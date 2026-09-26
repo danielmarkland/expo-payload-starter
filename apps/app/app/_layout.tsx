@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import { fonts } from '@starter/design-tokens'
 import { ThemeToggle } from '@/src/components/ThemeToggle'
+import { GoogleTagManager } from '@/src/components/GoogleTagManager'
 import { AuthProvider, useAuth } from '@/src/context/AuthContext'
 import { ThemeProvider, useTheme } from '@/src/context/ThemeContext'
 
@@ -24,6 +25,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
+      <GoogleTagManager />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <AuthProvider>

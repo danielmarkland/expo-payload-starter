@@ -43,6 +43,14 @@ browser, use `pnpm --filter @starter/app web` instead of the app's Expo Go
 server; it serves the app at `http://localhost:8081`. To run the site alongside
 Expo web, start `pnpm dev:site` in another terminal.
 
+Google Tag Manager is optional and configured independently for each web
+surface: set `NEXT_PUBLIC_GTM_CONTAINER_ID` in `apps/site/.env` for the public
+website, and `EXPO_PUBLIC_GTM_CONTAINER_ID` in `apps/app/.env` for Expo web.
+Use a container ID such as `GTM-ABC123`; these are public build-time values,
+not secrets. The site container does not load in Payload Admin, and the Expo
+container only runs in the browser—not in native iOS or Android apps. Configure
+consent and SPA page-view behavior in the relevant GTM container.
+
 The website is public. App sign-in uses Supabase Auth, while Payload Admin has
 separate CMS user accounts. Creating a Payload user at `/admin` does not create
 an app account, and app accounts do not grant CMS access.
@@ -164,13 +172,15 @@ project; add the second separately. See
 
    - Website + CMS: `DATABASE_URL`, `PAYLOAD_SECRET`, `PREVIEW_SECRET`,
      `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_APP_URL`, and the five `SUPABASE_S3_*`
-     values in `apps/site/.env.example`. Get the S3 endpoint, region, and
-     server-only access keys from Supabase Storage settings. `RESEND_API_KEY`
-     and sender values are optional unless using Payload email.
+     values in `apps/site/.env.example`. `NEXT_PUBLIC_GTM_CONTAINER_ID` is
+     optional. Get the S3 endpoint, region, and server-only access keys from
+     Supabase Storage settings. `RESEND_API_KEY` and sender values are optional
+     unless using Payload email.
    - Universal app: `EXPO_PUBLIC_SUPABASE_URL`,
      `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `EXPO_PUBLIC_SITE_URL` from
-     `apps/app/.env.example`. These are public build-time values; never use a
-     Supabase secret key here.
+     `apps/app/.env.example`. `EXPO_PUBLIC_GTM_CONTAINER_ID` is optional and
+     enables GTM for Expo web only. These are public build-time values; never
+     use a Supabase secret key here.
 
 4. In Supabase Auth URL settings, set the Site URL to the universal app's
    production URL and allow its exact `/auth/callback` URL. Add
