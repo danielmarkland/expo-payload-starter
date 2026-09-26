@@ -1,10 +1,8 @@
 :root {
   color-scheme: dark;
-  --color-accent: #00c853;
-  --color-accent-dark: #088d3f;
+  --color-accent-soft: #40382b;
   --color-border: #1e1e1e;
   --color-border-input: #2a2a2a;
-  --color-cobalt: #1d4ed8;
   --color-danger: #f44336;
   --color-danger-alpha: #f4433655;
   --color-ink: #ffffff;
@@ -17,6 +15,10 @@
   --color-ink-muted: #999999;
   --color-ink-subtle: #555555;
   --color-line-strong: #444444;
+  --color-primary: #eec784;
+  --color-primary-hover: #f5d9a8;
+  --color-primary-ink: #121212;
+  --color-secondary: #d2c7b8;
   --color-surface: #0f0f0f;
   --color-surface-footer: #0a0a0a;
   --color-surface-input: #1a1a1a;
@@ -27,11 +29,9 @@
 }
 :root[data-theme='light'] {
   color-scheme: light;
-  --color-accent: #00c853;
-  --color-accent-dark: #088d3f;
+  --color-accent-soft: #f0e3cc;
   --color-border: #e5e5e5;
   --color-border-input: #d1d5db;
-  --color-cobalt: #1d4ed8;
   --color-danger: #f44336;
   --color-danger-alpha: #f4433655;
   --color-ink: #231f20;
@@ -44,6 +44,10 @@
   --color-ink-muted: #666666;
   --color-ink-subtle: #999999;
   --color-line-strong: #d1d5db;
+  --color-primary: #eec784;
+  --color-primary-hover: #dbb66f;
+  --color-primary-ink: #121212;
+  --color-secondary: #6e685d;
   --color-surface: #ffffff;
   --color-surface-footer: #f5f5f5;
   --color-surface-input: #ffffff;
@@ -55,11 +59,9 @@
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
     color-scheme: light;
-    --color-accent: #00c853;
-    --color-accent-dark: #088d3f;
+    --color-accent-soft: #f0e3cc;
     --color-border: #e5e5e5;
     --color-border-input: #d1d5db;
-    --color-cobalt: #1d4ed8;
     --color-danger: #f44336;
     --color-danger-alpha: #f4433655;
     --color-ink: #231f20;
@@ -72,6 +74,10 @@
     --color-ink-muted: #666666;
     --color-ink-subtle: #999999;
     --color-line-strong: #d1d5db;
+    --color-primary: #eec784;
+    --color-primary-hover: #dbb66f;
+    --color-primary-ink: #121212;
+    --color-secondary: #6e685d;
     --color-surface: #ffffff;
     --color-surface-footer: #f5f5f5;
     --color-surface-input: #ffffff;

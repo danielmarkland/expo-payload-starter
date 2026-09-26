@@ -96,23 +96,28 @@ article text at 18px, eyebrow text at 12px, and responsive display/lede scales.
 Spacing tokens run from 4px to 120px; shared radii are 10px, 14px, 18px, and
 pill-shaped. The public content width is 1120px and article width is 760px.
 
-| Role                  | Dark theme                       | Light theme                      |
-| --------------------- | -------------------------------- | -------------------------------- |
-| Page / section        | `#0F0F0F` / `#111111`            | `#FFFFFF` / `#F7F7F7`            |
-| Card / raised         | `#161616` / `#222222`            | `#FFFFFF` / `#EEEEEE`            |
-| Primary text          | `#FFFFFF`                        | `#231F20`                        |
-| Body / muted text     | `#E8E8E8` / `#999999`            | `#333333` / `#666666`            |
-| Borders               | `#1E1E1E`                        | `#E5E5E5`                        |
-| Primary accent        | Green `#00C853`                  | Green `#00C853`                  |
-| Secondary text accent | Cobalt `#1D4ED8`                 | Cobalt `#1D4ED8`                 |
-| Danger / warning      | Red `#F44336` / yellow `#FACC15` | Red `#F44336` / yellow `#FACC15` |
+| Role                | Dark theme                       | Light theme                      |
+| ------------------- | -------------------------------- | -------------------------------- |
+| Page / section      | `#0F0F0F` / `#111111`            | `#FFFFFF` / `#F7F7F7`            |
+| Card / raised       | `#161616` / `#222222`            | `#FFFFFF` / `#EEEEEE`            |
+| Primary text        | `#FFFFFF`                        | `#231F20`                        |
+| Body / muted text   | `#E8E8E8` / `#999999`            | `#333333` / `#666666`            |
+| Borders             | `#1E1E1E`                        | `#E5E5E5`                        |
+| Primary brand color | Gold `#EEC784`                   | Gold `#EEC784`                   |
+| Secondary emphasis  | Warm stone `#D2C7B8`             | Taupe `#6E685D`                  |
+| Soft accent surface | `#40382B`                        | Cream `#F0E3CC`                  |
+| Primary action text | `#121212`                        | `#121212`                        |
+| Danger / warning    | Red `#F44336` / yellow `#FACC15` | Red `#F44336` / yellow `#FACC15` |
 
-Use green for primary actions and positive states, cobalt for secondary
-emphasis, and red or yellow for error and warning states. Keep surfaces layered
-subtly and use muted text for supporting information. Platform adapters are in
+Use gold for primary actions and key highlights, with dark text on gold for
+contrast. Use taupe/warm stone for secondary emphasis and cream for soft
+highlights. Secondary and soft-surface tones adapt to each mode for legibility;
+keep red or yellow for error and warning states. Keep surfaces layered subtly
+and use muted text for supporting information. Platform adapters are in
 `apps/site/src/app/(frontend)/` and `apps/app/src/context/ThemeContext.tsx`;
 change token values and brand assets in the shared package instead of editing
-duplicated palettes.
+duplicated palettes. The brand accents are based on the primary and secondary
+colors configured on [danielmarkland.com](https://danielmarkland.com/).
 
 ## Production deployment
 

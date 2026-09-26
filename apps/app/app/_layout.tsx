@@ -48,7 +48,7 @@ function RootNavigator() {
         >
           <ActivityIndicator
             accessibilityLabel="Restoring session"
-            color={colors.accent}
+            color={colors.primary}
           />
         </View>
       ) : (

@@ -7,8 +7,12 @@ describe('shared brand and theme tokens', () => {
     expect(Object.keys(themes.light).sort()).toEqual(
       Object.keys(themes.dark).sort(),
     )
-    expect(themes.dark.cobalt).toBe('#1d4ed8')
-    expect(themes.light.cobalt).toBe('#1d4ed8')
+    expect(themes.dark.primary).toBe('#eec784')
+    expect(themes.light.primary).toBe('#eec784')
+    expect(themes.dark.secondary).toBe('#d2c7b8')
+    expect(themes.light.secondary).toBe('#6e685d')
+    expect(themes.dark.accentSoft).toBe('#40382b')
+    expect(themes.light.accentSoft).toBe('#f0e3cc')
   })
 
   it('uses a manual preference before the system setting', () => {

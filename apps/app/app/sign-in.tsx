@@ -44,7 +44,9 @@ export default function SignInScreen() {
           { backgroundColor: colors.surfaceRaised, borderColor: colors.border },
         ]}
       >
-        <Text style={[styles.eyebrow, { color: colors.cobalt }]}>SIGN IN</Text>
+        <Text style={[styles.eyebrow, { color: colors.secondary }]}>
+          SIGN IN
+        </Text>
         <Text
           accessibilityRole="header"
           style={[styles.title, { color: colors.ink }]}
@@ -60,14 +62,14 @@ export default function SignInScreen() {
           onPress={() => void handleSignIn()}
           style={({ pressed }) => [
             styles.button,
-            { backgroundColor: colors.accent },
+            { backgroundColor: colors.primary },
             pressed && styles.buttonPressed,
           ]}
         >
           {pending ? (
-            <ActivityIndicator color={colors.inkInverse} />
+            <ActivityIndicator color={colors.primaryInk} />
           ) : (
-            <Text style={[styles.buttonText, { color: colors.inkInverse }]}>
+            <Text style={[styles.buttonText, { color: colors.primaryInk }]}>
               Continue with Google
             </Text>
           )}

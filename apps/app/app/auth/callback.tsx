@@ -15,7 +15,7 @@ export default function AuthCallbackScreen() {
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
       <ActivityIndicator
         accessibilityLabel="Completing sign in"
-        color={colors.accent}
+        color={colors.primary}
       />
       <Text style={[styles.text, { color: colors.inkMuted }]}>
         Completing sign in…
