@@ -1,10 +1,5 @@
-# expo-payload-starter
+# expo-payload-starter agent entrypoint
 
-Read `docs/architecture.md` before changing application boundaries, database
-ownership, authentication, storage, or email delivery.
-
-- Use pnpm from the repository root.
-- Keep product identity and data in Supabase; keep editorial content in Payload.
-- Never expose service-role, Payload database, S3, or Resend credentials to a client.
-- Add or update tests with behavior changes.
-- Run `pnpm check` before submitting changes.
+Read and follow `.instructions/shared.md` before working in this repository.
+Before editing a subdirectory, check for more-specific `AGENTS.md` or
+`CLAUDE.md` instructions there and follow those as well.
