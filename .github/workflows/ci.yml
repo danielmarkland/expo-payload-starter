@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      EXPO_PUBLIC_SITE_URL: http://localhost:3000
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: local-ci-key
+      EXPO_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_PUBLIC_APP_URL: http://localhost:8081
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      PAYLOAD_SECRET: local-ci-payload-secret-at-least-32-characters
+      PREVIEW_SECRET: local-ci-preview-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: pnpm install --frozen-lockfile
+      - run: supabase start
+      - run: pnpm --filter @starter/site payload migrate
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - name: Validate Expo configuration
+        run: pnpm --filter @starter/app exec expo config --type public
+      - name: Lint database schema
+        run: supabase db lint --level error
+      - name: Test database ownership and RLS
+        run: supabase test db
+      - name: Check generated Supabase types
+        run: |
+          supabase gen types typescript --local --schema app > /tmp/database.generated.ts
+          diff -u apps/app/src/types/database.ts /tmp/database.generated.ts
+
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      NEXT_PUBLIC_APP_URL: http://localhost:8081
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      PAYLOAD_SECRET: local-ci-payload-secret-at-least-32-characters
+      PREVIEW_SECRET: local-ci-preview-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: pnpm install --frozen-lockfile
+      - run: supabase start
+      - run: pnpm --filter @starter/site payload migrate
+      - run: pnpm --filter @starter/site exec playwright install --with-deps chromium
+      - run: pnpm --filter @starter/site test:e2e

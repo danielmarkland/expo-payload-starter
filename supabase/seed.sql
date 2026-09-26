@@ -1,0 +1,1 @@
+-- Add product-only development fixtures here. Payload fixtures belong to Payload.
