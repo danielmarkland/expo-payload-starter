@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     posts: Post;
+    pages: Page;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -201,6 +203,153 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  slug: string;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  layout: (
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        body?: string | null;
+        primaryButton?: {
+          label?: string | null;
+          url?: string | null;
+        };
+        secondaryButton?: {
+          label?: string | null;
+          url?: string | null;
+        };
+        image?: (number | null) | Media;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'hero';
+      }
+    | {
+        heading?: string | null;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'richText';
+      }
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'image';
+      }
+    | {
+        eyebrow?: string | null;
+        heading: string;
+        intro?: string | null;
+        items?:
+          | {
+              title: string;
+              description: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'featureGrid';
+      }
+    | {
+        heading: string;
+        body?: string | null;
+        buttonLabel: string;
+        buttonUrl: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'callToAction';
+      }
+    | {
+        heading?: string | null;
+        items?:
+          | {
+              quote: string;
+              name: string;
+              role?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'testimonials';
+      }
+    | {
+        heading?: string | null;
+        items?:
+          | {
+              name: string;
+              image: number | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'logoCloud';
+      }
+    | {
+        heading?: string | null;
+        items?:
+          | {
+              value: string;
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'stats';
+      }
+    | {
+        heading?: string | null;
+        items?:
+          | {
+              question: string;
+              answer: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faq';
+      }
+    | {
+        heading?: string | null;
+        limit?: number | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'latestPosts';
+      }
+  )[];
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -234,6 +383,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -335,6 +488,156 @@ export interface PostsSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              primaryButton?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              secondaryButton?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
+        richText?:
+          | T
+          | {
+              heading?: T;
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        image?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        featureGrid?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        callToAction?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              buttonLabel?: T;
+              buttonUrl?: T;
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    quote?: T;
+                    name?: T;
+                    role?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        logoCloud?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    name?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        stats?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        latestPosts?:
+          | T
+          | {
+              heading?: T;
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

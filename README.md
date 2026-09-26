@@ -43,6 +43,13 @@ browser, use `pnpm --filter @starter/app web` instead of the app's Expo Go
 server; it serves the app at `http://localhost:8081`. To run the site alongside
 Expo web, start `pnpm dev:site` in another terminal.
 
+The public homepage is a Payload Page with the slug `home`. After the first
+Payload migration, open `/admin`, create a Page with that slug, compose its
+sections using the available blocks, and publish it. Additional Pages render
+at `/<slug>`. Add a **Latest posts** block wherever you want published Posts
+to appear. Pages and Posts support drafts; use Payload's Preview action to
+preview unpublished content.
+
 Google Tag Manager is optional and configured independently for each web
 surface: set `NEXT_PUBLIC_GTM_CONTAINER_ID` in `apps/site/.env` for the public
 website, and `EXPO_PUBLIC_GTM_CONTAINER_ID` in `apps/app/.env` for Expo web.

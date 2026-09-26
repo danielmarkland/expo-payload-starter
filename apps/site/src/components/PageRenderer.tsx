@@ -1,0 +1,237 @@
+import Image from 'next/image'
+import Link from 'next/link'
+import { RichText } from '@payloadcms/richtext-lexical/react'
+
+import { LatestPostsSection } from '@/components/LatestPostsSection'
+import type { Media, Page } from '@/payload-types'
+
+type PageBlock = Page['layout'][number]
+
+function resolveMedia(media: number | Media | null | undefined): Media | null {
+  return media && typeof media === 'object' ? media : null
+}
+
+function safeHref(value?: string | null): string | null {
+  if (!value) return null
+  if (value.startsWith('/') && !value.startsWith('//')) return value
+
+  try {
+    const protocol = new URL(value).protocol
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(protocol) ? value : null
+  } catch {
+    return null
+  }
+}
+
+function SectionHeading({
+  eyebrow,
+  heading,
+  intro,
+}: {
+  eyebrow?: string | null
+  heading?: string | null
+  intro?: string | null
+}) {
+  if (!eyebrow && !heading && !intro) return null
+
+  return (
+    <header className="section-heading">
+      {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
+      {heading ? <h2>{heading}</h2> : null}
+      {intro ? <p className="lede">{intro}</p> : null}
+    </header>
+  )
+}
+
+function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: boolean }) {
+  switch (block.blockType) {
+    case 'hero': {
+      const image = resolveMedia(block.image)
+      const headingHref = safeHref(block.primaryButton?.url)
+      const secondaryHref = safeHref(block.secondaryButton?.url)
+      const Heading = primaryHero ? 'h1' : 'h2'
+      return (
+        <section className="page-hero">
+          <div className="page-hero-copy">
+            {block.eyebrow ? <p className="eyebrow">{block.eyebrow}</p> : null}
+            <Heading>{block.heading}</Heading>
+            {block.body ? <p className="lede">{block.body}</p> : null}
+            {headingHref || secondaryHref ? (
+              <div className="actions">
+                {block.primaryButton?.label && headingHref ? (
+                  <Link className="primary" href={headingHref}>
+                    {block.primaryButton.label}
+                  </Link>
+                ) : null}
+                {block.secondaryButton?.label && secondaryHref ? (
+                  <Link className="secondary" href={secondaryHref}>
+                    {block.secondaryButton.label}
+                  </Link>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+          {image?.url ? (
+            <Image
+              alt={image.alt || ''}
+              className="page-hero-image"
+              height={image.height || 900}
+              src={image.url}
+              unoptimized
+              width={image.width || 1200}
+            />
+          ) : null}
+        </section>
+      )
+    }
+    case 'richText':
+      return (
+        <section className="page-section prose-section">
+          {block.heading ? <h2>{block.heading}</h2> : null}
+          <div className="article-body">
+            <RichText data={block.content} />
+          </div>
+        </section>
+      )
+    case 'image': {
+      const image = resolveMedia(block.image)
+      if (!image?.url) return null
+      return (
+        <figure className="page-image">
+          <Image
+            alt={image.alt || ''}
+            height={image.height || 900}
+            src={image.url}
+            unoptimized
+            width={image.width || 1200}
+          />
+          {block.caption ? <figcaption>{block.caption}</figcaption> : null}
+        </figure>
+      )
+    }
+    case 'featureGrid':
+      return (
+        <section className="page-section">
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
+          <div className="page-card-grid">
+            {block.items?.map((item) => (
+              <article className="page-card" key={item.id || item.title}>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    case 'callToAction': {
+      const buttonHref = safeHref(block.buttonUrl)
+      return (
+        <section className="page-cta">
+          <div>
+            <h2>{block.heading}</h2>
+            {block.body ? <p>{block.body}</p> : null}
+          </div>
+          {buttonHref ? (
+            <Link className="primary" href={buttonHref}>
+              {block.buttonLabel}
+            </Link>
+          ) : null}
+        </section>
+      )
+    }
+    case 'testimonials':
+      return (
+        <section className="page-section">
+          <SectionHeading heading={block.heading} />
+          <div className="page-card-grid">
+            {block.items?.map((item) => (
+              <figure className="page-card testimonial" key={item.id || item.name}>
+                <blockquote>{item.quote}</blockquote>
+                <figcaption>
+                  <strong>{item.name}</strong>
+                  {item.role ? <span>{item.role}</span> : null}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )
+    case 'logoCloud':
+      return (
+        <section className="page-section">
+          <SectionHeading heading={block.heading} />
+          <ul className="logo-cloud" aria-label={block.heading || 'Organizations'}>
+            {block.items?.map((item) => {
+              const image = resolveMedia(item.image)
+              return (
+                <li key={item.id || item.name}>
+                  {image?.url ? (
+                    <Image
+                      alt={item.name}
+                      height={image.height || 120}
+                      src={image.url}
+                      unoptimized
+                      width={image.width || 240}
+                    />
+                  ) : (
+                    <span>{item.name}</span>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      )
+    case 'stats':
+      return (
+        <section className="page-section">
+          <SectionHeading heading={block.heading} />
+          <dl className="stats-grid">
+            {block.items?.map((item) => (
+              <div className="stat" key={item.id || item.label}>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )
+    case 'faq':
+      return (
+        <section className="page-section faq-section">
+          <SectionHeading heading={block.heading} />
+          {block.items?.map((item) => (
+            <details className="faq-item" key={item.id || item.question}>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </section>
+      )
+    case 'latestPosts':
+      return <LatestPostsSection heading={block.heading} limit={block.limit} />
+    default:
+      return null
+  }
+}
+
+export function PageRenderer({ page }: { page: Page }) {
+  const firstHero = page.layout.find((block) => block.blockType === 'hero')
+
+  return (
+    <main className="page-shell">
+      {!firstHero ? (
+        <header className="page-title">
+          <h1>{page.title}</h1>
+        </header>
+      ) : null}
+      {page.layout.map((block) => (
+        <PageBlockView
+          block={block}
+          key={block.id || block.blockType}
+          primaryHero={block === firstHero}
+        />
+      ))}
+    </main>
+  )
+}

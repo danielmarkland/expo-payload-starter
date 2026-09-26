@@ -1,13 +1,40 @@
 import { test, expect } from '@playwright/test'
+import { getPayload } from 'payload'
+
+import config from '../../src/payload.config.js'
 
 test.describe('Frontend', () => {
-  test('can go on homepage', async ({ page }) => {
-    await page.goto('http://localhost:3000')
+  const slug = `e2e-page-${Date.now()}`
+  let pageId: number
 
-    await expect(page).toHaveTitle(/Expo Payload Starter/)
+  test.beforeAll(async () => {
+    const payload = await getPayload({ config })
+    const page = await payload.create({
+      collection: 'pages',
+      data: {
+        title: 'CMS page fixture',
+        slug,
+        layout: [{ blockType: 'hero', heading: 'A page composed in Payload' }],
+      },
+      draft: false,
+      overrideAccess: true,
+    })
+    pageId = page.id
+  })
 
-    const heading = page.locator('h1').first()
+  test.afterAll(async () => {
+    if (!pageId) return
+    const payload = await getPayload({ config })
+    await payload.delete({ collection: 'pages', id: pageId, overrideAccess: true })
+  })
 
-    await expect(heading).toHaveText('Ship one product across web, iOS, and Android.')
+  test('renders a published CMS page by its slug', async ({ page }) => {
+    await page.goto(`http://localhost:3000/${slug}`)
+
+    await expect(page).toHaveTitle(/CMS page fixture/)
+    await expect(
+      page.getByRole('heading', { name: 'A page composed in Payload', level: 1 }),
+    ).toBeVisible()
+    await expect(page.getByRole('contentinfo')).toContainText('Expo Payload Starter')
   })
 })

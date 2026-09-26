@@ -7,6 +7,7 @@ import favicon from '@starter/design-tokens/assets/favicon.png'
 import appIcon from '@starter/design-tokens/assets/icon.png'
 
 import { GoogleTagManager } from '@/components/GoogleTagManager'
+import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 
 import '@starter/design-tokens/theme.css'
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GoogleTagManager />
         <SiteHeader />
         {children}
+        <SiteFooter />
       </body>
     </html>
   )

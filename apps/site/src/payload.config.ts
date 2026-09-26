@@ -9,6 +9,7 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -21,7 +22,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts],
+  collections: [Users, Media, Posts, Pages],
   cors: [process.env.NEXT_PUBLIC_APP_URL, process.env.NEXT_PUBLIC_SITE_URL].filter(
     (origin): origin is string => Boolean(origin),
   ),

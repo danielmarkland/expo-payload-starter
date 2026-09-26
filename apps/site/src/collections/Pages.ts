@@ -1,16 +1,19 @@
 import type { CollectionConfig } from 'payload'
 
-export const Posts: CollectionConfig = {
-  slug: 'posts',
-  dbName: 'cms_posts',
+import { pageBlocks } from '@/blocks'
+
+export const Pages: CollectionConfig = {
+  slug: 'pages',
+  dbName: 'cms_pages',
   admin: {
-    useAsTitle: 'title',
+    defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
     preview: ({ data }) => {
       const siteURL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
       const secret = process.env.PREVIEW_SECRET || ''
       const slug = (data as { slug?: unknown }).slug
-      return `${siteURL}/api/preview?collection=posts&slug=${encodeURIComponent(String(slug ?? ''))}&secret=${encodeURIComponent(secret)}`
+      return `${siteURL}/api/preview?collection=pages&slug=${encodeURIComponent(String(slug ?? ''))}&secret=${encodeURIComponent(secret)}`
     },
+    useAsTitle: 'title',
   },
   access: {
     create: ({ req }) => Boolean(req.user),
@@ -22,9 +25,6 @@ export const Posts: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', required: true },
     { name: 'slug', type: 'text', index: true, required: true, unique: true },
-    { name: 'summary', type: 'textarea', required: true },
-    { name: 'body', type: 'richText', required: true },
-    { name: 'publishedAt', type: 'date' },
     {
       name: 'seo',
       type: 'group',
@@ -32,6 +32,12 @@ export const Posts: CollectionConfig = {
         { name: 'title', type: 'text' },
         { name: 'description', type: 'textarea', maxLength: 160 },
       ],
+    },
+    {
+      name: 'layout',
+      type: 'blocks',
+      blocks: pageBlocks,
+      required: true,
     },
   ],
 }
