@@ -31,12 +31,47 @@ cp apps/site/.env.example apps/site/.env
 cp supabase/functions/.env.example supabase/functions/.env
 pnpm install
 supabase start
+pnpm --filter @starter/site payload migrate
 pnpm generate
 pnpm dev
 ```
 
 The public site runs on `http://localhost:3000`, Payload Admin on
-`http://localhost:3000/admin`, and Expo on the port selected by Expo CLI.
+`http://localhost:3000/admin`, and Supabase Studio on `http://localhost:54323`.
+`pnpm dev` starts the site and the Expo development server. To run the app in a
+browser, use `pnpm --filter @starter/app web` instead of the app's Expo Go
+server; it serves the app at `http://localhost:8081`. To run the site alongside
+Expo web, start `pnpm dev:site` in another terminal.
+
+The website is public. App sign-in uses Supabase Auth, while Payload Admin has
+separate CMS user accounts. Creating a Payload user at `/admin` does not create
+an app account, and app accounts do not grant CMS access.
+
+The app's sign-in screen uses Google OAuth. Local Supabase does not enable this
+provider until you configure it. Create a Google OAuth client and add
+`http://127.0.0.1:54321/auth/v1/callback` as an authorized redirect URI in
+Google. Add the following to `supabase/config.toml`:
+
+```toml
+[auth.external.google]
+enabled = true
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+```
+
+Put the corresponding client ID and secret in a root `.env` file, which the
+Supabase CLI reads for local config substitution and which must not be
+committed:
+
+```sh
+SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID=<your-google-client-id>
+SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET=<your-google-client-secret>
+```
+
+Restart the local stack after changing the config with `supabase stop` followed
+by `supabase start`. The app callback URL is already allowed in the local
+Supabase config. See [Supabase's local Google OAuth setup](https://supabase.com/docs/guides/auth/social-login/auth-google#local-development)
+for details.
 
 ## Production deployment
 
