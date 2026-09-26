@@ -46,7 +46,7 @@ jobs:
       - name: Check generated Supabase types
         run: |
           supabase gen types typescript --local --schema app > /tmp/database.generated.ts
-          diff -u apps/app/src/types/database.ts /tmp/database.generated.ts
+          diff -u packages/data/src/database.ts /tmp/database.generated.ts
 
   e2e:
     runs-on: ubuntu-latest
