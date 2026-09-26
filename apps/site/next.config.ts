@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  output: process.env.VERCEL ? undefined : 'standalone',
   images: {
     localPatterns: [
       {
