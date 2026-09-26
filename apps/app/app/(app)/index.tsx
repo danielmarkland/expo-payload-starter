@@ -2,12 +2,14 @@ import { useQuery } from '@tanstack/react-query'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { profileLabel } from '@starter/core'
-import { colors, fonts, spacing } from '@starter/design-tokens'
+import { fonts, radii, spacing, typography } from '@starter/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
+import { useTheme } from '@/src/context/ThemeContext'
 import { profiles } from '@/src/lib/supabase'
 
 export default function HomeScreen() {
   const { signOut, user } = useAuth()
+  const { colors } = useTheme()
   const profile = useQuery({
     enabled: Boolean(user),
     queryFn: () => profiles.findById(user!.id),
@@ -15,17 +17,20 @@ export default function HomeScreen() {
   })
   const label = user ? profileLabel(profile.data ?? null, user) : 'Member'
   return (
-    <View style={styles.container}>
-      <Text accessibilityRole="header" style={styles.title}>
+    <View style={[styles.container, { backgroundColor: colors.surface }]}>
+      <Text
+        accessibilityRole="header"
+        style={[styles.title, { color: colors.ink }]}
+      >
         You are signed in
       </Text>
-      <Text style={styles.email}>{label}</Text>
+      <Text style={[styles.email, { color: colors.inkMuted }]}>{label}</Text>
       <Pressable
         accessibilityRole="button"
         onPress={() => void signOut()}
-        style={styles.button}
+        style={[styles.button, { borderColor: colors.border }]}
       >
-        <Text style={styles.buttonText}>Sign out</Text>
+        <Text style={[styles.buttonText, { color: colors.ink }]}>Sign out</Text>
       </Pressable>
     </View>
   )
@@ -33,26 +38,23 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   button: {
-    borderColor: colors.border,
-    borderRadius: 10,
+    borderRadius: radii.sm,
     borderWidth: 1,
     marginTop: spacing.lg,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
   },
-  buttonText: { color: colors.ink, fontFamily: fonts.semibold },
+  buttonText: { fontFamily: fonts.semibold },
   container: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
     flex: 1,
     justifyContent: 'center',
     padding: spacing.lg,
   },
   email: {
-    color: colors.inkMuted,
     fontFamily: fonts.regular,
-    fontSize: 16,
+    fontSize: typography.fontSizes.body,
     marginTop: spacing.sm,
   },
-  title: { color: colors.ink, fontFamily: fonts.bold, fontSize: 30 },
+  title: { fontFamily: fonts.bold, fontSize: typography.fontSizes.title },
 })

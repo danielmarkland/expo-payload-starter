@@ -1,0 +1,21 @@
+{
+  "siteTitle": "Expo Payload Starter",
+  "appTitle": "Expo Payload Starter",
+  "shortName": "Expo Starter",
+  "description": "A production starter for Expo, Payload, Supabase, and Resend.",
+  "themeStorageKey": "expo-payload-site-theme",
+  "assets": {
+    "appIcon": "icon.png",
+    "androidBackground": "android-icon-background.png",
+    "androidForeground": "android-icon-foreground.png",
+    "androidMonochrome": "android-icon-monochrome.png",
+    "favicon": "favicon.png",
+    "splashIcon": "splash-icon.png",
+    "fonts": {
+      "regular": "fonts/Poppins_400Regular.ttf",
+      "medium": "fonts/Poppins_500Medium.ttf",
+      "semibold": "fonts/Poppins_600SemiBold.ttf",
+      "bold": "fonts/Poppins_700Bold.ttf"
+    }
+  }
+}

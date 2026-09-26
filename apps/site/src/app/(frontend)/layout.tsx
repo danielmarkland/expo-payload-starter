@@ -1,24 +1,54 @@
 import type { Metadata } from 'next'
-import { Poppins } from 'next/font/google'
+import localFont from 'next/font/local'
 import React from 'react'
 
+import { brand } from '@starter/design-tokens'
+import favicon from '@starter/design-tokens/assets/favicon.png'
+import appIcon from '@starter/design-tokens/assets/icon.png'
+
+import { SiteHeader } from '@/components/SiteHeader'
+
+import '@starter/design-tokens/theme.css'
 import './styles.css'
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+const font = localFont({
+  display: 'swap',
+  src: [
+    {
+      path: '../../../../../packages/design-tokens/assets/fonts/Poppins_400Regular.ttf',
+      weight: '400',
+    },
+    {
+      path: '../../../../../packages/design-tokens/assets/fonts/Poppins_500Medium.ttf',
+      weight: '500',
+    },
+    {
+      path: '../../../../../packages/design-tokens/assets/fonts/Poppins_600SemiBold.ttf',
+      weight: '600',
+    },
+    {
+      path: '../../../../../packages/design-tokens/assets/fonts/Poppins_700Bold.ttf',
+      weight: '700',
+    },
+  ],
+  variable: '--font-family-sans',
 })
 
 export const metadata: Metadata = {
-  description: 'A production starter for Expo, Payload, Supabase, and Resend.',
+  applicationName: brand.siteTitle,
+  description: brand.description,
+  icons: { apple: appIcon.src, icon: favicon.src },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: { default: 'Expo Payload Starter', template: '%s · Expo Payload Starter' },
+  title: { default: brand.siteTitle, template: `%s · ${brand.siteTitle}` },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <body className={font.variable}>
+        <SiteHeader />
+        {children}
+      </body>
     </html>
   )
 }

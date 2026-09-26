@@ -1,41 +1,40 @@
-export const colors = {
-  accent: '#00c853',
-  accentDark: '#088d3f',
-  border: '#1e1e1e',
-  borderInput: '#2a2a2a',
-  cobalt: '#1d4ed8',
-  danger: '#f44336',
-  dangerAlpha: '#f4433655',
-  ink: '#ffffff',
-  inkBody: '#e8e8e8',
-  inkDim: '#777777',
-  inkFaint: '#333333',
-  inkGhost: '#444444',
-  inkInverse: '#0f0f0f',
-  inkLight: '#cccccc',
-  inkMuted: '#999999',
-  inkSubtle: '#555555',
-  lineStrong: '#444444',
-  surface: '#0f0f0f',
-  surfaceFooter: '#0a0a0a',
-  surfaceInput: '#1a1a1a',
-  surfaceRaised: '#161616',
-  surfaceSection: '#111111',
-  surfaceTop: '#222222',
-  warning: '#facc15',
-} as const
+import brandConfig from './brand.json' with { type: 'json' }
+import tokenConfig from './tokens.json' with { type: 'json' }
 
+export type ThemeMode = keyof typeof tokenConfig.themes
+export type ThemeColors = (typeof tokenConfig.themes)[ThemeMode]
+
+export const brand = brandConfig
+export const THEME_STORAGE_KEY = brand.themeStorageKey
+export const themes = tokenConfig.themes
+export const typography = {
+  family: tokenConfig.fonts.family,
+  weights: tokenConfig.fonts.weights,
+  fontSizes: tokenConfig.fontSizes,
+  lineHeights: tokenConfig.lineHeights,
+} as const
+export const spacing = tokenConfig.spacing
+export const radii = tokenConfig.radii
+export const layout = tokenConfig.layout
+
+// Expo's font files are registered in the root layout and use these family names.
 export const fonts = {
-  bold: 'Poppins_700Bold',
-  medium: 'Poppins_500Medium',
-  regular: 'Poppins_400Regular',
-  semibold: 'Poppins_600SemiBold',
+  bold: `${tokenConfig.fonts.family}_Bold`,
+  medium: `${tokenConfig.fonts.family}_Medium`,
+  regular: `${tokenConfig.fonts.family}_Regular`,
+  semibold: `${tokenConfig.fonts.family}_SemiBold`,
 } as const
 
-export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 16,
-  lg: 24,
-  xl: 40,
-} as const
+// Retained as the default theme for callers that do not yet have theme context.
+export const colors = themes.dark
+
+export function getThemeColors(mode: ThemeMode): ThemeColors {
+  return themes[mode]
+}
+
+export function resolveThemeMode(
+  systemMode: ThemeMode | 'unspecified' | null,
+  preference: ThemeMode | null,
+): ThemeMode {
+  return preference ?? (systemMode === 'light' ? 'light' : 'dark')
+}

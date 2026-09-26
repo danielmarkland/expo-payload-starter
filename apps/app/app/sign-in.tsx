@@ -7,11 +7,20 @@ import {
   View,
 } from 'react-native'
 
-import { colors, fonts, spacing } from '@starter/design-tokens'
+import {
+  brand,
+  fonts,
+  layout,
+  radii,
+  spacing,
+  typography,
+} from '@starter/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
+import { useTheme } from '@/src/context/ThemeContext'
 
 export default function SignInScreen() {
   const { signInWithGoogle } = useAuth()
+  const { colors } = useTheme()
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
 
@@ -28,12 +37,21 @@ export default function SignInScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text accessibilityRole="header" style={styles.title}>
-          Expo Payload Starter
+    <View style={[styles.container, { backgroundColor: colors.surface }]}>
+      <View
+        style={[
+          styles.card,
+          { backgroundColor: colors.surfaceRaised, borderColor: colors.border },
+        ]}
+      >
+        <Text style={[styles.eyebrow, { color: colors.cobalt }]}>SIGN IN</Text>
+        <Text
+          accessibilityRole="header"
+          style={[styles.title, { color: colors.ink }]}
+        >
+          {brand.appTitle}
         </Text>
-        <Text style={styles.description}>
+        <Text style={[styles.description, { color: colors.inkMuted }]}>
           One authenticated application for web, iOS, and Android.
         </Text>
         <Pressable
@@ -42,17 +60,23 @@ export default function SignInScreen() {
           onPress={() => void handleSignIn()}
           style={({ pressed }) => [
             styles.button,
+            { backgroundColor: colors.accent },
             pressed && styles.buttonPressed,
           ]}
         >
           {pending ? (
             <ActivityIndicator color={colors.inkInverse} />
           ) : (
-            <Text style={styles.buttonText}>Continue with Google</Text>
+            <Text style={[styles.buttonText, { color: colors.inkInverse }]}>
+              Continue with Google
+            </Text>
           )}
         </Pressable>
         {error ? (
-          <Text accessibilityRole="alert" style={styles.error}>
+          <Text
+            accessibilityRole="alert"
+            style={[styles.error, { color: colors.danger }]}
+          >
             {error}
           </Text>
         ) : null}
@@ -64,8 +88,7 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: colors.accent,
-    borderRadius: 10,
+    borderRadius: radii.sm,
     justifyContent: 'center',
     marginTop: spacing.lg,
     minHeight: 48,
@@ -73,41 +96,39 @@ const styles = StyleSheet.create({
   },
   buttonPressed: { opacity: 0.82 },
   buttonText: {
-    color: colors.inkInverse,
     fontFamily: fonts.bold,
-    fontSize: 16,
+    fontSize: typography.fontSizes.body,
   },
   card: {
-    backgroundColor: colors.surfaceRaised,
-    borderColor: colors.border,
-    borderRadius: 18,
+    borderRadius: radii.lg,
     borderWidth: 1,
-    maxWidth: 460,
+    maxWidth: layout.card,
     padding: spacing.xl,
     width: '100%',
   },
   container: {
     alignItems: 'center',
-    backgroundColor: colors.surface,
     flex: 1,
     justifyContent: 'center',
     padding: spacing.lg,
   },
   description: {
-    color: colors.inkMuted,
     fontFamily: fonts.regular,
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: typography.fontSizes.body,
+    lineHeight: typography.fontSizes.body * typography.lineHeights.body,
+  },
+  eyebrow: {
+    fontFamily: fonts.bold,
+    fontSize: typography.fontSizes.eyebrow,
+    marginBottom: spacing.sm,
   },
   error: {
-    color: colors.danger,
     fontFamily: fonts.regular,
     marginTop: spacing.md,
   },
   title: {
-    color: colors.ink,
     fontFamily: fonts.bold,
-    fontSize: 30,
+    fontSize: typography.fontSizes.title,
     marginBottom: spacing.sm,
   },
 })

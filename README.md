@@ -73,6 +73,47 @@ by `supabase start`. The app callback URL is already allowed in the local
 Supabase config. See [Supabase's local Google OAuth setup](https://supabase.com/docs/guides/auth/social-login/auth-google#local-development)
 for details.
 
+## Shared brand and theme
+
+The shared source of truth is `packages/design-tokens/src/`: `tokens.json`
+defines light/dark colors, Poppins weights, type sizes, line heights, spacing,
+and radii; `brand.json` defines site/app titles, short name, description, and
+asset names. Put app icons, web favicon, Android adaptive icon layers, splash
+art, and font files in `packages/design-tokens/assets/`. Keep platform-specific
+identity values such as Expo slug, URL scheme, and native package IDs in
+`apps/app/app.config.js`.
+
+Both the public site and Expo app default to the system appearance and track
+system changes until a visitor manually switches theme. Manual choices are
+remembered per browser/device. The site gets CSS variables generated from
+`tokens.json`; regenerate them after token edits with
+`pnpm --filter @starter/design-tokens generate:css`. `pnpm check` verifies the
+generated CSS is current. Web and native components remain platform-specific,
+but consume the same semantic design values.
+
+The shared typography is Poppins (400, 500, 600, 700), with body text at 16px,
+article text at 18px, eyebrow text at 12px, and responsive display/lede scales.
+Spacing tokens run from 4px to 120px; shared radii are 10px, 14px, 18px, and
+pill-shaped. The public content width is 1120px and article width is 760px.
+
+| Role                  | Dark theme                       | Light theme                      |
+| --------------------- | -------------------------------- | -------------------------------- |
+| Page / section        | `#0F0F0F` / `#111111`            | `#FFFFFF` / `#F7F7F7`            |
+| Card / raised         | `#161616` / `#222222`            | `#FFFFFF` / `#EEEEEE`            |
+| Primary text          | `#FFFFFF`                        | `#231F20`                        |
+| Body / muted text     | `#E8E8E8` / `#999999`            | `#333333` / `#666666`            |
+| Borders               | `#1E1E1E`                        | `#E5E5E5`                        |
+| Primary accent        | Green `#00C853`                  | Green `#00C853`                  |
+| Secondary text accent | Cobalt `#1D4ED8`                 | Cobalt `#1D4ED8`                 |
+| Danger / warning      | Red `#F44336` / yellow `#FACC15` | Red `#F44336` / yellow `#FACC15` |
+
+Use green for primary actions and positive states, cobalt for secondary
+emphasis, and red or yellow for error and warning states. Keep surfaces layered
+subtly and use muted text for supporting information. Platform adapters are in
+`apps/site/src/app/(frontend)/` and `apps/app/src/context/ThemeContext.tsx`;
+change token values and brand assets in the shared package instead of editing
+duplicated palettes.
+
 ## Production deployment
 
 Deploy two Vercel projects from the same repository:
