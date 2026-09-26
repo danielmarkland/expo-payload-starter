@@ -182,9 +182,15 @@ project; add the second separately. See
 
 ## Fork checklist
 
-- Replace the starter name, copy, logo, icons, and design tokens.
+- Replace the shared site/app names, short name, description, and asset references
+  in `packages/design-tokens/src/brand.json`; update the files in
+  `packages/design-tokens/assets/` with your logo, icons, splash art, and fonts.
+- Customize colors, typography, spacing, radii, and layout tokens in
+  `packages/design-tokens/src/tokens.json`, then regenerate the site CSS with
+  `pnpm --filter @starter/design-tokens generate:css`.
 - Set a unique Expo `slug`, `scheme`, iOS bundle identifier, and Android
-  package in `apps/app/app.json`.
+  package in `apps/app/app.config.js`. These platform-specific identifiers are
+  separate from the shared brand settings.
 - Create a Supabase project, apply migrations, expose the `app` schema, and set
   OAuth callback URLs for the Vercel app domain and native scheme.
 - Create both Vercel projects, set their root directories and environment
