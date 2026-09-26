@@ -81,6 +81,87 @@ by `supabase start`. The app callback URL is already allowed in the local
 Supabase config. See [Supabase's local Google OAuth setup](https://supabase.com/docs/guides/auth/social-login/auth-google#local-development)
 for details.
 
+## Environment variables and secrets
+
+Copy the relevant `.env.example` files shown in [Quick start](#quick-start).
+Keep real values in ignored `.env` files locally and in the hosting provider's
+secret store in production. Never commit credentials. Variables beginning with
+`NEXT_PUBLIC_` or `EXPO_PUBLIC_` are embedded in web/client builds: only put
+public configuration there, never a password, private key, or service-role
+credential. See [Next.js environment variables](https://nextjs.org/docs/app/guides/environment-variables),
+[Expo environment variables](https://docs.expo.dev/guides/environment-variables/),
+and [Supabase API keys](https://supabase.com/docs/guides/getting-started/api-keys).
+
+### Website and Payload (`apps/site/.env`)
+
+| Variable                        | Purpose and handling                                                                                                                                                                                                                                                                                         |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DATABASE_URL`                  | Required server-only Postgres connection string for Payload. Use the local value from the example locally; for hosted Supabase, copy a suitable URI from the dashboard's **Connect** panel ([connection guide](https://supabase.com/docs/guides/database/connecting-to-postgres)). Treat it as a credential. |
+| `PAYLOAD_SECRET`                | Required server-only Payload signing/encryption secret. Generate a unique random value of at least 32 characters; do not reuse it elsewhere.                                                                                                                                                                 |
+| `PREVIEW_SECRET`                | Required independent server-only secret used to authorize draft preview links. Generate a strong random value and keep it separate from `PAYLOAD_SECRET`.                                                                                                                                                    |
+| `NEXT_PUBLIC_APP_URL`           | Public URL of the Expo app; used for site links and Payload's allowed app origin. Local default: `http://localhost:8081`.                                                                                                                                                                                    |
+| `NEXT_PUBLIC_SITE_URL`          | Public site URL used for Payload's allowed origin and preview links. Local default: `http://localhost:3000`.                                                                                                                                                                                                 |
+| `NEXT_PUBLIC_GTM_CONTAINER_ID`  | Optional public Google Tag Manager container ID (`GTM-…`) for the public website; leave empty to disable. Configure consent and page-view behavior in [Tag Manager](https://support.google.com/tagmanager/answer/6103696).                                                                                   |
+| `RESEND_API_KEY`                | Optional server-only Resend API key for Payload email. Create/manage it in [Resend API keys](https://resend.com/docs/dashboard/api-keys).                                                                                                                                                                    |
+| `EMAIL_FROM_ADDRESS`            | Optional Payload sender email address (example default `hello@example.com`). Verify the sender domain in Resend before production sending; see [Resend domain verification](https://resend.com/docs/dashboard/domains/introduction).                                                                         |
+| `EMAIL_FROM_NAME`               | Optional display name paired with `EMAIL_FROM_ADDRESS`; example default is `Expo Payload Starter`.                                                                                                                                                                                                           |
+| `SUPABASE_S3_ACCESS_KEY_ID`     | Server-only Supabase Storage S3 credential for Payload media uploads. Create an S3 access-key pair in Storage settings; these credentials bypass RLS and must never reach a client.                                                                                                                          |
+| `SUPABASE_S3_SECRET_ACCESS_KEY` | Secret half of the S3 credential pair above; keep server-only.                                                                                                                                                                                                                                               |
+| `SUPABASE_S3_ENDPOINT`          | Supabase Storage S3 endpoint. Local default is `http://127.0.0.1:54321/storage/v1/s3`; copy the hosted endpoint from the project's S3 settings.                                                                                                                                                              |
+| `SUPABASE_S3_REGION`            | S3 signing region. Local default is `local`; use the region shown in the project's S3 settings.                                                                                                                                                                                                              |
+| `SUPABASE_S3_BUCKET`            | Bucket used for Payload media; default is `cms-media`, created by the project migrations.                                                                                                                                                                                                                    |
+
+See [Supabase Storage S3 authentication](https://supabase.com/docs/guides/storage/s3/authentication) for S3 credentials and connection details. The access key ID and secret are strictly server-side.
+
+### Universal app (`apps/app/.env`)
+
+| Variable                               | Purpose and handling                                                                                                                        |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EXPO_PUBLIC_SUPABASE_URL`             | Public Supabase project URL; local default is `http://127.0.0.1:54321`.                                                                     |
+| `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public Supabase publishable key. It is designed for client use; protect data with RLS. Never substitute a Supabase secret/service-role key. |
+| `EXPO_PUBLIC_SITE_URL`                 | Public website URL used by the app; local default is `http://localhost:3000`.                                                               |
+| `EXPO_PUBLIC_GTM_CONTAINER_ID`         | Optional public GTM container ID for Expo web only; leave empty to disable. It is not loaded by native iOS/Android builds.                  |
+
+These public values are safe to bundle only because access is governed by
+Supabase Auth and RLS. Do not put server credentials in Expo's public
+environment variables.
+
+### Google OAuth (`.env` at repository root)
+
+| Variable                                  | Purpose and handling                                                                              |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID` | Google OAuth client ID referenced by `supabase/config.toml`; configuration value, not a password. |
+| `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET`    | Google OAuth client secret; keep private and use only for Supabase Auth.                          |
+
+These root variables are read by the Supabase CLI for `env(...)` substitutions
+in `supabase/config.toml`. Set the matching Google OAuth client and callback as
+described in [Supabase's Google provider setup](https://supabase.com/docs/guides/auth/social-login/auth-google#local-development).
+The root `.env` is distinct from `supabase/functions/.env` below.
+
+### Supabase Edge Functions (`supabase/functions/.env`)
+
+| Variable                | Purpose and handling                                                                                                                                             |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RESEND_API_KEY`        | Server-only Resend API key used by the example email function. This is separate from the site's `RESEND_API_KEY`; configure it in each runtime that sends email. |
+| `RESEND_FROM`           | Sender identity for the Edge Function, in `Name <email@example.com>` form; verify its domain with Resend. Separate from Payload's `EMAIL_FROM_*` settings.       |
+| `RESEND_WEBHOOK_SECRET` | Server-only signing secret for the Resend webhook; copy it from that webhook's details in Resend.                                                                |
+
+For local development, `supabase start` loads this file. In a hosted Supabase
+project, set these with [`supabase secrets set`](https://supabase.com/docs/guides/functions/secrets).
+Supabase provides `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and
+`SUPABASE_SERVICE_ROLE_KEY` to Edge Functions automatically; do not add them
+to the example file or set them manually. The service-role key is privileged
+and must remain server-side. See [Edge Function secrets and default variables](https://supabase.com/docs/guides/functions/secrets).
+
+### Vercel deployment
+
+Set the Website + CMS variables in the Vercel Website project, and the Expo
+variables in the separate Universal app project. Use Vercel's Production,
+Preview, and Development scopes as appropriate; configure public URLs and GTM
+IDs per project/environment. Add optional email and S3 credentials only when
+using those features. Vercel applies environment changes to new deployments,
+so redeploy after changing a value. See [Vercel environment variables](https://vercel.com/docs/environment-variables).
+
 ## Shared brand and theme
 
 The shared source of truth is `packages/design-tokens/src/`: `tokens.json`
@@ -168,19 +249,9 @@ project; add the second separately. See
    not apply database migrations automatically. Payload schema push is disabled
    to protect Supabase-owned tables.
 
-3. Configure Vercel environment variables for the relevant environments:
-
-   - Website + CMS: `DATABASE_URL`, `PAYLOAD_SECRET`, `PREVIEW_SECRET`,
-     `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_APP_URL`, and the five `SUPABASE_S3_*`
-     values in `apps/site/.env.example`. `NEXT_PUBLIC_GTM_CONTAINER_ID` is
-     optional. Get the S3 endpoint, region, and server-only access keys from
-     Supabase Storage settings. `RESEND_API_KEY` and sender values are optional
-     unless using Payload email.
-   - Universal app: `EXPO_PUBLIC_SUPABASE_URL`,
-     `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `EXPO_PUBLIC_SITE_URL` from
-     `apps/app/.env.example`. `EXPO_PUBLIC_GTM_CONTAINER_ID` is optional and
-     enables GTM for Expo web only. These are public build-time values; never
-     use a Supabase secret key here.
+3. Configure the Vercel environment variables described in
+   [Environment variables and secrets](#environment-variables-and-secrets)
+   for each project's relevant environments.
 
 4. In Supabase Auth URL settings, set the Site URL to the universal app's
    production URL and allow its exact `/auth/callback` URL. Add
