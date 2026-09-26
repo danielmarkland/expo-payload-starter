@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { profileLabel } from '@starter/core'
-import { colors, spacing } from '@starter/design-tokens'
+import { colors, fonts, spacing } from '@starter/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
 import { profiles } from '@/src/lib/supabase'
 
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
   },
-  buttonText: { color: colors.ink, fontWeight: '600' },
+  buttonText: { color: colors.ink, fontFamily: fonts.semibold },
   container: {
     alignItems: 'center',
     backgroundColor: colors.surface,
@@ -48,6 +48,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.lg,
   },
-  email: { color: colors.inkMuted, fontSize: 16, marginTop: spacing.sm },
-  title: { color: colors.ink, fontSize: 30, fontWeight: '800' },
+  email: {
+    color: colors.inkMuted,
+    fontFamily: fonts.regular,
+    fontSize: 16,
+    marginTop: spacing.sm,
+  },
+  title: { color: colors.ink, fontFamily: fonts.bold, fontSize: 30 },
 })

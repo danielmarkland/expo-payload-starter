@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native'
 
-import { colors, spacing } from '@starter/design-tokens'
+import { colors, fonts, spacing } from '@starter/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
 
 export default function SignInScreen() {
@@ -72,7 +72,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
   },
   buttonPressed: { opacity: 0.82 },
-  buttonText: { color: colors.inkInverse, fontSize: 16, fontWeight: '700' },
+  buttonText: {
+    color: colors.inkInverse,
+    fontFamily: fonts.bold,
+    fontSize: 16,
+  },
   card: {
     backgroundColor: colors.surfaceRaised,
     borderColor: colors.border,
@@ -89,12 +93,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.lg,
   },
-  description: { color: colors.inkMuted, fontSize: 16, lineHeight: 24 },
-  error: { color: colors.danger, marginTop: spacing.md },
+  description: {
+    color: colors.inkMuted,
+    fontFamily: fonts.regular,
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  error: {
+    color: colors.danger,
+    fontFamily: fonts.regular,
+    marginTop: spacing.md,
+  },
   title: {
     color: colors.ink,
+    fontFamily: fonts.bold,
     fontSize: 30,
-    fontWeight: '800',
     marginBottom: spacing.sm,
   },
 })

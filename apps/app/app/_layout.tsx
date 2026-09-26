@@ -1,4 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+} from '@expo-google-fonts/poppins'
+import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import { useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
@@ -8,6 +15,15 @@ import { AuthProvider, useAuth } from '@/src/context/AuthContext'
 
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient())
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+  })
+
+  if (!fontsLoaded) return null
+
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>

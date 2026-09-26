@@ -1,7 +1,7 @@
 import { Redirect } from 'expo-router'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
-import { colors, spacing } from '@starter/design-tokens'
+import { colors, fonts, spacing } from '@starter/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
 
 export default function AuthCallbackScreen() {
@@ -25,5 +25,5 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     justifyContent: 'center',
   },
-  text: { color: colors.inkMuted },
+  text: { color: colors.inkMuted, fontFamily: fonts.regular },
 })
