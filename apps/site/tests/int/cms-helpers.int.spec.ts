@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest'
 
 import { extractSearchText } from '@/lib/extractSearchText'
 import { getNavigationHref } from '@/lib/navigation'
-import { getHeaderNavigationPresentation } from '@/lib/headerNavigationIcons'
+import {
+  getHeaderNavigationPresentation,
+  getSearchNavigationPresentation,
+} from '@/lib/headerNavigationIcons'
 import { resolveRedirect } from '@/lib/redirects'
 import type { Redirect } from '@/payload-types'
 
@@ -54,6 +57,22 @@ describe('CMS helpers', () => {
     expect(
       getHeaderNavigationPresentation({ icon: 'not-a-supported-icon', iconOnly: true } as never),
     ).toEqual({ Icon: undefined, iconOnly: false })
+  })
+
+  it('configures the built-in Search link with safe icon fallback', () => {
+    expect(getSearchNavigationPresentation({ showSearch: false })).toEqual({
+      Icon: undefined,
+      show: false,
+    })
+    expect(
+      getSearchNavigationPresentation({ searchIcon: 'search', showSearch: true }).Icon,
+    ).toBeDefined()
+    expect(
+      getSearchNavigationPresentation({
+        searchIcon: 'not-a-supported-icon',
+        showSearch: true,
+      } as never),
+    ).toEqual({ Icon: undefined, show: true })
   })
 
   it('resolves CMS redirects with exact status codes and safe destinations', () => {

@@ -70,7 +70,9 @@ holds the site/app titles, short name, light/dark logos, favicon, fallback SEO
 description, social preview metadata, and runtime theme. Header navigation owns
 only the header links. Header links can use a
 curated set of Lucide icons; icon-only links retain their configured label for
-assistive technology. Footer navigation remains text links.
+assistive technology. The built-in Search link can be hidden or replaced with
+any curated icon from the same Header navigation settings. Footer navigation
+remains text links.
 
 To stage the current `danielmarkland.com` Elementor homepage in Payload, first
 apply the latest Payload migration, then inspect and run the guarded importer:

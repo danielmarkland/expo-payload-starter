@@ -1100,6 +1100,29 @@ export interface HeaderNavigation {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Show the built-in Search link after the navigation items.
+   */
+  showSearch: boolean;
+  /**
+   * Optional icon that replaces the visible Search label.
+   */
+  searchIcon?:
+    | (
+        | 'book-open'
+        | 'external-link'
+        | 'github'
+        | 'home'
+        | 'info'
+        | 'linkedin'
+        | 'mail'
+        | 'search'
+        | 'shopping-bag'
+        | 'user'
+        | 'youtube'
+        | 'twitter'
+      )
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1247,6 +1270,8 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
         newTab?: T;
         id?: T;
       };
+  showSearch?: T;
+  searchIcon?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

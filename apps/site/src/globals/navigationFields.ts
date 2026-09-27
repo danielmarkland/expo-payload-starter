@@ -1,5 +1,20 @@
 import type { Field } from 'payload'
 
+export const headerNavigationIconOptions = [
+  { label: 'Book', value: 'book-open' },
+  { label: 'External link', value: 'external-link' },
+  { label: 'GitHub', value: 'github' },
+  { label: 'Home', value: 'home' },
+  { label: 'Info', value: 'info' },
+  { label: 'LinkedIn', value: 'linkedin' },
+  { label: 'Email', value: 'mail' },
+  { label: 'Search', value: 'search' },
+  { label: 'Shop', value: 'shopping-bag' },
+  { label: 'Account', value: 'user' },
+  { label: 'YouTube', value: 'youtube' },
+  { label: 'X / Twitter', value: 'twitter' },
+]
+
 export function navigationItemsField({
   includeIcons = false,
 }: { includeIcons?: boolean } = {}): Field {
@@ -13,20 +28,7 @@ export function navigationItemsField({
             {
               name: 'icon',
               type: 'select' as const,
-              options: [
-                { label: 'Book', value: 'book-open' },
-                { label: 'External link', value: 'external-link' },
-                { label: 'GitHub', value: 'github' },
-                { label: 'Home', value: 'home' },
-                { label: 'Info', value: 'info' },
-                { label: 'LinkedIn', value: 'linkedin' },
-                { label: 'Email', value: 'mail' },
-                { label: 'Search', value: 'search' },
-                { label: 'Shop', value: 'shopping-bag' },
-                { label: 'Account', value: 'user' },
-                { label: 'YouTube', value: 'youtube' },
-                { label: 'X / Twitter', value: 'twitter' },
-              ],
+              options: headerNavigationIconOptions,
               admin: { description: 'Optional Lucide icon displayed alongside the link label.' },
             },
             {

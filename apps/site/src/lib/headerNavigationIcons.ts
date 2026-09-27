@@ -31,7 +31,20 @@ const icons = {
 
 type HeaderNavigationItem = NonNullable<HeaderNavigation['items']>[number]
 
+export function getHeaderNavigationIcon(icon?: null | string) {
+  return icon ? icons[icon as keyof typeof icons] : undefined
+}
+
 export function getHeaderNavigationPresentation(item: HeaderNavigationItem) {
-  const Icon = item.icon ? icons[item.icon as keyof typeof icons] : undefined
+  const Icon = getHeaderNavigationIcon(item.icon)
   return { Icon, iconOnly: Boolean(Icon && item.iconOnly) }
+}
+
+export function getSearchNavigationPresentation(
+  navigation: Pick<HeaderNavigation, 'searchIcon' | 'showSearch'>,
+) {
+  return {
+    Icon: getHeaderNavigationIcon(navigation.searchIcon),
+    show: navigation.showSearch !== false,
+  }
 }
