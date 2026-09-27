@@ -22,12 +22,13 @@ const media: Media = {
   updatedAt: '2026-01-01T00:00:00.000Z',
 }
 
-function renderPage(layout: Page['layout']) {
+function renderPage(layout: Page['layout'], customCSS?: string) {
   const page: Page = {
     id: 1,
     title: 'Page title',
     slug: 'test-page',
     layout,
+    customCSS,
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-01T00:00:00.000Z',
   }
@@ -223,5 +224,37 @@ describe('Payload page renderer', () => {
 
     expect(markup).toContain('<h1>Page title</h1>')
     expect(markup).toContain('<h2>Page content</h2>')
+  })
+
+  it('renders design-system appearance controls and advanced page CSS', () => {
+    const markup = renderPage(
+      [
+        {
+          id: 'styled-features',
+          blockType: 'featureGrid',
+          heading: 'Styled content',
+          items: [],
+          appearance: {
+            paddingTop: 'sm',
+            paddingBottom: 'xl',
+            marginTop: 'md',
+            marginBottom: 'none',
+            contentWidth: 'text',
+            background: 'raised',
+            borderTop: 'accent',
+            borderBottom: 'default',
+            rounded: true,
+          },
+        },
+      ],
+      '[data-page="test-page"] h2 { letter-spacing: 0; }',
+    )
+
+    expect(markup).toContain('data-page="test-page"')
+    expect(markup).toContain(
+      'page-block page-block-featureGrid padding-top-sm padding-bottom-xl margin-top-md margin-bottom-none content-width-text background-raised border-top-accent border-bottom-default page-block-rounded',
+    )
+    expect(markup).toContain('data-block-type="featureGrid"')
+    expect(markup).toContain('[data-page="test-page"] h2 { letter-spacing: 0; }')
   })
 })

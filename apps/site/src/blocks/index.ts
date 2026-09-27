@@ -1,4 +1,4 @@
-import type { Block } from 'payload'
+import type { Block, Field } from 'payload'
 
 import { heroHeadlineEditor, validateHeroHeadline } from '@/lib/heroHeadline'
 
@@ -17,10 +17,110 @@ const optionalAnchorField = {
       : 'Use lowercase letters, numbers, and hyphens, starting with a letter.',
 }
 
+const spacingOptions = [
+  { label: 'None', value: 'none' },
+  { label: 'Small', value: 'sm' },
+  { label: 'Medium', value: 'md' },
+  { label: 'Large', value: 'lg' },
+  { label: 'Extra large', value: 'xl' },
+]
+
+function appearanceField(): Field {
+  return {
+    name: 'appearance',
+    type: 'group',
+    admin: {
+      description: 'Optional layout and surface overrides. Defaults use the site design system.',
+    },
+    fields: [
+      {
+        type: 'collapsible',
+        label: 'Spacing',
+        admin: { initCollapsed: true },
+        fields: [
+          {
+            type: 'row',
+            fields: [
+              { name: 'paddingTop', type: 'select', dbName: 'pt', options: spacingOptions },
+              { name: 'paddingBottom', type: 'select', dbName: 'pb', options: spacingOptions },
+            ],
+          },
+          {
+            type: 'row',
+            fields: [
+              { name: 'marginTop', type: 'select', dbName: 'mt', options: spacingOptions },
+              { name: 'marginBottom', type: 'select', dbName: 'mb', options: spacingOptions },
+            ],
+          },
+        ],
+      },
+      {
+        type: 'collapsible',
+        label: 'Container and surface',
+        admin: { initCollapsed: true },
+        fields: [
+          {
+            name: 'contentWidth',
+            type: 'select',
+            dbName: 'cw',
+            options: [
+              { label: 'Site default', value: 'default' },
+              { label: 'Text / narrow', value: 'text' },
+              { label: 'Wide', value: 'wide' },
+              { label: 'Full width', value: 'full' },
+            ],
+          },
+          {
+            name: 'background',
+            type: 'select',
+            dbName: 'bg',
+            options: [
+              { label: 'Default', value: 'default' },
+              { label: 'Raised surface', value: 'raised' },
+              { label: 'Accent', value: 'accent' },
+              { label: 'Dark', value: 'dark' },
+            ],
+          },
+          {
+            type: 'row',
+            fields: [
+              {
+                name: 'borderTop',
+                type: 'select',
+                dbName: 'bt',
+                options: [
+                  { label: 'Default', value: 'default' },
+                  { label: 'None', value: 'none' },
+                  { label: 'Accent', value: 'accent' },
+                ],
+              },
+              {
+                name: 'borderBottom',
+                type: 'select',
+                dbName: 'bb',
+                options: [
+                  { label: 'None', value: 'none' },
+                  { label: 'Default', value: 'default' },
+                  { label: 'Accent', value: 'accent' },
+                ],
+              },
+            ],
+          },
+          { name: 'rounded', type: 'checkbox', label: 'Rounded container' },
+        ],
+      },
+    ],
+  }
+}
+
+function withAppearance(fields: Field[]): Field[] {
+  return [...fields, appearanceField()]
+}
+
 export const HeroBlock: Block = {
   slug: 'hero',
   labels: { plural: 'Hero sections', singular: 'Hero' },
-  fields: [
+  fields: withAppearance([
     { name: 'eyebrow', type: 'text' },
     {
       name: 'heading',
@@ -48,31 +148,31 @@ export const HeroBlock: Block = {
       fields: buttonFields,
     },
     { name: 'image', type: 'upload', relationTo: 'media' },
-  ],
+  ]),
 }
 
 export const RichTextBlock: Block = {
   slug: 'richText',
   labels: { plural: 'Rich text sections', singular: 'Rich text' },
-  fields: [
+  fields: withAppearance([
     { name: 'heading', type: 'text' },
     { name: 'content', type: 'richText', required: true },
-  ],
+  ]),
 }
 
 export const ImageBlock: Block = {
   slug: 'image',
   labels: { plural: 'Images', singular: 'Image' },
-  fields: [
+  fields: withAppearance([
     { name: 'image', type: 'upload', relationTo: 'media', required: true },
     { name: 'caption', type: 'text' },
-  ],
+  ]),
 }
 
 export const FeatureGridBlock: Block = {
   slug: 'featureGrid',
   labels: { plural: 'Feature grids', singular: 'Feature grid' },
-  fields: [
+  fields: withAppearance([
     { name: 'eyebrow', type: 'text' },
     { name: 'heading', type: 'text', required: true },
     { name: 'intro', type: 'textarea' },
@@ -85,13 +185,13 @@ export const FeatureGridBlock: Block = {
         { name: 'description', type: 'textarea', required: true },
       ],
     },
-  ],
+  ]),
 }
 
 export const SplitContentBlock: Block = {
   slug: 'splitContent',
   labels: { plural: 'Split content sections', singular: 'Split content' },
-  fields: [
+  fields: withAppearance([
     optionalAnchorField,
     { name: 'eyebrow', type: 'text' },
     { name: 'heading', type: 'text', required: true },
@@ -107,13 +207,13 @@ export const SplitContentBlock: Block = {
       ],
       required: true,
     },
-  ],
+  ]),
 }
 
 export const LinkGridBlock: Block = {
   slug: 'linkGrid',
   labels: { plural: 'Link grids', singular: 'Link grid' },
-  fields: [
+  fields: withAppearance([
     optionalAnchorField,
     { name: 'eyebrow', type: 'text' },
     { name: 'heading', type: 'text', required: true },
@@ -127,13 +227,13 @@ export const LinkGridBlock: Block = {
         { name: 'url', type: 'text' },
       ],
     },
-  ],
+  ]),
 }
 
 export const PortfolioGridBlock: Block = {
   slug: 'portfolioGrid',
   labels: { plural: 'Portfolio grids', singular: 'Portfolio grid' },
-  fields: [
+  fields: withAppearance([
     optionalAnchorField,
     { name: 'eyebrow', type: 'text' },
     { name: 'heading', type: 'text', required: true },
@@ -149,24 +249,24 @@ export const PortfolioGridBlock: Block = {
         { name: 'url', type: 'text' },
       ],
     },
-  ],
+  ]),
 }
 
 export const CallToActionBlock: Block = {
   slug: 'callToAction',
   labels: { plural: 'Call to action sections', singular: 'Call to action' },
-  fields: [
+  fields: withAppearance([
     { name: 'heading', type: 'text', required: true },
     { name: 'body', type: 'textarea' },
     { name: 'buttonLabel', type: 'text', required: true },
     { name: 'buttonUrl', type: 'text', required: true },
-  ],
+  ]),
 }
 
 export const TestimonialsBlock: Block = {
   slug: 'testimonials',
   labels: { plural: 'Testimonial sections', singular: 'Testimonials' },
-  fields: [
+  fields: withAppearance([
     { name: 'heading', type: 'text' },
     {
       name: 'items',
@@ -178,13 +278,13 @@ export const TestimonialsBlock: Block = {
         { name: 'role', type: 'text' },
       ],
     },
-  ],
+  ]),
 }
 
 export const LogoCloudBlock: Block = {
   slug: 'logoCloud',
   labels: { plural: 'Logo clouds', singular: 'Logo cloud' },
-  fields: [
+  fields: withAppearance([
     optionalAnchorField,
     { name: 'heading', type: 'text' },
     { name: 'intro', type: 'textarea' },
@@ -198,13 +298,13 @@ export const LogoCloudBlock: Block = {
         { name: 'url', type: 'text' },
       ],
     },
-  ],
+  ]),
 }
 
 export const ContactFormBlock: Block = {
   slug: 'contactForm',
   labels: { plural: 'Contact forms', singular: 'Contact form' },
-  fields: [
+  fields: withAppearance([
     {
       ...optionalAnchorField,
       defaultValue: 'contact',
@@ -219,13 +319,13 @@ export const ContactFormBlock: Block = {
       defaultValue: 'Thanks. Your message has been sent.',
       required: true,
     },
-  ],
+  ]),
 }
 
 export const StatsBlock: Block = {
   slug: 'stats',
   labels: { plural: 'Statistics sections', singular: 'Statistics' },
-  fields: [
+  fields: withAppearance([
     { name: 'heading', type: 'text' },
     {
       name: 'items',
@@ -236,13 +336,13 @@ export const StatsBlock: Block = {
         { name: 'label', type: 'text', required: true },
       ],
     },
-  ],
+  ]),
 }
 
 export const FAQBlock: Block = {
   slug: 'faq',
   labels: { plural: 'FAQ sections', singular: 'FAQ' },
-  fields: [
+  fields: withAppearance([
     { name: 'heading', type: 'text' },
     {
       name: 'items',
@@ -253,16 +353,16 @@ export const FAQBlock: Block = {
         { name: 'answer', type: 'textarea', required: true },
       ],
     },
-  ],
+  ]),
 }
 
 export const LatestPostsBlock: Block = {
   slug: 'latestPosts',
   labels: { plural: 'Latest posts sections', singular: 'Latest posts' },
-  fields: [
+  fields: withAppearance([
     { name: 'heading', type: 'text', defaultValue: 'Latest posts' },
     { name: 'limit', type: 'number', defaultValue: 3, min: 1, max: 12 },
-  ],
+  ]),
 }
 
 export const pageBlocks = [

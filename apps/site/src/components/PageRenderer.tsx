@@ -9,6 +9,23 @@ import type { Media, Page } from '@/payload-types'
 type PageBlock = Page['layout'][number]
 type HeroBlock = Extract<PageBlock, { blockType: 'hero' }>
 
+function blockClassName(block: PageBlock): string {
+  const appearance = block.appearance
+  const classes = ['page-block', `page-block-${block.blockType}`]
+
+  if (appearance?.paddingTop) classes.push(`padding-top-${appearance.paddingTop}`)
+  if (appearance?.paddingBottom) classes.push(`padding-bottom-${appearance.paddingBottom}`)
+  if (appearance?.marginTop) classes.push(`margin-top-${appearance.marginTop}`)
+  if (appearance?.marginBottom) classes.push(`margin-bottom-${appearance.marginBottom}`)
+  if (appearance?.contentWidth) classes.push(`content-width-${appearance.contentWidth}`)
+  if (appearance?.background) classes.push(`background-${appearance.background}`)
+  if (appearance?.borderTop) classes.push(`border-top-${appearance.borderTop}`)
+  if (appearance?.borderBottom) classes.push(`border-bottom-${appearance.borderBottom}`)
+  if (appearance?.rounded) classes.push('page-block-rounded')
+
+  return classes.join(' ')
+}
+
 function resolveMedia(media: number | Media | null | undefined): Media | null {
   return media && typeof media === 'object' ? media : null
 }
@@ -333,18 +350,21 @@ export function PageRenderer({ page }: { page: Page }) {
   const firstHero = page.layout.find((block) => block.blockType === 'hero')
 
   return (
-    <main className="page-shell">
+    <main className="page-shell" data-page={page.slug}>
+      {page.customCSS ? <style dangerouslySetInnerHTML={{ __html: page.customCSS }} /> : null}
       {!firstHero ? (
         <header className="page-title">
           <h1>{page.title}</h1>
         </header>
       ) : null}
       {page.layout.map((block) => (
-        <PageBlockView
-          block={block}
+        <div
+          className={blockClassName(block)}
+          data-block-type={block.blockType}
           key={block.id || block.blockType}
-          primaryHero={block === firstHero}
-        />
+        >
+          <PageBlockView block={block} primaryHero={block === firstHero} />
+        </div>
       ))}
     </main>
   )

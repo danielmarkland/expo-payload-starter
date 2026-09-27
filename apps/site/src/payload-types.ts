@@ -305,6 +305,20 @@ export interface Page {
           url?: string | null;
         };
         image?: (number | null) | Media;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'hero';
@@ -326,6 +340,20 @@ export interface Page {
           };
           [k: string]: unknown;
         };
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'richText';
@@ -333,6 +361,20 @@ export interface Page {
     | {
         image: number | Media;
         caption?: string | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'image';
@@ -348,6 +390,20 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'featureGrid';
@@ -376,6 +432,20 @@ export interface Page {
         };
         image: number | Media;
         imagePosition: 'left' | 'right';
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'splitContent';
@@ -395,6 +465,20 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'linkGrid';
@@ -416,6 +500,20 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'portfolioGrid';
@@ -425,6 +523,20 @@ export interface Page {
         body?: string | null;
         buttonLabel: string;
         buttonUrl: string;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'callToAction';
@@ -439,6 +551,20 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'testimonials';
@@ -458,6 +584,20 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'logoCloud';
@@ -472,6 +612,20 @@ export interface Page {
         body?: string | null;
         submitLabel: string;
         successMessage: string;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'contactForm';
@@ -485,6 +639,20 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'stats';
@@ -498,6 +666,20 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'faq';
@@ -505,11 +687,29 @@ export interface Page {
     | {
         heading?: string | null;
         limit?: number | null;
+        /**
+         * Optional layout and surface overrides. Defaults use the site design system.
+         */
+        appearance?: {
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          rounded?: boolean | null;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'latestPosts';
       }
   )[];
+  /**
+   * Optional escape hatch for trusted editors. Scope selectors to [data-page] to avoid affecting the admin or other pages.
+   */
+  customCSS?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -805,6 +1005,19 @@ export interface PagesSelect<T extends boolean = true> {
                     url?: T;
                   };
               image?: T;
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -813,6 +1026,19 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               content?: T;
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -821,6 +1047,19 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               image?: T;
               caption?: T;
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -837,6 +1076,19 @@ export interface PagesSelect<T extends boolean = true> {
                     description?: T;
                     id?: T;
                   };
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -849,6 +1101,19 @@ export interface PagesSelect<T extends boolean = true> {
               content?: T;
               image?: T;
               imagePosition?: T;
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -865,6 +1130,19 @@ export interface PagesSelect<T extends boolean = true> {
                     label?: T;
                     url?: T;
                     id?: T;
+                  };
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
                   };
               id?: T;
               blockName?: T;
@@ -885,6 +1163,19 @@ export interface PagesSelect<T extends boolean = true> {
                     url?: T;
                     id?: T;
                   };
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -895,6 +1186,19 @@ export interface PagesSelect<T extends boolean = true> {
               body?: T;
               buttonLabel?: T;
               buttonUrl?: T;
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -909,6 +1213,19 @@ export interface PagesSelect<T extends boolean = true> {
                     name?: T;
                     role?: T;
                     id?: T;
+                  };
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
                   };
               id?: T;
               blockName?: T;
@@ -927,6 +1244,19 @@ export interface PagesSelect<T extends boolean = true> {
                     url?: T;
                     id?: T;
                   };
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -939,6 +1269,19 @@ export interface PagesSelect<T extends boolean = true> {
               body?: T;
               submitLabel?: T;
               successMessage?: T;
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -952,6 +1295,19 @@ export interface PagesSelect<T extends boolean = true> {
                     value?: T;
                     label?: T;
                     id?: T;
+                  };
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
                   };
               id?: T;
               blockName?: T;
@@ -967,6 +1323,19 @@ export interface PagesSelect<T extends boolean = true> {
                     answer?: T;
                     id?: T;
                   };
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -975,10 +1344,24 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               heading?: T;
               limit?: T;
+              appearance?:
+                | T
+                | {
+                    paddingTop?: T;
+                    paddingBottom?: T;
+                    marginTop?: T;
+                    marginBottom?: T;
+                    contentWidth?: T;
+                    background?: T;
+                    borderTop?: T;
+                    borderBottom?: T;
+                    rounded?: T;
+                  };
               id?: T;
               blockName?: T;
             };
       };
+  customCSS?: T;
   meta?:
     | T
     | {

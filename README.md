@@ -102,6 +102,14 @@ assistive technology. The built-in Search link can be hidden or replaced with
 any curated icon from the same Header navigation settings. Footer navigation
 remains text links.
 
+Every Page block includes a collapsed **Appearance** group. Editors can choose
+responsive design-system presets for top/bottom padding and margin, content
+width, background, borders, and rounded corners without writing CSS. Leaving a
+control blank preserves that block's site default. Pages also include an
+**Advanced presentation → Custom page CSS** Monaco editor as a trusted-editor
+escape hatch. Scope custom selectors beneath `[data-page="page-slug"]`; prefer
+the Appearance controls so pages remain responsive and visually consistent.
+
 Posts can be assigned an Author, Categories, and Tags. Their public archives
 are available at `/authors/<slug>`, `/categories/<slug>`, and `/tags/<slug>`;
 the blog index is `/posts`. Payload's SEO fields support search/social titles,
