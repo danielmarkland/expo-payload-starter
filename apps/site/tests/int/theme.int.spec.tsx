@@ -35,7 +35,8 @@ describe('site theme toggle', () => {
     const button = await screen.findByRole('button', {
       name: 'Current theme: light mode. Switch to dark mode.',
     })
-    expect(button.textContent).toBe('Light mode')
+    expect(button.querySelector('svg')).not.toBeNull()
+    expect(button.textContent).toBe('')
     expect(document.documentElement.dataset.theme).toBe('light')
   })
 

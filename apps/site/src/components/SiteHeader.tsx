@@ -15,7 +15,6 @@ export async function SiteHeader() {
 
   return (
     <header className="site-header">
-      <ThemeToggle />
       <Link aria-label={brand.siteTitle} className="site-brand" href="/">
         {logo?.url ? (
           <Image
@@ -53,6 +52,7 @@ export async function SiteHeader() {
         })}
         <Link href="/search">Search</Link>
       </nav>
+      <ThemeToggle />
     </header>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { Moon, Sun } from 'lucide-react'
 
 import { THEME_STORAGE_KEY, type SiteTheme } from '@/theme'
 
@@ -56,6 +57,7 @@ export function ThemeToggle() {
 
   const nextTheme = theme === 'light' ? 'dark' : 'light'
   const currentLabel = theme ? `${theme} mode` : 'system mode'
+  const ThemeIcon = nextTheme === 'dark' ? Moon : Sun
 
   return (
     <button
@@ -65,7 +67,7 @@ export function ThemeToggle() {
       title={`Switch to ${nextTheme} mode`}
       type="button"
     >
-      {theme ? `${theme[0].toUpperCase()}${theme.slice(1)} mode` : 'System mode'}
+      <ThemeIcon aria-hidden="true" />
     </button>
   )
 }

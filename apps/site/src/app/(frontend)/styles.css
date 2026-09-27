@@ -16,7 +16,6 @@ a {
   align-items: center;
   display: flex;
   gap: var(--space-lg);
-  justify-content: flex-end;
   margin: 0 auto;
   max-width: var(--layout-content);
   padding: var(--space-lg);
@@ -34,9 +33,6 @@ a {
   font-size: var(--font-size-small);
   text-decoration-color: transparent;
   text-underline-offset: 4px;
-}
-.site-header .theme-toggle {
-  margin-right: auto;
 }
 .header-navigation a {
   align-items: center;
@@ -90,6 +86,7 @@ a {
   color: var(--color-ink);
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-bold);
+  margin-right: auto;
   text-decoration: none;
 }
 .site-brand-logo {
@@ -117,17 +114,22 @@ a {
   text-transform: uppercase;
 }
 .theme-toggle {
+  align-items: center;
   background: var(--color-surface-top);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   color: var(--color-ink-body);
   cursor: pointer;
+  display: inline-flex;
   flex: 0 0 auto;
-  font: inherit;
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-semibold);
-  min-height: 40px;
-  padding: 8px 14px;
+  height: 40px;
+  justify-content: center;
+  padding: 8px;
+  width: 40px;
+}
+.theme-toggle svg {
+  height: 20px;
+  width: 20px;
 }
 .theme-toggle:hover {
   border-color: var(--color-primary);
@@ -493,10 +495,6 @@ h1 {
 @media (max-width: 520px) {
   .site-header {
     flex-wrap: wrap;
-  }
-  .header-navigation {
-    flex: 1 1 100%;
-    order: 3;
   }
   .footer-navigation {
     justify-content: flex-start;
