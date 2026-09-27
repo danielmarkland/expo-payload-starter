@@ -31,7 +31,7 @@ cp apps/site/.env.example apps/site/.env
 cp supabase/functions/.env.example supabase/functions/.env
 pnpm install
 supabase start
-pnpm --filter @starter/site payload migrate
+pnpm payload:migrate
 pnpm generate
 pnpm dev
 ```
@@ -39,9 +39,25 @@ pnpm dev
 The public site runs on `http://localhost:3000`, Payload Admin on
 `http://localhost:3000/admin`, and Supabase Studio on `http://localhost:54323`.
 `pnpm dev` starts the site and the Expo development server. To run the app in a
-browser, use `pnpm --filter @starter/app web` instead of the app's Expo Go
+browser, use `pnpm dev:app:web` instead of the app's Expo Go
 server; it serves the app at `http://localhost:8081`. To run the site alongside
 Expo web, start `pnpm dev:site` in another terminal.
+
+### Common commands
+
+| Command                                   | Purpose                                                            |
+| ----------------------------------------- | ------------------------------------------------------------------ |
+| `pnpm dev`                                | Start the Payload/Next site and Expo development server together.  |
+| `pnpm dev:site`                           | Start only the Payload/Next site.                                  |
+| `pnpm dev:app`                            | Start only the Expo development server.                            |
+| `pnpm dev:app:web`                        | Start the Expo app in a web browser.                               |
+| `pnpm payload:migrate`                    | Apply pending Payload database migrations.                         |
+| `pnpm payload:migrate:status`             | Show applied and pending Payload migrations.                       |
+| `pnpm payload:migrate:create <name>`      | Generate a Payload migration after changing its schema.            |
+| `pnpm generate:payload`                   | Regenerate Payload types and the admin import map.                 |
+| `pnpm import:wordpress-home -- --dry-run` | Validate the WordPress homepage import without writing.            |
+| `pnpm import:wordpress-home -- --publish` | Import and publish the WordPress homepage.                         |
+| `pnpm check`                              | Run formatting, linting, typechecks, tests, and production builds. |
 
 The public homepage is a Payload Page with the slug `home`. After the first
 Payload migration, open `/admin`, create a Page with that slug, compose its
@@ -60,8 +76,8 @@ To stage the current `danielmarkland.com` Elementor homepage in Payload, first
 apply the latest Payload migration, then inspect and run the guarded importer:
 
 ```sh
-pnpm --filter @starter/site import:wordpress-home -- --dry-run
-pnpm --filter @starter/site import:wordpress-home
+pnpm import:wordpress-home -- --dry-run
+pnpm import:wordpress-home
 ```
 
 The importer downloads referenced media into the configured Payload storage,
@@ -317,7 +333,7 @@ project; add the second separately. See
 
    ```sh
    DATABASE_URL='<production postgres connection string>' \
-     pnpm --filter @starter/site payload migrate
+     pnpm payload:migrate
    ```
 
    Use the Session pooler URI for this command as well, or another appropriate
@@ -325,7 +341,7 @@ project; add the second separately. See
    trusted local shell or release job; don't paste the URI into shared logs or
    documentation. A successful run reports each migration as `Migrated` and
    ends with `Done`. Check pending migrations with
-   `pnpm --filter @starter/site payload migrate:status`, supplying the same
+   `pnpm payload:migrate:status`, supplying the same
    `DATABASE_URL`. Vercel builds do not apply Payload migrations automatically.
    Payload schema push is disabled to protect Supabase-owned tables.
 

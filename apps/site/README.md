@@ -6,7 +6,7 @@ From the repository root:
 
 ```sh
 cp apps/site/.env.example apps/site/.env
-pnpm --filter @starter/site payload migrate
+pnpm payload:migrate
 pnpm dev:site
 ```
 
