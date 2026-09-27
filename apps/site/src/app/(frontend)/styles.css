@@ -21,6 +21,13 @@ a {
   max-width: var(--layout-content);
   padding: var(--space-lg);
 }
+.site-header-sticky {
+  backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
 .header-navigation,
 .footer-navigation {
   align-items: center;
@@ -243,6 +250,42 @@ h1 {
   font-size: var(--font-size-article);
   line-height: var(--line-height-reading);
 }
+.article-body :is(h2, h3) {
+  scroll-margin-top: calc(var(--space-3xl) + var(--space-lg));
+}
+.article-featured-image {
+  display: block;
+  height: auto;
+  margin: 0 0 var(--space-2xl);
+  max-height: 560px;
+  object-fit: cover;
+  width: 100%;
+}
+.article-toc {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-lg);
+}
+.article-toc h2 {
+  font-size: var(--font-size-body);
+  margin: 0 0 var(--space-sm);
+}
+.article-toc ol {
+  display: grid;
+  gap: var(--space-xs);
+  list-style-position: inside;
+  margin: 0;
+  padding: 0;
+}
+.article-toc a {
+  color: var(--color-ink-body);
+  text-underline-offset: 4px;
+}
+.article-toc-nested {
+  margin-left: var(--space-lg);
+}
 .page-shell {
   margin: 0 auto;
   max-width: var(--layout-content);
@@ -458,6 +501,53 @@ h1 {
   color: var(--color-ink-muted);
   line-height: var(--line-height-reading);
   margin: 0;
+}
+.feature-grid-stacked {
+  border-left: 2px solid var(--color-primary);
+  display: grid;
+  gap: var(--space-xl);
+  padding-left: var(--space-xl);
+}
+.feature-stacked-item h3 {
+  color: var(--color-primary);
+  font-size: var(--font-size-body);
+  margin: 0 0 var(--space-sm);
+}
+.feature-stacked-item p {
+  color: var(--color-ink-body);
+  line-height: var(--line-height-reading);
+  margin: 0;
+  max-width: var(--layout-copy);
+}
+.section-action {
+  color: var(--color-primary);
+  display: inline-block;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-bold);
+  margin-top: var(--space-xl);
+  text-decoration: none;
+}
+.section-action:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.post-card {
+  overflow: hidden;
+  padding: 0;
+}
+.post-card-image {
+  aspect-ratio: 16 / 9;
+  display: block;
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+}
+.post-card-copy {
+  padding: var(--space-lg);
+}
+.post-card-copy h2,
+.post-card-copy h3 {
+  margin-top: 0;
 }
 .prose-section {
   max-width: var(--layout-copy);

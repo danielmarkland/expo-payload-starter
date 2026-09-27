@@ -28,5 +28,12 @@ export const Posts: CollectionConfig = {
     { name: 'categories', type: 'relationship', relationTo: 'categories', hasMany: true },
     { name: 'tags', type: 'relationship', relationTo: 'tags', hasMany: true },
     { name: 'publishedAt', type: 'date' },
+    {
+      name: 'showTableOfContents',
+      type: 'checkbox',
+      admin: { description: 'Show links to level-two and level-three headings in this article.' },
+      defaultValue: false,
+      label: 'Show table of contents',
+    },
   ],
 }

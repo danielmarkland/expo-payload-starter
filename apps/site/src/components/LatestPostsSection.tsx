@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 
@@ -13,7 +14,7 @@ export async function LatestPostsSection({
   const payload = await getPayload({ config })
   const posts = await payload.find({
     collection: 'posts',
-    depth: 0,
+    depth: 1,
     limit: limit || 3,
     overrideAccess: false,
     sort: '-publishedAt',
@@ -28,14 +29,30 @@ export async function LatestPostsSection({
         <h2>{heading || 'Latest posts'}</h2>
       </header>
       <div className="page-card-grid">
-        {posts.docs.map((post) => (
-          <article className="page-card" key={post.id}>
-            <h3>
-              <Link href={`/posts/${post.slug}`}>{post.title}</Link>
-            </h3>
-            <p>{post.summary}</p>
-          </article>
-        ))}
+        {posts.docs.map((post) => {
+          const image =
+            post.meta?.image && typeof post.meta.image === 'object' ? post.meta.image : null
+          return (
+            <article className="page-card post-card" key={post.id}>
+              {image?.url ? (
+                <Image
+                  alt={image.alt || ''}
+                  className="post-card-image"
+                  height={image.height || 630}
+                  src={image.url}
+                  unoptimized
+                  width={image.width || 1200}
+                />
+              ) : null}
+              <div className="post-card-copy">
+                <h3>
+                  <Link href={`/posts/${post.slug}`}>{post.title}</Link>
+                </h3>
+                <p>{post.summary}</p>
+              </div>
+            </article>
+          )
+        })}
       </div>
     </section>
   )

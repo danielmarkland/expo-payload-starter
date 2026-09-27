@@ -13,6 +13,13 @@ export const HeaderNavigation: GlobalConfig = {
   fields: [
     navigationItemsField({ includeIcons: true }),
     {
+      name: 'sticky',
+      type: 'checkbox',
+      admin: { description: 'Keep the header visible while the visitor scrolls.' },
+      defaultValue: false,
+      label: 'Sticky header',
+    },
+    {
       name: 'showSearch',
       type: 'checkbox',
       admin: { description: 'Show the built-in Search link after the navigation items.' },

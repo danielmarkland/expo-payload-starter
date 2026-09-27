@@ -356,22 +356,22 @@ Pages are ordered arrays of Payload blocks. Use the existing block whose
 content semantics match the design; do not choose a block only because its
 current styling happens to look similar.
 
-| Block          | Intended use                              | Supported content and variants                                                       |
-| -------------- | ----------------------------------------- | ------------------------------------------------------------------------------------ |
-| Hero           | Primary or secondary page introduction    | Eyebrow, rich headline with accent spans, secondary heading, body, two links, image. |
-| Rich text      | Editorial copy                            | Optional heading and Lexical rich text.                                              |
-| Image          | Standalone editorial image                | Media upload and optional caption.                                                   |
-| Feature grid   | Repeated benefits or capabilities         | Eyebrow, heading, intro, and title/description cards.                                |
-| Split content  | Copy paired with media                    | Anchor, eyebrow, heading, rich text, image, and left/right image position.           |
-| Link grid      | Resource or destination list              | Anchor, heading content, and label/URL items.                                        |
-| Portfolio grid | Projects, people, or case-study summaries | Anchor, heading content, and name/role/description/URL cards.                        |
-| Call to action | Focused conversion prompt                 | Heading, body, and one required action.                                              |
-| Testimonials   | Social proof                              | Optional heading and quote/name/role items.                                          |
-| Logo cloud     | Clients, partners, or tools               | Anchor, heading, intro, and linked logo uploads.                                     |
-| Contact form   | Built-in contact workflow                 | Anchor, eyebrow, heading, body, submit label, and success message.                   |
-| Statistics     | Compact quantitative proof                | Optional heading and value/label items.                                              |
-| FAQ            | Expandable questions                      | Optional heading and question/answer items.                                          |
-| Latest posts   | Dynamic published-post listing            | Optional heading and a limit from 1 through 12.                                      |
+| Block          | Intended use                              | Supported content and variants                                                                 |
+| -------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Hero           | Primary or secondary page introduction    | Eyebrow, rich headline with accent spans, secondary heading, body, two links, image.           |
+| Rich text      | Editorial copy                            | Optional heading and Lexical rich text.                                                        |
+| Image          | Standalone editorial image                | Media upload and optional caption.                                                             |
+| Feature grid   | Repeated benefits or capabilities         | Eyebrow, heading, intro, card or stacked layout, title/description items, and optional action. |
+| Split content  | Copy paired with media                    | Anchor, eyebrow, heading, rich text, image, left/right image position, and optional action.    |
+| Link grid      | Resource or destination list              | Anchor, heading content, label/URL items, and optional action.                                 |
+| Portfolio grid | Projects, people, or case-study summaries | Anchor, heading content, name/role/description/URL cards, and optional action.                 |
+| Call to action | Focused conversion prompt                 | Heading, body, and one required action.                                                        |
+| Testimonials   | Social proof                              | Optional heading and quote/name/role items.                                                    |
+| Logo cloud     | Clients, partners, or tools               | Anchor, heading, intro, and linked logo uploads.                                               |
+| Contact form   | Built-in contact workflow                 | Anchor, eyebrow, heading, body, submit label, and success message.                             |
+| Statistics     | Compact quantitative proof                | Optional heading and value/label items.                                                        |
+| FAQ            | Expandable questions                      | Optional heading and question/answer items.                                                    |
+| Latest posts   | Dynamic published-post listing            | Optional heading and a limit from 1 through 12.                                                |
 
 Every block includes an optional **Appearance** group:
 
@@ -390,10 +390,12 @@ use it only when the design calls for a mode-independent dark section.
 
 Other CMS-owned design surfaces are **Header navigation**, **Footer navigation**,
 Media, Pages, Posts, Authors, Categories, Tags, Redirects, and SEO metadata.
-Header links support a curated Lucide icon set and optional icon-only display;
-footer links are text-only. Content designs must account for draft/preview
-behavior and use Media relationships rather than embedding untracked asset
-URLs.
+Header links support a curated Lucide icon set, optional icon-only display, and
+an optional sticky header; footer links are text-only. Post SEO images also
+serve as featured images on article and listing views. Editors can enable a
+generated table of contents for an individual post; it links level-two and
+level-three headings. Content designs must account for draft/preview behavior
+and use Media relationships rather than embedding untracked asset URLs.
 
 ### Design brief for agents
 

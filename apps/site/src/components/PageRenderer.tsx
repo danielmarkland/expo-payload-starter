@@ -63,6 +63,18 @@ function SectionHeading({
   )
 }
 
+function SectionAction({ action }: { action?: { label?: null | string; url?: null | string } }) {
+  const href = safeHref(action?.url)
+  if (!action?.label || !href) return null
+
+  return (
+    <Link className="section-action" href={href}>
+      {action.label}
+      <span aria-hidden="true"> →</span>
+    </Link>
+  )
+}
+
 function HeroHeadline({ data, primary }: { data: HeroBlock['heading']; primary: boolean }) {
   const Heading = primary ? 'h1' : 'h2'
   const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
@@ -152,14 +164,22 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       return (
         <section className="page-section">
           <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
-          <div className="page-card-grid">
+          <div
+            className={`feature-grid feature-grid-${block.layout || 'cards'}${
+              block.layout === 'stacked' ? '' : ' page-card-grid'
+            }`}
+          >
             {block.items?.map((item) => (
-              <article className="page-card" key={item.id || item.title}>
+              <article
+                className={block.layout === 'stacked' ? 'feature-stacked-item' : 'page-card'}
+                key={item.id || item.title}
+              >
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
               </article>
             ))}
           </div>
+          <SectionAction action={block.action} />
         </section>
       )
     case 'splitContent': {
@@ -174,6 +194,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
             <div className="article-body">
               <RichText data={block.content} />
             </div>
+            <SectionAction action={block.action} />
           </div>
           {image?.url ? (
             <Image
@@ -208,6 +229,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
               )
             })}
           </ul>
+          <SectionAction action={block.action} />
         </section>
       )
     case 'portfolioGrid':
@@ -237,6 +259,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
               )
             })}
           </div>
+          <SectionAction action={block.action} />
         </section>
       )
     case 'callToAction': {

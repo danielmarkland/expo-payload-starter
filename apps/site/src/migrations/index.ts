@@ -9,6 +9,7 @@ import * as migration_20260927_164523_runtime_site_theme from './20260927_164523
 import * as migration_20260927_171523_light_dark_logos from './20260927_171523_light_dark_logos'
 import * as migration_20260927_173134_configurable_header_search from './20260927_173134_configurable_header_search'
 import * as migration_20260927_185854_section_appearance from './20260927_185854_section_appearance'
+import * as migration_20260927_204325_reusable_layout_capabilities from './20260927_204325_reusable_layout_capabilities'
 
 export const migrations = [
   {
@@ -65,5 +66,10 @@ export const migrations = [
     up: migration_20260927_185854_section_appearance.up,
     down: migration_20260927_185854_section_appearance.down,
     name: '20260927_185854_section_appearance',
+  },
+  {
+    up: migration_20260927_204325_reusable_layout_capabilities.up,
+    down: migration_20260927_204325_reusable_layout_capabilities.down,
+    name: '20260927_204325_reusable_layout_capabilities',
   },
 ]

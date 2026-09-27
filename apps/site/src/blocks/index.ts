@@ -7,6 +7,15 @@ const buttonFields = [
   { name: 'url', type: 'text' as const },
 ]
 
+function optionalActionField(): Field {
+  return {
+    name: 'action',
+    type: 'group',
+    admin: { description: 'Optional single link shown after the section content.' },
+    fields: buttonFields,
+  }
+}
+
 const optionalAnchorField = {
   name: 'anchor',
   type: 'text' as const,
@@ -177,6 +186,15 @@ export const FeatureGridBlock: Block = {
     { name: 'heading', type: 'text', required: true },
     { name: 'intro', type: 'textarea' },
     {
+      name: 'layout',
+      type: 'select',
+      defaultValue: 'cards',
+      options: [
+        { label: 'Cards', value: 'cards' },
+        { label: 'Stacked', value: 'stacked' },
+      ],
+    },
+    {
       name: 'items',
       type: 'array',
       minRows: 1,
@@ -185,6 +203,7 @@ export const FeatureGridBlock: Block = {
         { name: 'description', type: 'textarea', required: true },
       ],
     },
+    optionalActionField(),
   ]),
 }
 
@@ -207,6 +226,7 @@ export const SplitContentBlock: Block = {
       ],
       required: true,
     },
+    optionalActionField(),
   ]),
 }
 
@@ -227,6 +247,7 @@ export const LinkGridBlock: Block = {
         { name: 'url', type: 'text' },
       ],
     },
+    optionalActionField(),
   ]),
 }
 
@@ -249,6 +270,7 @@ export const PortfolioGridBlock: Block = {
         { name: 'url', type: 'text' },
       ],
     },
+    optionalActionField(),
   ]),
 }
 

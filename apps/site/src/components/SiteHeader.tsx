@@ -18,7 +18,7 @@ export async function SiteHeader({ siteConfig }: { siteConfig: SiteConfig }) {
   const SearchIcon = search.Icon
 
   return (
-    <header className="site-header">
+    <header className={`site-header${navigation.sticky ? ' site-header-sticky' : ''}`}>
       <Link aria-label={siteConfig.identity.siteTitle} className="site-brand" href="/">
         {siteConfig.identity.darkLogoUrl ? (
           <Image

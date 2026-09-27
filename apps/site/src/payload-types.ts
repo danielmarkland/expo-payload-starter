@@ -253,6 +253,10 @@ export interface Post {
   categories?: (number | Category)[] | null;
   tags?: (number | Tag)[] | null;
   publishedAt?: string | null;
+  /**
+   * Show links to level-two and level-three headings in this article.
+   */
+  showTableOfContents?: boolean | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -383,6 +387,7 @@ export interface Page {
         eyebrow?: string | null;
         heading: string;
         intro?: string | null;
+        layout?: ('cards' | 'stacked') | null;
         items?:
           | {
               title: string;
@@ -390,6 +395,13 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional single link shown after the section content.
+         */
+        action?: {
+          label?: string | null;
+          url?: string | null;
+        };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
          */
@@ -433,6 +445,13 @@ export interface Page {
         image: number | Media;
         imagePosition: 'left' | 'right';
         /**
+         * Optional single link shown after the section content.
+         */
+        action?: {
+          label?: string | null;
+          url?: string | null;
+        };
+        /**
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
@@ -465,6 +484,13 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional single link shown after the section content.
+         */
+        action?: {
+          label?: string | null;
+          url?: string | null;
+        };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
          */
@@ -500,6 +526,13 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        /**
+         * Optional single link shown after the section content.
+         */
+        action?: {
+          label?: string | null;
+          url?: string | null;
+        };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
          */
@@ -964,6 +997,7 @@ export interface PostsSelect<T extends boolean = true> {
   categories?: T;
   tags?: T;
   publishedAt?: T;
+  showTableOfContents?: T;
   meta?:
     | T
     | {
@@ -1069,12 +1103,19 @@ export interface PagesSelect<T extends boolean = true> {
               eyebrow?: T;
               heading?: T;
               intro?: T;
+              layout?: T;
               items?:
                 | T
                 | {
                     title?: T;
                     description?: T;
                     id?: T;
+                  };
+              action?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
                   };
               appearance?:
                 | T
@@ -1101,6 +1142,12 @@ export interface PagesSelect<T extends boolean = true> {
               content?: T;
               image?: T;
               imagePosition?: T;
+              action?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                  };
               appearance?:
                 | T
                 | {
@@ -1130,6 +1177,12 @@ export interface PagesSelect<T extends boolean = true> {
                     label?: T;
                     url?: T;
                     id?: T;
+                  };
+              action?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
                   };
               appearance?:
                 | T
@@ -1162,6 +1215,12 @@ export interface PagesSelect<T extends boolean = true> {
                     description?: T;
                     url?: T;
                     id?: T;
+                  };
+              action?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
                   };
               appearance?:
                 | T
@@ -1484,6 +1543,10 @@ export interface HeaderNavigation {
       }[]
     | null;
   /**
+   * Keep the header visible while the visitor scrolls.
+   */
+  sticky?: boolean | null;
+  /**
    * Show the built-in Search link after the navigation items.
    */
   showSearch: boolean;
@@ -1653,6 +1716,7 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
         newTab?: T;
         id?: T;
       };
+  sticky?: T;
   showSearch?: T;
   searchIcon?: T;
   updatedAt?: T;

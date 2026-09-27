@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractSearchText } from '@/lib/extractSearchText'
 import { getNavigationHref } from '@/lib/navigation'
+import { extractPostHeadings } from '@/lib/postHeadings'
 import {
   getHeaderNavigationPresentation,
   getSearchNavigationPresentation,
@@ -92,5 +93,24 @@ describe('CMS helpers', () => {
     expect(
       resolveRedirect({ ...postRedirect, to: { type: 'custom', url: '//bad.example' } }),
     ).toBeNull()
+  })
+
+  it('extracts stable, unique table-of-contents anchors from level-two and level-three headings', () => {
+    expect(
+      extractPostHeadings({
+        root: {
+          children: [
+            { children: [{ text: 'Introduction', type: 'text' }], tag: 'h2', type: 'heading' },
+            { children: [{ text: 'Details', type: 'text' }], tag: 'h3', type: 'heading' },
+            { children: [{ text: 'Introduction', type: 'text' }], tag: 'h2', type: 'heading' },
+            { children: [{ text: 'Ignored', type: 'text' }], tag: 'h4', type: 'heading' },
+          ],
+        },
+      }),
+    ).toEqual([
+      { id: 'introduction', level: 2, text: 'Introduction' },
+      { id: 'details', level: 3, text: 'Details' },
+      { id: 'introduction-2', level: 2, text: 'Introduction' },
+    ])
   })
 })

@@ -94,7 +94,9 @@ describe('Payload page renderer', () => {
         id: 'features',
         blockType: 'featureGrid',
         heading: 'What we do',
+        layout: 'stacked',
         items: [{ id: 'feature-one', title: 'Strategy', description: 'Plan the work.' }],
+        action: { label: 'Explore services', url: '#about' },
       },
       {
         id: 'split-content',
@@ -203,6 +205,8 @@ describe('Payload page renderer', () => {
     expect(markup).toContain('Rich text content')
     expect(markup).toContain('Example media')
     expect(markup).toContain('Strategy')
+    expect(markup).toContain('feature-grid-stacked')
+    expect(markup).toContain('Explore services')
     expect(markup).toContain('Biography content')
     expect(markup).toContain('TypeScript')
     expect(markup).toContain('Example Client')
