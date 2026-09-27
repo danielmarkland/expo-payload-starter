@@ -17,20 +17,35 @@ import { fileURLToPath } from 'node:url'
 
 import {
   appVariables,
+  branchCredentials,
   canonicalURL,
   databaseURL,
   generatedSecret,
   getEnvironmentNames,
   getPublishableKey,
-  productionConfig,
+  getSetupProfile,
+  hostedConfig,
   redactedVariableSummary,
   sensitiveVariableNames,
   siteVariables,
+  setupProfiles,
+  validateGitBranch,
 } from './setup-production-lib.mjs'
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url))
 const repositoryRoot = resolve(scriptDirectory, '../../..')
 const dryRun = process.argv.includes('--dry-run')
+
+function argumentValue(name) {
+  const inline = process.argv.find((argument) =>
+    argument.startsWith(`${name}=`),
+  )
+  if (inline) return inline.slice(name.length + 1)
+  const index = process.argv.indexOf(name)
+  return index >= 0 ? process.argv[index + 1] : undefined
+}
+
+const requestedProfile = argumentValue('--profile')
 let muteReadlineOutput = false
 const readlineOutput = new Writable({
   write(chunk, _encoding, callback) {
@@ -91,6 +106,18 @@ async function choose(message, choices, { allowCreate = false } = {}) {
     }
     process.stdout.write(`Enter a number from 1 to ${maximum}.\n`)
   }
+}
+
+async function setupProfile() {
+  if (requestedProfile) return getSetupProfile(requestedProfile)
+  const id = await choose(
+    'Choose a deployment profile',
+    Object.entries(setupProfiles).map(([value, profile]) => ({
+      label: profile.label,
+      value,
+    })),
+  )
+  return getSetupProfile(id)
 }
 
 async function run(command, args, options = {}) {
@@ -242,6 +269,96 @@ async function supabaseProject() {
   }
 }
 
+function branchList(value) {
+  if (Array.isArray(value)) return value
+  return value.branches || value.data || []
+}
+
+async function developmentBranch(projectRef, gitBranch, region) {
+  if (dryRun) {
+    return {
+      API_URL: 'https://development-branch.supabase.co',
+      POSTGRES_URL:
+        'postgresql://postgres.development@pooler.example.invalid:5432/postgres',
+      PUBLISHABLE_KEY: 'sb_publishable_[dry-run-development]',
+      git_branch: gitBranch,
+      name: gitBranch,
+      project_ref: 'development-branch-ref',
+    }
+  }
+
+  const listed = await run(
+    'supabase',
+    [
+      '--experimental',
+      'branches',
+      'list',
+      '--project-ref',
+      projectRef,
+      '--output',
+      'json',
+    ],
+    { allowFailure: true, quiet: true },
+  )
+  if (listed.code !== 0) {
+    throw new Error(
+      'Supabase Branching is unavailable. The staged profile requires a Pro-plan project with Branching enabled.',
+    )
+  }
+  const branches = branchList(parseJSON(listed, 'Supabase branches'))
+  let branch = branches.find(
+    (candidate) =>
+      candidate.git_branch === gitBranch || candidate.name === gitBranch,
+  )
+  if (!branch) {
+    if (
+      !(await confirm(
+        `Create persistent Supabase branch ${gitBranch} without production data? This may affect billing.`,
+      ))
+    ) {
+      throw new Error('Supabase development branch creation cancelled.')
+    }
+    const created = await run(
+      'supabase',
+      [
+        '--experimental',
+        'branches',
+        'create',
+        gitBranch,
+        '--project-ref',
+        projectRef,
+        '--git-branch',
+        gitBranch,
+        '--persistent',
+        '--region',
+        region,
+        '--output',
+        'json',
+        '--yes',
+      ],
+      { quiet: true },
+    )
+    branch = parseJSON(created, 'Created Supabase branch')
+  }
+  const identifier =
+    branch.id || branch.ref || branch.project_ref || branch.name
+  const details = await run(
+    'supabase',
+    [
+      '--experimental',
+      'branches',
+      'get',
+      identifier,
+      '--project-ref',
+      projectRef,
+      '--output',
+      'json',
+    ],
+    { quiet: true },
+  )
+  return parseJSON(details, 'Supabase development branch')
+}
+
 async function vercelProjects() {
   const account = await run('vercel', ['whoami'], {
     allowFailure: true,
@@ -370,13 +487,13 @@ async function linkAndConfigureVercel(project, scope, appDirectory, settings) {
   }
 }
 
-async function vercelEnvironmentNames(project, scope) {
+async function vercelEnvironmentNames(project, scope, environment, gitBranch) {
+  const environmentArgs = ['env', 'ls', environment]
+  if (gitBranch) environmentArgs.push(gitBranch)
   const result = await run(
     'vercel',
     [
-      'env',
-      'ls',
-      'production',
+      ...environmentArgs,
       '--project',
       project.id || project.name,
       '--scope',
@@ -396,8 +513,14 @@ async function applyVercelVariables(
   scope,
   variables,
   replaceExistingSecrets,
+  { environment = 'production', gitBranch } = {},
 ) {
-  const existing = await vercelEnvironmentNames(project, scope)
+  const existing = await vercelEnvironmentNames(
+    project,
+    scope,
+    environment,
+    gitBranch,
+  )
   for (const [name, value] of Object.entries(variables)) {
     const sensitive = sensitiveVariableNames.has(name)
     if (sensitive && existing.has(name) && !replaceExistingSecrets) {
@@ -406,7 +529,7 @@ async function applyVercelVariables(
     }
     if (dryRun) {
       process.stdout.write(
-        `[dry-run] ${existing.has(name) ? 'Update' : 'Add'} ${name}.\n`,
+        `[dry-run] ${existing.has(name) ? 'Update' : 'Add'} ${name} in Vercel ${environment}${gitBranch ? ` for ${gitBranch}` : ''}.\n`,
       )
       continue
     }
@@ -416,7 +539,7 @@ async function applyVercelVariables(
         'env',
         'add',
         name,
-        'production',
+        environment,
         '--project',
         project.id || project.name,
         '--scope',
@@ -424,6 +547,7 @@ async function applyVercelVariables(
         sensitive ? '--sensitive' : '--no-sensitive',
         '--force',
         '--yes',
+        ...(gitBranch ? ['--git-branch', gitBranch] : []),
       ],
       { input: `${value}\n`, quiet: true },
     )
@@ -433,7 +557,7 @@ async function applyVercelVariables(
   }
 }
 
-async function pushProductionConfig(values) {
+async function pushHostedConfig(values) {
   const localConfig = await readFile(
     join(repositoryRoot, 'supabase/config.toml'),
     'utf8',
@@ -442,7 +566,7 @@ async function pushProductionConfig(values) {
   const configDirectory = join(directory, 'supabase')
   await mkdir(configDirectory, { recursive: true })
   const configPath = join(configDirectory, 'config.toml')
-  await writeFile(configPath, productionConfig(localConfig, values), {
+  await writeFile(configPath, hostedConfig(localConfig, values), {
     mode: 0o600,
   })
   await chmod(configPath, 0o600)
@@ -465,13 +589,13 @@ async function pushProductionConfig(values) {
   }
 }
 
-async function optionalConfiguration(projectRef) {
+async function optionalConfiguration(projectRef, { includeApp }) {
   const site = {}
   let google = null
   let functionSecrets = null
   let deployFunctions = false
 
-  if (await confirm('Configure Google OAuth now?')) {
+  if (includeApp && (await confirm('Configure Google OAuth now?'))) {
     process.stdout.write(
       `Register this callback in Google Cloud: https://${projectRef}.supabase.co/auth/v1/callback\n`,
     )
@@ -527,9 +651,11 @@ async function optionalConfiguration(projectRef) {
   }
   if (await confirm('Configure Google Tag Manager now?')) {
     site.NEXT_PUBLIC_GTM_CONTAINER_ID = await prompt('Website GTM container ID')
-    site.EXPO_PUBLIC_GTM_CONTAINER_ID = await prompt(
-      'Expo web GTM container ID',
-    )
+    if (includeApp) {
+      site.EXPO_PUBLIC_GTM_CONTAINER_ID = await prompt(
+        'Expo web GTM container ID',
+      )
+    }
   }
   return { deployFunctions, functionSecrets, google, site }
 }
@@ -555,26 +681,38 @@ async function setFunctionSecrets(projectRef, secrets) {
   }
 }
 
-async function main() {
-  heading(`Production setup${dryRun ? ' (dry run)' : ''}`)
-  await requireCLI(
-    'supabase',
-    ['--version'],
-    'Install it from https://supabase.com/docs/guides/local-development/cli/getting-started',
-  )
-  await requireCLI(
-    'vercel',
-    ['--version'],
-    'Install it with `pnpm add -g vercel`.',
-  )
+async function collectS3(environment, projectRef, region) {
+  if (!dryRun) {
+    process.stdout.write(
+      `\nOpen Supabase ${environment} ${projectRef}, go to Storage → S3, enable the S3 protocol, and generate an access-key pair. The secret is shown only once.\n`,
+    )
+  }
+  const s3 = {
+    accessKeyID: dryRun
+      ? '[dry-run]'
+      : await hiddenPrompt(`${environment} Supabase S3 access key ID`),
+    bucket: await prompt(`${environment} Supabase S3 bucket`, 'cms-media'),
+    endpoint: `https://${projectRef}.storage.supabase.co/storage/v1/s3`,
+    region,
+    secretAccessKey: dryRun
+      ? '[dry-run]'
+      : await hiddenPrompt(`${environment} Supabase S3 secret access key`),
+  }
+  if (!dryRun && (!s3.accessKeyID || !s3.secretAccessKey)) {
+    throw new Error(
+      `Both ${environment} Supabase S3 credentials are required for Payload media uploads.`,
+    )
+  }
+  return s3
+}
 
-  heading('Supabase')
-  const project = await supabaseProject()
+async function productionEnvironment(project) {
   const projectRef = project.ref || project.id
   const databasePassword =
     project.databasePassword ||
-    (dryRun ? '[dry-run]' : await hiddenPrompt('Database password'))
-  if (!databasePassword) throw new Error('The database password is required.')
+    (dryRun ? '[dry-run]' : await hiddenPrompt('Production database password'))
+  if (!databasePassword)
+    throw new Error('The production database password is required.')
   if (!dryRun) {
     await run('supabase', [
       'link',
@@ -585,9 +723,10 @@ async function main() {
       '--yes',
     ])
   } else {
-    process.stdout.write(`[dry-run] Link Supabase project ${projectRef}.\n`)
+    process.stdout.write(
+      `[dry-run] Link production Supabase project ${projectRef}.\n`,
+    )
   }
-
   const publishableKey = project.dryRunNew
     ? 'sb_publishable_[dry-run]'
     : getPublishableKey(
@@ -615,28 +754,210 @@ async function main() {
           'utf8',
         )
       ).trim()
-  const database = databaseURL(poolerURL, databasePassword)
-  const supabaseURL = `https://${projectRef}.supabase.co`
   const region = project.region || (await prompt('Supabase region'))
-  if (!dryRun) {
-    process.stdout.write(
-      `\nOpen Supabase project ${projectRef}, go to Storage → S3, enable the S3 protocol, and generate an access-key pair. The secret is shown only once.\n`,
+  return {
+    database: databaseURL(poolerURL, databasePassword),
+    label: 'production',
+    projectRef,
+    publishableKey,
+    region,
+    supabaseURL: `https://${projectRef}.supabase.co`,
+    target: { environment: 'production' },
+  }
+}
+
+function previewURL(project, branch, scope) {
+  const segment = (value) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9-]+/g, '-')
+      .replace(/^-|-$/g, '')
+  return `https://${segment(project.name)}-git-${segment(branch)}-${segment(scope)}.vercel.app`
+}
+
+async function applyEnvironment({
+  appProject,
+  appURL,
+  environment,
+  includeApp,
+  nativeScheme,
+  optional,
+  replaceExistingSecrets,
+  siteURL,
+  vercelScope,
+  websiteProject,
+}) {
+  const websiteVariables = siteVariables({
+    appURL,
+    database: environment.database,
+    optional: optional.site,
+    payloadSecret: generatedSecret(),
+    previewSecret: generatedSecret(),
+    s3: environment.s3,
+    siteURL,
+  })
+  const appEnvironmentVariables = includeApp
+    ? appVariables({
+        gtmContainerID: optional.site.EXPO_PUBLIC_GTM_CONTAINER_ID,
+        publishableKey: environment.publishableKey,
+        siteURL,
+        supabaseURL: environment.supabaseURL,
+      })
+    : null
+  delete websiteVariables.EXPO_PUBLIC_GTM_CONTAINER_ID
+
+  process.stdout.write(
+    `${JSON.stringify(
+      {
+        app: appEnvironmentVariables
+          ? redactedVariableSummary(appEnvironmentVariables)
+          : 'not deployed',
+        environment: environment.label,
+        site: redactedVariableSummary(websiteVariables),
+        supabase: {
+          projectRef: environment.projectRef,
+          region: environment.region,
+        },
+        vercelTarget: environment.target,
+      },
+      null,
+      2,
+    )}\n`,
+  )
+
+  await applyVercelVariables(
+    websiteProject,
+    vercelScope,
+    websiteVariables,
+    replaceExistingSecrets,
+    environment.target,
+  )
+  if (appEnvironmentVariables) {
+    await applyVercelVariables(
+      appProject,
+      vercelScope,
+      appEnvironmentVariables,
+      replaceExistingSecrets,
+      environment.target,
     )
   }
-  const s3 = {
-    accessKeyID: dryRun
-      ? '[dry-run]'
-      : await hiddenPrompt('Supabase S3 access key ID'),
-    bucket: await prompt('Supabase S3 bucket', 'cms-media'),
-    endpoint: `https://${projectRef}.storage.supabase.co/storage/v1/s3`,
-    region,
-    secretAccessKey: dryRun
-      ? '[dry-run]'
-      : await hiddenPrompt('Supabase S3 secret access key'),
+
+  if (dryRun) {
+    process.stdout.write(
+      `[dry-run] Inspect and apply ${environment.label} Supabase migrations.\n`,
+    )
+    process.stdout.write(
+      `[dry-run] Push ${environment.label} Supabase API/Auth configuration.\n`,
+    )
+    process.stdout.write(
+      `[dry-run] Apply ${environment.label} Payload migrations.\n`,
+    )
+    return
   }
-  if (!dryRun && (!s3.accessKeyID || !s3.secretAccessKey)) {
-    throw new Error(
-      'Both Supabase S3 credentials are required for Payload media uploads.',
+
+  const databaseArgs = environment.target.gitBranch
+    ? ['--db-url', environment.database]
+    : ['--linked']
+  await run('supabase', ['db', 'push', '--dry-run', ...databaseArgs])
+  if (
+    !(await confirm(`Apply pending ${environment.label} Supabase migrations?`))
+  ) {
+    throw new Error(`${environment.label} Supabase migration cancelled.`)
+  }
+  await run('supabase', ['db', 'push', ...databaseArgs])
+  if (
+    !(await confirm(
+      `Push ${environment.label} Supabase API and Auth configuration?`,
+    ))
+  ) {
+    throw new Error(`${environment.label} Supabase configuration cancelled.`)
+  }
+  await pushHostedConfig({
+    appURL: appURL || siteURL,
+    google: optional.google,
+    nativeScheme: includeApp ? nativeScheme : null,
+    projectRef: environment.projectRef,
+  })
+  if (!(await confirm(`Apply ${environment.label} Payload CMS migrations?`))) {
+    throw new Error(`${environment.label} Payload migration cancelled.`)
+  }
+  await run('pnpm', ['payload:migrate'], {
+    env: { DATABASE_URL: environment.database },
+  })
+  if (optional.functionSecrets) {
+    await setFunctionSecrets(environment.projectRef, optional.functionSecrets)
+  }
+  if (optional.deployFunctions) {
+    await run('supabase', [
+      'functions',
+      'deploy',
+      'send-welcome-email',
+      'resend-webhook',
+      '--project-ref',
+      environment.projectRef,
+    ])
+  }
+}
+
+async function main() {
+  const profile = await setupProfile()
+  heading(`Hosted setup: ${profile.label}${dryRun ? ' (dry run)' : ''}`)
+  await requireCLI(
+    'supabase',
+    ['--version'],
+    'Install it from https://supabase.com/docs/guides/local-development/cli/getting-started',
+  )
+  await requireCLI(
+    'vercel',
+    ['--version'],
+    'Install it with `pnpm add -g vercel`.',
+  )
+
+  let productionBranch = 'main'
+  let developmentGitBranch = null
+  if (profile.development) {
+    productionBranch = validateGitBranch(
+      await prompt('Production Git branch', 'main'),
+    )
+    developmentGitBranch = validateGitBranch(
+      await prompt('Development Git branch', 'develop'),
+    )
+    if (productionBranch === developmentGitBranch) {
+      throw new Error('Production and development Git branches must differ.')
+    }
+  }
+
+  heading('Supabase production')
+  const project = await supabaseProject()
+  const production = await productionEnvironment(project)
+  production.s3 = await collectS3(
+    'production',
+    production.projectRef,
+    production.region,
+  )
+
+  let development = null
+  if (profile.development) {
+    heading('Supabase development')
+    const details = await developmentBranch(
+      production.projectRef,
+      developmentGitBranch,
+      production.region,
+    )
+    const credentials = branchCredentials(details)
+    development = {
+      ...credentials,
+      label: 'development',
+      region: details.region || production.region,
+      target: {
+        environment: 'preview',
+        gitBranch: developmentGitBranch,
+      },
+    }
+    development.s3 = await collectS3(
+      'development',
+      development.projectRef,
+      development.region,
     )
   }
 
@@ -649,23 +970,32 @@ async function main() {
     'expo-payload-site',
     'apps/site',
   )
-  const appProject = await selectVercelProject(
-    'Expo web app',
-    vercel.projects.filter((candidate) => candidate.id !== websiteProject.id),
-    vercel.scope,
-    'expo-payload-app',
-    'apps/app',
-  )
+  const includeAnyApp = profile.productionApp || profile.developmentApp
+  const appProject = includeAnyApp
+    ? await selectVercelProject(
+        'Expo web app',
+        vercel.projects.filter(
+          (candidate) => candidate.id !== websiteProject.id,
+        ),
+        vercel.scope,
+        'expo-payload-app',
+        'apps/app',
+      )
+    : null
   await linkAndConfigureVercel(websiteProject, vercel.scope, 'apps/site', {
     framework: 'nextjs',
+    ...(profile.development ? { productionBranch } : {}),
     rootDirectory: 'apps/site',
   })
-  await linkAndConfigureVercel(appProject, vercel.scope, 'apps/app', {
-    buildCommand: 'pnpm build',
-    framework: null,
-    outputDirectory: 'dist',
-    rootDirectory: 'apps/app',
-  })
+  if (appProject) {
+    await linkAndConfigureVercel(appProject, vercel.scope, 'apps/app', {
+      buildCommand: 'pnpm build',
+      framework: null,
+      outputDirectory: 'dist',
+      ...(profile.development ? { productionBranch } : {}),
+      rootDirectory: 'apps/app',
+    })
+  }
 
   const siteURL = canonicalURL(
     await prompt(
@@ -674,50 +1004,45 @@ async function main() {
         `https://${websiteProject.name}.vercel.app`,
     ),
   )
-  const appURL = canonicalURL(
-    await prompt(
-      'Canonical Expo web URL',
-      appProject.latestProductionUrl || `https://${appProject.name}.vercel.app`,
-    ),
-  )
-  const optional = await optionalConfiguration(projectRef)
+  const productionAppURL = profile.productionApp
+    ? canonicalURL(
+        await prompt(
+          'Canonical production Expo web URL',
+          appProject.latestProductionUrl ||
+            `https://${appProject.name}.vercel.app`,
+        ),
+      )
+    : null
+  let developmentSiteURL = null
+  let developmentAppURL = null
+  if (development) {
+    developmentSiteURL = canonicalURL(
+      await prompt(
+        'Canonical development website URL',
+        previewURL(websiteProject, developmentGitBranch, vercel.scope),
+      ),
+    )
+    developmentAppURL = canonicalURL(
+      await prompt(
+        'Canonical development Expo web URL',
+        previewURL(appProject, developmentGitBranch, vercel.scope),
+      ),
+    )
+  }
   const nativeScheme =
     (await import('../../../apps/app/app.config.js')).default?.scheme ||
     'expopayloadstarter'
-  const websiteVariables = siteVariables({
-    appURL,
-    database,
-    optional: optional.site,
-    payloadSecret: generatedSecret(),
-    previewSecret: generatedSecret(),
-    s3,
-    siteURL,
-  })
-  const expoVariables = appVariables({
-    gtmContainerID: optional.site.EXPO_PUBLIC_GTM_CONTAINER_ID,
-    publishableKey,
-    siteURL,
-    supabaseURL,
-  })
-  delete websiteVariables.EXPO_PUBLIC_GTM_CONTAINER_ID
-
-  heading('Planned production configuration')
-  process.stdout.write(
-    `${JSON.stringify(
-      {
-        app: redactedVariableSummary(expoVariables),
-        site: redactedVariableSummary(websiteVariables),
-        supabase: { projectRef, region },
-        vercel: {
-          app: appProject.name,
-          scope: vercel.scope,
-          website: websiteProject.name,
-        },
-      },
-      null,
-      2,
-    )}\n`,
+  heading('Optional production services')
+  const productionOptional = await optionalConfiguration(
+    production.projectRef,
+    { includeApp: profile.productionApp },
   )
+  const developmentOptional = development
+    ? (heading('Optional development services'),
+      await optionalConfiguration(development.projectRef, {
+        includeApp: profile.developmentApp,
+      }))
+    : null
 
   const replaceExistingSecrets = dryRun
     ? false
@@ -726,74 +1051,53 @@ async function main() {
       )
   if (
     !dryRun &&
-    !(await confirm('Apply the Vercel production variables shown above?'))
+    !(await confirm('Apply the Vercel environment variables shown above?'))
   ) {
     throw new Error('Vercel environment configuration cancelled.')
   }
-  await applyVercelVariables(
-    websiteProject,
-    vercel.scope,
-    websiteVariables,
-    replaceExistingSecrets,
-  )
-  await applyVercelVariables(
+  heading('Production configuration')
+  await applyEnvironment({
     appProject,
-    vercel.scope,
-    expoVariables,
+    appURL: productionAppURL,
+    environment: production,
+    includeApp: profile.productionApp,
+    nativeScheme,
+    optional: productionOptional,
     replaceExistingSecrets,
-  )
-
-  heading('Migrations and hosted configuration')
-  if (dryRun) {
-    process.stdout.write('[dry-run] Inspect and apply Supabase migrations.\n')
-    process.stdout.write(
-      '[dry-run] Push production Supabase API/Auth configuration.\n',
-    )
-    process.stdout.write(
-      '[dry-run] Apply Payload migrations to the same database.\n',
-    )
-  } else {
-    await run('supabase', ['db', 'push', '--dry-run', '--linked'])
-    if (!(await confirm('Apply the pending Supabase migrations?')))
-      throw new Error('Supabase migration cancelled.')
-    await run('supabase', ['db', 'push', '--linked'])
-    if (
-      !(await confirm('Push production Supabase API and Auth configuration?'))
-    ) {
-      throw new Error('Supabase configuration cancelled.')
-    }
-    await pushProductionConfig({
-      appURL,
-      google: optional.google,
+    siteURL,
+    vercelScope: vercel.scope,
+    websiteProject,
+  })
+  if (development) {
+    heading('Development configuration')
+    await applyEnvironment({
+      appProject,
+      appURL: developmentAppURL,
+      environment: development,
+      includeApp: profile.developmentApp,
       nativeScheme,
-      projectRef,
+      optional: developmentOptional,
+      replaceExistingSecrets,
+      siteURL: developmentSiteURL,
+      vercelScope: vercel.scope,
+      websiteProject,
     })
-    if (
-      !(await confirm('Apply Payload CMS migrations to the same database?'))
-    ) {
-      throw new Error('Payload migration cancelled.')
-    }
-    await run('pnpm', ['payload:migrate'], { env: { DATABASE_URL: database } })
-    if (optional.functionSecrets)
-      await setFunctionSecrets(projectRef, optional.functionSecrets)
-    if (optional.deployFunctions) {
-      await run('supabase', [
-        'functions',
-        'deploy',
-        'send-welcome-email',
-        'resend-webhook',
-        '--project-ref',
-        projectRef,
-      ])
-    }
   }
 
   heading('Deployment')
-  if (dryRun) {
+  if (profile.development) {
     process.stdout.write(
-      '[dry-run] Ask before deploying Website + CMS and Expo web to production.\n',
+      `Push ${developmentGitBranch} to create the branch-scoped Vercel Preview deployments. Production remains on ${productionBranch}.\n`,
     )
-  } else if (await confirm('Deploy both Vercel projects to production now?')) {
+  } else if (dryRun) {
+    process.stdout.write(
+      `[dry-run] Ask before deploying ${profile.productionApp ? 'Website + CMS and Expo web' : 'Website + CMS'} to production.\n`,
+    )
+  } else if (
+    await confirm(
+      `Deploy ${profile.productionApp ? 'both Vercel projects' : 'the Website + CMS project'} to production now?`,
+    )
+  ) {
     await run('vercel', [
       'deploy',
       '--prod',
@@ -803,23 +1107,32 @@ async function main() {
       '--scope',
       vercel.scope,
     ])
-    await run('vercel', [
-      'deploy',
-      '--prod',
-      '--yes',
-      '--project',
-      appProject.id,
-      '--scope',
-      vercel.scope,
-    ])
+    if (profile.productionApp) {
+      await run('vercel', [
+        'deploy',
+        '--prod',
+        '--yes',
+        '--project',
+        appProject.id,
+        '--scope',
+        vercel.scope,
+      ])
+    }
   } else {
     process.stdout.write(
       'Configuration is complete. Deploy later from Vercel or rerun this command.\n',
     )
   }
 
+  const verificationURLs = [
+    `${siteURL}/api/site-config`,
+    `${siteURL}/admin`,
+    productionAppURL,
+    developmentSiteURL && `${developmentSiteURL}/admin`,
+    developmentAppURL,
+  ].filter(Boolean)
   process.stdout.write(
-    `\nSetup complete. Verify ${siteURL}/api/site-config, ${siteURL}/admin, and ${appURL}.\n`,
+    `\nSetup complete. Verify ${verificationURLs.join(', ')}.\n`,
   )
 }
 

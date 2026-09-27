@@ -21,25 +21,27 @@ authenticated application.
 - Node.js 22+
 - pnpm 11
 - Supabase CLI
-- Vercel CLI, for guided production setup and deployment
+- Vercel CLI, for guided hosted setup and deployment
 - Docker, only for the full local Supabase development and test workflow
 
 ## Choose a setup path
 
 For the shortest path to a hosted environment, install dependencies,
-authenticate the provider CLIs, and run the guided production setup:
+authenticate the provider CLIs, and run the guided setup:
 
 ```sh
 pnpm install
 supabase login
 vercel login
-pnpm setup:production
+pnpm setup:hosted
 ```
 
-This path does not require Docker. The wizard selects or creates hosted
-Supabase and Vercel projects, applies migrations, and configures production
-variables. See [Production deployment](#production-deployment) for its safety
-boundaries and manual checkpoints.
+This path does not require Docker. The wizard supports a landing site, a
+single-environment app, or separate hosted development and production
+environments. It selects or creates Supabase and Vercel resources, applies
+migrations, and configures environment variables. See
+[Hosted environments and deployment](#hosted-environments-and-deployment) for
+its safety boundaries and manual checkpoints.
 
 Use the local path when developing database changes or running the complete
 test suite. It provides an isolated Supabase/Postgres instance for Payload
@@ -84,7 +86,8 @@ Expo web, start `pnpm dev:site` in another terminal.
 | `pnpm payload:migrate:status`        | Show applied and pending Payload migrations.                      |
 | `pnpm payload:migrate:create <name>` | Generate a Payload migration after changing its schema.           |
 | `pnpm generate:payload`              | Regenerate Payload types and the admin import map.                |
-| `pnpm setup:production`              | Configure Supabase and Vercel production projects interactively.  |
+| `pnpm setup:hosted`                  | Configure Supabase and Vercel environments interactively.         |
+| `pnpm setup:production`              | Run the backward-compatible single-app production setup.          |
 | `pnpm check`                         | Run all checks and builds; requires the local Supabase stack.     |
 
 The public homepage is a Payload Page with the slug `home`. After the first
@@ -314,7 +317,28 @@ change token values and brand assets in the shared package instead of editing
 duplicated palettes. The brand accents are based on the primary and secondary
 colors configured on [danielmarkland.com](https://danielmarkland.com/).
 
-## Production deployment
+## Hosted environments and deployment
+
+The starter recognizes three environment roles:
+
+| Environment | Supabase                     | Vercel                                                  | Purpose                                           |
+| ----------- | ---------------------------- | ------------------------------------------------------- | ------------------------------------------------- |
+| Local       | CLI/Docker stack             | Local Next.js and Expo servers                          | Database development and the complete test suite  |
+| Development | Persistent Supabase branch   | Preview variables scoped to a selected Git branch       | Long-lived hosted integration work before release |
+| Production  | Main hosted Supabase project | Production variables and the selected production branch | Public site and released app                      |
+
+Supabase Branching requires a Pro-plan project. Free-tier projects can use the
+Landing or Single-environment app profiles with local development. The staged
+profile uses a persistent branch without production data and requires separate
+branch credentials, Payload content, users, and media.
+
+The guided wizard offers these profiles:
+
+| Profile                | Production                   | Hosted development                                                                            |
+| ---------------------- | ---------------------------- | --------------------------------------------------------------------------------------------- |
+| Landing site           | Website + Payload            | None                                                                                          |
+| Single-environment app | Website + Payload + Expo web | None                                                                                          |
+| Staged app             | Website + Payload            | Website + Payload + Expo web on a persistent Supabase branch and branch-scoped Vercel Preview |
 
 Deploy two Vercel projects from the same repository:
 
@@ -322,6 +346,10 @@ Deploy two Vercel projects from the same repository:
 | -------------- | -------------- | ------------------------ |
 | Website + CMS  | `apps/site`    | Next.js (automatic)      |
 | Universal app  | `apps/app`     | `dist` (Expo web export) |
+
+The Landing profile creates only the Website + CMS project. The other profiles
+use both projects; in the Staged profile, the app project receives no
+production credentials or custom production domain until a later release.
 
 ### Guided setup
 
@@ -338,18 +366,34 @@ supabase login
 vercel login
 ```
 
-Run the production setup wizard from the repository root:
+Run the hosted setup wizard from the repository root:
 
 ```sh
-pnpm setup:production
+pnpm setup:hosted
 ```
 
-The wizard can select or create the Supabase project and both Vercel projects.
-It links the repository, previews and applies Supabase product migrations,
-applies Payload CMS migrations to the same database, configures production-only
-Vercel variables, and offers optional Google OAuth, email, Turnstile, and GTM
-setup. It shows a redacted summary and asks again before migrations, hosted
-Auth changes, replacing existing secrets, or production deployment.
+You can also select a profile non-interactively while retaining the wizard's
+resource and confirmation prompts:
+
+```sh
+pnpm run setup -- --profile landing
+pnpm run setup -- --profile single-app
+pnpm run setup -- --profile staged
+```
+
+`pnpm setup:production` remains an alias for the `single-app` profile. The
+wizard can select or create the production Supabase project and required Vercel
+projects. For staged deployments it also creates or selects a persistent
+Supabase branch associated with user-selected development and production Git
+branches. Vercel development variables use Preview scope restricted to the
+development branch, which works without a Vercel custom environment.
+
+The wizard links the repository, previews and applies Supabase product
+migrations, applies Payload CMS migrations to the same database, configures
+environment-scoped Vercel variables, and offers optional Google OAuth, email,
+Turnstile, and GTM setup. It shows a redacted summary and asks again before
+migrations, hosted Auth changes, replacing existing secrets, billable branch
+creation, or production deployment.
 
 Supabase currently requires one dashboard step for Payload media storage. When
 the wizard pauses, open **Storage → S3**, enable the S3 protocol, generate an
@@ -358,20 +402,28 @@ Google sign-in, register the callback URL printed by the wizard in Google Cloud
 before continuing. Secret values are piped directly to their destination and
 are not written to the repository.
 
-Preview deployments are intentionally not given production credentials. Give
-previews an isolated Supabase project or Supabase Branching configuration
-before enabling authenticated or CMS-backed previews. Inspect the complete
-plan without making remote changes using:
+Other Vercel Preview deployments are intentionally not given production or
+long-lived development credentials. Per-pull-request Supabase branches are a
+future enhancement. Inspect the complete plan without making remote changes
+using:
 
 ```sh
-pnpm setup:production -- --dry-run
+pnpm setup:hosted -- --dry-run
 ```
 
-The command is safe to rerun. It preserves existing sensitive Vercel variables
-unless you explicitly approve their replacement and updates public production
-configuration after showing the planned values. Vercel environment changes
-only affect new deployments, so accept the final deployment prompt or redeploy
-both projects afterward.
+The command is safe to rerun and can upgrade a Landing deployment by selecting
+a broader profile. It preserves existing sensitive Vercel variables unless you
+explicitly approve their replacement. Vercel environment changes only affect
+new deployments, so accept the final production deployment prompt or trigger a
+new deployment afterward. For staged setup, push the selected development
+branch to create its Preview deployments.
+
+Promotion is intentionally a reviewed Git workflow: merge the development
+branch into the selected production branch, apply pending Supabase migrations,
+apply Payload migrations with the production `DATABASE_URL`, deploy changed
+functions, and deploy the Vercel projects. This promotes code, schema,
+configuration, and functions. It does not copy development users, Payload
+content or drafts, storage objects, or media into production.
 
 ### Manual project linking
 
@@ -439,8 +491,9 @@ the project's **Logs** view in Vercel. See the [`vercel logs` reference](https:/
   separate from the shared brand settings.
 - Create a Supabase project, apply migrations, expose the `app` schema, and set
   OAuth callback URLs for the Vercel app domain and native scheme.
-- Create both Vercel projects, set their root directories and environment
-  variables, then assign your domains.
+- Create the Website Vercel project and, when the app is included, the App
+  project; set their root directories and environment variables, then assign
+  your domains.
 - Replace or remove the example profile flow, migration, contract, core rule,
   repository, and Expo screen usage.
 - Add your Resend domain and function secrets if you use the email examples.
@@ -452,3 +505,10 @@ domain.
 The profile flow is the included example domain. Forks can replace it by
 removing its contract and rule from `contracts` and `core`, its repository from
 `data`, the profile migration, and the profile query on the Expo home screen.
+
+## Planned enhancements
+
+- Isolated Supabase branches matched to individual pull-request previews.
+- Selective Payload content and media promotion between hosted environments.
+- A generic, source-configurable WordPress content importer. This will not
+  restore the removed site-specific homepage importer.

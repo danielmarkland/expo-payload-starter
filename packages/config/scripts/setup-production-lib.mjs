@@ -11,6 +11,69 @@ export const sensitiveVariableNames = new Set([
   'TURNSTILE_SECRET_KEY',
 ])
 
+export const setupProfiles = {
+  landing: {
+    development: false,
+    developmentApp: false,
+    label: 'Landing site',
+    productionApp: false,
+  },
+  'single-app': {
+    development: false,
+    developmentApp: false,
+    label: 'Single-environment app',
+    productionApp: true,
+  },
+  staged: {
+    development: true,
+    developmentApp: true,
+    label: 'Staged app',
+    productionApp: false,
+  },
+}
+
+export function getSetupProfile(value) {
+  const profile = setupProfiles[value]
+  if (!profile) {
+    throw new Error(
+      `Unknown setup profile ${JSON.stringify(value)}. Use landing, single-app, or staged.`,
+    )
+  }
+  return { id: value, ...profile }
+}
+
+export function validateGitBranch(value) {
+  if (
+    !value ||
+    value.startsWith('-') ||
+    value.startsWith('/') ||
+    value.endsWith('/') ||
+    value.endsWith('.') ||
+    value.includes('..') ||
+    value.includes('@{') ||
+    /[\s~^:?*[\\\]]/.test(value)
+  ) {
+    throw new Error(`Invalid Git branch name ${JSON.stringify(value)}.`)
+  }
+  return value
+}
+
+export function branchCredentials(value) {
+  const projectRef =
+    value.project_ref || value.projectRef || value.ref || value.id
+  const database =
+    value.POSTGRES_URL || value.postgres_url || value.database_url
+  const publishableKey =
+    value.PUBLISHABLE_KEY || value.publishable_key || value.publishableKey
+  const supabaseURL = value.API_URL || value.api_url || value.apiUrl
+  if (!projectRef || !database || !publishableKey || !supabaseURL) {
+    throw new Error(
+      'The Supabase development branch did not return a project ref, database URL, publishable key, and API URL.',
+    )
+  }
+  return { database, projectRef, publishableKey, supabaseURL }
+}
+
 export function canonicalURL(value) {
   const url = new URL(value)
   url.hash = ''
@@ -74,7 +137,7 @@ export function siteVariables({
     DATABASE_URL: database,
     PAYLOAD_SECRET: payloadSecret,
     PREVIEW_SECRET: previewSecret,
-    NEXT_PUBLIC_APP_URL: appURL,
+    ...(appURL ? { NEXT_PUBLIC_APP_URL: appURL } : {}),
     NEXT_PUBLIC_SITE_URL: siteURL,
     SUPABASE_S3_ACCESS_KEY_ID: s3.accessKeyID,
     SUPABASE_S3_BUCKET: s3.bucket,
@@ -101,10 +164,12 @@ export function appVariables({
   }
 }
 
-export function productionConfig(
+export function hostedConfig(
   localConfig,
   { appURL, google, nativeScheme, projectRef },
 ) {
+  const redirectURLs = [`${appURL}/auth/callback`]
+  if (nativeScheme) redirectURLs.push(`${nativeScheme}://auth/callback`)
   let config = localConfig
     .replace(
       /^project_id\s*=.*$/m,
@@ -113,7 +178,7 @@ export function productionConfig(
     .replace(/^site_url\s*=.*$/m, `site_url = ${JSON.stringify(appURL)}`)
     .replace(
       /^additional_redirect_urls\s*=\s*\[[\s\S]*?^\]/m,
-      `additional_redirect_urls = [\n  ${JSON.stringify(`${appURL}/auth/callback`)},\n  ${JSON.stringify(`${nativeScheme}://auth/callback`)}\n]`,
+      `additional_redirect_urls = [\n${redirectURLs.map((url) => `  ${JSON.stringify(url)}`).join(',\n')}\n]`,
     )
 
   config = config.replace(/\n\[auth\.external\.google\][\s\S]*?(?=\n\[|$)/, '')
@@ -122,6 +187,8 @@ export function productionConfig(
   }
   return config
 }
+
+export const productionConfig = hostedConfig
 
 export function redactedVariableSummary(variables) {
   return Object.fromEntries(

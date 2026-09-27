@@ -70,6 +70,10 @@ references; this file captures the agent-facing guardrails.
 - Use pnpm from the repository root; do not introduce a second package manager.
 - Add or update tests when behavior changes. Keep tests aligned with the owning
   package or application.
+- Review `README.md` for every code change and update it in the same change when
+  behavior, commands, setup, configuration, architecture, or user-facing
+  capabilities are affected. If no README edit is needed, explicitly confirm
+  that the review was performed when handing off the work.
 - Run `pnpm check` before handing off code changes. If an environment
   restriction prevents part of the check, report the exact failure and what
   could not be verified.
