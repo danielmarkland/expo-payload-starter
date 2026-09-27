@@ -48,7 +48,21 @@ Payload migration, open `/admin`, create a Page with that slug, compose its
 sections using the available blocks, and publish it. Additional Pages render
 at `/<slug>`. Add a **Latest posts** block wherever you want published Posts
 to appear. Pages and Posts support drafts; use Payload's Preview action to
-preview unpublished content.
+preview unpublished content. Configure editor-managed header and footer links
+in **Header navigation** and **Footer navigation** Globals. **Site settings**
+holds the fallback SEO description and social preview metadata; product and
+site identity (title, icons, colors, fonts) remains centralized in
+`packages/design-tokens`.
+
+Posts can be assigned an Author, Categories, and Tags. Their public archives
+are available at `/authors/<slug>`, `/categories/<slug>`, and `/tags/<slug>`;
+the blog index is `/posts`. Payload's SEO fields support search/social titles,
+descriptions, and preview images. Editors can manage 301/302 redirects in the
+**Redirects** collection. The site search is at `/search`, and public pages and
+posts are listed in `/sitemap.xml`; `/robots.txt` excludes the CMS and search
+results from indexing. After adding search to an existing database, open the
+**Search** collection in `/admin` and run **Reindex** once to index existing
+published content. New publishes and edits are indexed automatically.
 
 Google Tag Manager is optional and configured independently for each web
 surface: set `NEXT_PUBLIC_GTM_CONTAINER_ID` in `apps/site/.env` for the public
@@ -261,7 +275,8 @@ project; add the second separately. See
    deployments, so redeploy after changing a value.
 
 3. Apply Payload's CMS migrations to that same database before the first deploy
-   and whenever CMS schema changes:
+   and whenever CMS schema changes. This includes the editorial Pages,
+   navigation, taxonomy, SEO, redirect, and search schemas:
 
    ```sh
    DATABASE_URL='<production postgres connection string>' \

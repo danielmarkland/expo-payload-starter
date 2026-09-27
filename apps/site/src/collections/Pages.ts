@@ -26,14 +26,6 @@ export const Pages: CollectionConfig = {
     { name: 'title', type: 'text', required: true },
     { name: 'slug', type: 'text', index: true, required: true, unique: true },
     {
-      name: 'seo',
-      type: 'group',
-      fields: [
-        { name: 'title', type: 'text' },
-        { name: 'description', type: 'textarea', maxLength: 160 },
-      ],
-    },
-    {
       name: 'layout',
       type: 'blocks',
       blocks: pageBlocks,

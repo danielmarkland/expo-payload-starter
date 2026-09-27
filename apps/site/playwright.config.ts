@@ -36,6 +36,7 @@ export default defineConfig({
   webServer: {
     command: 'pnpm dev',
     reuseExistingServer: true,
-    url: 'http://localhost:3000',
+    // The homepage is CMS-managed and intentionally returns 404 until a `home` Page is published.
+    url: 'http://localhost:3000/search',
   },
 })

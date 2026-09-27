@@ -65,4 +65,90 @@ describe('API', () => {
       await payload.delete({ collection: 'pages', id: created.id, overrideAccess: true })
     }
   })
+
+  it('supports editorial taxonomy, authors, and published-content search', async () => {
+    const suffix = Date.now()
+    const category = await payload.create({
+      collection: 'categories',
+      data: { title: `Category ${suffix}`, slug: `category-${suffix}` },
+      overrideAccess: true,
+    })
+    const tag = await payload.create({
+      collection: 'tags',
+      data: { title: `Tag ${suffix}`, slug: `tag-${suffix}` },
+      overrideAccess: true,
+    })
+    const author = await payload.create({
+      collection: 'authors',
+      data: { name: `Author ${suffix}`, slug: `author-${suffix}` },
+      overrideAccess: true,
+    })
+    let postId: number | undefined
+
+    try {
+      const post = await payload.create({
+        collection: 'posts',
+        data: {
+          title: `Searchable title ${suffix}`,
+          slug: `searchable-post-${suffix}`,
+          summary: `Summary needle-${suffix}`,
+          body: {
+            root: {
+              type: 'root',
+              children: [
+                {
+                  type: 'paragraph',
+                  children: [{ type: 'text', text: `Body phrase-${suffix}`, version: 1 }],
+                  direction: 'ltr',
+                  format: '',
+                  indent: 0,
+                  version: 1,
+                },
+              ],
+              direction: 'ltr',
+              format: '',
+              indent: 0,
+              version: 1,
+            },
+          },
+          author: author.id,
+          categories: [category.id],
+          tags: [tag.id],
+          _status: 'published',
+        },
+        draft: false,
+        overrideAccess: true,
+      })
+      postId = post.id
+
+      const categorizedPosts = await payload.find({
+        collection: 'posts',
+        overrideAccess: false,
+        where: {
+          and: [
+            { author: { equals: author.id } },
+            { categories: { equals: category.id } },
+            { tags: { equals: tag.id } },
+          ],
+        },
+      })
+      expect(categorizedPosts.docs.map(({ id }) => id)).toContain(post.id)
+
+      const searchResults = await payload.find({
+        collection: 'search',
+        overrideAccess: false,
+        where: { searchText: { like: `needle-${suffix}` } },
+      })
+      expect(
+        searchResults.docs.some(({ doc }) => doc.relationTo === 'posts' && doc.value === post.id),
+      ).toBe(true)
+    } finally {
+      if (postId !== undefined) {
+        await payload.delete({ collection: 'posts', id: postId, overrideAccess: true })
+      }
+      await payload.delete({ collection: 'authors', id: author.id, overrideAccess: true })
+      await payload.delete({ collection: 'tags', id: tag.id, overrideAccess: true })
+      await payload.delete({ collection: 'categories', id: category.id, overrideAccess: true })
+    }
+  })
 })

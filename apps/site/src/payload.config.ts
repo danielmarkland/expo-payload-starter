@@ -1,5 +1,8 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { resendAdapter } from '@payloadcms/email-resend'
+import { redirectsPlugin } from '@payloadcms/plugin-redirects'
+import { searchPlugin } from '@payloadcms/plugin-search'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
@@ -7,10 +10,18 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
+import { brand } from '@starter/design-tokens'
 import { Users } from './collections/Users'
+import { Authors } from './collections/Authors'
+import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Tags } from './collections/Tags'
+import { FooterNavigation } from './globals/FooterNavigation'
+import { HeaderNavigation } from './globals/HeaderNavigation'
+import { SiteSettings } from './globals/SiteSettings'
+import { extractSearchText } from './lib/extractSearchText'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,7 +33,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts, Pages],
+  collections: [Users, Media, Authors, Categories, Tags, Posts, Pages],
   cors: [process.env.NEXT_PUBLIC_APP_URL, process.env.NEXT_PUBLIC_SITE_URL].filter(
     (origin): origin is string => Boolean(origin),
   ),
@@ -30,6 +41,7 @@ export default buildConfig({
     (origin): origin is string => Boolean(origin),
   ),
   editor: lexicalEditor(),
+  globals: [HeaderNavigation, FooterNavigation, SiteSettings],
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
@@ -64,6 +76,54 @@ export default buildConfig({
         forcePathStyle: true,
         region: process.env.SUPABASE_S3_REGION || 'local',
       },
+    }),
+    seoPlugin({
+      collections: ['pages', 'posts'],
+      globals: ['siteSettings'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => (typeof doc?.title === 'string' ? doc.title : brand.siteTitle),
+      generateDescription: ({ doc }) =>
+        typeof doc?.summary === 'string'
+          ? doc.summary
+          : typeof doc?.siteDescription === 'string'
+            ? doc.siteDescription
+            : undefined,
+      generateURL: ({ doc, collectionSlug }) => {
+        const slug = typeof doc?.slug === 'string' ? doc.slug : ''
+        return collectionSlug === 'posts'
+          ? `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/posts/${slug}`
+          : `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${slug}`
+      },
+    }),
+    redirectsPlugin({
+      collections: ['pages', 'posts'],
+      redirectTypes: ['301', '302'],
+      overrides: {
+        dbName: 'cms_redirects',
+        access: {
+          create: ({ req }) => Boolean(req.user),
+          delete: ({ req }) => Boolean(req.user),
+          update: ({ req }) => Boolean(req.user),
+        },
+      },
+    }),
+    searchPlugin({
+      collections: ['pages', 'posts'],
+      defaultPriorities: { pages: 10, posts: 20 },
+      searchOverrides: {
+        dbName: 'cms_search',
+        access: { create: () => false, delete: () => false, update: () => false, read: () => true },
+        fields: ({ defaultFields }) => [
+          ...defaultFields,
+          { name: 'excerpt', type: 'textarea' },
+          { name: 'searchText', type: 'textarea', index: true },
+        ],
+      },
+      beforeSync: ({ collectionSlug, originalDoc, searchDoc }) => ({
+        ...searchDoc,
+        excerpt: collectionSlug === 'posts' ? originalDoc.summary || '' : '',
+        searchText: extractSearchText(originalDoc),
+      }),
     }),
   ],
 })

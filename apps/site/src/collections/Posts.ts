@@ -24,14 +24,9 @@ export const Posts: CollectionConfig = {
     { name: 'slug', type: 'text', index: true, required: true, unique: true },
     { name: 'summary', type: 'textarea', required: true },
     { name: 'body', type: 'richText', required: true },
+    { name: 'author', type: 'relationship', relationTo: 'authors' },
+    { name: 'categories', type: 'relationship', relationTo: 'categories', hasMany: true },
+    { name: 'tags', type: 'relationship', relationTo: 'tags', hasMany: true },
     { name: 'publishedAt', type: 'date' },
-    {
-      name: 'seo',
-      type: 'group',
-      fields: [
-        { name: 'title', type: 'text' },
-        { name: 'description', type: 'textarea', maxLength: 160 },
-      ],
-    },
   ],
 }

@@ -15,6 +15,7 @@ test.describe('Frontend', () => {
         title: 'CMS page fixture',
         slug,
         layout: [{ blockType: 'hero', heading: 'A page composed in Payload' }],
+        _status: 'published',
       },
       draft: false,
       overrideAccess: true,
