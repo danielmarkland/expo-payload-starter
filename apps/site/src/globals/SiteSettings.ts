@@ -59,12 +59,22 @@ export const SiteSettings: GlobalConfig = {
       required: true,
     },
     {
-      name: 'logo',
+      name: 'lightLogo',
       type: 'upload',
       relationTo: 'media',
       admin: {
-        description: 'Primary website logo. The site title is used when no logo is selected.',
+        description: 'Logo shown in light mode. The site title is used when this is empty.',
       },
+      label: 'Light logo',
+    },
+    {
+      name: 'darkLogo',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Logo shown in dark mode. The site title is used when this is empty.',
+      },
+      label: 'Dark logo',
     },
     {
       name: 'favicon',
@@ -88,7 +98,11 @@ export const SiteSettings: GlobalConfig = {
         {
           name: 'defaultMode',
           type: 'select',
+          admin: {
+            description: 'Used when a visitor has not saved a light or dark preference.',
+          },
           defaultValue: 'system',
+          label: 'Default appearance',
           options: [
             { label: 'Follow system', value: 'system' },
             { label: 'Light', value: 'light' },

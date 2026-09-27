@@ -15,17 +15,33 @@ export async function SiteHeader({ siteConfig }: { siteConfig: SiteConfig }) {
   return (
     <header className="site-header">
       <Link aria-label={siteConfig.identity.siteTitle} className="site-brand" href="/">
-        {siteConfig.identity.logoUrl ? (
+        {siteConfig.identity.darkLogoUrl ? (
           <Image
             alt=""
-            className="site-brand-logo"
+            className="site-brand-logo site-brand-logo-dark"
             height={48}
-            src={siteConfig.identity.logoUrl}
+            src={siteConfig.identity.darkLogoUrl}
             unoptimized
             width={180}
           />
         ) : (
-          siteConfig.identity.siteTitle
+          <span className="site-brand-title site-brand-title-dark">
+            {siteConfig.identity.siteTitle}
+          </span>
+        )}
+        {siteConfig.identity.lightLogoUrl ? (
+          <Image
+            alt=""
+            className="site-brand-logo site-brand-logo-light"
+            height={48}
+            src={siteConfig.identity.lightLogoUrl}
+            unoptimized
+            width={180}
+          />
+        ) : (
+          <span className="site-brand-title site-brand-title-light">
+            {siteConfig.identity.siteTitle}
+          </span>
         )}
       </Link>
       <nav aria-label="Main navigation" className="header-navigation">

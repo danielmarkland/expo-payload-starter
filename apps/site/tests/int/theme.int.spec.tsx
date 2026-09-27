@@ -65,4 +65,16 @@ describe('site theme toggle', () => {
     })
     expect(document.documentElement.dataset.theme).toBe('dark')
   })
+
+  it('keeps a configured default instead of following later system changes', async () => {
+    setSystemTheme('light')
+    render(<ThemeToggle defaultMode="dark" />)
+
+    await screen.findByRole('button', {
+      name: 'Current theme: dark mode. Switch to light mode.',
+    })
+    const media = vi.mocked(window.matchMedia).mock.results[0]?.value
+    expect(media.addEventListener).not.toHaveBeenCalled()
+    expect(document.documentElement.dataset.theme).toBe('dark')
+  })
 })

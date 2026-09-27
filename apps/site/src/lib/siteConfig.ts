@@ -68,7 +68,9 @@ function resolvePalette(mode: 'dark' | 'light', input?: PaletteInput | null): Re
   }
 }
 
-function mediaURL(value: SiteSetting['favicon'] | SiteSetting['logo'], siteURL: string) {
+type MediaValue = { url?: null | string } | number | null | undefined
+
+function mediaURL(value: MediaValue, siteURL: string) {
   const url = value && typeof value === 'object' ? value.url : null
   return url ? new URL(url, siteURL).toString() : null
 }
@@ -77,13 +79,18 @@ export function resolveSiteConfig(
   settings: SiteSetting,
   siteURL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
 ): SiteConfig {
+  const darkLogoUrl = mediaURL(settings.darkLogo, siteURL)
+  const lightLogoUrl = mediaURL(settings.lightLogo, siteURL)
+
   return {
     version: 1,
     identity: {
       appTitle: settings.appTitle || brand.appTitle,
+      darkLogoUrl,
       description: settings.siteDescription || brand.description,
       faviconUrl: mediaURL(settings.favicon, siteURL),
-      logoUrl: mediaURL(settings.logo, siteURL),
+      lightLogoUrl,
+      logoUrl: darkLogoUrl,
       shortName: settings.shortName || brand.shortName,
       siteTitle: settings.siteTitle || brand.siteTitle,
     },

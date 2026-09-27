@@ -57,8 +57,10 @@ describe('siteConfigSchema', () => {
         version: 1,
         identity: {
           appTitle: 'Example App',
+          darkLogoUrl: 'https://example.com/logo-dark.png',
           description: 'Example description',
           faviconUrl: null,
+          lightLogoUrl: 'https://example.com/logo-light.png',
           logoUrl: 'https://example.com/logo.png',
           shortName: 'Example',
           siteTitle: 'Example Site',
@@ -81,8 +83,10 @@ describe('siteConfigSchema', () => {
       version: 1,
       identity: {
         appTitle: 'Example',
+        darkLogoUrl: null,
         description: 'Example',
         faviconUrl: null,
+        lightLogoUrl: null,
         logoUrl: null,
         shortName: 'Example',
         siteTitle: 'Example',
@@ -98,6 +102,32 @@ describe('siteConfigSchema', () => {
       },
     })
     expect(result.success).toBe(false)
+  })
+
+  it('accepts legacy config responses without theme-specific logos', () => {
+    const parsed = siteConfigSchema.parse({
+      version: 1,
+      identity: {
+        appTitle: 'Example',
+        description: 'Example',
+        faviconUrl: null,
+        logoUrl: 'https://example.com/logo.png',
+        shortName: 'Example',
+        siteTitle: 'Example',
+      },
+      theme: {
+        allowToggle: true,
+        dark: themeColors,
+        defaultMode: 'system',
+        densityPreset: 'comfortable',
+        fontPreset: 'poppins',
+        light: themeColors,
+        shapePreset: 'soft',
+      },
+    })
+
+    expect(parsed.identity.darkLogoUrl).toBeNull()
+    expect(parsed.identity.lightLogoUrl).toBeNull()
   })
 })
 

@@ -91,12 +91,37 @@ a {
   text-decoration: none;
 }
 .site-brand-logo {
-  display: block;
   height: auto;
   max-height: 48px;
   max-width: 180px;
   object-fit: contain;
   width: auto;
+}
+.site-brand-logo-light,
+.site-brand-title-light {
+  display: none;
+}
+.site-brand-logo-dark,
+.site-brand-title-dark {
+  display: block;
+}
+:root[data-theme='light'] .site-brand-logo-light,
+:root[data-theme='light'] .site-brand-title-light {
+  display: block;
+}
+:root[data-theme='light'] .site-brand-logo-dark,
+:root[data-theme='light'] .site-brand-title-dark {
+  display: none;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .site-brand-logo-light,
+  :root:not([data-theme]) .site-brand-title-light {
+    display: block;
+  }
+  :root:not([data-theme]) .site-brand-logo-dark,
+  :root:not([data-theme]) .site-brand-title-dark {
+    display: none;
+  }
 }
 .shell {
   margin: 0 auto;

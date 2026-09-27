@@ -1133,9 +1133,13 @@ export interface SiteSetting {
   appTitle: string;
   shortName: string;
   /**
-   * Primary website logo. The site title is used when no logo is selected.
+   * Logo shown in light mode. The site title is used when this is empty.
    */
-  logo?: (number | null) | Media;
+  lightLogo?: (number | null) | Media;
+  /**
+   * Logo shown in dark mode. The site title is used when this is empty.
+   */
+  darkLogo?: (number | null) | Media;
   /**
    * Website favicon and web-app manifest icon. Use a square PNG or SVG.
    */
@@ -1145,6 +1149,9 @@ export interface SiteSetting {
    */
   siteDescription: string;
   theme: {
+    /**
+     * Used when a visitor has not saved a light or dark preference.
+     */
     defaultMode: 'system' | 'light' | 'dark';
     allowToggle: boolean;
     fontPreset: 'poppins' | 'system';
@@ -1272,7 +1279,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   siteTitle?: T;
   appTitle?: T;
   shortName?: T;
-  logo?: T;
+  lightLogo?: T;
+  darkLogo?: T;
   favicon?: T;
   siteDescription?: T;
   theme?:

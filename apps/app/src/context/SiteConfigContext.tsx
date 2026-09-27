@@ -19,8 +19,10 @@ const CACHE_KEY = 'site-config-v1'
 export const fallbackSiteConfig: SiteConfig = {
   identity: {
     appTitle: brand.appTitle,
+    darkLogoUrl: null,
     description: brand.description,
     faviconUrl: null,
+    lightLogoUrl: null,
     logoUrl: null,
     shortName: brand.shortName,
     siteTitle: brand.siteTitle,

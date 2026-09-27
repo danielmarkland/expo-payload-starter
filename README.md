@@ -66,9 +66,9 @@ at `/<slug>`. Add a **Latest posts** block wherever you want published Posts
 to appear. Pages and Posts support drafts; use Payload's Preview action to
 preview unpublished content. Configure editor-managed header and footer links
 in **Header navigation** and **Footer navigation** Globals. **Site settings**
-holds the site/app titles, short name, logo, favicon, fallback SEO description,
-social preview metadata, and runtime theme. Header navigation owns only the
-header links. Header links can use a
+holds the site/app titles, short name, light/dark logos, favicon, fallback SEO
+description, social preview metadata, and runtime theme. Header navigation owns
+only the header links. Header links can use a
 curated set of Lucide icons; icon-only links retain their configured label for
 assistive technology. Footer navigation remains text links.
 
@@ -231,10 +231,12 @@ so redeploy after changing a value. See [Vercel environment variables](https://v
 Each deployment stores its identity and curated theme in Payload's **Site
 settings** Global. Editors can choose the default appearance, whether visitors
 may switch modes, font/shape/density presets, and the primary semantic colors
-for light and dark modes. The public site renders these settings server-side as
-CSS variables. The Expo app fetches the validated public `/api/site-config`
-contract at launch and whenever it returns to the foreground, caches the last
-valid response, and uses packaged defaults while offline.
+for light and dark modes. Separate header logos can be uploaded for each mode;
+when a mode has no logo, the header uses the site title. The public site renders
+these settings server-side as CSS variables. The Expo app fetches the validated
+public `/api/site-config` contract at launch and whenever it returns to the
+foreground, caches the last valid response, and uses packaged defaults while
+offline.
 
 Use a separate Payload database for each independently branded Vercel project.
 That lets multiple projects deploy the same Git branch while keeping their

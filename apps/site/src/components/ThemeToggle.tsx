@@ -37,8 +37,10 @@ export function ThemeToggle({ defaultMode = 'system' }: { defaultMode?: SiteThem
       setTheme(next)
     }
 
-    media.addEventListener('change', followSystem)
-    return () => media.removeEventListener('change', followSystem)
+    if (defaultMode === 'system') media.addEventListener('change', followSystem)
+    return () => {
+      if (defaultMode === 'system') media.removeEventListener('change', followSystem)
+    }
   }, [defaultMode])
 
   function toggleTheme() {

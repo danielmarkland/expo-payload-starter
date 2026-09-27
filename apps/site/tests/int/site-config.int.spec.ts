@@ -20,7 +20,8 @@ describe('runtime site config', () => {
     const config = resolveSiteConfig(
       settings({
         appTitle: 'Acme App',
-        logo: { url: '/api/media/file/logo.svg' } as SiteSetting['logo'],
+        darkLogo: { url: '/api/media/file/logo-dark.svg' },
+        lightLogo: { url: '/api/media/file/logo-light.svg' },
         shortName: 'Acme',
         siteTitle: 'Acme Studio',
         theme: {
@@ -36,7 +37,9 @@ describe('runtime site config', () => {
     )
 
     expect(siteConfigSchema.parse(config)).toEqual(config)
-    expect(config.identity.logoUrl).toBe('https://example.com/api/media/file/logo.svg')
+    expect(config.identity.darkLogoUrl).toBe('https://example.com/api/media/file/logo-dark.svg')
+    expect(config.identity.lightLogoUrl).toBe('https://example.com/api/media/file/logo-light.svg')
+    expect(config.identity.logoUrl).toBe('https://example.com/api/media/file/logo-dark.svg')
     expect(config.theme.dark.primary).toBe('#123456')
     expect(config.theme.dark.surface).toBe(themes.dark.surface)
   })

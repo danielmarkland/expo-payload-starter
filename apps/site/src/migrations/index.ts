@@ -6,6 +6,7 @@ import * as migration_20260927_020507_header_navigation_logo_and_icons from './2
 import * as migration_20260927_043014_homepage_migration from './20260927_043014_homepage_migration'
 import * as migration_20260927_162621_hero_headline from './20260927_162621_hero_headline'
 import * as migration_20260927_164523_runtime_site_theme from './20260927_164523_runtime_site_theme'
+import * as migration_20260927_171523_light_dark_logos from './20260927_171523_light_dark_logos'
 
 export const migrations = [
   {
@@ -47,5 +48,10 @@ export const migrations = [
     up: migration_20260927_164523_runtime_site_theme.up,
     down: migration_20260927_164523_runtime_site_theme.down,
     name: '20260927_164523_runtime_site_theme',
+  },
+  {
+    up: migration_20260927_171523_light_dark_logos.up,
+    down: migration_20260927_171523_light_dark_logos.down,
+    name: '20260927_171523_light_dark_logos',
   },
 ]

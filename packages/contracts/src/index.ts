@@ -77,8 +77,11 @@ export const siteConfigSchema = z.object({
   version: z.literal(1),
   identity: z.object({
     appTitle: z.string().min(1).max(100),
+    darkLogoUrl: z.url().nullable().default(null),
     description: z.string().min(1).max(500),
     faviconUrl: z.url().nullable(),
+    lightLogoUrl: z.url().nullable().default(null),
+    // Retained for deployed clients that predate theme-specific logos.
     logoUrl: z.url().nullable(),
     shortName: z.string().min(1).max(12),
     siteTitle: z.string().min(1).max(100),
