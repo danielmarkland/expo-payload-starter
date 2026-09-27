@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 
+import { ContactForm } from '@/components/ContactForm'
 import { LatestPostsSection } from '@/components/LatestPostsSection'
 import type { Media, Page } from '@/payload-types'
 
@@ -13,6 +14,7 @@ function resolveMedia(media: number | Media | null | undefined): Media | null {
 
 function safeHref(value?: string | null): string | null {
   if (!value) return null
+  if (/^#[a-z][a-z0-9-]*$/.test(value)) return value
   if (value.startsWith('/') && !value.startsWith('//')) return value
 
   try {
@@ -51,7 +53,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       const secondaryHref = safeHref(block.secondaryButton?.url)
       const Heading = primaryHero ? 'h1' : 'h2'
       return (
-        <section className="page-hero">
+        <section className={`page-hero${image?.url ? '' : ' page-hero-without-image'}`}>
           <div className="page-hero-copy">
             {block.eyebrow ? <p className="eyebrow">{block.eyebrow}</p> : null}
             <Heading>{block.heading}</Heading>
@@ -123,6 +125,83 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
           </div>
         </section>
       )
+    case 'splitContent': {
+      const image = resolveMedia(block.image)
+      return (
+        <section
+          className={`page-section split-content split-content-${block.imagePosition}`}
+          id={block.anchor || undefined}
+        >
+          <div className="split-content-copy">
+            <SectionHeading eyebrow={block.eyebrow} heading={block.heading} />
+            <div className="article-body">
+              <RichText data={block.content} />
+            </div>
+          </div>
+          {image?.url ? (
+            <Image
+              alt={image.alt || ''}
+              className="split-content-image"
+              height={image.height || 900}
+              src={image.url}
+              unoptimized
+              width={image.width || 1200}
+            />
+          ) : null}
+        </section>
+      )
+    }
+    case 'linkGrid':
+      return (
+        <section className="page-section" id={block.anchor || undefined}>
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
+          <ul className="link-grid">
+            {block.items?.map((item) => {
+              const href = safeHref(item.url)
+              return (
+                <li key={item.id || item.label}>
+                  {href ? (
+                    <Link href={href} rel="noreferrer" target="_blank">
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span>{item.label}</span>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        </section>
+      )
+    case 'portfolioGrid':
+      return (
+        <section className="page-section" id={block.anchor || undefined}>
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
+          <div className="portfolio-grid">
+            {block.items?.map((item) => {
+              const href = safeHref(item.url)
+              const content = (
+                <>
+                  <h3>{item.name}</h3>
+                  {item.role ? <p className="portfolio-role">{item.role}</p> : null}
+                  <p>{item.description}</p>
+                </>
+              )
+              return (
+                <article className="portfolio-card" key={item.id || item.name}>
+                  {href ? (
+                    <Link href={href} rel="noreferrer" target="_blank">
+                      {content}
+                    </Link>
+                  ) : (
+                    <div className="portfolio-content">{content}</div>
+                  )}
+                </article>
+              )
+            })}
+          </div>
+        </section>
+      )
     case 'callToAction': {
       const buttonHref = safeHref(block.buttonUrl)
       return (
@@ -158,28 +237,43 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       )
     case 'logoCloud':
       return (
-        <section className="page-section">
-          <SectionHeading heading={block.heading} />
+        <section className="page-section" id={block.anchor || undefined}>
+          <SectionHeading heading={block.heading} intro={block.intro} />
           <ul className="logo-cloud" aria-label={block.heading || 'Organizations'}>
             {block.items?.map((item) => {
               const image = resolveMedia(item.image)
+              const href = safeHref(item.url)
+              const logo = image?.url ? (
+                <Image
+                  alt={item.name}
+                  height={image.height || 120}
+                  src={image.url}
+                  unoptimized
+                  width={image.width || 240}
+                />
+              ) : (
+                <span>{item.name}</span>
+              )
               return (
                 <li key={item.id || item.name}>
-                  {image?.url ? (
-                    <Image
-                      alt={item.name}
-                      height={image.height || 120}
-                      src={image.url}
-                      unoptimized
-                      width={image.width || 240}
-                    />
+                  {href ? (
+                    <Link href={href} rel="noreferrer" target="_blank">
+                      {logo}
+                    </Link>
                   ) : (
-                    <span>{item.name}</span>
+                    logo
                   )}
                 </li>
               )
             })}
           </ul>
+        </section>
+      )
+    case 'contactForm':
+      return (
+        <section className="page-section contact-section" id={block.anchor || undefined}>
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.body} />
+          <ContactForm submitLabel={block.submitLabel} successMessage={block.successMessage} />
         </section>
       )
     case 'stats':

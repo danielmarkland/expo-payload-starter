@@ -23,3 +23,13 @@ export const emailDeliveryEventSchema = z.object({
 })
 
 export type EmailDeliveryEvent = z.infer<typeof emailDeliveryEventSchema>
+
+export const contactSubmissionSchema = z.object({
+  email: z.email().max(254),
+  message: z.string().trim().min(10).max(5000),
+  name: z.string().trim().min(2).max(100),
+  turnstileToken: z.string().min(1).max(2048),
+  website: z.string().max(200).optional().default(''),
+})
+
+export type ContactSubmission = z.infer<typeof contactSubmissionSchema>

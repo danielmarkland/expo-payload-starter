@@ -41,11 +41,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
   const socialImage = settings.meta?.image
   const socialImageURL = socialImage && typeof socialImage === 'object' ? socialImage.url : null
+  const uploadedFavicon = settings.favicon
+  const faviconURL =
+    uploadedFavicon && typeof uploadedFavicon === 'object' ? uploadedFavicon.url : null
 
   return {
     applicationName: brand.siteTitle,
     description: settings.meta?.description || settings.siteDescription || brand.description,
-    icons: { apple: appIcon.src, icon: favicon.src },
+    icons: { apple: appIcon.src, icon: faviconURL || favicon.src },
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
     openGraph: {
       description: settings.meta?.description || settings.siteDescription || brand.description,

@@ -56,7 +56,7 @@ export default buildConfig({
     ? resendAdapter({
         apiKey: process.env.RESEND_API_KEY,
         defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'hello@example.com',
-        defaultFromName: process.env.EMAIL_FROM_NAME || 'Expo Payload Starter',
+        defaultFromName: process.env.EMAIL_FROM_NAME || 'Daniel Markland',
       })
     : undefined,
   sharp,

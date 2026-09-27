@@ -10,6 +10,14 @@ export const SiteSettings: GlobalConfig = {
   },
   fields: [
     {
+      name: 'favicon',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Website favicon and web-app manifest icon. Use a square PNG or SVG.',
+      },
+    },
+    {
       name: 'siteDescription',
       type: 'textarea',
       admin: { description: 'Fallback description for pages without their own SEO description.' },

@@ -36,6 +36,6 @@ test.describe('Frontend', () => {
     await expect(
       page.getByRole('heading', { name: 'A page composed in Payload', level: 1 }),
     ).toBeVisible()
-    await expect(page.getByRole('contentinfo')).toContainText('Expo Payload Starter')
+    await expect(page.getByRole('contentinfo')).toContainText('Daniel Markland')
   })
 })

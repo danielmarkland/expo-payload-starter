@@ -25,6 +25,7 @@ export function navigationItemsField({
                 { label: 'Shop', value: 'shopping-bag' },
                 { label: 'Account', value: 'user' },
                 { label: 'YouTube', value: 'youtube' },
+                { label: 'X / Twitter', value: 'twitter' },
               ],
               admin: { description: 'Optional Lucide icon displayed alongside the link label.' },
             },

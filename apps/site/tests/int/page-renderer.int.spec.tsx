@@ -7,6 +7,9 @@ import type { Media, Page } from '@/payload-types'
 vi.mock('@/components/LatestPostsSection', () => ({
   LatestPostsSection: ({ heading }: { heading?: string | null }) => <section>{heading}</section>,
 }))
+vi.mock('@/components/ContactForm', () => ({
+  ContactForm: ({ submitLabel }: { submitLabel: string }) => <form>{submitLabel}</form>,
+}))
 
 const media: Media = {
   id: 1,
@@ -91,6 +94,66 @@ describe('Payload page renderer', () => {
         items: [{ id: 'feature-one', title: 'Strategy', description: 'Plan the work.' }],
       },
       {
+        id: 'split-content',
+        blockType: 'splitContent',
+        anchor: 'about',
+        heading: 'About',
+        content: {
+          root: {
+            type: 'root',
+            children: [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: 'Biography content',
+                    type: 'text',
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                version: 1,
+              },
+            ],
+            direction: 'ltr',
+            format: '',
+            indent: 0,
+            version: 1,
+          },
+        },
+        image: media,
+        imagePosition: 'right',
+      },
+      {
+        id: 'expertise',
+        blockType: 'linkGrid',
+        heading: 'Expertise',
+        items: [
+          { id: 'typescript', label: 'TypeScript', url: 'https://www.typescriptlang.org' },
+          { id: 'unsafe', label: 'Unsafe expertise', url: 'javascript:alert(1)' },
+        ],
+      },
+      {
+        id: 'portfolio',
+        blockType: 'portfolioGrid',
+        heading: 'Career highlights',
+        items: [
+          {
+            id: 'example-client',
+            name: 'Example Client',
+            role: 'React // TypeScript',
+            description: 'Delivered a successful project.',
+            url: 'https://example.com',
+          },
+        ],
+      },
+      {
         id: 'cta',
         blockType: 'callToAction',
         heading: 'Start a conversation',
@@ -105,7 +168,15 @@ describe('Payload page renderer', () => {
       {
         id: 'logos',
         blockType: 'logoCloud',
-        items: [{ id: 'logo-one', name: 'Example Co', image: media }],
+        items: [{ id: 'logo-one', name: 'Example Co', image: media, url: 'https://example.com' }],
+      },
+      {
+        id: 'contact',
+        blockType: 'contactForm',
+        anchor: 'contact',
+        heading: 'Get in touch',
+        submitLabel: 'Send message',
+        successMessage: 'Message sent.',
       },
       {
         id: 'stats',
@@ -126,13 +197,18 @@ describe('Payload page renderer', () => {
     expect(markup).toContain('Rich text content')
     expect(markup).toContain('Example media')
     expect(markup).toContain('Strategy')
+    expect(markup).toContain('Biography content')
+    expect(markup).toContain('TypeScript')
+    expect(markup).toContain('Example Client')
     expect(markup).toContain('mailto:hello@example.com')
     expect(markup).toContain('A helpful quote.')
     expect(markup).toContain('Example Co')
     expect(markup).toContain('3×')
     expect(markup).toContain('How does it work?')
     expect(markup).toContain('Recent writing')
+    expect(markup).toContain('Send message')
     expect(markup).not.toContain('Unsafe link')
+    expect(markup).not.toContain('javascript:alert(1)')
   })
 
   it('uses the page title as the primary heading when there is no hero block', () => {

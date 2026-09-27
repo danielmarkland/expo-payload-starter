@@ -335,6 +335,74 @@ export interface Page {
         blockType: 'featureGrid';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        eyebrow?: string | null;
+        heading: string;
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        image: number | Media;
+        imagePosition: 'left' | 'right';
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'splitContent';
+      }
+    | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        eyebrow?: string | null;
+        heading: string;
+        intro?: string | null;
+        items?:
+          | {
+              label: string;
+              url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'linkGrid';
+      }
+    | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        eyebrow?: string | null;
+        heading: string;
+        intro?: string | null;
+        items?:
+          | {
+              name: string;
+              role?: string | null;
+              description: string;
+              url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'portfolioGrid';
+      }
+    | {
         heading: string;
         body?: string | null;
         buttonLabel: string;
@@ -358,17 +426,37 @@ export interface Page {
         blockType: 'testimonials';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
         heading?: string | null;
+        intro?: string | null;
         items?:
           | {
               name: string;
               image: number | Media;
+              url?: string | null;
               id?: string | null;
             }[]
           | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'logoCloud';
+      }
+    | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        eyebrow?: string | null;
+        heading: string;
+        body?: string | null;
+        submitLabel: string;
+        successMessage: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'contactForm';
       }
     | {
         heading?: string | null;
@@ -733,6 +821,54 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        splitContent?:
+          | T
+          | {
+              anchor?: T;
+              eyebrow?: T;
+              heading?: T;
+              content?: T;
+              image?: T;
+              imagePosition?: T;
+              id?: T;
+              blockName?: T;
+            };
+        linkGrid?:
+          | T
+          | {
+              anchor?: T;
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              items?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        portfolioGrid?:
+          | T
+          | {
+              anchor?: T;
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              items?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    description?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         callToAction?:
           | T
           | {
@@ -761,14 +897,29 @@ export interface PagesSelect<T extends boolean = true> {
         logoCloud?:
           | T
           | {
+              anchor?: T;
               heading?: T;
+              intro?: T;
               items?:
                 | T
                 | {
                     name?: T;
                     image?: T;
+                    url?: T;
                     id?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        contactForm?:
+          | T
+          | {
+              anchor?: T;
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              submitLabel?: T;
+              successMessage?: T;
               id?: T;
               blockName?: T;
             };
@@ -919,6 +1070,7 @@ export interface HeaderNavigation {
               | 'shopping-bag'
               | 'user'
               | 'youtube'
+              | 'twitter'
             )
           | null;
         /**
@@ -962,6 +1114,10 @@ export interface FooterNavigation {
  */
 export interface SiteSetting {
   id: number;
+  /**
+   * Website favicon and web-app manifest icon. Use a square PNG or SVG.
+   */
+  favicon?: (number | null) | Media;
   /**
    * Fallback description for pages without their own SEO description.
    */
@@ -1025,6 +1181,7 @@ export interface FooterNavigationSelect<T extends boolean = true> {
  * via the `definition` "siteSettings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  favicon?: T;
   siteDescription?: T;
   meta?:
     | T

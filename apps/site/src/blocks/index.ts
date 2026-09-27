@@ -5,6 +5,16 @@ const buttonFields = [
   { name: 'url', type: 'text' as const },
 ]
 
+const optionalAnchorField = {
+  name: 'anchor',
+  type: 'text' as const,
+  admin: { description: 'Optional in-page anchor using lowercase letters, numbers, and hyphens.' },
+  validate: (value: null | string | undefined) =>
+    !value || /^[a-z][a-z0-9-]*$/.test(value)
+      ? true
+      : 'Use lowercase letters, numbers, and hyphens, starting with a letter.',
+}
+
 export const HeroBlock: Block = {
   slug: 'hero',
   labels: { plural: 'Hero sections', singular: 'Hero' },
@@ -65,6 +75,70 @@ export const FeatureGridBlock: Block = {
   ],
 }
 
+export const SplitContentBlock: Block = {
+  slug: 'splitContent',
+  labels: { plural: 'Split content sections', singular: 'Split content' },
+  fields: [
+    optionalAnchorField,
+    { name: 'eyebrow', type: 'text' },
+    { name: 'heading', type: 'text', required: true },
+    { name: 'content', type: 'richText', required: true },
+    { name: 'image', type: 'upload', relationTo: 'media', required: true },
+    {
+      name: 'imagePosition',
+      type: 'select',
+      defaultValue: 'right',
+      options: [
+        { label: 'Left', value: 'left' },
+        { label: 'Right', value: 'right' },
+      ],
+      required: true,
+    },
+  ],
+}
+
+export const LinkGridBlock: Block = {
+  slug: 'linkGrid',
+  labels: { plural: 'Link grids', singular: 'Link grid' },
+  fields: [
+    optionalAnchorField,
+    { name: 'eyebrow', type: 'text' },
+    { name: 'heading', type: 'text', required: true },
+    { name: 'intro', type: 'textarea' },
+    {
+      name: 'items',
+      type: 'array',
+      minRows: 1,
+      fields: [
+        { name: 'label', type: 'text', required: true },
+        { name: 'url', type: 'text' },
+      ],
+    },
+  ],
+}
+
+export const PortfolioGridBlock: Block = {
+  slug: 'portfolioGrid',
+  labels: { plural: 'Portfolio grids', singular: 'Portfolio grid' },
+  fields: [
+    optionalAnchorField,
+    { name: 'eyebrow', type: 'text' },
+    { name: 'heading', type: 'text', required: true },
+    { name: 'intro', type: 'textarea' },
+    {
+      name: 'items',
+      type: 'array',
+      minRows: 1,
+      fields: [
+        { name: 'name', type: 'text', required: true },
+        { name: 'role', type: 'text' },
+        { name: 'description', type: 'textarea', required: true },
+        { name: 'url', type: 'text' },
+      ],
+    },
+  ],
+}
+
 export const CallToActionBlock: Block = {
   slug: 'callToAction',
   labels: { plural: 'Call to action sections', singular: 'Call to action' },
@@ -98,7 +172,9 @@ export const LogoCloudBlock: Block = {
   slug: 'logoCloud',
   labels: { plural: 'Logo clouds', singular: 'Logo cloud' },
   fields: [
+    optionalAnchorField,
     { name: 'heading', type: 'text' },
+    { name: 'intro', type: 'textarea' },
     {
       name: 'items',
       type: 'array',
@@ -106,7 +182,29 @@ export const LogoCloudBlock: Block = {
       fields: [
         { name: 'name', type: 'text', required: true },
         { name: 'image', type: 'upload', relationTo: 'media', required: true },
+        { name: 'url', type: 'text' },
       ],
+    },
+  ],
+}
+
+export const ContactFormBlock: Block = {
+  slug: 'contactForm',
+  labels: { plural: 'Contact forms', singular: 'Contact form' },
+  fields: [
+    {
+      ...optionalAnchorField,
+      defaultValue: 'contact',
+    },
+    { name: 'eyebrow', type: 'text' },
+    { name: 'heading', type: 'text', required: true },
+    { name: 'body', type: 'textarea' },
+    { name: 'submitLabel', type: 'text', defaultValue: 'Send message', required: true },
+    {
+      name: 'successMessage',
+      type: 'text',
+      defaultValue: 'Thanks. Your message has been sent.',
+      required: true,
     },
   ],
 }
@@ -159,9 +257,13 @@ export const pageBlocks = [
   RichTextBlock,
   ImageBlock,
   FeatureGridBlock,
+  SplitContentBlock,
+  LinkGridBlock,
+  PortfolioGridBlock,
   CallToActionBlock,
   TestimonialsBlock,
   LogoCloudBlock,
+  ContactFormBlock,
   StatsBlock,
   FAQBlock,
   LatestPostsBlock,

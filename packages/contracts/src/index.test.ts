@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { profileSchema, welcomeEmailRequestSchema } from './index.js'
+import {
+  contactSubmissionSchema,
+  profileSchema,
+  welcomeEmailRequestSchema,
+} from './index.js'
 
 describe('profileSchema', () => {
   it('accepts the public profile contract', () => {
@@ -29,6 +33,30 @@ describe('welcomeEmailRequestSchema', () => {
   it('rejects malformed keys', () => {
     expect(() =>
       welcomeEmailRequestSchema.parse({ idempotencyKey: 'not-a-uuid' }),
+    ).toThrow()
+  })
+})
+
+describe('contactSubmissionSchema', () => {
+  it('accepts valid public contact submissions', () => {
+    expect(
+      contactSubmissionSchema.parse({
+        email: 'daniel@example.com',
+        message: 'I would like to discuss a project.',
+        name: 'Daniel Markland',
+        turnstileToken: 'verified-token',
+      }),
+    ).toMatchObject({ website: '' })
+  })
+
+  it('rejects malformed contact submissions', () => {
+    expect(() =>
+      contactSubmissionSchema.parse({
+        email: 'not-an-email',
+        message: 'Too short',
+        name: 'D',
+        turnstileToken: '',
+      }),
     ).toThrow()
   })
 })

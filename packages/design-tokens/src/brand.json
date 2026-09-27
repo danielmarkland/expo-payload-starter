@@ -1,9 +1,9 @@
 {
-  "siteTitle": "Expo Payload Starter",
-  "appTitle": "Expo Payload Starter",
-  "shortName": "Expo Starter",
-  "description": "A production starter for Expo, Payload, Supabase, and Resend.",
-  "themeStorageKey": "expo-payload-site-theme",
+  "siteTitle": "Daniel Markland",
+  "appTitle": "Daniel Markland",
+  "shortName": "D Markland",
+  "description": "Dallas-based software engineer specializing in web, mobile, AI, and software architecture.",
+  "themeStorageKey": "daniel-markland-theme",
   "assets": {
     "appIcon": "icon.png",
     "androidBackground": "android-icon-background.png",

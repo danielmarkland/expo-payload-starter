@@ -10,6 +10,7 @@ import {
   Search,
   ShoppingBag,
   User,
+  X,
 } from 'lucide-react'
 import type { HeaderNavigation } from '@/payload-types'
 
@@ -23,6 +24,7 @@ const icons = {
   mail: Mail,
   search: Search,
   'shopping-bag': ShoppingBag,
+  twitter: X,
   user: User,
   youtube: CirclePlay,
 }
