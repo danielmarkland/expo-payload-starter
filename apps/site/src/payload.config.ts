@@ -62,9 +62,11 @@ export default buildConfig({
   sharp,
   plugins: [
     s3Storage({
-      enabled: Boolean(
-        process.env.SUPABASE_S3_ACCESS_KEY_ID && process.env.SUPABASE_S3_SECRET_ACCESS_KEY,
-      ),
+      // Payload must use remote storage on Vercel; silently disabling the adapter
+      // makes uploads fall back to an unavailable local filesystem.
+      enabled:
+        process.env.VERCEL === '1' ||
+        Boolean(process.env.SUPABASE_S3_ACCESS_KEY_ID && process.env.SUPABASE_S3_SECRET_ACCESS_KEY),
       bucket: process.env.SUPABASE_S3_BUCKET || 'cms-media',
       collections: { media: true },
       config: {
