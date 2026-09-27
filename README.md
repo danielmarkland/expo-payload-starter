@@ -52,7 +52,10 @@ preview unpublished content. Configure editor-managed header and footer links
 in **Header navigation** and **Footer navigation** Globals. **Site settings**
 holds the fallback SEO description and social preview metadata; product and
 site identity (title, icons, colors, fonts) remains centralized in
-`packages/design-tokens`.
+`packages/design-tokens`. The Header navigation Global also owns the optional
+site logo (choose an image from Media) and header links. Header links can use a
+curated set of Lucide icons; icon-only links retain their configured label for
+assistive technology. Footer navigation remains text links.
 
 Posts can be assigned an Author, Categories, and Tags. Their public archives
 are available at `/authors/<slug>`, `/categories/<slug>`, and `/tags/<slug>`;

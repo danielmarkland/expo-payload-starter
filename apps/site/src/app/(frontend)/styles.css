@@ -16,7 +16,7 @@ a {
   align-items: center;
   display: flex;
   gap: var(--space-lg);
-  justify-content: space-between;
+  justify-content: flex-end;
   margin: 0 auto;
   max-width: var(--layout-content);
   padding: var(--space-lg);
@@ -34,6 +34,21 @@ a {
   font-size: var(--font-size-small);
   text-decoration-color: transparent;
   text-underline-offset: 4px;
+}
+.site-header .theme-toggle {
+  margin-right: auto;
+}
+.header-navigation a {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--space-xs);
+}
+.header-navigation-icon {
+  height: 1em;
+  width: 1em;
+}
+.header-navigation-icon-only {
+  padding: 4px;
 }
 .header-navigation a:hover,
 .footer-navigation a:hover {
@@ -76,6 +91,14 @@ a {
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-bold);
   text-decoration: none;
+}
+.site-brand-logo {
+  display: block;
+  height: auto;
+  max-height: 48px;
+  max-width: 180px;
+  object-fit: contain;
+  width: auto;
 }
 .shell {
   margin: 0 auto;

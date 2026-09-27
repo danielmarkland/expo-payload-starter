@@ -896,9 +896,35 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface HeaderNavigation {
   id: number;
+  /**
+   * Optional site logo. The site title is shown when no logo is selected.
+   */
+  logo?: (number | null) | Media;
   items?:
     | {
         label: string;
+        /**
+         * Optional Lucide icon displayed alongside the link label.
+         */
+        icon?:
+          | (
+              | 'book-open'
+              | 'external-link'
+              | 'github'
+              | 'home'
+              | 'info'
+              | 'linkedin'
+              | 'mail'
+              | 'search'
+              | 'shopping-bag'
+              | 'user'
+              | 'youtube'
+            )
+          | null;
+        /**
+         * Hide the visible label. The link label remains available to screen readers.
+         */
+        iconOnly?: boolean | null;
         type: 'page' | 'post' | 'url';
         page?: (number | null) | Page;
         post?: (number | null) | Post;
@@ -956,10 +982,13 @@ export interface SiteSetting {
  * via the `definition` "headerNavigation_select".
  */
 export interface HeaderNavigationSelect<T extends boolean = true> {
+  logo?: T;
   items?:
     | T
     | {
         label?: T;
+        icon?: T;
+        iconOnly?: T;
         type?: T;
         page?: T;
         post?: T;

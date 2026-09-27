@@ -1,11 +1,46 @@
 import type { Field } from 'payload'
 
-export function navigationItemsField(): Field {
+export function navigationItemsField({
+  includeIcons = false,
+}: { includeIcons?: boolean } = {}): Field {
   return {
     name: 'items',
     type: 'array',
     fields: [
       { name: 'label', type: 'text', required: true },
+      ...(includeIcons
+        ? [
+            {
+              name: 'icon',
+              type: 'select' as const,
+              options: [
+                { label: 'Book', value: 'book-open' },
+                { label: 'External link', value: 'external-link' },
+                { label: 'GitHub', value: 'github' },
+                { label: 'Home', value: 'home' },
+                { label: 'Info', value: 'info' },
+                { label: 'LinkedIn', value: 'linkedin' },
+                { label: 'Email', value: 'mail' },
+                { label: 'Search', value: 'search' },
+                { label: 'Shop', value: 'shopping-bag' },
+                { label: 'Account', value: 'user' },
+                { label: 'YouTube', value: 'youtube' },
+              ],
+              admin: { description: 'Optional Lucide icon displayed alongside the link label.' },
+            },
+            {
+              name: 'iconOnly',
+              type: 'checkbox' as const,
+              defaultValue: false,
+              admin: {
+                condition: (_data: unknown, siblingData: unknown) =>
+                  Boolean((siblingData as { icon?: string | null }).icon),
+                description:
+                  'Hide the visible label. The link label remains available to screen readers.',
+              },
+            },
+          ]
+        : []),
       {
         name: 'type',
         type: 'select',

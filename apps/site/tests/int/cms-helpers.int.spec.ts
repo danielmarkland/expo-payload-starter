@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { extractSearchText } from '@/lib/extractSearchText'
 import { getNavigationHref } from '@/lib/navigation'
+import { getHeaderNavigationPresentation } from '@/lib/headerNavigationIcons'
 import { resolveRedirect } from '@/lib/redirects'
 import type { Redirect } from '@/payload-types'
 
@@ -43,6 +44,16 @@ describe('CMS helpers', () => {
         url: 'javascript:alert(1)',
       } as never),
     ).toBeNull()
+  })
+
+  it('renders curated header icons and only hides labels when an icon is available', () => {
+    const iconOnly = getHeaderNavigationPresentation({ icon: 'github', iconOnly: true } as never)
+    expect(iconOnly.Icon).toBeDefined()
+    expect(iconOnly.iconOnly).toBe(true)
+
+    expect(
+      getHeaderNavigationPresentation({ icon: 'not-a-supported-icon', iconOnly: true } as never),
+    ).toEqual({ Icon: undefined, iconOnly: false })
   })
 
   it('resolves CMS redirects with exact status codes and safe destinations', () => {
