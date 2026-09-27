@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { getPayload } from 'payload'
 
-import { brand } from '@starter/design-tokens'
+import type { SiteConfig } from '@starter/contracts'
 import { getNavigationHref } from '@/lib/navigation'
 import config from '@/payload.config'
 
-export async function SiteFooter() {
+export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
   const appURL = process.env.NEXT_PUBLIC_APP_URL
   const payload = await getPayload({ config })
   const navigation = await payload.findGlobal({ slug: 'footerNavigation', depth: 1 })
@@ -13,7 +13,7 @@ export async function SiteFooter() {
   return (
     <footer className="site-footer">
       <Link className="site-brand" href="/">
-        {brand.siteTitle}
+        {siteConfig.identity.siteTitle}
       </Link>
       {appURL ? (
         <a className="footer-app-link" href={appURL}>
@@ -34,7 +34,7 @@ export async function SiteFooter() {
         </nav>
       ) : null}
       <small>
-        © {new Date().getFullYear()} {brand.siteTitle}
+        © {new Date().getFullYear()} {siteConfig.identity.siteTitle}
       </small>
     </footer>
   )

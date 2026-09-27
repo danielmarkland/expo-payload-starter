@@ -6,19 +6,20 @@ import { ActivityIndicator, View } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-import { fonts } from '@starter/design-tokens'
+import { fonts as bundledFonts } from '@starter/design-tokens'
 import { ThemeToggle } from '@/src/components/ThemeToggle'
 import { GoogleTagManager } from '@/src/components/GoogleTagManager'
 import { AuthProvider, useAuth } from '@/src/context/AuthContext'
+import { SiteConfigProvider } from '@/src/context/SiteConfigContext'
 import { ThemeProvider, useTheme } from '@/src/context/ThemeContext'
 
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient())
   const [fontsLoaded] = useFonts({
-    [fonts.regular]: require('@starter/design-tokens/assets/fonts/Poppins_400Regular.ttf'),
-    [fonts.medium]: require('@starter/design-tokens/assets/fonts/Poppins_500Medium.ttf'),
-    [fonts.semibold]: require('@starter/design-tokens/assets/fonts/Poppins_600SemiBold.ttf'),
-    [fonts.bold]: require('@starter/design-tokens/assets/fonts/Poppins_700Bold.ttf'),
+    [bundledFonts.regular]: require('@starter/design-tokens/assets/fonts/Poppins_400Regular.ttf'),
+    [bundledFonts.medium]: require('@starter/design-tokens/assets/fonts/Poppins_500Medium.ttf'),
+    [bundledFonts.semibold]: require('@starter/design-tokens/assets/fonts/Poppins_600SemiBold.ttf'),
+    [bundledFonts.bold]: require('@starter/design-tokens/assets/fonts/Poppins_700Bold.ttf'),
   })
 
   if (!fontsLoaded) return null
@@ -27,11 +28,13 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <GoogleTagManager />
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <AuthProvider>
-            <RootNavigator />
-          </AuthProvider>
-        </ThemeProvider>
+        <SiteConfigProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <RootNavigator />
+            </AuthProvider>
+          </ThemeProvider>
+        </SiteConfigProvider>
       </QueryClientProvider>
     </SafeAreaProvider>
   )
@@ -39,7 +42,7 @@ export default function RootLayout() {
 
 function RootNavigator() {
   const { initialized, user } = useAuth()
-  const { colors, mode, ready } = useTheme()
+  const { colors, fonts, mode, ready } = useTheme()
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>

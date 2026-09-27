@@ -2,31 +2,30 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getPayload } from 'payload'
 
-import { brand } from '@starter/design-tokens'
+import type { SiteConfig } from '@starter/contracts'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { getNavigationHref } from '@/lib/navigation'
 import { getHeaderNavigationPresentation } from '@/lib/headerNavigationIcons'
 import config from '@/payload.config'
 
-export async function SiteHeader() {
+export async function SiteHeader({ siteConfig }: { siteConfig: SiteConfig }) {
   const payload = await getPayload({ config })
   const navigation = await payload.findGlobal({ slug: 'headerNavigation', depth: 1 })
-  const logo = typeof navigation.logo === 'object' && navigation.logo ? navigation.logo : null
 
   return (
     <header className="site-header">
-      <Link aria-label={brand.siteTitle} className="site-brand" href="/">
-        {logo?.url ? (
+      <Link aria-label={siteConfig.identity.siteTitle} className="site-brand" href="/">
+        {siteConfig.identity.logoUrl ? (
           <Image
             alt=""
             className="site-brand-logo"
-            height={logo.height || 48}
-            src={logo.url}
+            height={48}
+            src={siteConfig.identity.logoUrl}
             unoptimized
-            width={logo.width || 180}
+            width={180}
           />
         ) : (
-          brand.siteTitle
+          siteConfig.identity.siteTitle
         )}
       </Link>
       <nav aria-label="Main navigation" className="header-navigation">
@@ -52,7 +51,9 @@ export async function SiteHeader() {
         })}
         <Link href="/search">Search</Link>
       </nav>
-      <ThemeToggle />
+      {siteConfig.theme.allowToggle ? (
+        <ThemeToggle defaultMode={siteConfig.theme.defaultMode} />
+      ) : null}
     </header>
   )
 }

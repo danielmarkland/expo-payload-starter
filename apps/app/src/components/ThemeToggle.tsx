@@ -1,14 +1,25 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { fonts, radii, spacing, typography } from '@starter/design-tokens'
+import { typography } from '@starter/design-tokens'
 import { useTheme } from '@/src/context/ThemeContext'
 
 export function ThemeToggle() {
   const insets = useSafeAreaInsets()
-  const { colors, mode, ready, toggleTheme } = useTheme()
+  const {
+    allowToggle,
+    colors,
+    fonts,
+    mode,
+    radii,
+    ready,
+    spacing,
+    toggleTheme,
+  } = useTheme()
   const nextMode = mode === 'dark' ? 'light' : 'dark'
   const nextLabel = nextMode === 'dark' ? 'dark' : 'light'
+
+  if (!allowToggle) return null
 
   return (
     <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
@@ -22,13 +33,20 @@ export function ThemeToggle() {
           {
             backgroundColor: colors.surfaceTop,
             borderColor: colors.border,
+            borderRadius: radii.pill,
             opacity: !ready || pressed ? 0.72 : 1,
+            paddingHorizontal: spacing.md,
             right: spacing.lg,
             top: insets.top + spacing.md,
           },
         ]}
       >
-        <Text style={[styles.label, { color: colors.inkBody }]}>
+        <Text
+          style={[
+            styles.label,
+            { color: colors.inkBody, fontFamily: fonts.medium },
+          ]}
+        >
           {mode === 'dark' ? 'Light mode' : 'Dark mode'}
         </Text>
       </Pressable>
@@ -39,14 +57,11 @@ export function ThemeToggle() {
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    borderRadius: radii.pill,
     borderWidth: 1,
     minHeight: 40,
-    paddingHorizontal: spacing.md,
     position: 'absolute',
   },
   label: {
-    fontFamily: fonts.medium,
     fontSize: typography.fontSizes.small,
     lineHeight: 40,
     textTransform: 'capitalize',

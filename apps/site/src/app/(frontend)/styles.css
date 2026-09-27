@@ -6,7 +6,8 @@ html {
   color: var(--color-ink);
 }
 body {
-  font-family: var(--font-family-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family:
+    var(--font-family-runtime, var(--font-family-sans)), ui-sans-serif, system-ui, sans-serif;
   margin: 0;
 }
 a {

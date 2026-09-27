@@ -50,10 +50,9 @@ at `/<slug>`. Add a **Latest posts** block wherever you want published Posts
 to appear. Pages and Posts support drafts; use Payload's Preview action to
 preview unpublished content. Configure editor-managed header and footer links
 in **Header navigation** and **Footer navigation** Globals. **Site settings**
-holds the fallback SEO description and social preview metadata; product and
-site identity (title, icons, colors, fonts) remains centralized in
-`packages/design-tokens`. The Header navigation Global also owns the optional
-site logo (choose an image from Media) and header links. Header links can use a
+holds the site/app titles, short name, logo, favicon, fallback SEO description,
+social preview metadata, and runtime theme. Header navigation owns only the
+header links. Header links can use a
 curated set of Lucide icons; icon-only links retain their configured label for
 assistive technology. Footer navigation remains text links.
 
@@ -211,9 +210,26 @@ IDs per project/environment. Add optional email and S3 credentials only when
 using those features. Vercel applies environment changes to new deployments,
 so redeploy after changing a value. See [Vercel environment variables](https://vercel.com/docs/environment-variables).
 
-## Shared brand and theme
+## Runtime brand and theme
 
-The shared source of truth is `packages/design-tokens/src/`: `tokens.json`
+Each deployment stores its identity and curated theme in Payload's **Site
+settings** Global. Editors can choose the default appearance, whether visitors
+may switch modes, font/shape/density presets, and the primary semantic colors
+for light and dark modes. The public site renders these settings server-side as
+CSS variables. The Expo app fetches the validated public `/api/site-config`
+contract at launch and whenever it returns to the foreground, caches the last
+valid response, and uses packaged defaults while offline.
+
+Use a separate Payload database for each independently branded Vercel project.
+That lets multiple projects deploy the same Git branch while keeping their
+content, media, identity, and theme isolated. Set `EXPO_PUBLIC_SITE_URL` to the
+matching website so each app reads the correct public configuration. Native app
+icons, splash artwork, Expo slug/scheme, and iOS/Android identifiers remain
+build-time values and require an app build when changed.
+
+## Packaged design defaults
+
+The fallback source of truth is `packages/design-tokens/src/`: `tokens.json`
 defines light/dark colors, Poppins weights, type sizes, line heights, spacing,
 and radii; `brand.json` defines site/app titles, short name, description, and
 asset names. Put app icons, web favicon, Android adaptive icon layers, splash

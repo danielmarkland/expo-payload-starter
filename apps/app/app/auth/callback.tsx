@@ -1,13 +1,26 @@
 import { Redirect } from 'expo-router'
+import { useMemo } from 'react'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 
-import { fonts, spacing } from '@starter/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
 import { useTheme } from '@/src/context/ThemeContext'
 
 export default function AuthCallbackScreen() {
   const { initialized, user } = useAuth()
-  const { colors } = useTheme()
+  const { colors, fonts, spacing } = useTheme()
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          alignItems: 'center',
+          flex: 1,
+          gap: spacing.md,
+          justifyContent: 'center',
+        },
+        text: { fontFamily: fonts.regular },
+      }),
+    [fonts, spacing],
+  )
   if (initialized && user) return <Redirect href="/" />
   if (initialized && !user) return <Redirect href="/sign-in" />
 
@@ -23,13 +36,3 @@ export default function AuthCallbackScreen() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    gap: spacing.md,
-    justifyContent: 'center',
-  },
-  text: { fontFamily: fonts.regular },
-})

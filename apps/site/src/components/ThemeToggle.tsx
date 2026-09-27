@@ -9,7 +9,7 @@ function getSystemTheme(): SiteTheme {
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ defaultMode = 'system' }: { defaultMode?: SiteTheme | 'system' }) {
   const [theme, setTheme] = useState<SiteTheme | null>(null)
   const preference = useRef<SiteTheme | null>(null)
 
@@ -25,7 +25,8 @@ export function ThemeToggle() {
     }
 
     preference.current = saved === 'light' || saved === 'dark' ? saved : null
-    const initial = preference.current ?? (media.matches ? 'light' : 'dark')
+    const configured = defaultMode === 'system' ? null : defaultMode
+    const initial = preference.current ?? configured ?? (media.matches ? 'light' : 'dark')
     root.dataset.theme = initial
     setTheme(initial)
 
@@ -38,7 +39,7 @@ export function ThemeToggle() {
 
     media.addEventListener('change', followSystem)
     return () => media.removeEventListener('change', followSystem)
-  }, [])
+  }, [defaultMode])
 
   function toggleTheme() {
     const current = theme ?? getSystemTheme()

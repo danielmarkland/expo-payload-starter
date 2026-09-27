@@ -10,15 +10,5 @@ export const HeaderNavigation: GlobalConfig = {
     read: () => true,
     update: ({ req }) => Boolean(req.user),
   },
-  fields: [
-    {
-      name: 'logo',
-      type: 'upload',
-      relationTo: 'media',
-      admin: {
-        description: 'Optional site logo. The site title is shown when no logo is selected.',
-      },
-    },
-    navigationItemsField({ includeIcons: true }),
-  ],
+  fields: [navigationItemsField({ includeIcons: true })],
 }

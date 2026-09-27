@@ -1,15 +1,20 @@
 import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { profileLabel } from '@starter/core'
-import { fonts, radii, spacing, typography } from '@starter/design-tokens'
+import { typography } from '@starter/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
 import { useTheme } from '@/src/context/ThemeContext'
 import { profiles } from '@/src/lib/supabase'
 
 export default function HomeScreen() {
   const { signOut, user } = useAuth()
-  const { colors } = useTheme()
+  const { colors, fonts, radii, spacing } = useTheme()
+  const styles = useMemo(
+    () => createStyles(fonts, radii, spacing),
+    [fonts, radii, spacing],
+  )
   const profile = useQuery({
     enabled: Boolean(user),
     queryFn: () => profiles.findById(user!.id),
@@ -36,25 +41,31 @@ export default function HomeScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  button: {
-    borderRadius: radii.sm,
-    borderWidth: 1,
-    marginTop: spacing.lg,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  buttonText: { fontFamily: fonts.semibold },
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    padding: spacing.lg,
-  },
-  email: {
-    fontFamily: fonts.regular,
-    fontSize: typography.fontSizes.body,
-    marginTop: spacing.sm,
-  },
-  title: { fontFamily: fonts.bold, fontSize: typography.fontSizes.title },
-})
+function createStyles(
+  fonts: ReturnType<typeof useTheme>['fonts'],
+  radii: ReturnType<typeof useTheme>['radii'],
+  spacing: ReturnType<typeof useTheme>['spacing'],
+) {
+  return StyleSheet.create({
+    button: {
+      borderRadius: radii.sm,
+      borderWidth: 1,
+      marginTop: spacing.lg,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+    },
+    buttonText: { fontFamily: fonts.semibold },
+    container: {
+      alignItems: 'center',
+      flex: 1,
+      justifyContent: 'center',
+      padding: spacing.lg,
+    },
+    email: {
+      fontFamily: fonts.regular,
+      fontSize: typography.fontSizes.body,
+      marginTop: spacing.sm,
+    },
+    title: { fontFamily: fonts.bold, fontSize: typography.fontSizes.title },
+  })
+}

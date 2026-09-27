@@ -17,6 +17,40 @@ export const spacing = tokenConfig.spacing
 export const radii = tokenConfig.radii
 export const layout = tokenConfig.layout
 
+export type DensityPreset = 'compact' | 'comfortable' | 'spacious'
+export type ShapePreset = 'rounded' | 'soft' | 'square'
+
+const densityScales: Record<DensityPreset, number> = {
+  compact: 0.8,
+  comfortable: 1,
+  spacious: 1.2,
+}
+
+const shapeScales: Record<ShapePreset, number> = {
+  rounded: 1.5,
+  soft: 1,
+  square: 0,
+}
+
+export function getPresetTokens(density: DensityPreset, shape: ShapePreset) {
+  const densityScale = densityScales[density]
+  const shapeScale = shapeScales[shape]
+  const scaledSpacing = Object.fromEntries(
+    Object.entries(spacing).map(([key, value]) => [
+      key,
+      Math.round(value * densityScale),
+    ]),
+  ) as typeof spacing
+  const scaledRadii = Object.fromEntries(
+    Object.entries(radii).map(([key, value]) => [
+      key,
+      key === 'pill' ? value : Math.round(value * shapeScale),
+    ]),
+  ) as typeof radii
+
+  return { radii: scaledRadii, spacing: scaledSpacing }
+}
+
 // Expo's font files are registered in the root layout and use these family names.
 export const fonts = {
   bold: `${tokenConfig.fonts.family}_Bold`,

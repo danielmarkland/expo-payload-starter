@@ -5,6 +5,7 @@ import * as migration_20260926_213242 from './20260926_213242'
 import * as migration_20260927_020507_header_navigation_logo_and_icons from './20260927_020507_header_navigation_logo_and_icons'
 import * as migration_20260927_043014_homepage_migration from './20260927_043014_homepage_migration'
 import * as migration_20260927_162621_hero_headline from './20260927_162621_hero_headline'
+import * as migration_20260927_164523_runtime_site_theme from './20260927_164523_runtime_site_theme'
 
 export const migrations = [
   {
@@ -41,5 +42,10 @@ export const migrations = [
     up: migration_20260927_162621_hero_headline.up,
     down: migration_20260927_162621_hero_headline.down,
     name: '20260927_162621_hero_headline',
+  },
+  {
+    up: migration_20260927_164523_runtime_site_theme.up,
+    down: migration_20260927_164523_runtime_site_theme.down,
+    name: '20260927_164523_runtime_site_theme',
   },
 ]

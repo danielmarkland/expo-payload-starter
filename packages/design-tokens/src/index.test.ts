@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { brand, resolveThemeMode, themes } from './index.js'
+import { brand, getPresetTokens, resolveThemeMode, themes } from './index.js'
 
 describe('shared brand and theme tokens', () => {
   it('defines matching colors for both platform themes', () => {
@@ -26,5 +26,11 @@ describe('shared brand and theme tokens', () => {
     expect(brand.siteTitle).toBe(brand.appTitle)
     expect(brand.shortName.length).toBeLessThanOrEqual(12)
     expect(brand.assets.fonts.regular).toContain('.ttf')
+  })
+
+  it('resolves curated spacing and shape presets', () => {
+    expect(getPresetTokens('compact', 'square').spacing.lg).toBe(19)
+    expect(getPresetTokens('comfortable', 'soft').radii.md).toBe(14)
+    expect(getPresetTokens('spacious', 'rounded').radii.lg).toBe(27)
   })
 })

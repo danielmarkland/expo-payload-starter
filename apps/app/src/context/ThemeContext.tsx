@@ -12,25 +12,39 @@ import { Platform, useColorScheme } from 'react-native'
 
 import {
   THEME_STORAGE_KEY,
-  resolveThemeMode,
-  themes,
+  fonts as bundledFonts,
+  getPresetTokens,
   type ThemeMode,
 } from '@starter/design-tokens'
+import { useSiteConfig } from '@/src/context/SiteConfigContext'
 
 type ThemeContextValue = {
-  colors: (typeof themes)[ThemeMode]
+  allowToggle: boolean
+  colors: ReturnType<typeof useSiteConfig>['config']['theme']['dark']
+  fonts: Record<keyof typeof bundledFonts, string | undefined>
   mode: ThemeMode
+  radii: ReturnType<typeof getPresetTokens>['radii']
   ready: boolean
+  spacing: ReturnType<typeof getPresetTokens>['spacing']
   toggleTheme: () => void
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 export function ThemeProvider({ children }: PropsWithChildren) {
+  const { config, ready: configReady } = useSiteConfig()
   const systemMode = useColorScheme()
   const [preference, setPreference] = useState<ThemeMode | null>(null)
   const [ready, setReady] = useState(false)
-  const mode = resolveThemeMode(systemMode, preference)
+  const configuredMode =
+    config.theme.defaultMode === 'system'
+      ? systemMode === 'light'
+        ? 'light'
+        : 'dark'
+      : config.theme.defaultMode
+  const mode = config.theme.allowToggle
+    ? (preference ?? configuredMode)
+    : configuredMode
 
   useEffect(() => {
     let active = true
@@ -48,15 +62,36 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   }, [])
 
   const toggleTheme = useCallback(() => {
+    if (!config.theme.allowToggle) return
     const next: ThemeMode = mode === 'dark' ? 'light' : 'dark'
     setPreference(next)
     void savePreference(next)
-  }, [mode])
+  }, [config.theme.allowToggle, mode])
 
-  const value = useMemo<ThemeContextValue>(
-    () => ({ colors: themes[mode], mode, ready, toggleTheme }),
-    [mode, ready, toggleTheme],
-  )
+  const value = useMemo<ThemeContextValue>(() => {
+    const preset = getPresetTokens(
+      config.theme.densityPreset,
+      config.theme.shapePreset,
+    )
+    return {
+      allowToggle: config.theme.allowToggle,
+      colors: config.theme[mode],
+      fonts:
+        config.theme.fontPreset === 'system'
+          ? {
+              bold: undefined,
+              medium: undefined,
+              regular: undefined,
+              semibold: undefined,
+            }
+          : bundledFonts,
+      mode,
+      radii: preset.radii,
+      ready: ready && configReady,
+      spacing: preset.spacing,
+      toggleTheme,
+    }
+  }, [config, configReady, mode, ready, toggleTheme])
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }

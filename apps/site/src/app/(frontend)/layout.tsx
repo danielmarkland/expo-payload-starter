@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import React from 'react'
 
-import { brand } from '@starter/design-tokens'
+import { THEME_STORAGE_KEY } from '@starter/design-tokens'
 import favicon from '@starter/design-tokens/assets/favicon.png'
 import appIcon from '@starter/design-tokens/assets/icon.png'
 
@@ -10,6 +10,7 @@ import { GoogleTagManager } from '@/components/GoogleTagManager'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { getSiteSettings } from '@/lib/getSiteSettings'
+import { resolveSiteConfig, siteConfigCSS } from '@/lib/siteConfig'
 
 import '@starter/design-tokens/theme.css'
 import './styles.css'
@@ -39,6 +40,7 @@ const font = localFont({
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
+  const siteConfig = resolveSiteConfig(settings)
   const socialImage = settings.meta?.image
   const socialImageURL = socialImage && typeof socialImage === 'object' ? socialImage.url : null
   const uploadedFavicon = settings.favicon
@@ -46,30 +48,38 @@ export async function generateMetadata(): Promise<Metadata> {
     uploadedFavicon && typeof uploadedFavicon === 'object' ? uploadedFavicon.url : null
 
   return {
-    applicationName: brand.siteTitle,
-    description: settings.meta?.description || settings.siteDescription || brand.description,
+    applicationName: siteConfig.identity.siteTitle,
+    description: settings.meta?.description || siteConfig.identity.description,
     icons: { apple: appIcon.src, icon: faviconURL || favicon.src },
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
     openGraph: {
-      description: settings.meta?.description || settings.siteDescription || brand.description,
+      description: settings.meta?.description || siteConfig.identity.description,
       images: socialImageURL ? [socialImageURL] : undefined,
-      siteName: brand.siteTitle,
+      siteName: siteConfig.identity.siteTitle,
     },
     title: {
-      default: settings.meta?.title || brand.siteTitle,
-      template: `%s · ${brand.siteTitle}`,
+      default: settings.meta?.title || siteConfig.identity.siteTitle,
+      template: `%s · ${siteConfig.identity.siteTitle}`,
     },
   }
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings()
+  const siteConfig = resolveSiteConfig(settings)
+  const bootstrap = `(function(){try{var s=${siteConfig.theme.allowToggle ? `localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)})` : 'null'};var d=${JSON.stringify(siteConfig.theme.defaultMode)};var t=s==='light'||s==='dark'?s:d==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):d;document.documentElement.dataset.theme=t}catch(e){}})()`
+
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: siteConfigCSS(siteConfig) }} />
+        <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
+      </head>
       <body className={font.variable}>
         <GoogleTagManager />
-        <SiteHeader />
+        <SiteHeader siteConfig={siteConfig} />
         {children}
-        <SiteFooter />
+        <SiteFooter siteConfig={siteConfig} />
       </body>
     </html>
   )

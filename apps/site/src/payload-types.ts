@@ -1066,10 +1066,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface HeaderNavigation {
   id: number;
-  /**
-   * Optional site logo. The site title is shown when no logo is selected.
-   */
-  logo?: (number | null) | Media;
   items?:
     | {
         label: string;
@@ -1133,6 +1129,13 @@ export interface FooterNavigation {
  */
 export interface SiteSetting {
   id: number;
+  siteTitle: string;
+  appTitle: string;
+  shortName: string;
+  /**
+   * Primary website logo. The site title is used when no logo is selected.
+   */
+  logo?: (number | null) | Media;
   /**
    * Website favicon and web-app manifest icon. Use a square PNG or SVG.
    */
@@ -1140,7 +1143,74 @@ export interface SiteSetting {
   /**
    * Fallback description for pages without their own SEO description.
    */
-  siteDescription?: string | null;
+  siteDescription: string;
+  theme: {
+    defaultMode: 'system' | 'light' | 'dark';
+    allowToggle: boolean;
+    fontPreset: 'poppins' | 'system';
+    shapePreset: 'square' | 'soft' | 'rounded';
+    densityPreset: 'compact' | 'comfortable' | 'spacious';
+    light: {
+      /**
+       * Primary as a six-digit hexadecimal color.
+       */
+      primary: string;
+      /**
+       * Text on primary as a six-digit hexadecimal color.
+       */
+      primaryInk: string;
+      /**
+       * Page background as a six-digit hexadecimal color.
+       */
+      surface: string;
+      /**
+       * Raised surface as a six-digit hexadecimal color.
+       */
+      surfaceRaised: string;
+      /**
+       * Primary text as a six-digit hexadecimal color.
+       */
+      ink: string;
+      /**
+       * Muted text as a six-digit hexadecimal color.
+       */
+      inkMuted: string;
+      /**
+       * Borders as a six-digit hexadecimal color.
+       */
+      border: string;
+    };
+    dark: {
+      /**
+       * Primary as a six-digit hexadecimal color.
+       */
+      primary: string;
+      /**
+       * Text on primary as a six-digit hexadecimal color.
+       */
+      primaryInk: string;
+      /**
+       * Page background as a six-digit hexadecimal color.
+       */
+      surface: string;
+      /**
+       * Raised surface as a six-digit hexadecimal color.
+       */
+      surfaceRaised: string;
+      /**
+       * Primary text as a six-digit hexadecimal color.
+       */
+      ink: string;
+      /**
+       * Muted text as a six-digit hexadecimal color.
+       */
+      inkMuted: string;
+      /**
+       * Borders as a six-digit hexadecimal color.
+       */
+      border: string;
+    };
+  };
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -1157,7 +1227,6 @@ export interface SiteSetting {
  * via the `definition` "headerNavigation_select".
  */
 export interface HeaderNavigationSelect<T extends boolean = true> {
-  logo?: T;
   items?:
     | T
     | {
@@ -1200,8 +1269,43 @@ export interface FooterNavigationSelect<T extends boolean = true> {
  * via the `definition` "siteSettings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  siteTitle?: T;
+  appTitle?: T;
+  shortName?: T;
+  logo?: T;
   favicon?: T;
   siteDescription?: T;
+  theme?:
+    | T
+    | {
+        defaultMode?: T;
+        allowToggle?: T;
+        fontPreset?: T;
+        shapePreset?: T;
+        densityPreset?: T;
+        light?:
+          | T
+          | {
+              primary?: T;
+              primaryInk?: T;
+              surface?: T;
+              surfaceRaised?: T;
+              ink?: T;
+              inkMuted?: T;
+              border?: T;
+            };
+        dark?:
+          | T
+          | {
+              primary?: T;
+              primaryInk?: T;
+              surface?: T;
+              surfaceRaised?: T;
+              ink?: T;
+              inkMuted?: T;
+              border?: T;
+            };
+      };
   meta?:
     | T
     | {
