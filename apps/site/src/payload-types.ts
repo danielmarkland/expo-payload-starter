@@ -276,7 +276,25 @@ export interface Page {
   layout: (
     | {
         eyebrow?: string | null;
-        heading: string;
+        /**
+         * Select text and choose Accent from the toolbar. Use Shift+Enter for a line break.
+         */
+        heading: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        secondaryHeading?: string | null;
         body?: string | null;
         primaryButton?: {
           label?: string | null;
@@ -772,6 +790,7 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               eyebrow?: T;
               heading?: T;
+              secondaryHeading?: T;
               body?: T;
               primaryButton?:
                 | T

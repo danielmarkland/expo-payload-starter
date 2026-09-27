@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { RichText } from '@payloadcms/richtext-lexical/react'
+import { RichText, type JSXConvertersFunction } from '@payloadcms/richtext-lexical/react'
 
 import { ContactForm } from '@/components/ContactForm'
 import { LatestPostsSection } from '@/components/LatestPostsSection'
 import type { Media, Page } from '@/payload-types'
 
 type PageBlock = Page['layout'][number]
+type HeroBlock = Extract<PageBlock, { blockType: 'hero' }>
 
 function resolveMedia(media: number | Media | null | undefined): Media | null {
   return media && typeof media === 'object' ? media : null
@@ -45,18 +46,37 @@ function SectionHeading({
   )
 }
 
+function HeroHeadline({ data, primary }: { data: HeroBlock['heading']; primary: boolean }) {
+  const Heading = primary ? 'h1' : 'h2'
+  const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
+    ...defaultConverters,
+    paragraph: ({ node, nodesToJSX }) => (
+      <Heading className="page-hero-heading">{nodesToJSX({ nodes: node.children })}</Heading>
+    ),
+    text: ({ node }) => {
+      const content = node.text
+      const tone = (node as typeof node & { $?: { tone?: unknown } }).$?.tone
+      return tone === 'accent' ? <span className="hero-heading-accent">{content}</span> : content
+    },
+  })
+
+  return <RichText converters={converters} data={data} />
+}
+
 function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: boolean }) {
   switch (block.blockType) {
     case 'hero': {
       const image = resolveMedia(block.image)
       const headingHref = safeHref(block.primaryButton?.url)
       const secondaryHref = safeHref(block.secondaryButton?.url)
-      const Heading = primaryHero ? 'h1' : 'h2'
       return (
         <section className={`page-hero${image?.url ? '' : ' page-hero-without-image'}`}>
           <div className="page-hero-copy">
             {block.eyebrow ? <p className="eyebrow">{block.eyebrow}</p> : null}
-            <Heading>{block.heading}</Heading>
+            <HeroHeadline data={block.heading} primary={primaryHero} />
+            {block.secondaryHeading ? (
+              <p className="page-hero-secondary-heading">{block.secondaryHeading}</p>
+            ) : null}
             {block.body ? <p className="lede">{block.body}</p> : null}
             {headingHref || secondaryHref ? (
               <div className="actions">

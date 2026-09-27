@@ -3,6 +3,7 @@ import { getPayload, type Payload } from 'payload'
 import { config as loadEnv } from 'dotenv'
 
 import type { Page } from '../src/payload-types.js'
+import { createHeroHeadline } from '../src/lib/heroHeadline.js'
 
 loadEnv({ path: new URL('../.env', import.meta.url) })
 
@@ -250,9 +251,13 @@ async function run() {
     const layout: Page['layout'] = [
       {
         blockType: 'hero' as const,
-        body: homepage.heroBody,
-        heading: homepage.heroHeading,
+        heading: createHeroHeadline(homepage.heroHeading, [
+          'Daniel Markland',
+          'software engineer',
+          'Dallas, TX',
+        ]),
         primaryButton: { label: 'Start a conversation', url: '#contact' },
+        secondaryHeading: homepage.heroBody,
       },
       {
         blockType: 'featureGrid' as const,

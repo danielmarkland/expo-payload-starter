@@ -237,11 +237,21 @@ h1 {
   grid-template-columns: minmax(0, 1fr);
 }
 .page-hero h1,
+.page-hero h2.page-hero-heading,
 .page-title h1 {
   font-size: clamp(var(--font-size-hero-min), 8vw, var(--font-size-hero-max));
   letter-spacing: -0.06em;
   line-height: 0.98;
   margin: 18px 0 24px;
+}
+.hero-heading-accent {
+  color: var(--color-primary);
+}
+.page-hero-secondary-heading {
+  font-size: clamp(var(--font-size-section), 4vw, 56px);
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  margin: 0 0 var(--space-xl);
 }
 .page-hero-image,
 .page-image img {

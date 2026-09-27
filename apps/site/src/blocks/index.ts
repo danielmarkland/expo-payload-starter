@@ -1,5 +1,7 @@
 import type { Block } from 'payload'
 
+import { heroHeadlineEditor, validateHeroHeadline } from '@/lib/heroHeadline'
+
 const buttonFields = [
   { name: 'label', type: 'text' as const },
   { name: 'url', type: 'text' as const },
@@ -20,7 +22,18 @@ export const HeroBlock: Block = {
   labels: { plural: 'Hero sections', singular: 'Hero' },
   fields: [
     { name: 'eyebrow', type: 'text' },
-    { name: 'heading', type: 'text', required: true },
+    {
+      name: 'heading',
+      type: 'richText',
+      admin: {
+        description:
+          'Select text and choose Accent from the toolbar. Use Shift+Enter for a line break.',
+      },
+      editor: heroHeadlineEditor,
+      required: true,
+      validate: validateHeroHeadline,
+    },
+    { name: 'secondaryHeading', type: 'text' },
     { name: 'body', type: 'textarea' },
     {
       name: 'primaryButton',

@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import { getPayload } from 'payload'
 
 import config from '../../src/payload.config.js'
+import { createHeroHeadline } from '../../src/lib/heroHeadline.js'
 
 test.describe('Frontend', () => {
   const slug = `e2e-page-${Date.now()}`
@@ -14,7 +15,7 @@ test.describe('Frontend', () => {
       data: {
         title: 'CMS page fixture',
         slug,
-        layout: [{ blockType: 'hero', heading: 'A page composed in Payload' }],
+        layout: [{ blockType: 'hero', heading: createHeroHeadline('A page composed in Payload') }],
         _status: 'published',
       },
       draft: false,

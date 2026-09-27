@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it, vi } from 'vitest'
 
 import { PageRenderer } from '@/components/PageRenderer'
+import { createHeroHeadline } from '@/lib/heroHeadline'
 import type { Media, Page } from '@/payload-types'
 
 vi.mock('@/components/LatestPostsSection', () => ({
@@ -41,12 +42,13 @@ describe('Payload page renderer', () => {
         id: 'hero-one',
         blockType: 'hero',
         eyebrow: 'First section',
-        heading: 'A CMS-authored homepage',
+        heading: createHeroHeadline('A CMS-authored homepage', ['CMS-authored']),
+        secondaryHeading: 'A flexible supporting headline',
         body: 'Page introduction',
         primaryButton: { label: 'Get in touch', url: '/contact' },
         secondaryButton: { label: 'Unsafe link', url: 'javascript:alert(1)' },
       },
-      { id: 'hero-two', blockType: 'hero', heading: 'A second hero' },
+      { id: 'hero-two', blockType: 'hero', heading: createHeroHeadline('A second hero') },
       {
         id: 'rich-text',
         blockType: 'richText',
@@ -192,8 +194,11 @@ describe('Payload page renderer', () => {
     ])
 
     expect(markup.match(/<h1/g)).toHaveLength(1)
-    expect(markup).toContain('<h1>A CMS-authored homepage</h1>')
-    expect(markup).toContain('<h2>A second hero</h2>')
+    expect(markup).toContain(
+      '<h1 class="page-hero-heading">A <span class="hero-heading-accent">CMS-authored</span> homepage</h1>',
+    )
+    expect(markup).toContain('<h2 class="page-hero-heading">A second hero</h2>')
+    expect(markup).toContain('A flexible supporting headline')
     expect(markup).toContain('Rich text content')
     expect(markup).toContain('Example media')
     expect(markup).toContain('Strategy')

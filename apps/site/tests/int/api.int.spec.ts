@@ -1,5 +1,6 @@
 import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
+import { createHeroHeadline } from '@/lib/heroHeadline'
 
 import { describe, it, beforeAll, expect } from 'vitest'
 
@@ -25,7 +26,7 @@ describe('API', () => {
       data: {
         title: 'Page access fixture',
         slug,
-        layout: [{ blockType: 'hero', heading: 'A private draft' }],
+        layout: [{ blockType: 'hero', heading: createHeroHeadline('A private draft') }],
       },
       draft: true,
       overrideAccess: true,
