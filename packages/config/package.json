@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "scripts": {
+    "test": "node --check scripts/setup-production.mjs && node --test scripts/setup-production.test.mjs"
+  },
   "exports": {
     "./typescript": "./typescript/strict.json"
   }

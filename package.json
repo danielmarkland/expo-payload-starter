@@ -21,6 +21,7 @@
     "payload:migrate": "pnpm --filter @starter/site payload migrate",
     "payload:migrate:create": "pnpm --filter @starter/site payload migrate:create",
     "payload:migrate:status": "pnpm --filter @starter/site payload migrate:status",
+    "setup:production": "node packages/config/scripts/setup-production.mjs",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"

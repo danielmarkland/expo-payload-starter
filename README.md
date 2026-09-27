@@ -20,12 +20,36 @@ authenticated application.
 
 - Node.js 22+
 - pnpm 11
-- Docker, for the local Supabase stack
 - Supabase CLI
+- Vercel CLI, for guided production setup and deployment
+- Docker, only for the full local Supabase development and test workflow
 
-## Quick start
+## Choose a setup path
+
+For the shortest path to a hosted environment, install dependencies,
+authenticate the provider CLIs, and run the guided production setup:
 
 ```sh
+pnpm install
+supabase login
+vercel login
+pnpm setup:production
+```
+
+This path does not require Docker. The wizard selects or creates hosted
+Supabase and Vercel projects, applies migrations, and configures production
+variables. See [Production deployment](#production-deployment) for its safety
+boundaries and manual checkpoints.
+
+Use the local path when developing database changes or running the complete
+test suite. It provides an isolated Supabase/Postgres instance for Payload
+integration tests, RLS tests, schema linting, generated-type verification, and
+Playwright without touching hosted data.
+
+## Local development
+
+```sh
+cp .env.example .env
 cp apps/app/.env.example apps/app/.env
 cp apps/site/.env.example apps/site/.env
 cp supabase/functions/.env.example supabase/functions/.env
@@ -36,6 +60,11 @@ pnpm generate
 pnpm dev
 ```
 
+Do not point the local development or CI test configuration at production.
+Several integration and end-to-end tests intentionally create, update, and
+delete database records. A disposable local stack keeps those tests repeatable
+and prevents concurrent runs from affecting shared data.
+
 The public site runs on `http://localhost:3000`, Payload Admin on
 `http://localhost:3000/admin`, and Supabase Studio on `http://localhost:54323`.
 `pnpm dev` starts the site and the Expo development server. To run the app in a
@@ -45,17 +74,18 @@ Expo web, start `pnpm dev:site` in another terminal.
 
 ### Common commands
 
-| Command                              | Purpose                                                            |
-| ------------------------------------ | ------------------------------------------------------------------ |
-| `pnpm dev`                           | Start the Payload/Next site and Expo development server together.  |
-| `pnpm dev:site`                      | Start only the Payload/Next site.                                  |
-| `pnpm dev:app`                       | Start only the Expo development server.                            |
-| `pnpm dev:app:web`                   | Start the Expo app in a web browser.                               |
-| `pnpm payload:migrate`               | Apply pending Payload database migrations.                         |
-| `pnpm payload:migrate:status`        | Show applied and pending Payload migrations.                       |
-| `pnpm payload:migrate:create <name>` | Generate a Payload migration after changing its schema.            |
-| `pnpm generate:payload`              | Regenerate Payload types and the admin import map.                 |
-| `pnpm check`                         | Run formatting, linting, typechecks, tests, and production builds. |
+| Command                              | Purpose                                                           |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| `pnpm dev`                           | Start the Payload/Next site and Expo development server together. |
+| `pnpm dev:site`                      | Start only the Payload/Next site.                                 |
+| `pnpm dev:app`                       | Start only the Expo development server.                           |
+| `pnpm dev:app:web`                   | Start the Expo app in a web browser.                              |
+| `pnpm payload:migrate`               | Apply pending Payload database migrations.                        |
+| `pnpm payload:migrate:status`        | Show applied and pending Payload migrations.                      |
+| `pnpm payload:migrate:create <name>` | Generate a Payload migration after changing its schema.           |
+| `pnpm generate:payload`              | Regenerate Payload types and the admin import map.                |
+| `pnpm setup:production`              | Configure Supabase and Vercel production projects interactively.  |
+| `pnpm check`                         | Run all checks and builds; requires the local Supabase stack.     |
 
 The public homepage is a Payload Page with the slug `home`. After the first
 Payload migration, open `/admin`, create a Page with that slug, compose its
@@ -285,69 +315,93 @@ Deploy two Vercel projects from the same repository:
 | Website + CMS  | `apps/site`    | Next.js (automatic)      |
 | Universal app  | `apps/app`     | `dist` (Expo web export) |
 
-Create both projects in Vercel and set each root directory above. Allow each
-project to include source files outside its root so pnpm can use the root
-workspace and shared `packages/*`. The Deploy Button creates one Vercel
-project; add the second separately. See
-[Vercel's monorepo guide](https://vercel.com/docs/monorepos).
+### Guided setup
 
-1. Create a Supabase project, link this repository, and apply the product
-   migrations:
+Install the
+[Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started)
+and [Vercel CLI](https://vercel.com/docs/cli), then authenticate both:
 
-   ```sh
-   supabase login
-   supabase link --project-ref <project-ref>
-   supabase db push --dry-run
-   supabase db push
-   ```
+```sh
+# macOS; use the linked installation guides for other platforms
+brew install supabase/tap/supabase
+pnpm add --global vercel
 
-   In Supabase API settings, add `app` to the exposed schemas. Do not use
-   `--include-seed` against production. Migrations create product tables, RLS
-   policies, and the `app-uploads` and `cms-media` buckets.
+supabase login
+vercel login
+```
 
-2. Configure the Vercel environment variables described in
-   [Environment variables and secrets](#environment-variables-and-secrets)
-   for each project's relevant environments. For the Website + CMS project's
-   `DATABASE_URL`, copy the **Session pooler** connection string from the same
-   Supabase project's **Connect** panel. Confirm its project reference and
-   database match the project where you applied the Supabase migrations. Keep
-   credentials server-side. Vercel environment changes apply only to new
-   deployments, so redeploy after changing a value.
+Run the production setup wizard from the repository root:
 
-3. Apply Payload's CMS migrations to that same database before the first deploy
-   and whenever CMS schema changes. This includes the editorial Pages,
-   navigation, taxonomy, SEO, redirect, and search schemas:
+```sh
+pnpm setup:production
+```
 
-   ```sh
-   DATABASE_URL='<production postgres connection string>' \
-     pnpm payload:migrate
-   ```
+The wizard can select or create the Supabase project and both Vercel projects.
+It links the repository, previews and applies Supabase product migrations,
+applies Payload CMS migrations to the same database, configures production-only
+Vercel variables, and offers optional Google OAuth, email, Turnstile, and GTM
+setup. It shows a redacted summary and asks again before migrations, hosted
+Auth changes, replacing existing secrets, or production deployment.
 
-   Use the Session pooler URI for this command as well, or another appropriate
-   direct/session connection to the exact same database. Run migrations from a
-   trusted local shell or release job; don't paste the URI into shared logs or
-   documentation. A successful run reports each migration as `Migrated` and
-   ends with `Done`. Check pending migrations with
-   `pnpm payload:migrate:status`, supplying the same
-   `DATABASE_URL`. Vercel builds do not apply Payload migrations automatically.
-   Payload schema push is disabled to protect Supabase-owned tables.
+Supabase currently requires one dashboard step for Payload media storage. When
+the wizard pauses, open **Storage → S3**, enable the S3 protocol, generate an
+access-key pair, and paste both values into the hidden prompts. When enabling
+Google sign-in, register the callback URL printed by the wizard in Google Cloud
+before continuing. Secret values are piped directly to their destination and
+are not written to the repository.
 
-4. Deploy both Vercel projects. Verify the public website, `/admin`, and the
-   Expo web app. If an environment variable changed, ensure the active
-   production deployment was created after that change.
+Preview deployments are intentionally not given production credentials. Give
+previews an isolated Supabase project or Supabase Branching configuration
+before enabling authenticated or CMS-backed previews. Inspect the complete
+plan without making remote changes using:
 
-5. In Supabase Auth URL settings, set the Site URL to the universal app's
-   production URL and allow its exact `/auth/callback` URL. Add
-   `expopayloadstarter://auth/callback` for native builds. Configure Google
-   OAuth in Supabase and register Supabase's callback URL with Google. Add
-   Vercel preview callback patterns only when previews need sign-in. See
-   [Supabase redirect URL guidance](https://supabase.com/docs/guides/auth/redirect-urls).
+```sh
+pnpm setup:production -- --dry-run
+```
 
-6. If using the example email functions, set `RESEND_API_KEY`, `RESEND_FROM`,
-   and `RESEND_WEBHOOK_SECRET` as Supabase function secrets. Deploy them with
-   `supabase functions deploy send-welcome-email` and
-   `supabase functions deploy resend-webhook`, then configure the matching
-   Resend webhook URL.
+The command is safe to rerun. It preserves existing sensitive Vercel variables
+unless you explicitly approve their replacement and updates public production
+configuration after showing the planned values. Vercel environment changes
+only affect new deployments, so accept the final deployment prompt or redeploy
+both projects afterward.
+
+### Manual project linking
+
+For an existing Vercel monorepo, link each application directory to its
+corresponding project:
+
+```sh
+vercel link --cwd apps/site --project <website-project> --team <team-slug>
+vercel link --cwd apps/app --project <app-project> --team <team-slug>
+```
+
+The generated `.vercel/` directories are ignored. Verify each association and
+its configured root directory with:
+
+```sh
+vercel project inspect --cwd apps/site
+vercel project inspect --cwd apps/app
+```
+
+The Website + CMS project must use `apps/site` with the Next.js preset. The
+Universal app project must use `apps/app`, `pnpm build`, and output directory
+`dist`. Projects created by the wizard are also connected to the current
+`origin` Git remote. See [Vercel's monorepo guide](https://vercel.com/docs/monorepos).
+
+For manual database delivery, link the production project, preview the product
+migrations, and then apply both migration owners in order:
+
+```sh
+supabase link --project-ref <project-ref>
+supabase db push --dry-run
+supabase db push
+DATABASE_URL='<session-pooler-connection-string>' pnpm payload:migrate
+```
+
+Never use `--include-seed` against production. Supabase migrations own product
+tables, RLS, and storage buckets; Payload migrations own the CMS tables.
+Payload schema push remains disabled, and Vercel builds do not apply either
+migration set automatically.
 
 ### Production troubleshooting
 
