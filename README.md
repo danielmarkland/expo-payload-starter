@@ -45,19 +45,17 @@ Expo web, start `pnpm dev:site` in another terminal.
 
 ### Common commands
 
-| Command                                   | Purpose                                                            |
-| ----------------------------------------- | ------------------------------------------------------------------ |
-| `pnpm dev`                                | Start the Payload/Next site and Expo development server together.  |
-| `pnpm dev:site`                           | Start only the Payload/Next site.                                  |
-| `pnpm dev:app`                            | Start only the Expo development server.                            |
-| `pnpm dev:app:web`                        | Start the Expo app in a web browser.                               |
-| `pnpm payload:migrate`                    | Apply pending Payload database migrations.                         |
-| `pnpm payload:migrate:status`             | Show applied and pending Payload migrations.                       |
-| `pnpm payload:migrate:create <name>`      | Generate a Payload migration after changing its schema.            |
-| `pnpm generate:payload`                   | Regenerate Payload types and the admin import map.                 |
-| `pnpm import:wordpress-home -- --dry-run` | Validate the WordPress homepage import without writing.            |
-| `pnpm import:wordpress-home -- --publish` | Import and publish the WordPress homepage.                         |
-| `pnpm check`                              | Run formatting, linting, typechecks, tests, and production builds. |
+| Command                              | Purpose                                                            |
+| ------------------------------------ | ------------------------------------------------------------------ |
+| `pnpm dev`                           | Start the Payload/Next site and Expo development server together.  |
+| `pnpm dev:site`                      | Start only the Payload/Next site.                                  |
+| `pnpm dev:app`                       | Start only the Expo development server.                            |
+| `pnpm dev:app:web`                   | Start the Expo app in a web browser.                               |
+| `pnpm payload:migrate`               | Apply pending Payload database migrations.                         |
+| `pnpm payload:migrate:status`        | Show applied and pending Payload migrations.                       |
+| `pnpm payload:migrate:create <name>` | Generate a Payload migration after changing its schema.            |
+| `pnpm generate:payload`              | Regenerate Payload types and the admin import map.                 |
+| `pnpm check`                         | Run formatting, linting, typechecks, tests, and production builds. |
 
 The public homepage is a Payload Page with the slug `home`. After the first
 Payload migration, open `/admin`, create a Page with that slug, compose its
@@ -73,21 +71,6 @@ curated set of Lucide icons; icon-only links retain their configured label for
 assistive technology. The built-in Search link can be hidden or replaced with
 any curated icon from the same Header navigation settings. Footer navigation
 remains text links.
-
-To stage the current `danielmarkland.com` Elementor homepage in Payload, first
-apply the latest Payload migration, then inspect and run the guarded importer:
-
-```sh
-pnpm import:wordpress-home -- --dry-run
-pnpm import:wordpress-home
-```
-
-The importer downloads referenced media into the configured Payload storage,
-upserts the `home` page and navigation globals, and leaves the page as a draft
-for preview and editorial review. Add `--publish` only when intentionally
-publishing the imported page. The importer refuses to continue if the expected
-WordPress section counts change. Upload the website favicon separately in
-Payload's **Site settings**; native Expo icons remain build-time assets.
 
 Posts can be assigned an Author, Categories, and Tags. Their public archives
 are available at `/authors/<slug>`, `/categories/<slug>`, and `/tags/<slug>`;

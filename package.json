@@ -17,7 +17,6 @@
     "generate": "turbo run generate",
     "generate:payload": "pnpm --filter @starter/site generate",
     "generate:supabase": "supabase gen types typescript --local --schema app > packages/data/src/database.ts",
-    "import:wordpress-home": "pnpm --filter @starter/site import:wordpress-home",
     "lint": "node packages/config/scripts/check-boundaries.mjs && turbo run lint",
     "payload:migrate": "pnpm --filter @starter/site payload migrate",
     "payload:migrate:create": "pnpm --filter @starter/site payload migrate:create",
