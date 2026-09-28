@@ -43,6 +43,26 @@ test.describe('Admin Panel', () => {
     await page.setViewportSize({ width: 1440, height: 900 })
     await page.goto('http://localhost:3000/admin/globals/siteSettings')
 
+    await expect(page.locator('input[name="siteTitle"]')).toBeVisible()
+    const siteDescription = page.locator('textarea[name="siteDescription"]')
+    const seoTitle = page.locator('input[name="meta.title"]')
+    await expect(siteDescription).toBeHidden()
+    await expect(seoTitle).toBeHidden()
+    await page.getByRole('button', { exact: true, name: 'Branding' }).click()
+    await expect(page.getByText('Light logo', { exact: true })).toBeVisible()
+    await expect(siteDescription).toBeHidden()
+    await expect(seoTitle).toBeHidden()
+    await page.getByRole('button', { exact: true, name: 'Appearance' }).click()
+    await expect(page.getByText('Light palette', { exact: true })).toBeVisible()
+    await expect(siteDescription).toBeHidden()
+    await expect(seoTitle).toBeHidden()
+    await page.getByRole('button', { exact: true, name: 'SEO' }).click()
+    await expect(siteDescription).toBeVisible()
+    await expect(seoTitle).toBeVisible()
+    await page.getByRole('button', { exact: true, name: 'Appearance' }).click()
+    await expect(siteDescription).toBeHidden()
+    await expect(seoTitle).toBeHidden()
+
     const palettePickers = page.locator(
       'input[type="color"][name^="theme.light."], input[type="color"][name^="theme.dark."]',
     )

@@ -26,6 +26,7 @@ vi.mock('@payloadcms/ui/shared', () => ({
 
 import { ColorPickerField } from '@/components/admin/ColorPickerField'
 import { SiteSettings } from '@/globals/SiteSettings'
+import payloadConfig from '@/payload.config'
 
 const field = {
   admin: { width: '25%' },
@@ -70,7 +71,41 @@ describe('Payload color picker field', () => {
   })
 
   it('uses the picker for every palette color without changing hex validation', () => {
-    const theme = SiteSettings.fields.find(
+    const tabs = SiteSettings.fields.find((candidate) => candidate.type === 'tabs')
+    expect(tabs).toMatchObject({
+      tabs: [
+        { label: 'General' },
+        { label: 'Branding' },
+        { label: 'Appearance' },
+        { label: 'SEO' },
+      ],
+      type: 'tabs',
+    })
+    if (!tabs || tabs.type !== 'tabs') throw new Error('Site settings tabs are missing')
+
+    const generalTab = tabs.tabs.find((tab) => tab.label === 'General')
+    const brandingTab = tabs.tabs.find((tab) => tab.label === 'Branding')
+    const seoTab = tabs.tabs.find((tab) => tab.label === 'SEO')
+    const appearanceTab = tabs.tabs.find((tab) => tab.label === 'Appearance')
+    expect(generalTab?.fields).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'siteTitle' })]),
+    )
+    expect(brandingTab?.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'lightLogo' }),
+        expect.objectContaining({ name: 'favicon' }),
+      ]),
+    )
+    expect(seoTab?.fields).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'siteDescription' })]),
+    )
+    for (const tab of tabs.tabs.filter((candidate) => candidate.label !== 'SEO')) {
+      expect(tab.fields).not.toEqual(
+        expect.arrayContaining([expect.objectContaining({ name: 'siteDescription' })]),
+      )
+    }
+
+    const theme = appearanceTab?.fields.find(
       (candidate) => 'name' in candidate && candidate.name === 'theme',
     )
     expect(theme).toMatchObject({ type: 'group' })
@@ -105,5 +140,37 @@ describe('Payload color picker field', () => {
         expect(color.validate?.('red', {} as never)).toMatch(/six-digit hex color/)
       }
     }
+  })
+
+  it('keeps the SEO plugin group inside the final SEO tab', async () => {
+    const config = await payloadConfig
+    const siteSettings = config.globals?.find((global) => global.slug === 'siteSettings')
+    const tabs = siteSettings?.fields.find((candidate) => candidate.type === 'tabs')
+    expect(tabs?.type).toBe('tabs')
+    if (!tabs || tabs.type !== 'tabs') throw new Error('Site settings tabs are missing')
+
+    expect(tabs.tabs.map((tab) => tab.label)).toEqual(['General', 'Branding', 'Appearance', 'SEO'])
+    const seoTab = tabs.tabs.find((tab) => tab.label === 'SEO')
+    expect(seoTab?.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'siteDescription' }),
+        expect.objectContaining({ name: 'meta', label: 'SEO', type: 'group' }),
+      ]),
+    )
+    for (const tab of tabs.tabs.filter((candidate) => candidate.label !== 'SEO')) {
+      expect(tab.fields).not.toEqual(
+        expect.arrayContaining([expect.objectContaining({ name: 'meta' })]),
+      )
+      expect(tab.fields).not.toEqual(
+        expect.arrayContaining([expect.objectContaining({ name: 'siteDescription' })]),
+      )
+    }
+    const outsideTabFields = siteSettings?.fields.filter((field) => field.type !== 'tabs') ?? []
+    expect(outsideTabFields).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'meta' })]),
+    )
+    expect(outsideTabFields).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: 'siteDescription' })]),
+    )
   })
 })

@@ -1613,10 +1613,6 @@ export interface SiteSetting {
    * Website favicon and web-app manifest icon. Use a square PNG or SVG.
    */
   favicon?: (number | null) | Media;
-  /**
-   * Fallback description for pages without their own SEO description.
-   */
-  siteDescription: string;
   theme: {
     /**
      * Used when a visitor has not saved a light or dark preference.
@@ -1647,6 +1643,10 @@ export interface SiteSetting {
       border: string;
     };
   };
+  /**
+   * Fallback description for pages without their own SEO description.
+   */
+  siteDescription: string;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -1714,7 +1714,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   lightLogo?: T;
   darkLogo?: T;
   favicon?: T;
-  siteDescription?: T;
   theme?:
     | T
     | {
@@ -1748,6 +1747,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               border?: T;
             };
       };
+  siteDescription?: T;
   meta?:
     | T
     | {

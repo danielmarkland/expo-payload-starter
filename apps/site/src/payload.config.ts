@@ -6,7 +6,7 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
-import { buildConfig } from 'payload'
+import { buildConfig, type Plugin } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
@@ -25,6 +25,33 @@ import { extractSearchText } from './lib/extractSearchText'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const moveGlobalSEOFieldsIntoTab: Plugin = (config) => ({
+  ...config,
+  globals: config.globals?.map((global) => {
+    if (global.slug !== SiteSettings.slug) return global
+
+    const seoField = global.fields.find((field) => 'name' in field && field.name === 'meta')
+    const tabsField = global.fields.find((field) => field.type === 'tabs')
+    if (!seoField || !tabsField || tabsField.type !== 'tabs') return global
+
+    return {
+      ...global,
+      fields: global.fields
+        .filter((field) => field !== seoField)
+        .map((field) =>
+          field === tabsField
+            ? {
+                ...tabsField,
+                tabs: tabsField.tabs.map((tab) =>
+                  tab.label === 'SEO' ? { ...tab, fields: [...tab.fields, seoField] } : tab,
+                ),
+              }
+            : field,
+        ),
+    }
+  }),
+})
 
 export default buildConfig({
   admin: {
@@ -97,6 +124,7 @@ export default buildConfig({
           : `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${slug}`
       },
     }),
+    moveGlobalSEOFieldsIntoTab,
     redirectsPlugin({
       collections: ['pages', 'posts'],
       redirectTypes: ['301', '302'],
