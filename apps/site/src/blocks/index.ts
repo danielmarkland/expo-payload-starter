@@ -40,6 +40,12 @@ const spacingOptions = [
   { label: 'Extra large', value: 'xl' },
 ]
 
+const borderOptions = [
+  { label: 'None', value: 'none' },
+  { label: 'Default', value: 'default' },
+  { label: 'Accent', value: 'accent' },
+]
+
 function appearanceField(): Field {
   return {
     name: 'appearance',
@@ -57,14 +63,18 @@ function appearanceField(): Field {
             type: 'row',
             fields: [
               { name: 'paddingTop', type: 'select', dbName: 'pt', options: spacingOptions },
+              { name: 'paddingRight', type: 'select', dbName: 'pr', options: spacingOptions },
               { name: 'paddingBottom', type: 'select', dbName: 'pb', options: spacingOptions },
+              { name: 'paddingLeft', type: 'select', dbName: 'pl', options: spacingOptions },
             ],
           },
           {
             type: 'row',
             fields: [
               { name: 'marginTop', type: 'select', dbName: 'mt', options: spacingOptions },
+              { name: 'marginRight', type: 'select', dbName: 'mr', options: spacingOptions },
               { name: 'marginBottom', type: 'select', dbName: 'mb', options: spacingOptions },
+              { name: 'marginLeft', type: 'select', dbName: 'ml', options: spacingOptions },
             ],
           },
         ],
@@ -96,6 +106,14 @@ function appearanceField(): Field {
               { label: 'Dark', value: 'dark' },
             ],
           },
+          { name: 'rounded', type: 'checkbox', label: 'Rounded container' },
+        ],
+      },
+      {
+        type: 'collapsible',
+        label: 'Border',
+        admin: { initCollapsed: true },
+        fields: [
           {
             type: 'row',
             fields: [
@@ -109,19 +127,21 @@ function appearanceField(): Field {
                   { label: 'Accent', value: 'accent' },
                 ],
               },
+              { name: 'borderRight', type: 'select', dbName: 'br', options: borderOptions },
+              { name: 'borderBottom', type: 'select', dbName: 'bb', options: borderOptions },
+              { name: 'borderLeft', type: 'select', dbName: 'bl', options: borderOptions },
               {
-                name: 'borderBottom',
+                name: 'borderWidth',
                 type: 'select',
-                dbName: 'bb',
+                dbName: 'bw',
                 options: [
-                  { label: 'None', value: 'none' },
-                  { label: 'Default', value: 'default' },
-                  { label: 'Accent', value: 'accent' },
+                  { label: 'Thin (1px)', value: 'thin' },
+                  { label: 'Medium (2px)', value: 'medium' },
+                  { label: 'Thick (4px)', value: 'thick' },
                 ],
               },
             ],
           },
-          { name: 'rounded', type: 'checkbox', label: 'Rounded container' },
         ],
       },
     ],

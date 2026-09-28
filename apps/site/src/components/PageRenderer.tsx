@@ -14,13 +14,20 @@ function blockClassName(block: PageBlock): string {
   const classes = ['page-block', `page-block-${block.blockType}`]
 
   if (appearance?.paddingTop) classes.push(`padding-top-${appearance.paddingTop}`)
+  if (appearance?.paddingRight) classes.push(`padding-right-${appearance.paddingRight}`)
   if (appearance?.paddingBottom) classes.push(`padding-bottom-${appearance.paddingBottom}`)
+  if (appearance?.paddingLeft) classes.push(`padding-left-${appearance.paddingLeft}`)
   if (appearance?.marginTop) classes.push(`margin-top-${appearance.marginTop}`)
+  if (appearance?.marginRight) classes.push(`margin-right-${appearance.marginRight}`)
   if (appearance?.marginBottom) classes.push(`margin-bottom-${appearance.marginBottom}`)
+  if (appearance?.marginLeft) classes.push(`margin-left-${appearance.marginLeft}`)
   if (appearance?.contentWidth) classes.push(`content-width-${appearance.contentWidth}`)
   if (appearance?.background) classes.push(`background-${appearance.background}`)
   if (appearance?.borderTop) classes.push(`border-top-${appearance.borderTop}`)
+  if (appearance?.borderRight) classes.push(`border-right-${appearance.borderRight}`)
   if (appearance?.borderBottom) classes.push(`border-bottom-${appearance.borderBottom}`)
+  if (appearance?.borderLeft) classes.push(`border-left-${appearance.borderLeft}`)
+  if (appearance?.borderWidth) classes.push(`border-width-${appearance.borderWidth}`)
   if (appearance?.rounded) classes.push('page-block-rounded')
 
   return classes.join(' ')

@@ -380,18 +380,21 @@ appear above the section content.
 
 Every block includes an optional **Appearance** group:
 
-- Top and bottom padding: none, small, medium, large, or extra large.
-- Top and bottom margin: none, small, medium, large, or extra large; blank also
-  preserves the default of no margin.
+- Per-side padding: none, small, medium, large, or extra large.
+- Per-side margin: none, small, medium, large, or extra large; blank preserves
+  that side's design-system default.
 - Content width: site default, narrow text, viewport-wide, or full viewport.
 - Background: default, raised surface, primary accent, or fixed dark treatment.
-- Top border: default, none, or accent; bottom border: none, default, or accent.
+- Per-side borders: none, default, or accent, with a shared thin (1px), medium
+  (2px), or thick (4px) width.
 - Rounded container: on or off, using the active shape preset.
 
 Appearance values are presets rather than arbitrary CSS measurements and remain
 responsive automatically. Blank controls preserve each block's design-system
 default. The fixed dark background intentionally stays dark in either mode;
 use it only when the design calls for a mode-independent dark section.
+Explicit left or right spacing overrides background padding and content-width
+margins on that side, including when the selected value is none.
 
 Other CMS-owned design surfaces are **Header navigation**, **Footer navigation**,
 Media, Pages, Posts, Authors, Categories, Tags, Redirects, and SEO metadata.

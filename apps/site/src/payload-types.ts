@@ -318,14 +318,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -361,14 +368,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -390,14 +404,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -431,14 +452,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -480,14 +508,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -520,14 +555,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -562,14 +604,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -593,14 +642,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -629,14 +685,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -666,14 +729,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -694,14 +764,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -729,14 +806,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -764,14 +848,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -793,14 +884,21 @@ export interface Page {
          */
         appearance?: {
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          borderTop?: ('default' | 'none' | 'accent') | null;
-          borderBottom?: ('none' | 'default' | 'accent') | null;
           rounded?: boolean | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
         };
         id?: string | null;
         blockName?: string | null;
@@ -1112,14 +1210,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1135,14 +1240,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1158,14 +1270,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1195,14 +1314,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1226,14 +1352,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1262,14 +1395,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1300,14 +1440,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1325,14 +1472,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1355,14 +1509,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1386,14 +1547,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1411,14 +1579,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1440,14 +1615,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1469,14 +1651,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;
@@ -1492,14 +1681,21 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     paddingTop?: T;
+                    paddingRight?: T;
                     paddingBottom?: T;
+                    paddingLeft?: T;
                     marginTop?: T;
+                    marginRight?: T;
                     marginBottom?: T;
+                    marginLeft?: T;
                     contentWidth?: T;
                     background?: T;
-                    borderTop?: T;
-                    borderBottom?: T;
                     rounded?: T;
+                    borderTop?: T;
+                    borderRight?: T;
+                    borderBottom?: T;
+                    borderLeft?: T;
+                    borderWidth?: T;
                   };
               id?: T;
               blockName?: T;

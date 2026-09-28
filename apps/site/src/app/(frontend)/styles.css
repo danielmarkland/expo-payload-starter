@@ -404,6 +404,66 @@ h1 {
 .page-block.background-dark p {
   color: inherit;
 }
+.page-block.padding-right-none {
+  padding-right: 0;
+}
+.page-block.padding-right-sm {
+  padding-right: var(--space-md);
+}
+.page-block.padding-right-md {
+  padding-right: var(--space-xl);
+}
+.page-block.padding-right-lg {
+  padding-right: var(--space-3xl);
+}
+.page-block.padding-right-xl {
+  padding-right: var(--space-5xl);
+}
+.page-block.padding-left-none {
+  padding-left: 0;
+}
+.page-block.padding-left-sm {
+  padding-left: var(--space-md);
+}
+.page-block.padding-left-md {
+  padding-left: var(--space-xl);
+}
+.page-block.padding-left-lg {
+  padding-left: var(--space-3xl);
+}
+.page-block.padding-left-xl {
+  padding-left: var(--space-5xl);
+}
+.page-block.margin-right-none {
+  margin-right: 0;
+}
+.page-block.margin-right-sm {
+  margin-right: var(--space-md);
+}
+.page-block.margin-right-md {
+  margin-right: var(--space-xl);
+}
+.page-block.margin-right-lg {
+  margin-right: var(--space-3xl);
+}
+.page-block.margin-right-xl {
+  margin-right: var(--space-5xl);
+}
+.page-block.margin-left-none {
+  margin-left: 0;
+}
+.page-block.margin-left-sm {
+  margin-left: var(--space-md);
+}
+.page-block.margin-left-md {
+  margin-left: var(--space-xl);
+}
+.page-block.margin-left-lg {
+  margin-left: var(--space-3xl);
+}
+.page-block.margin-left-xl {
+  margin-left: var(--space-5xl);
+}
 .page-block.border-top-none {
   border-top: 0;
 }
@@ -416,6 +476,29 @@ h1 {
 }
 .page-block.border-bottom-accent {
   border-bottom-color: var(--color-primary);
+}
+.page-block.border-right-default,
+.page-block.border-right-accent {
+  border-right: 1px solid var(--color-border);
+}
+.page-block.border-right-accent {
+  border-right-color: var(--color-primary);
+}
+.page-block.border-left-default,
+.page-block.border-left-accent {
+  border-left: 1px solid var(--color-border);
+}
+.page-block.border-left-accent {
+  border-left-color: var(--color-primary);
+}
+.page-block.border-width-thin {
+  border-width: 1px;
+}
+.page-block.border-width-medium {
+  border-width: 2px;
+}
+.page-block.border-width-thick {
+  border-width: 4px;
 }
 .page-block-rounded {
   border-radius: var(--radius-lg);

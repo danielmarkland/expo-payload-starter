@@ -317,13 +317,20 @@ describe('Payload page renderer', () => {
           items: [],
           appearance: {
             paddingTop: 'sm',
+            paddingRight: 'md',
             paddingBottom: 'xl',
+            paddingLeft: 'none',
             marginTop: 'md',
+            marginRight: 'sm',
             marginBottom: 'none',
+            marginLeft: 'lg',
             contentWidth: 'text',
             background: 'raised',
             borderTop: 'accent',
+            borderRight: 'default',
             borderBottom: 'default',
+            borderLeft: 'accent',
+            borderWidth: 'thick',
             rounded: true,
           },
         },
@@ -333,7 +340,7 @@ describe('Payload page renderer', () => {
 
     expect(markup).toContain('data-page="test-page"')
     expect(markup).toContain(
-      'page-block page-block-featureGrid padding-top-sm padding-bottom-xl margin-top-md margin-bottom-none content-width-text background-raised border-top-accent border-bottom-default page-block-rounded',
+      'page-block page-block-featureGrid padding-top-sm padding-right-md padding-bottom-xl padding-left-none margin-top-md margin-right-sm margin-bottom-none margin-left-lg content-width-text background-raised border-top-accent border-right-default border-bottom-default border-left-accent border-width-thick page-block-rounded',
     )
     expect(markup).toContain('data-block-type="featureGrid"')
     expect(markup).toContain('[data-page="test-page"] h2 { letter-spacing: 0; }')
