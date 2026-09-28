@@ -1,11 +1,9 @@
 import type { Field, GlobalConfig } from 'payload'
 
 import { brand, themes } from '@starter/design-tokens'
+import { type PaletteColorName, validatePaletteColor } from '@/lib/colorContrast'
 
-const validateHexColor = (value: null | string | undefined) =>
-  !value || /^#[0-9a-fA-F]{6}$/.test(value) ? true : 'Enter a six-digit hex color such as #eec784.'
-
-function colorField(name: string, label: string, defaultValue: string): Field {
+function colorField(name: PaletteColorName, label: string, defaultValue: string): Field {
   return {
     name,
     type: 'text',
@@ -13,25 +11,31 @@ function colorField(name: string, label: string, defaultValue: string): Field {
       components: {
         Field: '@/components/admin/ColorPickerField#ColorPickerField',
       },
-      description: `${label} as a six-digit hexadecimal color.`,
+      width: '25%',
     },
     defaultValue,
     label,
     required: true,
-    validate: validateHexColor,
+    validate: validatePaletteColor(name),
   }
 }
 
 function paletteFields(mode: 'dark' | 'light'): Field[] {
   const palette = themes[mode]
   return [
-    colorField('primary', 'Primary', palette.primary),
-    colorField('primaryInk', 'Text on primary', palette.primaryInk),
-    colorField('surface', 'Page background', palette.surface),
-    colorField('surfaceRaised', 'Raised surface', palette.surfaceRaised),
-    colorField('ink', 'Primary text', palette.ink),
-    colorField('inkMuted', 'Muted text', palette.inkMuted),
-    colorField('border', 'Borders', palette.border),
+    {
+      type: 'row',
+      fields: [
+        colorField('primary', 'Primary', palette.primary),
+        colorField('primaryInk', 'Text on primary', palette.primaryInk),
+        colorField('accent', 'Accent', palette.secondary),
+        colorField('surface', 'Page background', palette.surface),
+        colorField('surfaceRaised', 'Raised surface', palette.surfaceRaised),
+        colorField('ink', 'Primary text', palette.ink),
+        colorField('inkMuted', 'Muted text', palette.inkMuted),
+        colorField('border', 'Borders', palette.border),
+      ],
+    },
   ]
 }
 

@@ -40,12 +40,30 @@ test.describe('Admin Panel', () => {
   })
 
   test('uses color pickers for the site theme palettes', async () => {
+    await page.setViewportSize({ width: 1440, height: 900 })
     await page.goto('http://localhost:3000/admin/globals/siteSettings')
 
     const palettePickers = page.locator(
       'input[type="color"][name^="theme.light."], input[type="color"][name^="theme.dark."]',
     )
-    await expect(palettePickers).toHaveCount(14)
+    await expect(palettePickers).toHaveCount(16)
     await expect(palettePickers.first()).toHaveValue(/^#[0-9a-f]{6}$/)
+    await expect(page.getByText(/as a six-digit hexadecimal color/i)).toHaveCount(0)
+
+    const lightPickerTops = await page
+      .locator('input[type="color"][name^="theme.light."]')
+      .evaluateAll((pickers) =>
+        pickers.map((picker) =>
+          Math.round(picker.closest('.color-picker-field')?.getBoundingClientRect().top ?? 0),
+        ),
+      )
+    expect(new Set(lightPickerTops.slice(0, 4)).size).toBe(1)
+    expect(lightPickerTops[4]).toBeGreaterThan(lightPickerTops[0])
+
+    const primary = page.locator('input[type="color"][name="theme.light.primary"]')
+    const primaryInk = page.locator('input[type="color"][name="theme.light.primaryInk"]')
+    await primary.fill(await primaryInk.inputValue())
+    await page.getByRole('button', { name: 'Save' }).click()
+    await expect(page.getByText(/need at least 4\.5:1 contrast/).first()).toBeVisible()
   })
 })

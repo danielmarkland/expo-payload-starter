@@ -301,16 +301,17 @@ controls:
 | Font preset    | Poppins, system sans                        | Runtime font family for both web and app.                                      |
 | Shape preset   | Square, soft, rounded                       | Scales non-pill radii to `0`, `1`, or `1.5` times the packaged values.         |
 | Density preset | Compact, comfortable, spacious              | Scales the spacing system to `0.8`, `1`, or `1.2` times the packaged values.   |
-| Light palette  | Seven required six-digit hexadecimal colors | Curated semantic colors for light mode.                                        |
-| Dark palette   | Seven required six-digit hexadecimal colors | Curated semantic colors for dark mode.                                         |
+| Light palette  | Eight required six-digit hexadecimal colors | Curated semantic colors for light mode.                                        |
+| Dark palette   | Eight required six-digit hexadecimal colors | Curated semantic colors for dark mode.                                         |
 
-Each mode exposes only `primary`, `primaryInk`, `surface`, `surfaceRaised`,
-`ink`, `inkMuted`, and `border`. The runtime resolver derives hover, secondary,
-soft accent, input, footer, section, strong-line, and supporting-text colors
-from those seven values. A design brief should therefore specify semantic
-roles, not a separate arbitrary color for every component. Check text on
-`surface`, text on `surfaceRaised`, and `primaryInk` on `primary` for accessible
-contrast in both modes.
+Each mode exposes only `primary`, `primaryInk`, `accent`, `surface`,
+`surfaceRaised`, `ink`, `inkMuted`, and `border`. Primary is the dominant action
+color; Accent supports links, highlights, focus indicators, and decoration.
+The runtime resolver derives hover, soft accent, input, footer, section,
+strong-line, and supporting-text colors from those eight values. A design brief
+should therefore specify semantic roles, not a separate arbitrary color for
+every component. Payload enforces WCAG AA contrast for the core text and
+background pairs in both modes.
 
 When a mode-specific logo is absent, the header displays the site title. Native
 app icons, splash artwork, Expo slug/scheme, and iOS/Android identifiers are

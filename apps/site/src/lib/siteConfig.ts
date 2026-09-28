@@ -8,7 +8,7 @@ type PaletteInput = Partial<
     ResolvedThemeColors,
     'border' | 'ink' | 'inkMuted' | 'primary' | 'primaryInk' | 'surface' | 'surfaceRaised'
   >
->
+> & { accent?: null | string }
 
 function channel(value: string, offset: number) {
   return Number.parseInt(value.slice(offset, offset + 2), 16)
@@ -32,6 +32,7 @@ function resolvePalette(mode: 'dark' | 'light', input?: PaletteInput | null): Re
 
   const primary = input.primary || fallback.primary
   const primaryInk = input.primaryInk || fallback.primaryInk
+  const accent = input.accent || fallback.secondary
   const surface = input.surface || fallback.surface
   const surfaceRaised = input.surfaceRaised || fallback.surfaceRaised
   const ink = input.ink || fallback.ink
@@ -42,7 +43,7 @@ function resolvePalette(mode: 'dark' | 'light', input?: PaletteInput | null): Re
 
   return {
     ...fallback,
-    accentSoft: mixHex(surface, primary, 0.2),
+    accentSoft: mixHex(surface, accent, 0.2),
     border,
     borderInput: mixHex(surface, ink, 0.18),
     ink,
@@ -58,7 +59,7 @@ function resolvePalette(mode: 'dark' | 'light', input?: PaletteInput | null): Re
     primary,
     primaryHover: mixHex(primary, ink, mode === 'dark' ? 0.2 : 0.12),
     primaryInk,
-    secondary: mixHex(inkMuted, primary, 0.28),
+    secondary: accent,
     surface,
     surfaceFooter: mixHex(surface, ink, 0.035),
     surfaceInput: mixHex(surface, ink, 0.08),

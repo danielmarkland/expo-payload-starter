@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
 import { siteConfigSchema } from '@starter/contracts'
-import { themes } from '@starter/design-tokens'
 import { resolveSiteConfig, siteConfigCSS } from '@/lib/siteConfig'
 import type { SiteSetting } from '@/payload-types'
 
@@ -26,7 +25,7 @@ describe('runtime site config', () => {
         siteTitle: 'Acme Studio',
         theme: {
           allowToggle: false,
-          dark: { primary: '#123456' },
+          dark: { accent: '#ffffff', primary: '#123456', surface: '#000000' },
           defaultMode: 'dark',
           densityPreset: 'compact',
           fontPreset: 'system',
@@ -41,7 +40,8 @@ describe('runtime site config', () => {
     expect(config.identity.lightLogoUrl).toBe('https://example.com/api/media/file/logo-light.svg')
     expect(config.identity.logoUrl).toBe('https://example.com/api/media/file/logo-dark.svg')
     expect(config.theme.dark.primary).toBe('#123456')
-    expect(config.theme.dark.surface).toBe(themes.dark.surface)
+    expect(config.theme.dark.secondary).toBe('#ffffff')
+    expect(config.theme.dark.accentSoft).toBe('#333333')
   })
 
   it('emits palette and preset CSS variables', () => {

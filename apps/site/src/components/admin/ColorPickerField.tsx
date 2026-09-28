@@ -2,6 +2,7 @@
 
 import type { TextFieldClientComponent } from 'payload'
 import { FieldDescription, FieldError, FieldLabel, useField } from '@payloadcms/ui'
+import { mergeFieldStyles } from '@payloadcms/ui/shared'
 import { useId } from 'react'
 
 import './ColorPickerField.css'
@@ -21,6 +22,7 @@ export const ColorPickerField: TextFieldClientComponent = ({ field, path, readOn
       className={['field-type', 'color-picker-field', field.admin?.className, showError && 'error']
         .filter(Boolean)
         .join(' ')}
+      style={mergeFieldStyles(field)}
     >
       <FieldLabel
         htmlFor={inputId}

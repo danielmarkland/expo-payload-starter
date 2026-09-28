@@ -1627,63 +1627,23 @@ export interface SiteSetting {
     shapePreset: 'square' | 'soft' | 'rounded';
     densityPreset: 'compact' | 'comfortable' | 'spacious';
     light: {
-      /**
-       * Primary as a six-digit hexadecimal color.
-       */
       primary: string;
-      /**
-       * Text on primary as a six-digit hexadecimal color.
-       */
       primaryInk: string;
-      /**
-       * Page background as a six-digit hexadecimal color.
-       */
+      accent: string;
       surface: string;
-      /**
-       * Raised surface as a six-digit hexadecimal color.
-       */
       surfaceRaised: string;
-      /**
-       * Primary text as a six-digit hexadecimal color.
-       */
       ink: string;
-      /**
-       * Muted text as a six-digit hexadecimal color.
-       */
       inkMuted: string;
-      /**
-       * Borders as a six-digit hexadecimal color.
-       */
       border: string;
     };
     dark: {
-      /**
-       * Primary as a six-digit hexadecimal color.
-       */
       primary: string;
-      /**
-       * Text on primary as a six-digit hexadecimal color.
-       */
       primaryInk: string;
-      /**
-       * Page background as a six-digit hexadecimal color.
-       */
+      accent: string;
       surface: string;
-      /**
-       * Raised surface as a six-digit hexadecimal color.
-       */
       surfaceRaised: string;
-      /**
-       * Primary text as a six-digit hexadecimal color.
-       */
       ink: string;
-      /**
-       * Muted text as a six-digit hexadecimal color.
-       */
       inkMuted: string;
-      /**
-       * Borders as a six-digit hexadecimal color.
-       */
       border: string;
     };
   };
@@ -1768,6 +1728,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
           | {
               primary?: T;
               primaryInk?: T;
+              accent?: T;
               surface?: T;
               surfaceRaised?: T;
               ink?: T;
@@ -1779,6 +1740,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
           | {
               primary?: T;
               primaryInk?: T;
+              accent?: T;
               surface?: T;
               surfaceRaised?: T;
               ink?: T;

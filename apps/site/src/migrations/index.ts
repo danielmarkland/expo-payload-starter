@@ -10,6 +10,7 @@ import * as migration_20260927_171523_light_dark_logos from './20260927_171523_l
 import * as migration_20260927_173134_configurable_header_search from './20260927_173134_configurable_header_search'
 import * as migration_20260927_185854_section_appearance from './20260927_185854_section_appearance'
 import * as migration_20260927_204325_reusable_layout_capabilities from './20260927_204325_reusable_layout_capabilities'
+import * as migration_20260928_181815 from './20260928_181815'
 
 export const migrations = [
   {
@@ -71,5 +72,10 @@ export const migrations = [
     up: migration_20260927_204325_reusable_layout_capabilities.up,
     down: migration_20260927_204325_reusable_layout_capabilities.down,
     name: '20260927_204325_reusable_layout_capabilities',
+  },
+  {
+    up: migration_20260928_181815.up,
+    down: migration_20260928_181815.down,
+    name: '20260928_181815',
   },
 ]

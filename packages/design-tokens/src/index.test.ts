@@ -11,8 +11,12 @@ describe('shared brand and theme tokens', () => {
     expect(themes.light.primary).toBe('#eec784')
     expect(themes.dark.secondary).toBe('#d2c7b8')
     expect(themes.light.secondary).toBe('#6e685d')
-    expect(themes.dark.accentSoft).toBe('#40382b')
-    expect(themes.light.accentSoft).toBe('#f0e3cc')
+    expect(themes.dark.accentSoft).toBe('#363431')
+    expect(themes.light.accentSoft).toBe('#e2e1df')
+    expect(themes.dark.danger).toBe('#f87171')
+    expect(themes.light.danger).toBe('#b91c1c')
+    expect(themes.dark.warning).toBe('#facc15')
+    expect(themes.light.warning).toBe('#854d0e')
   })
 
   it('uses a manual preference before the system setting', () => {

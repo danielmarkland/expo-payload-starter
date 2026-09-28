@@ -18,11 +18,17 @@ vi.mock('@payloadcms/ui', () => ({
   useField: () => fieldState,
 }))
 
+vi.mock('@payloadcms/ui/shared', () => ({
+  mergeFieldStyles: (field: TextFieldClientProps['field']) => ({
+    '--field-width': field.admin?.width,
+  }),
+}))
+
 import { ColorPickerField } from '@/components/admin/ColorPickerField'
 import { SiteSettings } from '@/globals/SiteSettings'
 
 const field = {
-  admin: { description: 'Primary as a six-digit hexadecimal color.' },
+  admin: { width: '25%' },
   label: 'Primary',
   name: 'primary',
   required: true,
@@ -45,6 +51,9 @@ describe('Payload color picker field', () => {
     expect(picker.type).toBe('color')
     expect(picker.value).toBe('#eec784')
     expect(screen.getByText('#eec784')).not.toBeNull()
+    expect(picker.closest('.color-picker-field')?.getAttribute('style')).toContain(
+      '--field-width: 25%',
+    )
 
     fireEvent.change(picker, { target: { value: '#AABBCC' } })
     expect(fieldState.setValue).toHaveBeenCalledWith('#aabbcc')
@@ -77,12 +86,21 @@ describe('Payload color picker field', () => {
 
     for (const palette of palettes) {
       if (palette.type !== 'group') throw new Error('Palette group is missing')
-      expect(palette.fields).toHaveLength(7)
-      for (const color of palette.fields) {
+      expect(palette.fields).toHaveLength(1)
+      const row = palette.fields[0]
+      expect(row).toMatchObject({ type: 'row' })
+      if (row.type !== 'row') throw new Error('Palette row is missing')
+      expect(row.fields).toHaveLength(8)
+      expect(row.fields).toContainEqual(
+        expect.objectContaining({ name: 'accent', label: 'Accent' }),
+      )
+      for (const color of row.fields) {
         if (color.type !== 'text' || color.hasMany) throw new Error('Color field is invalid')
         expect(color.admin?.components?.Field).toBe(
           '@/components/admin/ColorPickerField#ColorPickerField',
         )
+        expect(color.admin?.description).toBeUndefined()
+        expect(color.admin?.width).toBe('25%')
         expect(color.validate?.('#abcdef', {} as never)).toBe(true)
         expect(color.validate?.('red', {} as never)).toMatch(/six-digit hex color/)
       }
