@@ -38,4 +38,14 @@ test.describe('Admin Panel', () => {
     const editViewArtifact = page.locator('input[name="email"]')
     await expect(editViewArtifact).toBeVisible()
   })
+
+  test('uses color pickers for the site theme palettes', async () => {
+    await page.goto('http://localhost:3000/admin/globals/siteSettings')
+
+    const palettePickers = page.locator(
+      'input[type="color"][name^="theme.light."], input[type="color"][name^="theme.dark."]',
+    )
+    await expect(palettePickers).toHaveCount(14)
+    await expect(palettePickers.first()).toHaveValue(/^#[0-9a-f]{6}$/)
+  })
 })

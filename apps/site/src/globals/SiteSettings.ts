@@ -9,7 +9,12 @@ function colorField(name: string, label: string, defaultValue: string): Field {
   return {
     name,
     type: 'text',
-    admin: { description: `${label} as a six-digit hexadecimal color.` },
+    admin: {
+      components: {
+        Field: '@/components/admin/ColorPickerField#ColorPickerField',
+      },
+      description: `${label} as a six-digit hexadecimal color.`,
+    },
     defaultValue,
     label,
     required: true,
