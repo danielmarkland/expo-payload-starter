@@ -1,12 +1,24 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it, vi } from 'vitest'
 
+import { pageBlocks } from '@/blocks'
 import { PageRenderer } from '@/components/PageRenderer'
 import { createHeroHeadline } from '@/lib/heroHeadline'
 import type { Media, Page } from '@/payload-types'
 
 vi.mock('@/components/LatestPostsSection', () => ({
-  LatestPostsSection: ({ heading }: { heading?: string | null }) => <section>{heading}</section>,
+  LatestPostsSection: ({
+    eyebrow,
+    heading,
+  }: {
+    eyebrow?: string | null
+    heading?: string | null
+  }) => (
+    <section>
+      {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
+      {heading}
+    </section>
+  ),
 }))
 vi.mock('@/components/ContactForm', () => ({
   ContactForm: ({ submitLabel }: { submitLabel: string }) => <form>{submitLabel}</form>,
@@ -36,23 +48,49 @@ function renderPage(layout: Page['layout'], customCSS?: string) {
   return renderToStaticMarkup(<PageRenderer page={page} />)
 }
 
+function sectionMeta(name: string) {
+  return { anchor: `section-${name}`, eyebrow: `${name} eyebrow` }
+}
+
 describe('Payload page renderer', () => {
+  it('provides anchor and eyebrow fields for every page block', () => {
+    for (const block of pageBlocks) {
+      const fieldNames = block.fields.flatMap((field) => ('name' in field ? [field.name] : []))
+      expect(fieldNames, block.slug).toContain('anchor')
+      expect(fieldNames, block.slug).toContain('eyebrow')
+      const anchor = block.fields.find((field) => 'name' in field && field.name === 'anchor')
+      const eyebrow = block.fields.find((field) => 'name' in field && field.name === 'eyebrow')
+      expect(anchor && 'required' in anchor ? anchor.required : undefined, block.slug).not.toBe(
+        true,
+      )
+      expect(eyebrow && 'required' in eyebrow ? eyebrow.required : undefined, block.slug).not.toBe(
+        true,
+      )
+    }
+  })
+
   it('renders the marketing blocks with one primary heading and safe links', () => {
     const markup = renderPage([
       {
         id: 'hero-one',
         blockType: 'hero',
-        eyebrow: 'First section',
+        ...sectionMeta('hero-one'),
         heading: createHeroHeadline('A CMS-authored homepage', ['CMS-authored']),
         secondaryHeading: 'A flexible supporting headline',
         body: 'Page introduction',
         primaryButton: { label: 'Get in touch', url: '/contact' },
         secondaryButton: { label: 'Unsafe link', url: 'javascript:alert(1)' },
       },
-      { id: 'hero-two', blockType: 'hero', heading: createHeroHeadline('A second hero') },
+      {
+        id: 'hero-two',
+        blockType: 'hero',
+        ...sectionMeta('hero-two'),
+        heading: createHeroHeadline('A second hero'),
+      },
       {
         id: 'rich-text',
         blockType: 'richText',
+        ...sectionMeta('rich-text'),
         heading: 'About the work',
         content: {
           root: {
@@ -87,12 +125,14 @@ describe('Payload page renderer', () => {
       {
         id: 'image',
         blockType: 'image',
+        ...sectionMeta('image'),
         image: media,
         caption: 'Image caption',
       },
       {
         id: 'features',
         blockType: 'featureGrid',
+        ...sectionMeta('features'),
         heading: 'What we do',
         layout: 'stacked',
         items: [{ id: 'feature-one', title: 'Strategy', description: 'Plan the work.' }],
@@ -101,7 +141,7 @@ describe('Payload page renderer', () => {
       {
         id: 'split-content',
         blockType: 'splitContent',
-        anchor: 'about',
+        ...sectionMeta('split-content'),
         heading: 'About',
         content: {
           root: {
@@ -138,6 +178,7 @@ describe('Payload page renderer', () => {
       {
         id: 'expertise',
         blockType: 'linkGrid',
+        ...sectionMeta('expertise'),
         heading: 'Expertise',
         items: [
           { id: 'typescript', label: 'TypeScript', url: 'https://www.typescriptlang.org' },
@@ -147,6 +188,7 @@ describe('Payload page renderer', () => {
       {
         id: 'portfolio',
         blockType: 'portfolioGrid',
+        ...sectionMeta('portfolio'),
         heading: 'Career highlights',
         items: [
           {
@@ -161,6 +203,7 @@ describe('Payload page renderer', () => {
       {
         id: 'cta',
         blockType: 'callToAction',
+        ...sectionMeta('cta'),
         heading: 'Start a conversation',
         buttonLabel: 'Email us',
         buttonUrl: 'mailto:hello@example.com',
@@ -168,17 +211,19 @@ describe('Payload page renderer', () => {
       {
         id: 'testimonials',
         blockType: 'testimonials',
+        ...sectionMeta('testimonials'),
         items: [{ id: 'quote-one', quote: 'A helpful quote.', name: 'A Person', role: 'Founder' }],
       },
       {
         id: 'logos',
         blockType: 'logoCloud',
+        ...sectionMeta('logos'),
         items: [{ id: 'logo-one', name: 'Example Co', image: media, url: 'https://example.com' }],
       },
       {
         id: 'contact',
         blockType: 'contactForm',
-        anchor: 'contact',
+        ...sectionMeta('contact'),
         heading: 'Get in touch',
         submitLabel: 'Send message',
         successMessage: 'Message sent.',
@@ -186,14 +231,22 @@ describe('Payload page renderer', () => {
       {
         id: 'stats',
         blockType: 'stats',
+        ...sectionMeta('stats'),
         items: [{ id: 'stat-one', value: '3×', label: 'Growth' }],
       },
       {
         id: 'faq',
         blockType: 'faq',
+        ...sectionMeta('faq'),
         items: [{ id: 'question-one', question: 'How does it work?', answer: 'Step by step.' }],
       },
-      { id: 'latest-posts', blockType: 'latestPosts', heading: 'Recent writing', limit: 3 },
+      {
+        id: 'latest-posts',
+        blockType: 'latestPosts',
+        ...sectionMeta('latest-posts'),
+        heading: 'Recent writing',
+        limit: 3,
+      },
     ])
 
     expect(markup.match(/<h1/g)).toHaveLength(1)
@@ -217,6 +270,30 @@ describe('Payload page renderer', () => {
     expect(markup).toContain('How does it work?')
     expect(markup).toContain('Recent writing')
     expect(markup).toContain('Send message')
+    expect(markup.match(/id="section-/g)).toHaveLength(15)
+    for (const name of [
+      'hero-one',
+      'hero-two',
+      'rich-text',
+      'image',
+      'features',
+      'split-content',
+      'expertise',
+      'portfolio',
+      'cta',
+      'testimonials',
+      'logos',
+      'contact',
+      'stats',
+      'faq',
+      'latest-posts',
+    ]) {
+      expect(markup).toContain(`<p class="eyebrow">${name} eyebrow</p>`)
+      expect(markup).toContain(`id="section-${name}"`)
+    }
+    expect(markup.indexOf('<p class="eyebrow">image eyebrow</p>')).toBeLessThan(
+      markup.indexOf('<img'),
+    )
     expect(markup).not.toContain('Unsafe link')
     expect(markup).not.toContain('javascript:alert(1)')
   })

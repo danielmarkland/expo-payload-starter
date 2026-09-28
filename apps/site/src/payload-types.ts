@@ -279,6 +279,10 @@ export interface Page {
   slug: string;
   layout: (
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
         eyebrow?: string | null;
         /**
          * Select text and choose Accent from the toolbar. Use Shift+Enter for a line break.
@@ -328,6 +332,14 @@ export interface Page {
         blockType: 'hero';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        /**
+         * Optional short label displayed above the section heading or content.
+         */
+        eyebrow?: string | null;
         heading?: string | null;
         content: {
           root: {
@@ -363,6 +375,14 @@ export interface Page {
         blockType: 'richText';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        /**
+         * Optional short label displayed above the section heading or content.
+         */
+        eyebrow?: string | null;
         image: number | Media;
         caption?: string | null;
         /**
@@ -384,6 +404,10 @@ export interface Page {
         blockType: 'image';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
         eyebrow?: string | null;
         heading: string;
         intro?: string | null;
@@ -552,6 +576,14 @@ export interface Page {
         blockType: 'portfolioGrid';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        /**
+         * Optional short label displayed above the section heading or content.
+         */
+        eyebrow?: string | null;
         heading: string;
         body?: string | null;
         buttonLabel: string;
@@ -575,6 +607,14 @@ export interface Page {
         blockType: 'callToAction';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        /**
+         * Optional short label displayed above the section heading or content.
+         */
+        eyebrow?: string | null;
         heading?: string | null;
         items?:
           | {
@@ -607,6 +647,10 @@ export interface Page {
          * Optional in-page anchor using lowercase letters, numbers, and hyphens.
          */
         anchor?: string | null;
+        /**
+         * Optional short label displayed above the section heading or content.
+         */
+        eyebrow?: string | null;
         heading?: string | null;
         intro?: string | null;
         items?:
@@ -664,6 +708,14 @@ export interface Page {
         blockType: 'contactForm';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        /**
+         * Optional short label displayed above the section heading or content.
+         */
+        eyebrow?: string | null;
         heading?: string | null;
         items?:
           | {
@@ -691,6 +743,14 @@ export interface Page {
         blockType: 'stats';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        /**
+         * Optional short label displayed above the section heading or content.
+         */
+        eyebrow?: string | null;
         heading?: string | null;
         items?:
           | {
@@ -718,6 +778,14 @@ export interface Page {
         blockType: 'faq';
       }
     | {
+        /**
+         * Optional in-page anchor using lowercase letters, numbers, and hyphens.
+         */
+        anchor?: string | null;
+        /**
+         * Optional short label displayed above the section heading or content.
+         */
+        eyebrow?: string | null;
         heading?: string | null;
         limit?: number | null;
         /**
@@ -1022,6 +1090,7 @@ export interface PagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              anchor?: T;
               eyebrow?: T;
               heading?: T;
               secondaryHeading?: T;
@@ -1058,6 +1127,8 @@ export interface PagesSelect<T extends boolean = true> {
         richText?:
           | T
           | {
+              anchor?: T;
+              eyebrow?: T;
               heading?: T;
               content?: T;
               appearance?:
@@ -1079,6 +1150,8 @@ export interface PagesSelect<T extends boolean = true> {
         image?:
           | T
           | {
+              anchor?: T;
+              eyebrow?: T;
               image?: T;
               caption?: T;
               appearance?:
@@ -1100,6 +1173,7 @@ export interface PagesSelect<T extends boolean = true> {
         featureGrid?:
           | T
           | {
+              anchor?: T;
               eyebrow?: T;
               heading?: T;
               intro?: T;
@@ -1241,6 +1315,8 @@ export interface PagesSelect<T extends boolean = true> {
         callToAction?:
           | T
           | {
+              anchor?: T;
+              eyebrow?: T;
               heading?: T;
               body?: T;
               buttonLabel?: T;
@@ -1264,6 +1340,8 @@ export interface PagesSelect<T extends boolean = true> {
         testimonials?:
           | T
           | {
+              anchor?: T;
+              eyebrow?: T;
               heading?: T;
               items?:
                 | T
@@ -1293,6 +1371,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               anchor?: T;
+              eyebrow?: T;
               heading?: T;
               intro?: T;
               items?:
@@ -1347,6 +1426,8 @@ export interface PagesSelect<T extends boolean = true> {
         stats?:
           | T
           | {
+              anchor?: T;
+              eyebrow?: T;
               heading?: T;
               items?:
                 | T
@@ -1374,6 +1455,8 @@ export interface PagesSelect<T extends boolean = true> {
         faq?:
           | T
           | {
+              anchor?: T;
+              eyebrow?: T;
               heading?: T;
               items?:
                 | T
@@ -1401,6 +1484,8 @@ export interface PagesSelect<T extends boolean = true> {
         latestPosts?:
           | T
           | {
+              anchor?: T;
+              eyebrow?: T;
               heading?: T;
               limit?: T;
               appearance?:

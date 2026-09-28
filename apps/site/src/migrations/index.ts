@@ -11,6 +11,7 @@ import * as migration_20260927_173134_configurable_header_search from './2026092
 import * as migration_20260927_185854_section_appearance from './20260927_185854_section_appearance'
 import * as migration_20260927_204325_reusable_layout_capabilities from './20260927_204325_reusable_layout_capabilities'
 import * as migration_20260928_181815 from './20260928_181815'
+import * as migration_20260928_193114_page_section_anchors_eyebrows from './20260928_193114_page_section_anchors_eyebrows'
 
 export const migrations = [
   {
@@ -77,5 +78,10 @@ export const migrations = [
     up: migration_20260928_181815.up,
     down: migration_20260928_181815.down,
     name: '20260928_181815',
+  },
+  {
+    up: migration_20260928_193114_page_section_anchors_eyebrows.up,
+    down: migration_20260928_193114_page_section_anchors_eyebrows.down,
+    name: '20260928_193114_page_section_anchors_eyebrows',
   },
 ]

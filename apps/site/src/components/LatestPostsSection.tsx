@@ -5,9 +5,11 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 
 export async function LatestPostsSection({
+  eyebrow,
   heading,
   limit,
 }: {
+  eyebrow?: string | null
   heading?: string | null
   limit?: number | null
 }) {
@@ -26,6 +28,7 @@ export async function LatestPostsSection({
   return (
     <section aria-label={heading || 'Latest posts'} className="page-section">
       <header className="section-heading">
+        {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
         <h2>{heading || 'Latest posts'}</h2>
       </header>
       <div className="page-card-grid">

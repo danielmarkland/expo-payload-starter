@@ -582,6 +582,10 @@ h1 {
 .page-cta h2 {
   margin-bottom: var(--space-sm);
 }
+.page-cta .eyebrow {
+  color: var(--color-secondary);
+  margin: 0 0 var(--space-sm);
+}
 .page-cta .primary {
   background: var(--color-primary);
   border-radius: var(--radius-md);

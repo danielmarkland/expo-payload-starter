@@ -15,7 +15,14 @@ test.describe('Frontend', () => {
       data: {
         title: 'CMS page fixture',
         slug,
-        layout: [{ blockType: 'hero', heading: createHeroHeadline('A page composed in Payload') }],
+        layout: [
+          {
+            blockType: 'hero',
+            anchor: 'e2e-intro',
+            eyebrow: 'A page section',
+            heading: createHeroHeadline('A page composed in Payload'),
+          },
+        ],
         _status: 'published',
       },
       draft: false,
@@ -37,6 +44,8 @@ test.describe('Frontend', () => {
     await expect(
       page.getByRole('heading', { name: 'A page composed in Payload', level: 1 }),
     ).toBeVisible()
+    await expect(page.locator('#e2e-intro')).toBeVisible()
+    await expect(page.locator('#e2e-intro .eyebrow')).toHaveText('A page section')
     await expect(page.getByRole('contentinfo')).toContainText('Daniel Markland')
   })
 })

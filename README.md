@@ -355,7 +355,9 @@ palette values inside platform components.
 
 Pages are ordered arrays of Payload blocks. Use the existing block whose
 content semantics match the design; do not choose a block only because its
-current styling happens to look similar.
+current styling happens to look similar. Every block also supports an optional
+in-page anchor and eyebrow; anchors target the section wrapper, and eyebrows
+appear above the section content.
 
 | Block          | Intended use                              | Supported content and variants                                                                 |
 | -------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------- |

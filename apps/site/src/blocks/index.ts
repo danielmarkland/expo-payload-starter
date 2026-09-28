@@ -26,6 +26,12 @@ const optionalAnchorField = {
       : 'Use lowercase letters, numbers, and hyphens, starting with a letter.',
 }
 
+const optionalEyebrowField = {
+  name: 'eyebrow',
+  type: 'text' as const,
+  admin: { description: 'Optional short label displayed above the section heading or content.' },
+}
+
 const spacingOptions = [
   { label: 'None', value: 'none' },
   { label: 'Small', value: 'sm' },
@@ -122,8 +128,18 @@ function appearanceField(): Field {
   }
 }
 
+function withSectionFields(fields: Field[]): Field[] {
+  const anchor = fields.find((field) => 'name' in field && field.name === 'anchor')
+  const eyebrow = fields.find((field) => 'name' in field && field.name === 'eyebrow')
+  const contentFields = fields.filter(
+    (field) => !('name' in field && (field.name === 'anchor' || field.name === 'eyebrow')),
+  )
+
+  return [anchor || optionalAnchorField, eyebrow || optionalEyebrowField, ...contentFields]
+}
+
 function withAppearance(fields: Field[]): Field[] {
-  return [...fields, appearanceField()]
+  return [...withSectionFields(fields), appearanceField()]
 }
 
 export const HeroBlock: Block = {

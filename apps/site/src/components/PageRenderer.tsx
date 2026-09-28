@@ -138,7 +138,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
     case 'richText':
       return (
         <section className="page-section prose-section">
-          {block.heading ? <h2>{block.heading}</h2> : null}
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} />
           <div className="article-body">
             <RichText data={block.content} />
           </div>
@@ -149,6 +149,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       if (!image?.url) return null
       return (
         <figure className="page-image">
+          {block.eyebrow ? <p className="eyebrow">{block.eyebrow}</p> : null}
           <Image
             alt={image.alt || ''}
             height={image.height || 900}
@@ -185,10 +186,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
     case 'splitContent': {
       const image = resolveMedia(block.image)
       return (
-        <section
-          className={`page-section split-content split-content-${block.imagePosition}`}
-          id={block.anchor || undefined}
-        >
+        <section className={`page-section split-content split-content-${block.imagePosition}`}>
           <div className="split-content-copy">
             <SectionHeading eyebrow={block.eyebrow} heading={block.heading} />
             <div className="article-body">
@@ -211,7 +209,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
     }
     case 'linkGrid':
       return (
-        <section className="page-section" id={block.anchor || undefined}>
+        <section className="page-section">
           <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
           <ul className="link-grid">
             {block.items?.map((item) => {
@@ -234,7 +232,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       )
     case 'portfolioGrid':
       return (
-        <section className="page-section" id={block.anchor || undefined}>
+        <section className="page-section">
           <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
           <div className="portfolio-grid">
             {block.items?.map((item) => {
@@ -267,6 +265,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       return (
         <section className="page-cta">
           <div>
+            {block.eyebrow ? <p className="eyebrow">{block.eyebrow}</p> : null}
             <h2>{block.heading}</h2>
             {block.body ? <p>{block.body}</p> : null}
           </div>
@@ -281,7 +280,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
     case 'testimonials':
       return (
         <section className="page-section">
-          <SectionHeading heading={block.heading} />
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} />
           <div className="page-card-grid">
             {block.items?.map((item) => (
               <figure className="page-card testimonial" key={item.id || item.name}>
@@ -297,8 +296,8 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       )
     case 'logoCloud':
       return (
-        <section className="page-section" id={block.anchor || undefined}>
-          <SectionHeading heading={block.heading} intro={block.intro} />
+        <section className="page-section">
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
           <ul className="logo-cloud" aria-label={block.heading || 'Organizations'}>
             {block.items?.map((item) => {
               const image = resolveMedia(item.image)
@@ -331,7 +330,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       )
     case 'contactForm':
       return (
-        <section className="page-section contact-section" id={block.anchor || undefined}>
+        <section className="page-section contact-section">
           <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.body} />
           <ContactForm submitLabel={block.submitLabel} successMessage={block.successMessage} />
         </section>
@@ -339,7 +338,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
     case 'stats':
       return (
         <section className="page-section">
-          <SectionHeading heading={block.heading} />
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} />
           <dl className="stats-grid">
             {block.items?.map((item) => (
               <div className="stat" key={item.id || item.label}>
@@ -353,7 +352,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
     case 'faq':
       return (
         <section className="page-section faq-section">
-          <SectionHeading heading={block.heading} />
+          <SectionHeading eyebrow={block.eyebrow} heading={block.heading} />
           {block.items?.map((item) => (
             <details className="faq-item" key={item.id || item.question}>
               <summary>{item.question}</summary>
@@ -363,7 +362,9 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
         </section>
       )
     case 'latestPosts':
-      return <LatestPostsSection heading={block.heading} limit={block.limit} />
+      return (
+        <LatestPostsSection eyebrow={block.eyebrow} heading={block.heading} limit={block.limit} />
+      )
     default:
       return null
   }
@@ -384,6 +385,7 @@ export function PageRenderer({ page }: { page: Page }) {
         <div
           className={blockClassName(block)}
           data-block-type={block.blockType}
+          id={block.anchor || undefined}
           key={block.id || block.blockType}
         >
           <PageBlockView block={block} primaryHero={block === firstHero} />
