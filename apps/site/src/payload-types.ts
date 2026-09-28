@@ -317,6 +317,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -325,9 +328,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -367,6 +367,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -375,9 +378,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -403,6 +403,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -411,9 +414,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -451,6 +451,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -459,9 +462,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -507,6 +507,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -515,9 +518,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -554,6 +554,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -562,9 +565,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -603,6 +603,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -611,9 +614,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -641,6 +641,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -649,9 +652,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -684,6 +684,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -692,9 +695,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -728,6 +728,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -736,9 +739,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -763,6 +763,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -771,9 +774,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -805,6 +805,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -813,9 +816,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -847,6 +847,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -855,9 +858,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -883,6 +883,9 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -891,9 +894,6 @@ export interface Page {
           marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
-          rounded?: boolean | null;
           borderTop?: ('default' | 'none' | 'accent') | null;
           borderRight?: ('none' | 'default' | 'accent') | null;
           borderBottom?: ('none' | 'default' | 'accent') | null;
@@ -1209,6 +1209,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1217,9 +1220,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1239,6 +1239,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1247,9 +1250,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1269,6 +1269,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1277,9 +1280,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1313,6 +1313,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1321,9 +1324,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1351,6 +1351,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1359,9 +1362,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1394,6 +1394,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1402,9 +1405,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1439,6 +1439,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1447,9 +1450,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1471,6 +1471,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1479,9 +1482,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1508,6 +1508,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1516,9 +1519,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1546,6 +1546,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1554,9 +1557,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1578,6 +1578,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1586,9 +1589,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1614,6 +1614,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1622,9 +1625,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1650,6 +1650,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1658,9 +1661,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;
@@ -1680,6 +1680,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    contentWidth?: T;
+                    background?: T;
+                    rounded?: T;
                     paddingTop?: T;
                     paddingRight?: T;
                     paddingBottom?: T;
@@ -1688,9 +1691,6 @@ export interface PagesSelect<T extends boolean = true> {
                     marginRight?: T;
                     marginBottom?: T;
                     marginLeft?: T;
-                    contentWidth?: T;
-                    background?: T;
-                    rounded?: T;
                     borderTop?: T;
                     borderRight?: T;
                     borderBottom?: T;

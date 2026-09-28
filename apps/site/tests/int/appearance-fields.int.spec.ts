@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { pageBlocks } from '@/blocks'
 
 type TestField = {
+  admin?: { description?: string; initCollapsed?: boolean }
   fields?: TestField[]
   label?: string
   name?: string
@@ -36,6 +37,12 @@ describe('page-block appearance fields', () => {
     const spacing = labeledField(appearance.fields || [], 'Spacing')
     const border = labeledField(appearance.fields || [], 'Border')
 
+    expect(appearance.fields?.map((field) => field.label)).toEqual([
+      'Container and surface',
+      'Spacing',
+      'Border',
+    ])
+
     expect(spacing.fields?.map((row) => row.fields?.map((field) => field.name))).toEqual([
       ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'],
       ['marginTop', 'marginRight', 'marginBottom', 'marginLeft'],
@@ -54,6 +61,10 @@ describe('page-block appearance fields', () => {
     const border = labeledField(appearance.fields || [], 'Border')
     const borderFields = border.fields?.[0].fields || []
 
+    expect(border.admin?.description).toBe(
+      'Width applies to every enabled border side and stays fixed across density presets. Blank uses the 1px default.',
+    )
+
     expect(namedField(borderFields, 'borderLeft').options?.map((option) => option.value)).toEqual([
       'none',
       'default',
@@ -64,5 +75,14 @@ describe('page-block appearance fields', () => {
       { label: 'Medium (2px)', value: 'medium' },
       { label: 'Thick (4px)', value: 'thick' },
     ])
+  })
+
+  it('documents the density-scaled spacing values for editors', () => {
+    const appearance = namedField(blocks[0].fields, 'appearance')
+    const spacing = labeledField(appearance.fields || [], 'Spacing')
+
+    expect(spacing.admin?.description).toBe(
+      'Base values: Small 16px, Medium 40px, Large 72px, Extra large 120px. The site density preset scales them.',
+    )
   })
 })

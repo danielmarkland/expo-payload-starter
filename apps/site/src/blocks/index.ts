@@ -56,31 +56,6 @@ function appearanceField(): Field {
     fields: [
       {
         type: 'collapsible',
-        label: 'Spacing',
-        admin: { initCollapsed: true },
-        fields: [
-          {
-            type: 'row',
-            fields: [
-              { name: 'paddingTop', type: 'select', dbName: 'pt', options: spacingOptions },
-              { name: 'paddingRight', type: 'select', dbName: 'pr', options: spacingOptions },
-              { name: 'paddingBottom', type: 'select', dbName: 'pb', options: spacingOptions },
-              { name: 'paddingLeft', type: 'select', dbName: 'pl', options: spacingOptions },
-            ],
-          },
-          {
-            type: 'row',
-            fields: [
-              { name: 'marginTop', type: 'select', dbName: 'mt', options: spacingOptions },
-              { name: 'marginRight', type: 'select', dbName: 'mr', options: spacingOptions },
-              { name: 'marginBottom', type: 'select', dbName: 'mb', options: spacingOptions },
-              { name: 'marginLeft', type: 'select', dbName: 'ml', options: spacingOptions },
-            ],
-          },
-        ],
-      },
-      {
-        type: 'collapsible',
         label: 'Container and surface',
         admin: { initCollapsed: true },
         fields: [
@@ -111,8 +86,41 @@ function appearanceField(): Field {
       },
       {
         type: 'collapsible',
+        label: 'Spacing',
+        admin: {
+          description:
+            'Base values: Small 16px, Medium 40px, Large 72px, Extra large 120px. The site density preset scales them.',
+          initCollapsed: true,
+        },
+        fields: [
+          {
+            type: 'row',
+            fields: [
+              { name: 'paddingTop', type: 'select', dbName: 'pt', options: spacingOptions },
+              { name: 'paddingRight', type: 'select', dbName: 'pr', options: spacingOptions },
+              { name: 'paddingBottom', type: 'select', dbName: 'pb', options: spacingOptions },
+              { name: 'paddingLeft', type: 'select', dbName: 'pl', options: spacingOptions },
+            ],
+          },
+          {
+            type: 'row',
+            fields: [
+              { name: 'marginTop', type: 'select', dbName: 'mt', options: spacingOptions },
+              { name: 'marginRight', type: 'select', dbName: 'mr', options: spacingOptions },
+              { name: 'marginBottom', type: 'select', dbName: 'mb', options: spacingOptions },
+              { name: 'marginLeft', type: 'select', dbName: 'ml', options: spacingOptions },
+            ],
+          },
+        ],
+      },
+      {
+        type: 'collapsible',
         label: 'Border',
-        admin: { initCollapsed: true },
+        admin: {
+          description:
+            'Width applies to every enabled border side and stays fixed across density presets. Blank uses the 1px default.',
+          initCollapsed: true,
+        },
         fields: [
           {
             type: 'row',

@@ -380,9 +380,10 @@ appear above the section content.
 
 Every block includes an optional **Appearance** group:
 
-- Per-side padding: none, small, medium, large, or extra large.
-- Per-side margin: none, small, medium, large, or extra large; blank preserves
-  that side's design-system default.
+- Per-side padding: none, small (16px base), medium (40px), large (72px), or
+  extra large (120px).
+- Per-side margin uses the same presets; blank preserves that side's
+  design-system default.
 - Content width: site default, narrow text, viewport-wide, or full viewport.
 - Background: default, raised surface, primary accent, or fixed dark treatment.
 - Per-side borders: none, default, or accent, with a shared thin (1px), medium
@@ -390,9 +391,12 @@ Every block includes an optional **Appearance** group:
 - Rounded container: on or off, using the active shape preset.
 
 Appearance values are presets rather than arbitrary CSS measurements and remain
-responsive automatically. Blank controls preserve each block's design-system
-default. The fixed dark background intentionally stays dark in either mode;
-use it only when the design calls for a mode-independent dark section.
+responsive automatically. The spacing values follow the Site settings density
+preset: compact scales them by 0.8, comfortable uses their base values, and
+spacious scales them by 1.2. Border widths remain fixed at 1px, 2px, and 4px.
+Blank controls preserve each block's design-system default. The fixed dark
+background intentionally stays dark in either mode; use it only when the design
+calls for a mode-independent dark section.
 Explicit left or right spacing overrides background padding and content-width
 margins on that side, including when the selected value is none.
 
