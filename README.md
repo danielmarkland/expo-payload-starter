@@ -94,8 +94,10 @@ The public homepage is a Payload Page with the slug `home`. After the first
 Payload migration, open `/admin`, create a Page with that slug, compose its
 sections using the available blocks, and publish it. Additional Pages render
 at `/<slug>`. Add a **Latest posts** block wherever you want published Posts
-to appear. Pages and Posts support drafts; use Payload's Preview action to
-preview unpublished content. Configure editor-managed header and footer links
+to appear. The Page editor groups title and slug under **General**, sections
+and custom CSS under **Layout**, and search/social metadata under **SEO**.
+Pages and Posts support drafts; use Payload's Preview action to preview
+unpublished content. Configure editor-managed header and footer links
 in **Header navigation** and **Footer navigation** Globals. **Site settings**
 holds the site/app titles, short name, light/dark logos, favicon, fallback SEO
 description, social preview metadata, and runtime theme. Header navigation owns

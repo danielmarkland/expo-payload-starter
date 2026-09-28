@@ -26,8 +26,31 @@ import { extractSearchText } from './lib/extractSearchText'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const moveGlobalSEOFieldsIntoTab: Plugin = (config) => ({
+const moveSEOFieldsIntoTabs: Plugin = (config) => ({
   ...config,
+  collections: config.collections?.map((collection) => {
+    if (collection.slug !== Pages.slug) return collection
+
+    const seoField = collection.fields.find((field) => 'name' in field && field.name === 'meta')
+    const tabsField = collection.fields.find((field) => field.type === 'tabs')
+    if (!seoField || !tabsField || tabsField.type !== 'tabs') return collection
+
+    return {
+      ...collection,
+      fields: collection.fields
+        .filter((field) => field !== seoField)
+        .map((field) =>
+          field === tabsField
+            ? {
+                ...tabsField,
+                tabs: tabsField.tabs.map((tab) =>
+                  tab.label === 'SEO' ? { ...tab, fields: [...tab.fields, seoField] } : tab,
+                ),
+              }
+            : field,
+        ),
+    }
+  }),
   globals: config.globals?.map((global) => {
     if (global.slug !== SiteSettings.slug) return global
 
@@ -124,7 +147,7 @@ export default buildConfig({
           : `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${slug}`
       },
     }),
-    moveGlobalSEOFieldsIntoTab,
+    moveSEOFieldsIntoTabs,
     redirectsPlugin({
       collections: ['pages', 'posts'],
       redirectTypes: ['301', '302'],

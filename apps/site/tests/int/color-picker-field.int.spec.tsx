@@ -26,6 +26,7 @@ vi.mock('@payloadcms/ui/shared', () => ({
 
 import { ColorPickerField } from '@/components/admin/ColorPickerField'
 import { SiteSettings } from '@/globals/SiteSettings'
+import { Pages } from '@/collections/Pages'
 import payloadConfig from '@/payload.config'
 
 const field = {
@@ -172,5 +173,40 @@ describe('Payload color picker field', () => {
     expect(outsideTabFields).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ name: 'siteDescription' })]),
     )
+  })
+
+  it('organizes the page editor into General, Layout, and SEO tabs', async () => {
+    const config = await payloadConfig
+    const pages = config.collections?.find((collection) => collection.slug === 'pages')
+    const tabs = pages?.fields.find((candidate) => candidate.type === 'tabs')
+
+    expect(tabs?.type).toBe('tabs')
+    if (!tabs || tabs.type !== 'tabs') throw new Error('Page editor tabs are missing')
+
+    expect(tabs.tabs.map((tab) => tab.label)).toEqual(['General', 'Layout', 'SEO'])
+    const generalTab = tabs.tabs.find((tab) => tab.label === 'General')
+    const layoutTab = tabs.tabs.find((tab) => tab.label === 'Layout')
+    const seoTab = tabs.tabs.find((tab) => tab.label === 'SEO')
+
+    expect(generalTab?.fields.map((field) => ('name' in field ? field.name : undefined))).toEqual([
+      'title',
+      'slug',
+    ])
+    expect(layoutTab?.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'layout', type: 'blocks' }),
+        expect.objectContaining({ label: 'Advanced presentation', type: 'collapsible' }),
+      ]),
+    )
+    expect(seoTab?.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'meta', label: 'SEO', type: 'group' }),
+      ]),
+    )
+    expect(pages?.fields.filter((field) => 'name' in field && field.name === 'meta')).toEqual([])
+
+    const posts = config.collections?.find((collection) => collection.slug === 'posts')
+    expect(posts?.fields.some((field) => field.type === 'tabs')).toBe(false)
+    expect(Pages.fields[0]).toMatchObject({ type: 'tabs' })
   })
 })
