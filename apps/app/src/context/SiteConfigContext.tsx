@@ -29,6 +29,7 @@ export const fallbackSiteConfig: SiteConfig = {
   },
   theme: {
     allowToggle: true,
+    buttonShape: 'square',
     dark: themes.dark,
     defaultMode: 'system',
     densityPreset: 'comfortable',

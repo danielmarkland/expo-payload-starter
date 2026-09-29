@@ -304,6 +304,7 @@ controls:
 | Visitor toggle | Allowed or hidden                           | Whether visitors may override the default; choices persist per browser/device. |
 | Font preset    | Poppins, system sans                        | Runtime font family for both web and app.                                      |
 | Shape preset   | Square, soft, rounded                       | Scales non-pill radii to `0`, `1`, or `1.5` times the packaged values.         |
+| Button shape   | Square, soft, rounded, pill                 | Controls public action corners independently; square is the default.           |
 | Density preset | Compact, comfortable, spacious              | Scales the spacing system to `0.8`, `1`, or `1.2` times the packaged values.   |
 | Light palette  | Eight required six-digit hexadecimal colors | Curated semantic colors for light mode.                                        |
 | Dark palette   | Eight required six-digit hexadecimal colors | Curated semantic colors for dark mode.                                         |
@@ -316,6 +317,12 @@ strong-line, and supporting-text colors from those eight values. A design brief
 should therefore specify semantic roles, not a separate arbitrary color for
 every component. Payload enforces WCAG AA contrast for the core text and
 background pairs in both modes.
+
+Public actions use four boxed variants: **Primary Filled**, **Primary Outline**,
+**Secondary Filled**, and **Secondary Outline**. Primary variants use the
+primary palette pair; secondary variants use the accent color and its
+contrast-validated inverse. Page editors choose a variant for each CMS action,
+while contact and search submits use Primary Filled.
 
 When a mode-specific logo is absent, the header displays the site title. Native
 app icons, splash artwork, Expo slug/scheme, and iOS/Android identifiers are
@@ -365,14 +372,14 @@ appear above the section content.
 
 | Block          | Intended use                              | Supported content and variants                                                                 |
 | -------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Hero           | Primary or secondary page introduction    | Eyebrow, rich headline with accent spans, secondary heading, body, two links, image.           |
+| Hero           | Primary or secondary page introduction    | Eyebrow, rich headline with accent spans, secondary heading, body, two styled actions, image.  |
 | Rich text      | Editorial copy                            | Optional heading and Lexical rich text.                                                        |
 | Image          | Standalone editorial image                | Media upload and optional caption.                                                             |
 | Feature grid   | Repeated benefits or capabilities         | Eyebrow, heading, intro, card or stacked layout, title/description items, and optional action. |
 | Split content  | Copy paired with media                    | Anchor, eyebrow, heading, rich text, image, left/right image position, and optional action.    |
 | Link grid      | Resource or destination list              | Anchor, heading content, label/URL items, and optional action.                                 |
 | Portfolio grid | Projects, people, or case-study summaries | Anchor, heading content, name/role/description/URL cards, and optional action.                 |
-| Call to action | Focused conversion prompt                 | Heading, body, and one required action.                                                        |
+| Call to action | Focused conversion prompt                 | Heading, body, and one required styled action.                                                 |
 | Testimonials   | Social proof                              | Optional heading and quote/name/role items.                                                    |
 | Logo cloud     | Clients, partners, or tools               | Anchor, heading, intro, and linked logo uploads.                                               |
 | Contact form   | Built-in contact workflow                 | Anchor, eyebrow, heading, body, submit label, and success message.                             |

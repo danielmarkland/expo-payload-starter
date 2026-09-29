@@ -83,7 +83,11 @@ export function ContactForm({
             Contact form verification is not configured.
           </p>
         )}
-        <button className="primary" disabled={status === 'sending' || !siteKey} type="submit">
+        <button
+          className="button button-primary-filled"
+          disabled={status === 'sending' || !siteKey}
+          type="submit"
+        >
           {status === 'sending' ? 'Sending…' : submitLabel}
         </button>
         <div aria-live="polite">

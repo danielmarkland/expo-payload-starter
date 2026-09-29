@@ -307,10 +307,12 @@ export interface Page {
         primaryButton?: {
           label?: string | null;
           url?: string | null;
+          variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         secondaryButton?: {
           label?: string | null;
           url?: string | null;
+          variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         image?: (number | null) | Media;
         /**
@@ -446,6 +448,7 @@ export interface Page {
         action?: {
           label?: string | null;
           url?: string | null;
+          variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -502,6 +505,7 @@ export interface Page {
         action?: {
           label?: string | null;
           url?: string | null;
+          variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -549,6 +553,7 @@ export interface Page {
         action?: {
           label?: string | null;
           url?: string | null;
+          variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -598,6 +603,7 @@ export interface Page {
         action?: {
           label?: string | null;
           url?: string | null;
+          variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -637,6 +643,7 @@ export interface Page {
         body?: string | null;
         buttonLabel: string;
         buttonUrl: string;
+        buttonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
          */
@@ -1198,12 +1205,14 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     url?: T;
+                    variant?: T;
                   };
               secondaryButton?:
                 | T
                 | {
                     label?: T;
                     url?: T;
+                    variant?: T;
                   };
               image?: T;
               appearance?:
@@ -1309,6 +1318,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     url?: T;
+                    variant?: T;
                   };
               appearance?:
                 | T
@@ -1347,6 +1357,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     url?: T;
+                    variant?: T;
                   };
               appearance?:
                 | T
@@ -1390,6 +1401,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     url?: T;
+                    variant?: T;
                   };
               appearance?:
                 | T
@@ -1435,6 +1447,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     url?: T;
+                    variant?: T;
                   };
               appearance?:
                 | T
@@ -1468,6 +1481,7 @@ export interface PagesSelect<T extends boolean = true> {
               body?: T;
               buttonLabel?: T;
               buttonUrl?: T;
+              buttonVariant?: T;
               appearance?:
                 | T
                 | {
@@ -1948,6 +1962,12 @@ export interface SiteSetting {
       border: string;
     };
   };
+  buttons: {
+    /**
+     * Controls button corners independently from the site-wide shape preset.
+     */
+    shape: 'square' | 'soft' | 'rounded' | 'pill';
+  };
   /**
    * Fallback description for pages without their own SEO description.
    */
@@ -2068,6 +2088,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               inkMuted?: T;
               border?: T;
             };
+      };
+  buttons?:
+    | T
+    | {
+        shape?: T;
       };
   siteDescription?: T;
   meta?:

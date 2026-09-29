@@ -268,22 +268,66 @@ h1 {
   gap: 12px;
   margin-top: 32px;
 }
-.actions a {
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  font-weight: 700;
-  padding: 12px 18px;
+.button {
+  align-items: center;
+  border: 1px solid;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: var(--font-weight-bold);
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 24px;
   text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
 }
-.actions .primary {
+.button-primary-filled {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-primary-ink);
+}
+.button-primary-filled:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+.button-primary-outline {
+  background: transparent;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.button-primary-outline:hover {
   background: var(--color-primary);
   color: var(--color-primary-ink);
 }
-.actions .primary:hover {
-  background: var(--color-primary-hover);
+.button-secondary-filled {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-ink-inverse);
 }
-.secondary {
-  background: var(--color-surface-raised);
+.button-secondary-filled:hover {
+  background: color-mix(in srgb, var(--color-secondary) 82%, var(--color-ink));
+  border-color: color-mix(in srgb, var(--color-secondary) 82%, var(--color-ink));
+}
+.button-secondary-outline {
+  background: transparent;
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+.button-secondary-outline:hover {
+  background: var(--color-secondary);
+  color: var(--color-ink-inverse);
+}
+.button:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 3px;
+}
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 .posts {
   border-top: 1px solid var(--color-border);
@@ -682,16 +726,7 @@ h1 {
   max-width: var(--layout-copy);
 }
 .section-action {
-  color: var(--color-primary);
-  display: inline-block;
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-bold);
   margin-top: var(--space-xl);
-  text-decoration: none;
-}
-.section-action:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 .post-card {
   overflow: hidden;
@@ -748,14 +783,8 @@ h1 {
   color: var(--color-secondary);
   margin: 0 0 var(--space-sm);
 }
-.page-cta .primary {
-  background: var(--color-primary);
-  border-radius: var(--radius-md);
-  color: var(--color-primary-ink);
+.page-cta .button {
   flex: 0 0 auto;
-  font-weight: var(--font-weight-bold);
-  padding: 12px 18px;
-  text-decoration: none;
 }
 .testimonial blockquote {
   color: var(--color-ink-body);
@@ -943,20 +972,8 @@ h1 {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
-.contact-form button.primary {
-  background: var(--color-primary);
-  border: 0;
-  border-radius: var(--radius-sm);
-  color: var(--color-primary-ink);
-  cursor: pointer;
-  font: inherit;
-  font-weight: var(--font-weight-bold);
+.contact-form .button {
   justify-self: start;
-  padding: 12px 18px;
-}
-.contact-form button.primary:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
 }
 .contact-honeypot {
   left: -10000px;
@@ -1025,14 +1042,6 @@ h1 {
   font: inherit;
   min-width: 0;
   padding: 12px;
-}
-.search-form button {
-  border: 0;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font: inherit;
-  font-weight: var(--font-weight-semibold);
-  padding: 10px 16px;
 }
 .search-results {
   margin-top: var(--space-2xl);

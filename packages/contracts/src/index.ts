@@ -37,6 +37,7 @@ export type ContactSubmission = z.infer<typeof contactSubmissionSchema>
 export const themeModeSchema = z.enum(['system', 'light', 'dark'])
 export const fontPresetSchema = z.enum(['poppins', 'system'])
 export const shapePresetSchema = z.enum(['square', 'soft', 'rounded'])
+export const buttonShapeSchema = z.enum(['square', 'soft', 'rounded', 'pill'])
 export const densityPresetSchema = z.enum([
   'compact',
   'comfortable',
@@ -88,6 +89,7 @@ export const siteConfigSchema = z.object({
   }),
   theme: z.object({
     allowToggle: z.boolean(),
+    buttonShape: buttonShapeSchema.default('square'),
     dark: themeColorsSchema,
     defaultMode: themeModeSchema,
     densityPreset: densityPresetSchema,

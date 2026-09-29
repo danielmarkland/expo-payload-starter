@@ -67,6 +67,7 @@ describe('siteConfigSchema', () => {
         },
         theme: {
           allowToggle: true,
+          buttonShape: 'rounded',
           dark: themeColors,
           defaultMode: 'system',
           densityPreset: 'comfortable',
@@ -76,6 +77,31 @@ describe('siteConfigSchema', () => {
         },
       }).identity.siteTitle,
     ).toBe('Example Site')
+  })
+
+  it('defaults legacy configurations to square buttons', () => {
+    const parsed = siteConfigSchema.parse({
+      version: 1,
+      identity: {
+        appTitle: 'Example',
+        description: 'Example',
+        faviconUrl: null,
+        logoUrl: null,
+        shortName: 'Example',
+        siteTitle: 'Example',
+      },
+      theme: {
+        allowToggle: true,
+        dark: themeColors,
+        defaultMode: 'system',
+        densityPreset: 'comfortable',
+        fontPreset: 'poppins',
+        light: themeColors,
+        shapePreset: 'soft',
+      },
+    })
+
+    expect(parsed.theme.buttonShape).toBe('square')
   })
 
   it('rejects arbitrary CSS in color values', () => {

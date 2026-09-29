@@ -78,7 +78,7 @@ describe('Payload page renderer', () => {
         heading: createHeroHeadline('A CMS-authored homepage', ['CMS-authored']),
         secondaryHeading: 'A flexible supporting headline',
         body: 'Page introduction',
-        primaryButton: { label: 'Get in touch', url: '/contact' },
+        primaryButton: { label: 'Get in touch', url: '/contact', variant: 'secondary-filled' },
         secondaryButton: { label: 'Unsafe link', url: 'javascript:alert(1)' },
       },
       {
@@ -136,7 +136,7 @@ describe('Payload page renderer', () => {
         heading: 'What we do',
         layout: 'stacked',
         items: [{ id: 'feature-one', title: 'Strategy', description: 'Plan the work.' }],
-        action: { label: 'Explore services', url: '#about' },
+        action: { label: 'Explore services', url: '#about', variant: 'primary-outline' },
       },
       {
         id: 'split-content',
@@ -207,6 +207,7 @@ describe('Payload page renderer', () => {
         heading: 'Start a conversation',
         buttonLabel: 'Email us',
         buttonUrl: 'mailto:hello@example.com',
+        buttonVariant: 'secondary-outline',
       },
       {
         id: 'testimonials',
@@ -260,10 +261,13 @@ describe('Payload page renderer', () => {
     expect(markup).toContain('Strategy')
     expect(markup).toContain('feature-grid-stacked')
     expect(markup).toContain('Explore services')
+    expect(markup).toContain('button button-primary-outline section-action')
     expect(markup).toContain('Biography content')
     expect(markup).toContain('TypeScript')
     expect(markup).toContain('Example Client')
     expect(markup).toContain('mailto:hello@example.com')
+    expect(markup).toContain('button button-secondary-filled')
+    expect(markup).toContain('button button-secondary-outline')
     expect(markup).toContain('A helpful quote.')
     expect(markup).toContain('Example Co')
     expect(markup).toContain('3×')

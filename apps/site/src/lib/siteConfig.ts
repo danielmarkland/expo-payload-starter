@@ -1,5 +1,5 @@
 import type { SiteConfig } from '@starter/contracts'
-import { brand, getPresetTokens, layout, themes, typography } from '@starter/design-tokens'
+import { brand, getPresetTokens, layout, radii, themes, typography } from '@starter/design-tokens'
 import type { SiteSetting } from '@/payload-types'
 
 type ResolvedThemeColors = SiteConfig['theme']['dark']
@@ -97,6 +97,7 @@ export function resolveSiteConfig(
     },
     theme: {
       allowToggle: settings.theme?.allowToggle ?? true,
+      buttonShape: settings.buttons?.shape || 'square',
       dark: resolvePalette('dark', settings.theme?.dark),
       defaultMode: settings.theme?.defaultMode || 'system',
       densityPreset: settings.theme?.densityPreset || 'comfortable',
@@ -125,6 +126,15 @@ export function siteConfigCSS(config: SiteConfig) {
     declarations(typography.lineHeights, 'line-height'),
     declarations(preset.spacing, 'space', 'px'),
     declarations(preset.radii, 'radius', 'px'),
+    `--radius-button:${
+      config.theme.buttonShape === 'square'
+        ? 0
+        : config.theme.buttonShape === 'soft'
+          ? radii.sm
+          : config.theme.buttonShape === 'rounded'
+            ? radii.lg
+            : radii.pill
+    }px;`,
     declarations(layout, 'layout', 'px'),
     `--font-family-runtime:${config.theme.fontPreset === 'system' ? 'ui-sans-serif,system-ui,sans-serif' : 'var(--font-family-sans)'};`,
   ].join('')

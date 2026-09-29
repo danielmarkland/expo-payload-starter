@@ -180,6 +180,29 @@ export const SiteSettings: GlobalConfig = {
                 },
               ],
             },
+            {
+              name: 'buttons',
+              type: 'group',
+              label: 'Buttons',
+              fields: [
+                {
+                  name: 'shape',
+                  type: 'select',
+                  admin: {
+                    description:
+                      'Controls button corners independently from the site-wide shape preset.',
+                  },
+                  defaultValue: 'square',
+                  options: [
+                    { label: 'Square', value: 'square' },
+                    { label: 'Soft', value: 'soft' },
+                    { label: 'Rounded', value: 'rounded' },
+                    { label: 'Pill', value: 'pill' },
+                  ],
+                  required: true,
+                },
+              ],
+            },
           ],
         },
         {

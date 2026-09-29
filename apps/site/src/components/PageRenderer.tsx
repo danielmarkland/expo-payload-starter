@@ -9,6 +9,18 @@ import type { Media, Page } from '@/payload-types'
 type PageBlock = Page['layout'][number]
 type HeroBlock = Extract<PageBlock, { blockType: 'hero' }>
 
+const buttonVariants = new Set([
+  'primary-filled',
+  'primary-outline',
+  'secondary-filled',
+  'secondary-outline',
+])
+
+function buttonClassName(value: null | string | undefined, fallback: string) {
+  const variant = value && buttonVariants.has(value) ? value : fallback
+  return `button button-${variant}`
+}
+
 function blockClassName(block: PageBlock): string {
   const appearance = block.appearance
   const classes = ['page-block', `page-block-${block.blockType}`]
@@ -70,12 +82,19 @@ function SectionHeading({
   )
 }
 
-function SectionAction({ action }: { action?: { label?: null | string; url?: null | string } }) {
+function SectionAction({
+  action,
+}: {
+  action?: { label?: null | string; url?: null | string; variant?: null | string }
+}) {
   const href = safeHref(action?.url)
   if (!action?.label || !href) return null
 
   return (
-    <Link className="section-action" href={href}>
+    <Link
+      className={`${buttonClassName(action.variant, 'primary-outline')} section-action`}
+      href={href}
+    >
       {action.label}
       <span aria-hidden="true"> →</span>
     </Link>
@@ -117,12 +136,18 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
             {headingHref || secondaryHref ? (
               <div className="actions">
                 {block.primaryButton?.label && headingHref ? (
-                  <Link className="primary" href={headingHref}>
+                  <Link
+                    className={buttonClassName(block.primaryButton.variant, 'primary-filled')}
+                    href={headingHref}
+                  >
                     {block.primaryButton.label}
                   </Link>
                 ) : null}
                 {block.secondaryButton?.label && secondaryHref ? (
-                  <Link className="secondary" href={secondaryHref}>
+                  <Link
+                    className={buttonClassName(block.secondaryButton.variant, 'secondary-outline')}
+                    href={secondaryHref}
+                  >
                     {block.secondaryButton.label}
                   </Link>
                 ) : null}
@@ -277,7 +302,10 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
             {block.body ? <p>{block.body}</p> : null}
           </div>
           {buttonHref ? (
-            <Link className="primary" href={buttonHref}>
+            <Link
+              className={buttonClassName(block.buttonVariant, 'primary-filled')}
+              href={buttonHref}
+            >
               {block.buttonLabel}
             </Link>
           ) : null}

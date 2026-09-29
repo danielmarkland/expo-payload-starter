@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { pageBlocks } from '@/blocks'
+import { buttonVariantOptions, pageBlocks } from '@/blocks'
 
 type TestField = {
   admin?: { description?: string; initCollapsed?: boolean }
+  defaultValue?: unknown
   fields?: TestField[]
   label?: string
   name?: string
@@ -26,6 +27,31 @@ function labeledField(fields: TestField[], label: string): TestField {
 }
 
 describe('page-block appearance fields', () => {
+  it('offers four button variants with role-appropriate defaults', () => {
+    expect(buttonVariantOptions.map((option) => option.value)).toEqual([
+      'primary-filled',
+      'primary-outline',
+      'secondary-filled',
+      'secondary-outline',
+    ])
+
+    const hero = blocks.find((block) => block.slug === 'hero')
+    const featureGrid = blocks.find((block) => block.slug === 'featureGrid')
+    const callToAction = blocks.find((block) => block.slug === 'callToAction')
+    if (!hero || !featureGrid || !callToAction) throw new Error('Missing action block')
+
+    expect(
+      namedField(namedField(hero.fields, 'primaryButton').fields || [], 'variant').defaultValue,
+    ).toBe('primary-filled')
+    expect(
+      namedField(namedField(hero.fields, 'secondaryButton').fields || [], 'variant').defaultValue,
+    ).toBe('secondary-outline')
+    expect(
+      namedField(namedField(featureGrid.fields, 'action').fields || [], 'variant').defaultValue,
+    ).toBe('primary-outline')
+    expect(namedField(callToAction.fields, 'buttonVariant').defaultValue).toBe('primary-filled')
+  })
+
   it('adds the shared Appearance group to every page block', () => {
     for (const block of blocks) {
       expect(namedField(block.fields, 'appearance').type, block.slug).toBe('group')

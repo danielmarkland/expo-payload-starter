@@ -2,17 +2,32 @@ import type { Block, Field } from 'payload'
 
 import { heroHeadlineEditor, validateHeroHeadline } from '@/lib/heroHeadline'
 
-const buttonFields = [
-  { name: 'label', type: 'text' as const },
-  { name: 'url', type: 'text' as const },
+export const buttonVariantOptions = [
+  { label: 'Primary Filled', value: 'primary-filled' },
+  { label: 'Primary Outline', value: 'primary-outline' },
+  { label: 'Secondary Filled', value: 'secondary-filled' },
+  { label: 'Secondary Outline', value: 'secondary-outline' },
 ]
+
+function buttonFields(defaultVariant: string): Field[] {
+  return [
+    { name: 'label', type: 'text' },
+    { name: 'url', type: 'text' },
+    {
+      name: 'variant',
+      type: 'select',
+      defaultValue: defaultVariant,
+      options: buttonVariantOptions,
+    },
+  ]
+}
 
 function optionalActionField(): Field {
   return {
     name: 'action',
     type: 'group',
     admin: { description: 'Optional single link shown after the section content.' },
-    fields: buttonFields,
+    fields: buttonFields('primary-outline'),
   }
 }
 
@@ -192,13 +207,13 @@ export const HeroBlock: Block = {
       name: 'primaryButton',
       type: 'group',
       required: false,
-      fields: buttonFields,
+      fields: buttonFields('primary-filled'),
     },
     {
       name: 'secondaryButton',
       type: 'group',
       required: false,
-      fields: buttonFields,
+      fields: buttonFields('secondary-outline'),
     },
     { name: 'image', type: 'upload', relationTo: 'media' },
   ]),
@@ -326,6 +341,12 @@ export const CallToActionBlock: Block = {
     { name: 'body', type: 'textarea' },
     { name: 'buttonLabel', type: 'text', required: true },
     { name: 'buttonUrl', type: 'text', required: true },
+    {
+      name: 'buttonVariant',
+      type: 'select',
+      defaultValue: 'primary-filled',
+      options: buttonVariantOptions,
+    },
   ]),
 }
 

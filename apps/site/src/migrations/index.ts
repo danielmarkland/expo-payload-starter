@@ -14,6 +14,7 @@ import * as migration_20260928_181815 from './20260928_181815'
 import * as migration_20260928_193114_page_section_anchors_eyebrows from './20260928_193114_page_section_anchors_eyebrows'
 import * as migration_20260928_232313_expand_page_block_appearance from './20260928_232313_expand_page_block_appearance'
 import * as migration_20260928_235332_structured_footer from './20260928_235332_structured_footer'
+import * as migration_20260929_004712_button_variants from './20260929_004712_button_variants'
 
 export const migrations = [
   {
@@ -95,5 +96,10 @@ export const migrations = [
     up: migration_20260928_235332_structured_footer.up,
     down: migration_20260928_235332_structured_footer.down,
     name: '20260928_235332_structured_footer',
+  },
+  {
+    up: migration_20260929_004712_button_variants.up,
+    down: migration_20260929_004712_button_variants.down,
+    name: '20260929_004712_button_variants',
   },
 ]

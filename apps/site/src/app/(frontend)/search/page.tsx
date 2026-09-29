@@ -81,7 +81,7 @@ export default async function SearchPage({ searchParams }: Props) {
         <label htmlFor="site-search">Search pages and posts</label>
         <div>
           <input autoComplete="off" defaultValue={query} id="site-search" name="q" type="search" />
-          <button className="primary" type="submit">
+          <button className="button button-primary-filled" type="submit">
             Search
           </button>
         </div>
