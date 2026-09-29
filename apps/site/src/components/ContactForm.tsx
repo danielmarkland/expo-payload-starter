@@ -3,6 +3,8 @@
 import Script from 'next/script'
 import { type FormEvent, useState } from 'react'
 
+import { buttonClassName, type ButtonVariant } from '@/lib/buttonVariants'
+
 type FormStatus = 'error' | 'idle' | 'sending' | 'success'
 
 declare global {
@@ -12,9 +14,11 @@ declare global {
 }
 
 export function ContactForm({
+  submitButtonVariant,
   submitLabel,
   successMessage,
 }: {
+  submitButtonVariant?: ButtonVariant | null
   submitLabel: string
   successMessage: string
 }) {
@@ -84,7 +88,7 @@ export function ContactForm({
           </p>
         )}
         <button
-          className="button button-primary-filled"
+          className={buttonClassName(submitButtonVariant)}
           disabled={status === 'sending' || !siteKey}
           type="submit"
         >

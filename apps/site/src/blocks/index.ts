@@ -1,13 +1,9 @@
 import type { Block, Field } from 'payload'
 
+import { buttonVariantOptions } from '@/lib/buttonVariants'
 import { heroHeadlineEditor, validateHeroHeadline } from '@/lib/heroHeadline'
 
-export const buttonVariantOptions = [
-  { label: 'Primary Filled', value: 'primary-filled' },
-  { label: 'Primary Outline', value: 'primary-outline' },
-  { label: 'Secondary Filled', value: 'secondary-filled' },
-  { label: 'Secondary Outline', value: 'secondary-outline' },
-]
+export { buttonVariantOptions } from '@/lib/buttonVariants'
 
 function buttonFields(defaultVariant: string): Field[] {
   return [
@@ -400,6 +396,12 @@ export const ContactFormBlock: Block = {
     { name: 'heading', type: 'text', required: true },
     { name: 'body', type: 'textarea' },
     { name: 'submitLabel', type: 'text', defaultValue: 'Send message', required: true },
+    {
+      name: 'submitButtonVariant',
+      type: 'select',
+      defaultValue: 'primary-filled',
+      options: buttonVariantOptions,
+    },
     {
       name: 'successMessage',
       type: 'text',

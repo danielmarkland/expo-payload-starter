@@ -321,8 +321,10 @@ background pairs in both modes.
 Public actions use four boxed variants: **Primary Filled**, **Primary Outline**,
 **Secondary Filled**, and **Secondary Outline**. Primary variants use the
 primary palette pair; secondary variants use the accent color and its
-contrast-validated inverse. Page editors choose a variant for each CMS action,
-while contact and search submits use Primary Filled.
+contrast-validated inverse. The shared treatment uses substantial 56px controls,
+strong contrasting borders, and a subtle hover lift. Page editors choose a
+variant for each CMS action and Contact Form submit button; new and legacy
+contact forms default to Primary Filled, as does search.
 
 When a mode-specific logo is absent, the header displays the site title. Native
 app icons, splash artwork, Expo slug/scheme, and iOS/Android identifiers are

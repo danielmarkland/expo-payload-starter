@@ -52,4 +52,34 @@ describe('contact form', () => {
     ).toBe(true)
     expect(screen.getByRole('alert').textContent).toContain('not configured')
   })
+
+  it('uses the selected submit variant and defaults to primary filled', () => {
+    const { rerender } = render(
+      <ContactForm
+        submitButtonVariant="secondary-outline"
+        submitLabel="Send message"
+        successMessage="Message received."
+      />,
+    )
+
+    expect(screen.getByRole('button', { name: 'Send message' }).className).toBe(
+      'button button-secondary-outline',
+    )
+
+    rerender(<ContactForm submitLabel="Send message" successMessage="Message received." />)
+    expect(screen.getByRole('button', { name: 'Send message' }).className).toBe(
+      'button button-primary-filled',
+    )
+
+    rerender(
+      <ContactForm
+        submitButtonVariant={'unsupported' as never}
+        submitLabel="Send message"
+        successMessage="Message received."
+      />,
+    )
+    expect(screen.getByRole('button', { name: 'Send message' }).className).toBe(
+      'button button-primary-filled',
+    )
+  })
 })

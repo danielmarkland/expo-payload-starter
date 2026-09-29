@@ -4,22 +4,11 @@ import { RichText, type JSXConvertersFunction } from '@payloadcms/richtext-lexic
 
 import { ContactForm } from '@/components/ContactForm'
 import { LatestPostsSection } from '@/components/LatestPostsSection'
+import { buttonClassName } from '@/lib/buttonVariants'
 import type { Media, Page } from '@/payload-types'
 
 type PageBlock = Page['layout'][number]
 type HeroBlock = Extract<PageBlock, { blockType: 'hero' }>
-
-const buttonVariants = new Set([
-  'primary-filled',
-  'primary-outline',
-  'secondary-filled',
-  'secondary-outline',
-])
-
-function buttonClassName(value: null | string | undefined, fallback: string) {
-  const variant = value && buttonVariants.has(value) ? value : fallback
-  return `button button-${variant}`
-}
 
 function blockClassName(block: PageBlock): string {
   const appearance = block.appearance
@@ -367,7 +356,11 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
       return (
         <section className="page-section contact-section">
           <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.body} />
-          <ContactForm submitLabel={block.submitLabel} successMessage={block.successMessage} />
+          <ContactForm
+            submitButtonVariant={block.submitButtonVariant}
+            submitLabel={block.submitLabel}
+            successMessage={block.successMessage}
+          />
         </section>
       )
     case 'stats':

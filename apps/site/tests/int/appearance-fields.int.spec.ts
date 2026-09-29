@@ -38,7 +38,10 @@ describe('page-block appearance fields', () => {
     const hero = blocks.find((block) => block.slug === 'hero')
     const featureGrid = blocks.find((block) => block.slug === 'featureGrid')
     const callToAction = blocks.find((block) => block.slug === 'callToAction')
-    if (!hero || !featureGrid || !callToAction) throw new Error('Missing action block')
+    const contactForm = blocks.find((block) => block.slug === 'contactForm')
+    if (!hero || !featureGrid || !callToAction || !contactForm) {
+      throw new Error('Missing action block')
+    }
 
     expect(
       namedField(namedField(hero.fields, 'primaryButton').fields || [], 'variant').defaultValue,
@@ -50,6 +53,12 @@ describe('page-block appearance fields', () => {
       namedField(namedField(featureGrid.fields, 'action').fields || [], 'variant').defaultValue,
     ).toBe('primary-outline')
     expect(namedField(callToAction.fields, 'buttonVariant').defaultValue).toBe('primary-filled')
+    expect(namedField(contactForm.fields, 'submitButtonVariant').defaultValue).toBe(
+      'primary-filled',
+    )
+    expect(
+      namedField(contactForm.fields, 'submitButtonVariant').options?.map((option) => option.value),
+    ).toEqual(buttonVariantOptions.map((option) => option.value))
   })
 
   it('adds the shared Appearance group to every page block', () => {

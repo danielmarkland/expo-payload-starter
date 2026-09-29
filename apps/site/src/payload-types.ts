@@ -765,6 +765,7 @@ export interface Page {
         heading: string;
         body?: string | null;
         submitLabel: string;
+        submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         successMessage: string;
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -1588,6 +1589,7 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               body?: T;
               submitLabel?: T;
+              submitButtonVariant?: T;
               successMessage?: T;
               appearance?:
                 | T

@@ -15,6 +15,7 @@ import * as migration_20260928_193114_page_section_anchors_eyebrows from './2026
 import * as migration_20260928_232313_expand_page_block_appearance from './20260928_232313_expand_page_block_appearance'
 import * as migration_20260928_235332_structured_footer from './20260928_235332_structured_footer'
 import * as migration_20260929_004712_button_variants from './20260929_004712_button_variants'
+import * as migration_20260929_010246_contact_form_button_variant from './20260929_010246_contact_form_button_variant'
 
 export const migrations = [
   {
@@ -101,5 +102,10 @@ export const migrations = [
     up: migration_20260929_004712_button_variants.up,
     down: migration_20260929_004712_button_variants.down,
     name: '20260929_004712_button_variants',
+  },
+  {
+    up: migration_20260929_010246_contact_form_button_variant.up,
+    down: migration_20260929_010246_contact_form_button_variant.down,
+    name: '20260929_010246_contact_form_button_variant',
   },
 ]

@@ -21,7 +21,13 @@ vi.mock('@/components/LatestPostsSection', () => ({
   ),
 }))
 vi.mock('@/components/ContactForm', () => ({
-  ContactForm: ({ submitLabel }: { submitLabel: string }) => <form>{submitLabel}</form>,
+  ContactForm: ({
+    submitButtonVariant,
+    submitLabel,
+  }: {
+    submitButtonVariant?: string | null
+    submitLabel: string
+  }) => <form data-submit-button-variant={submitButtonVariant}>{submitLabel}</form>,
 }))
 
 const media: Media = {
@@ -226,6 +232,7 @@ describe('Payload page renderer', () => {
         blockType: 'contactForm',
         ...sectionMeta('contact'),
         heading: 'Get in touch',
+        submitButtonVariant: 'secondary-outline',
         submitLabel: 'Send message',
         successMessage: 'Message sent.',
       },
@@ -274,6 +281,7 @@ describe('Payload page renderer', () => {
     expect(markup).toContain('How does it work?')
     expect(markup).toContain('Recent writing')
     expect(markup).toContain('Send message')
+    expect(markup).toContain('data-submit-button-variant="secondary-outline"')
     expect(markup.match(/id="section-/g)).toHaveLength(15)
     for (const name of [
       'hero-one',
