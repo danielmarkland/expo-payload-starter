@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   getContactEmailConfig,
+  getNewsletterConfig,
   getPreviewSecret,
   getSiteURL,
   getStorageConfig,
@@ -45,6 +46,15 @@ describe('server configuration', () => {
     expect(() => getContactEmailConfig({ RESEND_API_KEY: 're_test' })).toThrow(
       'EMAIL_FROM_ADDRESS is required',
     )
+  })
+
+  it('keeps MailerLite and Turnstile newsletter credentials server-side', () => {
+    expect(
+      getNewsletterConfig({
+        MAILERLITE_API_KEY: 'mailer-secret',
+        TURNSTILE_SECRET_KEY: 'turnstile-secret',
+      }),
+    ).toEqual({ apiKey: 'mailer-secret', turnstileSecret: 'turnstile-secret' })
   })
 
   it('fixes the Payload media bucket while retaining provider-required S3 values', () => {

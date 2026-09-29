@@ -179,10 +179,12 @@ test('redacts connection strings, keys, and sensitive variable values', () => {
   assert.deepEqual(
     redactedVariableSummary({
       DATABASE_URL: 'secret',
+      MAILERLITE_API_KEY: 'mailer-secret',
       SITE_URL: 'https://example.com',
     }),
     {
       DATABASE_URL: '[sensitive]',
+      MAILERLITE_API_KEY: '[sensitive]',
       SITE_URL: 'https://example.com',
     },
   )

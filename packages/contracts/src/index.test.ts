@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   contactSubmissionSchema,
+  newsletterSubmissionSchema,
   profileSchema,
   siteConfigSchema,
 } from './index.js'
@@ -46,6 +47,27 @@ describe('profileSchema', () => {
         updatedAt: '2026-09-25T12:00:00.000Z',
       }).displayName,
     ).toBe('Ada')
+  })
+})
+
+describe('newsletterSubmissionSchema', () => {
+  it('requires names, a valid email, and a verification token', () => {
+    expect(
+      newsletterSubmissionSchema.parse({
+        email: 'ada@example.com',
+        firstName: 'Ada',
+        lastName: 'Lovelace',
+        turnstileToken: 'verified',
+      }),
+    ).toMatchObject({ firstName: 'Ada', lastName: 'Lovelace', website: '' })
+    expect(
+      newsletterSubmissionSchema.safeParse({
+        email: 'invalid',
+        firstName: '',
+        lastName: 'Lovelace',
+        turnstileToken: '',
+      }).success,
+    ).toBe(false)
   })
 })
 

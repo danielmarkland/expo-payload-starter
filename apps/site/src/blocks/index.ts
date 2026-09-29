@@ -57,7 +57,7 @@ const borderOptions = [
   { label: 'Accent', value: 'accent' },
 ]
 
-function appearanceField(): Field {
+export function appearanceField(): Field {
   return {
     name: 'appearance',
     type: 'group',

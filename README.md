@@ -105,8 +105,10 @@ curated set of Lucide icons; icon-only links retain their configured label for
 assistive technology. The built-in Search link can be hidden or replaced with
 any curated icon from the same Header navigation settings. Footer navigation
 controls the footer tagline, social profiles, legal and utility links, latest-posts
-section, and copyright owner. The footer automatically lists the two newest
-published Posts when its latest-posts section is enabled.
+section, copyright owner, and optional site-wide newsletter and contact sections.
+When both conversion sections are enabled, the MailerLite newsletter signup appears
+before the contact form on every public page. The footer automatically lists the two
+newest published Posts when its latest-posts section is enabled.
 
 Every Page block includes a collapsed **Appearance** group. Editors can choose
 responsive design-system presets for top/bottom padding and margin, content
@@ -183,6 +185,7 @@ and [Supabase API keys](https://supabase.com/docs/guides/getting-started/api-key
 | `EMAIL_FROM_ADDRESS`            | Config     | Sender address for Payload and contact email. The site title is used as the display name.                                                                                                 |
 | `CONTACT_TO_ADDRESS`            | **Secret** | Optional contact recipient. When omitted, `EMAIL_FROM_ADDRESS` is used.                                                                                                                   |
 | `TURNSTILE_SECRET_KEY`          | **Secret** | Server-only Cloudflare Turnstile verification secret.                                                                                                                                     |
+| `MAILERLITE_API_KEY`            | **Secret** | Optional server-only MailerLite API key used by the global newsletter signup. The target group ID is configured in Footer Navigation.                                                     |
 | `SUPABASE_S3_ACCESS_KEY_ID`     | **Secret** | Supabase Storage S3 access key for Payload media uploads.                                                                                                                                 |
 | `SUPABASE_S3_SECRET_ACCESS_KEY` | **Secret** | Secret half of the S3 credential pair.                                                                                                                                                    |
 | `SUPABASE_S3_ENDPOINT`          | Config     | Supabase Storage S3 endpoint.                                                                                                                                                             |
@@ -198,6 +201,12 @@ Public runtime configuration belongs in **Site settings → Integrations**:
 - **Google Tag Manager ID** is shared by the website and Expo web.
 - **Turnstile site key** is exposed to the public contact form; its secret key
   remains server-only.
+
+Configure the optional global conversion sections in **Footer navigation**.
+Enable **Newsletter CTA** after adding `MAILERLITE_API_KEY`, a MailerLite group
+ID, and Turnstile keys. Enable **Contact form** after configuring Resend and
+Turnstile. Both sections default off so an unconfigured deployment never
+exposes a disabled form.
 
 If a secret is accidentally exposed, rotate it with its provider, update every
 environment that uses it, then redeploy. Do not paste database URLs or other

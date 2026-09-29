@@ -2,6 +2,7 @@ import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import type { SiteConfig } from '@starter/contracts'
+import { SiteConfigProvider } from '@/components/SiteConfigProvider'
 
 const payload = vi.hoisted(() => ({
   find: vi.fn(),
@@ -10,6 +11,7 @@ const payload = vi.hoisted(() => ({
 
 vi.mock('payload', () => ({ getPayload: vi.fn(async () => payload) }))
 vi.mock('@/payload.config', () => ({ default: {} }))
+vi.mock('next/script', () => ({ default: () => null }))
 
 import { SiteFooter } from '@/components/SiteFooter'
 
@@ -108,5 +110,39 @@ describe('SiteFooter', () => {
     expect(screen.queryByRole('navigation')).toBeNull()
     expect(screen.queryByRole('heading', { level: 2 })).toBeNull()
     expect(screen.getAllByText(/Example Site/).length).toBeGreaterThan(0)
+  })
+
+  it('renders enabled global newsletter and contact sections in fixed order', async () => {
+    payload.findGlobal.mockResolvedValue({
+      contactForm: {
+        heading: 'Start a conversation',
+        show: true,
+        submitLabel: 'Send',
+        successMessage: 'Sent.',
+      },
+      items: [],
+      latestPosts: { show: false },
+      newsletter: {
+        consentText: 'Consent copy',
+        heading: 'Join the newsletter',
+        show: true,
+        submitLabel: 'Join',
+        successMessage: 'Joined.',
+      },
+      socialLinks: [],
+    })
+    payload.find.mockResolvedValue({ docs: [] })
+
+    const { container } = render(
+      <SiteConfigProvider config={siteConfig}>
+        {await SiteFooter({ siteConfig })}
+      </SiteConfigProvider>,
+    )
+    const sections = container.querySelectorAll('.footer-conversion-section')
+    expect(sections).toHaveLength(2)
+    expect(sections[0]?.classList.contains('footer-newsletter-section')).toBe(true)
+    expect(sections[1]?.classList.contains('footer-contact-section')).toBe(true)
+    expect(screen.getByRole('heading', { name: 'Join the newsletter' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Start a conversation' })).toBeTruthy()
   })
 })

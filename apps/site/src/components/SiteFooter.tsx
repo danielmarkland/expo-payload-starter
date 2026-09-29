@@ -2,9 +2,12 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 
 import type { SiteConfig } from '@starter/contracts'
+import { ContactForm } from '@/components/ContactForm'
+import { NewsletterForm } from '@/components/NewsletterForm'
 import { SiteBrand } from '@/components/SiteBrand'
 import { getHeaderNavigationIcon } from '@/lib/headerNavigationIcons'
 import { getNavigationHref, getSafeExternalHref } from '@/lib/navigation'
+import { sectionAppearanceClassName } from '@/lib/sectionAppearance'
 import config from '@/payload.config'
 
 export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
@@ -32,9 +35,54 @@ export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
       return href ? [{ ...item, href }] : []
     }) ?? []
   const showPosts = navigation.latestPosts?.show !== false && posts.docs.length > 0
+  const newsletter = navigation.newsletter
+  const contactForm = navigation.contactForm
 
   return (
     <footer className="site-footer">
+      {newsletter?.show ? (
+        <section
+          className={sectionAppearanceClassName(
+            ['page-block', 'footer-conversion-section', 'footer-newsletter-section'],
+            newsletter.appearance,
+          )}
+        >
+          <div className="footer-conversion-content">
+            <header className="section-heading">
+              {newsletter.eyebrow ? <p className="eyebrow">{newsletter.eyebrow}</p> : null}
+              <h2>{newsletter.heading}</h2>
+              {newsletter.body ? <p className="lede">{newsletter.body}</p> : null}
+            </header>
+            <NewsletterForm
+              buttonVariant={newsletter.submitButtonVariant}
+              consentText={newsletter.consentText}
+              submitLabel={newsletter.submitLabel}
+              successMessage={newsletter.successMessage}
+            />
+          </div>
+        </section>
+      ) : null}
+      {contactForm?.show ? (
+        <section
+          className={sectionAppearanceClassName(
+            ['page-block', 'footer-conversion-section', 'footer-contact-section'],
+            contactForm.appearance,
+          )}
+        >
+          <div className="footer-conversion-content contact-section">
+            <header className="section-heading">
+              {contactForm.eyebrow ? <p className="eyebrow">{contactForm.eyebrow}</p> : null}
+              <h2>{contactForm.heading}</h2>
+              {contactForm.body ? <p className="lede">{contactForm.body}</p> : null}
+            </header>
+            <ContactForm
+              submitButtonVariant={contactForm.submitButtonVariant}
+              submitLabel={contactForm.submitLabel}
+              successMessage={contactForm.successMessage}
+            />
+          </div>
+        </section>
+      ) : null}
       <div className={`site-footer-main${showPosts ? '' : ' site-footer-main-single'}`}>
         <div className="site-footer-brand">
           <SiteBrand siteConfig={siteConfig} />

@@ -1,18 +1,12 @@
 'use client'
 
-import Script from 'next/script'
 import { type FormEvent, useState } from 'react'
 
 import { buttonClassName, type ButtonVariant } from '@/lib/buttonVariants'
 import { useSiteConfig } from '@/components/SiteConfigProvider'
+import { TurnstileField } from '@/components/TurnstileField'
 
 type FormStatus = 'error' | 'idle' | 'sending' | 'success'
-
-declare global {
-  interface Window {
-    turnstile?: { reset: () => void }
-  }
-}
 
 export function ContactForm({
   submitButtonVariant,
@@ -24,6 +18,7 @@ export function ContactForm({
   successMessage: string
 }) {
   const [status, setStatus] = useState<FormStatus>('idle')
+  const [turnstileKey, setTurnstileKey] = useState(0)
   const siteKey = useSiteConfig().integrations.turnstileSiteKey
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -50,20 +45,16 @@ export function ContactForm({
       if (!response.ok) throw new Error('Contact request failed')
 
       form.reset()
-      window.turnstile?.reset()
+      setTurnstileKey((value) => value + 1)
       setStatus('success')
     } catch {
-      window.turnstile?.reset()
+      setTurnstileKey((value) => value + 1)
       setStatus('error')
     }
   }
 
   return (
     <>
-      <Script
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-        strategy="afterInteractive"
-      />
       <form className="contact-form" onSubmit={submit}>
         <label>
           Name
@@ -82,7 +73,7 @@ export function ContactForm({
           <input autoComplete="off" name="website" tabIndex={-1} type="text" />
         </label>
         {siteKey ? (
-          <div className="cf-turnstile" data-action="contact" data-sitekey={siteKey} />
+          <TurnstileField action="contact" key={turnstileKey} siteKey={siteKey} />
         ) : (
           <p className="form-message error" role="alert">
             Contact form verification is not configured.

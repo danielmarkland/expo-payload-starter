@@ -20,6 +20,16 @@ export const contactSubmissionSchema = z.object({
 
 export type ContactSubmission = z.infer<typeof contactSubmissionSchema>
 
+export const newsletterSubmissionSchema = z.object({
+  email: z.email().max(254),
+  firstName: z.string().trim().min(1).max(100),
+  lastName: z.string().trim().min(1).max(100),
+  turnstileToken: z.string().min(1).max(2048),
+  website: z.string().max(200).optional().default(''),
+})
+
+export type NewsletterSubmission = z.infer<typeof newsletterSubmissionSchema>
+
 export const themeModeSchema = z.enum(['system', 'light', 'dark'])
 export const fontPresetSchema = z.enum(['poppins', 'system'])
 export const shapePresetSchema = z.enum(['square', 'soft', 'rounded'])

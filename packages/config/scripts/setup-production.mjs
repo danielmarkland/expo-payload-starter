@@ -592,6 +592,7 @@ async function pushHostedConfig(values) {
 async function optionalConfiguration(projectRef, { includeApp }) {
   const site = {}
   const siteSettings = { integrations: {}, links: {} }
+  const footerNavigation = { newsletter: {} }
   let google = null
 
   if (includeApp && (await confirm('Configure Google OAuth now?'))) {
@@ -632,12 +633,18 @@ async function optionalConfiguration(projectRef, { includeApp }) {
       ? '[dry-run]'
       : await hiddenPrompt('Turnstile secret key')
   }
+  if (await confirm('Configure MailerLite newsletter signup now?')) {
+    site.MAILERLITE_API_KEY = dryRun
+      ? '[dry-run]'
+      : await hiddenPrompt('MailerLite API key')
+    footerNavigation.newsletter.groupId = await prompt('MailerLite group ID')
+  }
   if (await confirm('Configure Google Tag Manager now?')) {
     siteSettings.integrations.googleTagManagerId = await prompt(
       'Shared website and Expo web GTM container ID',
     )
   }
-  return { google, site, siteSettings }
+  return { footerNavigation, google, site, siteSettings }
 }
 
 async function collectS3(environment, projectRef, region) {
@@ -766,6 +773,7 @@ async function applyEnvironment({
           ? redactedVariableSummary(appEnvironmentVariables)
           : 'not deployed',
         environment: environment.label,
+        footerNavigation: optional.footerNavigation,
         site: redactedVariableSummary(websiteVariables),
         siteSettings: optional.siteSettings,
         supabase: {
@@ -856,6 +864,8 @@ async function applyEnvironment({
         SETUP_APP_URL: appURL || '',
         SETUP_GTM_CONTAINER_ID:
           optional.siteSettings.integrations.googleTagManagerId || '',
+        SETUP_MAILERLITE_GROUP_ID:
+          optional.footerNavigation.newsletter.groupId || '',
         SETUP_TURNSTILE_SITE_KEY:
           optional.siteSettings.integrations.turnstileSiteKey || '',
       },

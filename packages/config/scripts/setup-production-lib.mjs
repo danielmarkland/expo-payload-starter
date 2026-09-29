@@ -3,6 +3,7 @@ import { randomBytes } from 'node:crypto'
 export const sensitiveVariableNames = new Set([
   'CONTACT_TO_ADDRESS',
   'DATABASE_URL',
+  'MAILERLITE_API_KEY',
   'PAYLOAD_SECRET',
   'RESEND_API_KEY',
   'SUPABASE_S3_ACCESS_KEY_ID',

@@ -1875,6 +1875,71 @@ export interface HeaderNavigation {
  */
 export interface FooterNavigation {
   id: number;
+  newsletter: {
+    show: boolean;
+    eyebrow?: string | null;
+    heading: string;
+    body?: string | null;
+    /**
+     * MailerLite group ID. The API key remains server-side.
+     */
+    groupId?: string | null;
+    submitLabel: string;
+    submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+    successMessage: string;
+    consentText?: string | null;
+    /**
+     * Optional layout and surface overrides. Defaults use the site design system.
+     */
+    appearance?: {
+      contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+      background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+      rounded?: boolean | null;
+      paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      borderTop?: ('default' | 'none' | 'accent') | null;
+      borderRight?: ('none' | 'default' | 'accent') | null;
+      borderBottom?: ('none' | 'default' | 'accent') | null;
+      borderLeft?: ('none' | 'default' | 'accent') | null;
+      borderWidth?: ('thin' | 'medium' | 'thick') | null;
+    };
+  };
+  contactForm: {
+    show: boolean;
+    eyebrow?: string | null;
+    heading: string;
+    body?: string | null;
+    submitLabel: string;
+    submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+    successMessage: string;
+    /**
+     * Optional layout and surface overrides. Defaults use the site design system.
+     */
+    appearance?: {
+      contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
+      background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+      rounded?: boolean | null;
+      paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      borderTop?: ('default' | 'none' | 'accent') | null;
+      borderRight?: ('none' | 'default' | 'accent') | null;
+      borderBottom?: ('none' | 'default' | 'accent') | null;
+      borderLeft?: ('none' | 'default' | 'accent') | null;
+      borderWidth?: ('thin' | 'medium' | 'thick') | null;
+    };
+  };
   /**
    * Short brand message. The site SEO description is used when this is empty.
    */
@@ -2031,6 +2096,70 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
  * via the `definition` "footerNavigation_select".
  */
 export interface FooterNavigationSelect<T extends boolean = true> {
+  newsletter?:
+    | T
+    | {
+        show?: T;
+        eyebrow?: T;
+        heading?: T;
+        body?: T;
+        groupId?: T;
+        submitLabel?: T;
+        submitButtonVariant?: T;
+        successMessage?: T;
+        consentText?: T;
+        appearance?:
+          | T
+          | {
+              contentWidth?: T;
+              background?: T;
+              rounded?: T;
+              paddingTop?: T;
+              paddingRight?: T;
+              paddingBottom?: T;
+              paddingLeft?: T;
+              marginTop?: T;
+              marginRight?: T;
+              marginBottom?: T;
+              marginLeft?: T;
+              borderTop?: T;
+              borderRight?: T;
+              borderBottom?: T;
+              borderLeft?: T;
+              borderWidth?: T;
+            };
+      };
+  contactForm?:
+    | T
+    | {
+        show?: T;
+        eyebrow?: T;
+        heading?: T;
+        body?: T;
+        submitLabel?: T;
+        submitButtonVariant?: T;
+        successMessage?: T;
+        appearance?:
+          | T
+          | {
+              contentWidth?: T;
+              background?: T;
+              rounded?: T;
+              paddingTop?: T;
+              paddingRight?: T;
+              paddingBottom?: T;
+              paddingLeft?: T;
+              marginTop?: T;
+              marginRight?: T;
+              marginBottom?: T;
+              marginLeft?: T;
+              borderTop?: T;
+              borderRight?: T;
+              borderBottom?: T;
+              borderLeft?: T;
+              borderWidth?: T;
+            };
+      };
   tagline?: T;
   socialLinks?:
     | T

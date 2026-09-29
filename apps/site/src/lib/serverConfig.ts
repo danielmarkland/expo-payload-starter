@@ -40,6 +40,13 @@ export function getContactEmailConfig(environment: Environment = process.env) {
   return { apiKey, fromAddress, toAddress, turnstileSecret }
 }
 
+export function getNewsletterConfig(environment: Environment = process.env) {
+  return {
+    apiKey: environment.MAILERLITE_API_KEY || null,
+    turnstileSecret: environment.TURNSTILE_SECRET_KEY || null,
+  }
+}
+
 export function getStorageConfig(environment: Environment = process.env) {
   const config = {
     accessKeyId: environment.SUPABASE_S3_ACCESS_KEY_ID || '',
