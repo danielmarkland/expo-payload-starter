@@ -18,6 +18,7 @@ import * as migration_20260929_004712_button_variants from './20260929_004712_bu
 import * as migration_20260929_010246_contact_form_button_variant from './20260929_010246_contact_form_button_variant'
 import * as migration_20260929_015744_minimal_runtime_configuration from './20260929_015744_minimal_runtime_configuration'
 import * as migration_20260929_025039_global_footer_conversion_sections from './20260929_025039_global_footer_conversion_sections'
+import * as migration_20260929_031022_remove_footer_app_link from './20260929_031022_remove_footer_app_link'
 
 export const migrations = [
   {
@@ -119,5 +120,10 @@ export const migrations = [
     up: migration_20260929_025039_global_footer_conversion_sections.up,
     down: migration_20260929_025039_global_footer_conversion_sections.down,
     name: '20260929_025039_global_footer_conversion_sections',
+  },
+  {
+    up: migration_20260929_031022_remove_footer_app_link.up,
+    down: migration_20260929_031022_remove_footer_app_link.down,
+    name: '20260929_031022_remove_footer_app_link',
   },
 ]

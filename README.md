@@ -98,8 +98,8 @@ Pages and Posts support drafts; use Payload's Preview action to preview
 unpublished content. Configure editor-managed header and footer links
 in **Header navigation** and **Footer navigation** Globals. **Site settings**
 holds the site/app titles, short name, light/dark logos, favicon, fallback SEO
-description, social preview metadata, runtime theme, public app URL, Google Tag
-Manager ID, and Turnstile site key. Header navigation owns
+description, social preview metadata, runtime theme, Google Tag Manager ID, and
+Turnstile site key. Header navigation owns
 only the header links. Header links can use a
 curated set of Lucide icons; icon-only links retain their configured label for
 assistive technology. The built-in Search link can be hidden or replaced with
@@ -197,7 +197,6 @@ bucket-name variable. See [Supabase Storage S3 authentication](https://supabase.
 
 Public runtime configuration belongs in **Site settings → Integrations**:
 
-- **App URL** links the website to the Expo app.
 - **Google Tag Manager ID** is shared by the website and Expo web.
 - **Turnstile site key** is exposed to the public contact form; its secret key
   remains server-only.

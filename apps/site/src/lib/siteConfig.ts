@@ -97,9 +97,6 @@ export function resolveSiteConfig(settings: SiteSetting, siteURL = getSiteURL())
       shortName: settings.shortName || brand.shortName,
       siteTitle: settings.siteTitle || brand.siteTitle,
     },
-    links: {
-      appUrl: settings.links?.appUrl || null,
-    },
     theme: {
       allowToggle: settings.theme?.allowToggle ?? true,
       buttonShape: settings.buttons?.shape || 'square',

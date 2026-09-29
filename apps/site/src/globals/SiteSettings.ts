@@ -39,16 +39,6 @@ function paletteFields(mode: 'dark' | 'light'): Field[] {
   ]
 }
 
-function optionalURL(value: null | string | undefined) {
-  if (!value) return true
-  try {
-    new URL(value)
-    return true
-  } catch {
-    return 'Enter a complete URL including https://.'
-  }
-}
-
 export const SiteSettings: GlobalConfig = {
   slug: 'siteSettings',
   label: 'Site settings',
@@ -218,20 +208,6 @@ export const SiteSettings: GlobalConfig = {
         {
           label: 'Integrations',
           fields: [
-            {
-              name: 'links',
-              type: 'group',
-              fields: [
-                {
-                  name: 'appUrl',
-                  type: 'text',
-                  admin: { description: 'Optional URL shown as the footer app link.' },
-                  label: 'App URL',
-                  validate: optionalURL,
-                },
-              ],
-              label: 'Links',
-            },
             {
               name: 'integrations',
               type: 'group',

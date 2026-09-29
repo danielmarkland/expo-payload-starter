@@ -591,7 +591,7 @@ async function pushHostedConfig(values) {
 
 async function optionalConfiguration(projectRef, { includeApp }) {
   const site = {}
-  const siteSettings = { integrations: {}, links: {} }
+  const siteSettings = { integrations: {} }
   const footerNavigation = { newsletter: {} }
   let google = null
 
@@ -861,7 +861,6 @@ async function applyEnvironment({
     {
       env: {
         ...websiteVariables,
-        SETUP_APP_URL: appURL || '',
         SETUP_GTM_CONTAINER_ID:
           optional.siteSettings.integrations.googleTagManagerId || '',
         SETUP_MAILERLITE_GROUP_ID:

@@ -11,7 +11,6 @@ import { sectionAppearanceClassName } from '@/lib/sectionAppearance'
 import config from '@/payload.config'
 
 export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
-  const appURL = siteConfig.links.appUrl
   const payload = await getPayload({ config })
   const navigationPromise = payload.findGlobal({ slug: 'footerNavigation', depth: 1 })
   const postsPromise = payload.find({
@@ -89,11 +88,6 @@ export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
           <p className="site-footer-tagline">
             {navigation.tagline || siteConfig.identity.description}
           </p>
-          {appURL ? (
-            <a className="footer-app-link" href={appURL}>
-              Open app
-            </a>
-          ) : null}
           {socialLinks.length ? (
             <nav aria-label="Social media" className="footer-social-navigation">
               {socialLinks.map(({ Icon, href, ...item }) => (

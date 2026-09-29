@@ -93,11 +93,6 @@ export const siteConfigSchema = z.object({
     shortName: z.string().min(1).max(12),
     siteTitle: z.string().min(1).max(100),
   }),
-  links: z
-    .object({
-      appUrl: z.url().nullable().default(null),
-    })
-    .default({ appUrl: null }),
   theme: z.object({
     allowToggle: z.boolean(),
     buttonShape: buttonShapeSchema.default('square'),

@@ -90,7 +90,6 @@ describe('siteConfigSchema', () => {
           shortName: 'Example',
           siteTitle: 'Example Site',
         },
-        links: { appUrl: 'https://app.example.com' },
         theme: {
           allowToggle: true,
           buttonShape: 'rounded',
@@ -132,7 +131,6 @@ describe('siteConfigSchema', () => {
       googleTagManagerId: null,
       turnstileSiteKey: null,
     })
-    expect(parsed.links).toEqual({ appUrl: null })
   })
 
   it('rejects arbitrary CSS in color values', () => {

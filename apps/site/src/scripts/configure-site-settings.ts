@@ -15,9 +15,6 @@ await payload.updateGlobal({
       turnstileSiteKey:
         process.env.SETUP_TURNSTILE_SITE_KEY || current.integrations?.turnstileSiteKey || null,
     },
-    links: {
-      appUrl: process.env.SETUP_APP_URL || current.links?.appUrl || null,
-    },
   },
 })
 

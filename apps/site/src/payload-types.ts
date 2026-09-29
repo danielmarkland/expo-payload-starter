@@ -2035,12 +2035,6 @@ export interface SiteSetting {
      */
     shape: 'square' | 'soft' | 'rounded' | 'pill';
   };
-  links?: {
-    /**
-     * Optional URL shown as the footer app link.
-     */
-    appUrl?: string | null;
-  };
   integrations?: {
     /**
      * Optional GTM-… container shared by the website and Expo web.
@@ -2240,11 +2234,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | T
     | {
         shape?: T;
-      };
-  links?:
-    | T
-    | {
-        appUrl?: T;
       };
   integrations?:
     | T

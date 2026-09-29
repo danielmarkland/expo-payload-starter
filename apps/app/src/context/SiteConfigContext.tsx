@@ -31,7 +31,6 @@ export const fallbackSiteConfig: SiteConfig = {
     shortName: brand.shortName,
     siteTitle: brand.siteTitle,
   },
-  links: { appUrl: null },
   theme: {
     allowToggle: true,
     buttonShape: 'square',

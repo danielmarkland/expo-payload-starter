@@ -139,11 +139,6 @@ a {
   margin: var(--space-md) 0 0;
   max-width: 36rem;
 }
-.footer-app-link {
-  margin-top: var(--space-md);
-  text-decoration-color: var(--color-secondary);
-  text-underline-offset: 4px;
-}
 .footer-social-navigation {
   display: flex;
   flex-wrap: wrap;
