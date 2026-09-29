@@ -15,12 +15,18 @@ export const headerNavigationIconOptions = [
   { label: 'X / Twitter', value: 'twitter' },
 ]
 
+export const footerSocialIconOptions = headerNavigationIconOptions.filter(({ value }) =>
+  ['github', 'linkedin', 'mail', 'twitter', 'youtube'].includes(value),
+)
+
 export function navigationItemsField({
   includeIcons = false,
-}: { includeIcons?: boolean } = {}): Field {
+  label,
+}: { includeIcons?: boolean; label?: string } = {}): Field {
   return {
     name: 'items',
     type: 'array',
+    label,
     fields: [
       { name: 'label', type: 'text', required: true },
       ...(includeIcons

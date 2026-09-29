@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { extractSearchText } from '@/lib/extractSearchText'
-import { getNavigationHref } from '@/lib/navigation'
+import { getNavigationHref, getSafeExternalHref } from '@/lib/navigation'
 import { extractPostHeadings } from '@/lib/postHeadings'
 import {
   getHeaderNavigationPresentation,
@@ -48,6 +48,13 @@ describe('CMS helpers', () => {
         url: 'javascript:alert(1)',
       } as never),
     ).toBeNull()
+  })
+
+  it('accepts supported footer destinations and rejects unsafe protocols', () => {
+    expect(getSafeExternalHref('https://example.com/profile')).toBe('https://example.com/profile')
+    expect(getSafeExternalHref('mailto:hello@example.com')).toBe('mailto:hello@example.com')
+    expect(getSafeExternalHref('javascript:alert(1)')).toBeNull()
+    expect(getSafeExternalHref('//example.com')).toBeNull()
   })
 
   it('renders curated header icons and only hides labels when an icon is available', () => {

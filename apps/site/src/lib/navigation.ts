@@ -3,6 +3,17 @@ import type { FooterNavigation, HeaderNavigation } from '@/payload-types'
 type NavigationItem =
   NonNullable<HeaderNavigation['items']>[number] | NonNullable<FooterNavigation['items']>[number]
 
+export function getSafeExternalHref(value?: null | string): string | null {
+  if (!value) return null
+  if (value.startsWith('/') && !value.startsWith('//')) return value
+
+  try {
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(new URL(value).protocol) ? value : null
+  } catch {
+    return null
+  }
+}
+
 export function getNavigationHref(item: NavigationItem): string | null {
   if (
     item.type === 'page' &&
@@ -22,14 +33,6 @@ export function getNavigationHref(item: NavigationItem): string | null {
     return `/posts/${encodeURIComponent(item.post.slug)}`
   }
 
-  if (item.type !== 'url' || !item.url) return null
-  if (item.url.startsWith('/') && !item.url.startsWith('//')) return item.url
-
-  try {
-    return ['http:', 'https:', 'mailto:', 'tel:'].includes(new URL(item.url).protocol)
-      ? item.url
-      : null
-  } catch {
-    return null
-  }
+  if (item.type !== 'url') return null
+  return getSafeExternalHref(item.url)
 }

@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 
 import type { SiteConfig } from '@starter/contracts'
+import { SiteBrand } from '@/components/SiteBrand'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { getNavigationHref } from '@/lib/navigation'
 import {
@@ -19,36 +19,7 @@ export async function SiteHeader({ siteConfig }: { siteConfig: SiteConfig }) {
 
   return (
     <header className={`site-header${navigation.sticky ? ' site-header-sticky' : ''}`}>
-      <Link aria-label={siteConfig.identity.siteTitle} className="site-brand" href="/">
-        {siteConfig.identity.darkLogoUrl ? (
-          <Image
-            alt=""
-            className="site-brand-logo site-brand-logo-dark"
-            height={48}
-            src={siteConfig.identity.darkLogoUrl}
-            unoptimized
-            width={180}
-          />
-        ) : (
-          <span className="site-brand-title site-brand-title-dark">
-            {siteConfig.identity.siteTitle}
-          </span>
-        )}
-        {siteConfig.identity.lightLogoUrl ? (
-          <Image
-            alt=""
-            className="site-brand-logo site-brand-logo-light"
-            height={48}
-            src={siteConfig.identity.lightLogoUrl}
-            unoptimized
-            width={180}
-          />
-        ) : (
-          <span className="site-brand-title site-brand-title-light">
-            {siteConfig.identity.siteTitle}
-          </span>
-        )}
-      </Link>
+      <SiteBrand siteConfig={siteConfig} />
       <nav aria-label="Main navigation" className="header-navigation">
         {navigation.items?.map((item) => {
           const href = getNavigationHref(item)

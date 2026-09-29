@@ -1859,6 +1859,22 @@ export interface HeaderNavigation {
  */
 export interface FooterNavigation {
   id: number;
+  /**
+   * Short brand message. The site SEO description is used when this is empty.
+   */
+  tagline?: string | null;
+  socialLinks?:
+    | {
+        label: string;
+        icon: 'github' | 'linkedin' | 'mail' | 'youtube' | 'twitter';
+        /**
+         * Use an https, mailto, or tel URL.
+         */
+        url: string;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   items?:
     | {
         label: string;
@@ -1870,6 +1886,14 @@ export interface FooterNavigation {
         id?: string | null;
       }[]
     | null;
+  latestPosts: {
+    show: boolean;
+    heading?: string | null;
+  };
+  /**
+   * The site title is used when this is empty.
+   */
+  copyrightOwner?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1969,6 +1993,16 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
  * via the `definition` "footerNavigation_select".
  */
 export interface FooterNavigationSelect<T extends boolean = true> {
+  tagline?: T;
+  socialLinks?:
+    | T
+    | {
+        label?: T;
+        icon?: T;
+        url?: T;
+        newTab?: T;
+        id?: T;
+      };
   items?:
     | T
     | {
@@ -1980,6 +2014,13 @@ export interface FooterNavigationSelect<T extends boolean = true> {
         newTab?: T;
         id?: T;
       };
+  latestPosts?:
+    | T
+    | {
+        show?: T;
+        heading?: T;
+      };
+  copyrightOwner?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

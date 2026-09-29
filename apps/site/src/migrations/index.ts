@@ -13,6 +13,7 @@ import * as migration_20260927_204325_reusable_layout_capabilities from './20260
 import * as migration_20260928_181815 from './20260928_181815'
 import * as migration_20260928_193114_page_section_anchors_eyebrows from './20260928_193114_page_section_anchors_eyebrows'
 import * as migration_20260928_232313_expand_page_block_appearance from './20260928_232313_expand_page_block_appearance'
+import * as migration_20260928_235332_structured_footer from './20260928_235332_structured_footer'
 
 export const migrations = [
   {
@@ -89,5 +90,10 @@ export const migrations = [
     up: migration_20260928_232313_expand_page_block_appearance.up,
     down: migration_20260928_232313_expand_page_block_appearance.down,
     name: '20260928_232313_expand_page_block_appearance',
+  },
+  {
+    up: migration_20260928_235332_structured_footer.up,
+    down: migration_20260928_235332_structured_footer.down,
+    name: '20260928_235332_structured_footer',
   },
 ]

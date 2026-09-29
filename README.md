@@ -105,7 +105,9 @@ only the header links. Header links can use a
 curated set of Lucide icons; icon-only links retain their configured label for
 assistive technology. The built-in Search link can be hidden or replaced with
 any curated icon from the same Header navigation settings. Footer navigation
-remains text links.
+controls the footer tagline, social profiles, legal and utility links, latest-posts
+section, and copyright owner. The footer automatically lists the two newest
+published Posts when its latest-posts section is enabled.
 
 Every Page block includes a collapsed **Appearance** group. Editors can choose
 responsive design-system presets for top/bottom padding and margin, content
