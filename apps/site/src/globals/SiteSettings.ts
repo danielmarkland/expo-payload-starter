@@ -39,6 +39,16 @@ function paletteFields(mode: 'dark' | 'light'): Field[] {
   ]
 }
 
+function optionalURL(value: null | string | undefined) {
+  if (!value) return true
+  try {
+    new URL(value)
+    return true
+  } catch {
+    return 'Enter a complete URL including https://.'
+  }
+}
+
 export const SiteSettings: GlobalConfig = {
   slug: 'siteSettings',
   label: 'Site settings',
@@ -202,6 +212,53 @@ export const SiteSettings: GlobalConfig = {
                   required: true,
                 },
               ],
+            },
+          ],
+        },
+        {
+          label: 'Integrations',
+          fields: [
+            {
+              name: 'links',
+              type: 'group',
+              fields: [
+                {
+                  name: 'appUrl',
+                  type: 'text',
+                  admin: { description: 'Optional URL shown as the footer app link.' },
+                  label: 'App URL',
+                  validate: optionalURL,
+                },
+              ],
+              label: 'Links',
+            },
+            {
+              name: 'integrations',
+              type: 'group',
+              fields: [
+                {
+                  name: 'googleTagManagerId',
+                  type: 'text',
+                  admin: {
+                    description: 'Optional GTM-… container shared by the website and Expo web.',
+                  },
+                  label: 'Google Tag Manager container ID',
+                  validate: (value: null | string | undefined) =>
+                    !value || /^GTM-[A-Z0-9]+$/i.test(value)
+                      ? true
+                      : 'Enter a GTM container ID such as GTM-ABC123.',
+                },
+                {
+                  name: 'turnstileSiteKey',
+                  type: 'text',
+                  admin: {
+                    description:
+                      'Public Cloudflare Turnstile site key. The matching secret remains server-side.',
+                  },
+                  label: 'Turnstile site key',
+                },
+              ],
+              label: 'Public integrations',
             },
           ],
         },

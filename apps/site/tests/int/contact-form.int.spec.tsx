@@ -1,15 +1,31 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { ComponentProps } from 'react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import type { SiteConfig } from '@starter/contracts'
 import { ContactForm } from '@/components/ContactForm'
+import { SiteConfigProvider } from '@/components/SiteConfigProvider'
 
 vi.mock('next/script', () => ({ default: () => null }))
 
-describe('contact form', () => {
-  beforeEach(() => {
-    vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY', 'turnstile-site-key')
-  })
+function renderForm(
+  props: ComponentProps<typeof ContactForm> = {
+    submitLabel: 'Send message',
+    successMessage: 'Message received.',
+  },
+  siteKey: null | string = 'turnstile-site-key',
+) {
+  const config = {
+    integrations: { googleTagManagerId: null, turnstileSiteKey: siteKey },
+  } as SiteConfig
+  return render(
+    <SiteConfigProvider config={config}>
+      <ContactForm {...props} />
+    </SiteConfigProvider>,
+  )
+}
 
+describe('contact form', () => {
   afterEach(() => {
     cleanup()
     vi.restoreAllMocks()
@@ -20,7 +36,7 @@ describe('contact form', () => {
     const fetchMock = vi
       .spyOn(globalThis, 'fetch')
       .mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }))
-    render(<ContactForm submitLabel="Send message" successMessage="Message received." />)
+    renderForm()
 
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Daniel Markland' } })
     fireEvent.change(screen.getByLabelText('Email'), {
@@ -44,8 +60,7 @@ describe('contact form', () => {
   })
 
   it('disables submission when Turnstile is not configured', () => {
-    vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY', '')
-    render(<ContactForm submitLabel="Send message" successMessage="Message received." />)
+    renderForm(undefined, null)
 
     expect(
       (screen.getByRole('button', { name: 'Send message' }) as HTMLButtonElement).disabled,
@@ -54,29 +69,41 @@ describe('contact form', () => {
   })
 
   it('uses the selected submit variant and defaults to primary filled', () => {
-    const { rerender } = render(
-      <ContactForm
-        submitButtonVariant="secondary-outline"
-        submitLabel="Send message"
-        successMessage="Message received."
-      />,
-    )
+    const { rerender } = renderForm({
+      submitButtonVariant: 'secondary-outline',
+      submitLabel: 'Send message',
+      successMessage: 'Message received.',
+    })
 
     expect(screen.getByRole('button', { name: 'Send message' }).className).toBe(
       'button button-secondary-outline',
     )
 
-    rerender(<ContactForm submitLabel="Send message" successMessage="Message received." />)
+    rerender(
+      <SiteConfigProvider
+        config={
+          { integrations: { googleTagManagerId: null, turnstileSiteKey: 'key' } } as SiteConfig
+        }
+      >
+        <ContactForm submitLabel="Send message" successMessage="Message received." />
+      </SiteConfigProvider>,
+    )
     expect(screen.getByRole('button', { name: 'Send message' }).className).toBe(
       'button button-primary-filled',
     )
 
     rerender(
-      <ContactForm
-        submitButtonVariant={'unsupported' as never}
-        submitLabel="Send message"
-        successMessage="Message received."
-      />,
+      <SiteConfigProvider
+        config={
+          { integrations: { googleTagManagerId: null, turnstileSiteKey: 'key' } } as SiteConfig
+        }
+      >
+        <ContactForm
+          submitButtonVariant={'unsupported' as never}
+          submitLabel="Send message"
+          successMessage="Message received."
+        />
+      </SiteConfigProvider>,
     )
     expect(screen.getByRole('button', { name: 'Send message' }).className).toBe(
       'button button-primary-filled',

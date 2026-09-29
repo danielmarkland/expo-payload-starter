@@ -2,11 +2,12 @@ import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 
 import config from '@/payload.config'
+import { getSiteURL } from '@/lib/serverConfig'
 
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteURL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const siteURL = getSiteURL()
   const payload = await getPayload({ config })
   const [pages, posts] = await Promise.all([
     payload.find({

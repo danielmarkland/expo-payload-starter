@@ -21,11 +21,12 @@ workflows. Expo owns the authenticated web, iOS, and Android experience.
 2. Public Next.js pages use Payload's Local API on the server.
 3. Published CMS content can be exposed through Payload REST endpoints.
 4. Privileged product workflows use narrowly scoped Supabase Edge Functions.
-5. There is no generic client-callable email or admin endpoint.
+5. The public contact form uses a narrow server-only Next.js endpoint. There is
+   no generic client-callable email or admin endpoint.
 
 ## Shared code
 
-Share contracts, design values, and email templates. Do not force the Next.js
+Share contracts and design values. Do not force the Next.js
 site and Expo app to share presentation components: they have different
 rendering, accessibility, and deployment constraints.
 
@@ -35,14 +36,13 @@ The reusable packages are private workspace packages intended to make a fork
 easy to understand and change, not to form a plugin framework.
 
 ```text
-apps -> auth/data/email -> core/contracts
+apps -> auth/data -> core/contracts
 ```
 
 - `contracts` owns wire and domain schemas.
 - `core` owns pure, framework-independent product rules.
 - `auth` owns product identity and authorization interfaces, not provider SDKs.
 - `data` owns typed Supabase repositories and generated database types.
-- `email` owns email content and templates.
 - `design-tokens` owns framework-neutral visual values.
 - `config` owns shared tool configuration and dependency checks.
 

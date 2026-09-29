@@ -591,9 +591,8 @@ async function pushHostedConfig(values) {
 
 async function optionalConfiguration(projectRef, { includeApp }) {
   const site = {}
+  const siteSettings = { integrations: {}, links: {} }
   let google = null
-  let functionSecrets = null
-  let deployFunctions = false
 
   if (includeApp && (await confirm('Configure Google OAuth now?'))) {
     process.stdout.write(
@@ -618,67 +617,27 @@ async function optionalConfiguration(projectRef, { includeApp }) {
       'Payload sender address',
       'hello@example.com',
     )
-    site.EMAIL_FROM_NAME = await prompt(
-      'Payload sender name',
-      'Expo Payload Starter',
+    const contactAddress = await prompt(
+      'Contact-form recipient address',
+      site.EMAIL_FROM_ADDRESS,
     )
-    site.CONTACT_TO_ADDRESS = dryRun
-      ? '[dry-run]'
-      : await hiddenPrompt('Contact-form recipient address')
-    if (
-      await confirm(
-        'Configure and deploy the example Supabase email functions?',
-      )
-    ) {
-      functionSecrets = {
-        RESEND_API_KEY: resendAPIKey,
-        RESEND_FROM: await prompt(
-          'Function sender value',
-          `Expo Payload Starter <${site.EMAIL_FROM_ADDRESS}>`,
-        ),
-        RESEND_WEBHOOK_SECRET: dryRun
-          ? '[dry-run]'
-          : await hiddenPrompt('Resend webhook secret'),
-      }
-      deployFunctions = true
+    if (contactAddress !== site.EMAIL_FROM_ADDRESS) {
+      site.CONTACT_TO_ADDRESS = contactAddress
     }
   }
   if (await confirm('Configure Cloudflare Turnstile now?')) {
-    site.NEXT_PUBLIC_TURNSTILE_SITE_KEY = await prompt('Turnstile site key')
+    siteSettings.integrations.turnstileSiteKey =
+      await prompt('Turnstile site key')
     site.TURNSTILE_SECRET_KEY = dryRun
       ? '[dry-run]'
       : await hiddenPrompt('Turnstile secret key')
   }
   if (await confirm('Configure Google Tag Manager now?')) {
-    site.NEXT_PUBLIC_GTM_CONTAINER_ID = await prompt('Website GTM container ID')
-    if (includeApp) {
-      site.EXPO_PUBLIC_GTM_CONTAINER_ID = await prompt(
-        'Expo web GTM container ID',
-      )
-    }
-  }
-  return { deployFunctions, functionSecrets, google, site }
-}
-
-async function setFunctionSecrets(projectRef, secrets) {
-  if (!secrets) return
-  const directory = await mkdtemp(join(tmpdir(), 'starter-function-secrets-'))
-  const path = join(directory, '.env')
-  const contents = Object.entries(secrets)
-    .map(([name, value]) => `${name}=${JSON.stringify(value)}`)
-    .join('\n')
-  await writeFile(path, `${contents}\n`, { mode: 0o600 })
-  try {
-    await run(
-      'supabase',
-      ['secrets', 'set', '--env-file', path, '--project-ref', projectRef],
-      {
-        quiet: true,
-      },
+    siteSettings.integrations.googleTagManagerId = await prompt(
+      'Shared website and Expo web GTM container ID',
     )
-  } finally {
-    await rm(directory, { force: true, recursive: true })
   }
+  return { google, site, siteSettings }
 }
 
 async function collectS3(environment, projectRef, region) {
@@ -691,7 +650,6 @@ async function collectS3(environment, projectRef, region) {
     accessKeyID: dryRun
       ? '[dry-run]'
       : await hiddenPrompt(`${environment} Supabase S3 access key ID`),
-    bucket: await prompt(`${environment} Supabase S3 bucket`, 'cms-media'),
     endpoint: `https://${projectRef}.storage.supabase.co/storage/v1/s3`,
     region,
     secretAccessKey: dryRun
@@ -788,24 +746,19 @@ async function applyEnvironment({
   websiteProject,
 }) {
   const websiteVariables = siteVariables({
-    appURL,
     database: environment.database,
     optional: optional.site,
     payloadSecret: generatedSecret(),
-    previewSecret: generatedSecret(),
     s3: environment.s3,
-    siteURL,
+    siteURL: environment.target.environment === 'production' ? null : siteURL,
   })
   const appEnvironmentVariables = includeApp
     ? appVariables({
-        gtmContainerID: optional.site.EXPO_PUBLIC_GTM_CONTAINER_ID,
         publishableKey: environment.publishableKey,
         siteURL,
         supabaseURL: environment.supabaseURL,
       })
     : null
-  delete websiteVariables.EXPO_PUBLIC_GTM_CONTAINER_ID
-
   process.stdout.write(
     `${JSON.stringify(
       {
@@ -814,6 +767,7 @@ async function applyEnvironment({
           : 'not deployed',
         environment: environment.label,
         site: redactedVariableSummary(websiteVariables),
+        siteSettings: optional.siteSettings,
         supabase: {
           projectRef: environment.projectRef,
           region: environment.region,
@@ -852,6 +806,9 @@ async function applyEnvironment({
     process.stdout.write(
       `[dry-run] Apply ${environment.label} Payload migrations.\n`,
     )
+    process.stdout.write(
+      `[dry-run] Store ${environment.label} public integrations in Payload Site settings.\n`,
+    )
     return
   }
 
@@ -882,21 +839,28 @@ async function applyEnvironment({
     throw new Error(`${environment.label} Payload migration cancelled.`)
   }
   await run('pnpm', ['payload:migrate'], {
-    env: { DATABASE_URL: environment.database },
+    env: websiteVariables,
   })
-  if (optional.functionSecrets) {
-    await setFunctionSecrets(environment.projectRef, optional.functionSecrets)
-  }
-  if (optional.deployFunctions) {
-    await run('supabase', [
-      'functions',
-      'deploy',
-      'send-welcome-email',
-      'resend-webhook',
-      '--project-ref',
-      environment.projectRef,
-    ])
-  }
+  await run(
+    'pnpm',
+    [
+      '--filter',
+      '@starter/site',
+      'exec',
+      'tsx',
+      'src/scripts/configure-site-settings.ts',
+    ],
+    {
+      env: {
+        ...websiteVariables,
+        SETUP_APP_URL: appURL || '',
+        SETUP_GTM_CONTAINER_ID:
+          optional.siteSettings.integrations.googleTagManagerId || '',
+        SETUP_TURNSTILE_SITE_KEY:
+          optional.siteSettings.integrations.turnstileSiteKey || '',
+      },
+    },
+  )
 }
 
 async function main() {

@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 
 import { contactSubmissionSchema } from '@starter/contracts'
+import { getContactEmailConfig } from '@/lib/serverConfig'
 import config from '@/payload.config'
 
 export const runtime = 'nodejs'
@@ -37,16 +38,15 @@ export async function POST(request: Request) {
   const submission = parsed.data
   if (submission.website) return json({ ok: true }, 200)
 
-  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY
-  const contactAddress = process.env.CONTACT_TO_ADDRESS
-  if (!turnstileSecret || !contactAddress || !process.env.RESEND_API_KEY) {
+  const email = getContactEmailConfig()
+  if (!email.turnstileSecret || !email.toAddress || !email.apiKey || !email.fromAddress) {
     console.error('Contact form is missing server-side email or Turnstile configuration.')
     return json({ error: 'Contact form is temporarily unavailable.' }, 503)
   }
 
   const verificationBody = new URLSearchParams({
     response: submission.turnstileToken,
-    secret: turnstileSecret,
+    secret: email.turnstileSecret,
   })
   const forwardedFor = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
   if (forwardedFor) verificationBody.set('remoteip', forwardedFor)
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       replyTo: submission.email,
       subject: `Website inquiry from ${submission.name}`,
       text: `Name: ${submission.name}\nEmail: ${submission.email}\n\n${submission.message}`,
-      to: contactAddress,
+      to: email.toAddress,
     })
 
     return json({ ok: true }, 200)

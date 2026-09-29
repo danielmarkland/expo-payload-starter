@@ -28,6 +28,7 @@ function request(body: unknown) {
 describe('contact route', () => {
   beforeEach(() => {
     vi.stubEnv('CONTACT_TO_ADDRESS', 'inbox@example.com')
+    vi.stubEnv('EMAIL_FROM_ADDRESS', 'sender@example.com')
     vi.stubEnv('RESEND_API_KEY', 're_test')
     vi.stubEnv('TURNSTILE_SECRET_KEY', 'turnstile-secret')
     sendEmail.mockReset()
@@ -70,6 +71,18 @@ describe('contact route', () => {
         to: 'inbox@example.com',
       }),
     )
+  })
+
+  it('defaults the contact recipient to the sender address', async () => {
+    vi.stubEnv('CONTACT_TO_ADDRESS', '')
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ action: 'contact', success: true }), { status: 200 }),
+    )
+
+    const response = await POST(request(validSubmission))
+
+    expect(response.status).toBe(200)
+    expect(sendEmail).toHaveBeenCalledWith(expect.objectContaining({ to: 'sender@example.com' }))
   })
 
   it('rejects failed Turnstile verification', async () => {

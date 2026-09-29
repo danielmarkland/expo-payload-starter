@@ -14,6 +14,7 @@ vi.mock('@/payload.config', () => ({ default: {} }))
 import { SiteFooter } from '@/components/SiteFooter'
 
 const siteConfig = {
+  integrations: { googleTagManagerId: null, turnstileSiteKey: null },
   identity: {
     appTitle: 'Example App',
     darkLogoUrl: null,
@@ -24,6 +25,7 @@ const siteConfig = {
     shortName: 'Example',
     siteTitle: 'Example Site',
   },
+  links: { appUrl: 'https://app.example.com' },
   theme: {
     allowToggle: true,
     dark: {},
@@ -82,6 +84,9 @@ describe('SiteFooter', () => {
     expect(screen.getByRole('heading', { name: 'Research & Analysis' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'What Risk Means' }).getAttribute('href')).toBe(
       '/posts/risk',
+    )
+    expect(screen.getByRole('link', { name: 'Open app' }).getAttribute('href')).toBe(
+      'https://app.example.com',
     )
     expect(screen.getAllByText(/Example, LLC/)).toHaveLength(1)
     expect(payload.find).toHaveBeenCalledWith(

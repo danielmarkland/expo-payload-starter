@@ -8,7 +8,7 @@ import { getNavigationHref, getSafeExternalHref } from '@/lib/navigation'
 import config from '@/payload.config'
 
 export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
-  const appURL = process.env.NEXT_PUBLIC_APP_URL
+  const appURL = siteConfig.links.appUrl
   const payload = await getPayload({ config })
   const navigationPromise = payload.findGlobal({ slug: 'footerNavigation', depth: 1 })
   const postsPromise = payload.find({

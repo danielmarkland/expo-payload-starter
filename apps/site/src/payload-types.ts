@@ -1970,6 +1970,22 @@ export interface SiteSetting {
      */
     shape: 'square' | 'soft' | 'rounded' | 'pill';
   };
+  links?: {
+    /**
+     * Optional URL shown as the footer app link.
+     */
+    appUrl?: string | null;
+  };
+  integrations?: {
+    /**
+     * Optional GTM-… container shared by the website and Expo web.
+     */
+    googleTagManagerId?: string | null;
+    /**
+     * Public Cloudflare Turnstile site key. The matching secret remains server-side.
+     */
+    turnstileSiteKey?: string | null;
+  };
   /**
    * Fallback description for pages without their own SEO description.
    */
@@ -2095,6 +2111,17 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | T
     | {
         shape?: T;
+      };
+  links?:
+    | T
+    | {
+        appUrl?: T;
+      };
+  integrations?:
+    | T
+    | {
+        googleTagManagerId?: T;
+        turnstileSiteKey?: T;
       };
   siteDescription?: T;
   meta?:

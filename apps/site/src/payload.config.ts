@@ -22,9 +22,13 @@ import { FooterNavigation } from './globals/FooterNavigation'
 import { HeaderNavigation } from './globals/HeaderNavigation'
 import { SiteSettings } from './globals/SiteSettings'
 import { extractSearchText } from './lib/extractSearchText'
+import { getContactEmailConfig, getSiteURL, getStorageConfig } from './lib/serverConfig'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const siteURL = getSiteURL()
+const email = getContactEmailConfig()
+const storage = getStorageConfig()
 
 const moveSEOFieldsIntoTabs: Plugin = (config) => ({
   ...config,
@@ -84,12 +88,8 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Authors, Categories, Tags, Posts, Pages],
-  cors: [process.env.NEXT_PUBLIC_APP_URL, process.env.NEXT_PUBLIC_SITE_URL].filter(
-    (origin): origin is string => Boolean(origin),
-  ),
-  csrf: [process.env.NEXT_PUBLIC_APP_URL, process.env.NEXT_PUBLIC_SITE_URL].filter(
-    (origin): origin is string => Boolean(origin),
-  ),
+  cors: [siteURL],
+  csrf: [siteURL],
   editor: lexicalEditor(),
   globals: [HeaderNavigation, FooterNavigation, SiteSettings],
   secret: process.env.PAYLOAD_SECRET || '',
@@ -102,31 +102,31 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  email: process.env.RESEND_API_KEY
-    ? resendAdapter({
-        apiKey: process.env.RESEND_API_KEY,
-        defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'hello@example.com',
-        defaultFromName: process.env.EMAIL_FROM_NAME || 'Daniel Markland',
-      })
-    : undefined,
+  email:
+    email.apiKey && email.fromAddress
+      ? resendAdapter({
+          apiKey: email.apiKey,
+          defaultFromAddress: email.fromAddress,
+          defaultFromName: brand.siteTitle,
+        })
+      : undefined,
   sharp,
   plugins: [
     s3Storage({
       // Payload must use remote storage on Vercel; silently disabling the adapter
       // makes uploads fall back to an unavailable local filesystem.
       enabled:
-        process.env.VERCEL === '1' ||
-        Boolean(process.env.SUPABASE_S3_ACCESS_KEY_ID && process.env.SUPABASE_S3_SECRET_ACCESS_KEY),
-      bucket: process.env.SUPABASE_S3_BUCKET || 'cms-media',
+        process.env.VERCEL === '1' || Boolean(storage.accessKeyId && storage.secretAccessKey),
+      bucket: storage.bucket,
       collections: { media: true },
       config: {
         credentials: {
-          accessKeyId: process.env.SUPABASE_S3_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.SUPABASE_S3_SECRET_ACCESS_KEY || '',
+          accessKeyId: storage.accessKeyId,
+          secretAccessKey: storage.secretAccessKey,
         },
-        endpoint: process.env.SUPABASE_S3_ENDPOINT,
+        endpoint: storage.endpoint,
         forcePathStyle: true,
-        region: process.env.SUPABASE_S3_REGION || 'local',
+        region: storage.region,
       },
     }),
     seoPlugin({
@@ -142,9 +142,7 @@ export default buildConfig({
             : undefined,
       generateURL: ({ doc, collectionSlug }) => {
         const slug = typeof doc?.slug === 'string' ? doc.slug : ''
-        return collectionSlug === 'posts'
-          ? `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/posts/${slug}`
-          : `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/${slug}`
+        return collectionSlug === 'posts' ? `${siteURL}/posts/${slug}` : `${siteURL}/${slug}`
       },
     }),
     moveSEOFieldsIntoTabs,

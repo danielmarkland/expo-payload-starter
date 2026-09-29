@@ -9,7 +9,9 @@ import appIcon from '@starter/design-tokens/assets/icon.png'
 import { GoogleTagManager } from '@/components/GoogleTagManager'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
+import { SiteConfigProvider } from '@/components/SiteConfigProvider'
 import { getSiteSettings } from '@/lib/getSiteSettings'
+import { getSiteURL } from '@/lib/serverConfig'
 import { resolveSiteConfig, siteConfigCSS } from '@/lib/siteConfig'
 
 import '@starter/design-tokens/theme.css'
@@ -51,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
     applicationName: siteConfig.identity.siteTitle,
     description: settings.meta?.description || siteConfig.identity.description,
     icons: { apple: appIcon.src, icon: faviconURL || favicon.src },
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+    metadataBase: new URL(getSiteURL()),
     openGraph: {
       description: settings.meta?.description || siteConfig.identity.description,
       images: socialImageURL ? [socialImageURL] : undefined,
@@ -76,10 +78,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
       </head>
       <body className={font.variable}>
-        <GoogleTagManager />
-        <SiteHeader siteConfig={siteConfig} />
-        {children}
-        <SiteFooter siteConfig={siteConfig} />
+        <SiteConfigProvider config={siteConfig}>
+          <GoogleTagManager containerId={siteConfig.integrations.googleTagManagerId} />
+          <SiteHeader siteConfig={siteConfig} />
+          {children}
+          <SiteFooter siteConfig={siteConfig} />
+        </SiteConfigProvider>
       </body>
     </html>
   )

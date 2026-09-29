@@ -1,13 +1,15 @@
 import type { CollectionConfig } from 'payload'
 
+import { getPreviewSecret, getSiteURL } from '@/lib/serverConfig'
+
 export const Posts: CollectionConfig = {
   slug: 'posts',
   dbName: 'cms_posts',
   admin: {
     useAsTitle: 'title',
     preview: ({ data }) => {
-      const siteURL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-      const secret = process.env.PREVIEW_SECRET || ''
+      const siteURL = getSiteURL()
+      const secret = getPreviewSecret()
       const slug = (data as { slug?: unknown }).slug
       return `${siteURL}/api/preview?collection=posts&slug=${encodeURIComponent(String(slug ?? ''))}&secret=${encodeURIComponent(secret)}`
     },

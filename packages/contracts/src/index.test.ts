@@ -4,7 +4,6 @@ import {
   contactSubmissionSchema,
   profileSchema,
   siteConfigSchema,
-  welcomeEmailRequestSchema,
 } from './index.js'
 
 const themeColors = {
@@ -55,6 +54,10 @@ describe('siteConfigSchema', () => {
     expect(
       siteConfigSchema.parse({
         version: 1,
+        integrations: {
+          googleTagManagerId: 'GTM-ABC123',
+          turnstileSiteKey: 'turnstile-site-key',
+        },
         identity: {
           appTitle: 'Example App',
           darkLogoUrl: 'https://example.com/logo-dark.png',
@@ -65,6 +68,7 @@ describe('siteConfigSchema', () => {
           shortName: 'Example',
           siteTitle: 'Example Site',
         },
+        links: { appUrl: 'https://app.example.com' },
         theme: {
           allowToggle: true,
           buttonShape: 'rounded',
@@ -102,6 +106,11 @@ describe('siteConfigSchema', () => {
     })
 
     expect(parsed.theme.buttonShape).toBe('square')
+    expect(parsed.integrations).toEqual({
+      googleTagManagerId: null,
+      turnstileSiteKey: null,
+    })
+    expect(parsed.links).toEqual({ appUrl: null })
   })
 
   it('rejects arbitrary CSS in color values', () => {
@@ -154,23 +163,6 @@ describe('siteConfigSchema', () => {
 
     expect(parsed.identity.darkLogoUrl).toBeNull()
     expect(parsed.identity.lightLogoUrl).toBeNull()
-  })
-})
-
-describe('welcomeEmailRequestSchema', () => {
-  it('accepts an idempotency key without accepting a client recipient', () => {
-    const parsed = welcomeEmailRequestSchema.parse({
-      idempotencyKey: 'ad2eff36-2515-4afa-9618-0f16bcbb63dc',
-    })
-    expect(parsed).toEqual({
-      idempotencyKey: 'ad2eff36-2515-4afa-9618-0f16bcbb63dc',
-    })
-  })
-
-  it('rejects malformed keys', () => {
-    expect(() =>
-      welcomeEmailRequestSchema.parse({ idempotencyKey: 'not-a-uuid' }),
-    ).toThrow()
   })
 })
 

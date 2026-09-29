@@ -4,7 +4,6 @@ export const sensitiveVariableNames = new Set([
   'CONTACT_TO_ADDRESS',
   'DATABASE_URL',
   'PAYLOAD_SECRET',
-  'PREVIEW_SECRET',
   'RESEND_API_KEY',
   'SUPABASE_S3_ACCESS_KEY_ID',
   'SUPABASE_S3_SECRET_ACCESS_KEY',
@@ -125,22 +124,17 @@ export function redact(value) {
 }
 
 export function siteVariables({
-  appURL,
   database,
   optional = {},
   payloadSecret,
-  previewSecret,
   s3,
   siteURL,
 }) {
   return {
     DATABASE_URL: database,
     PAYLOAD_SECRET: payloadSecret,
-    PREVIEW_SECRET: previewSecret,
-    ...(appURL ? { NEXT_PUBLIC_APP_URL: appURL } : {}),
-    NEXT_PUBLIC_SITE_URL: siteURL,
+    ...(siteURL ? { SITE_URL: siteURL } : {}),
     SUPABASE_S3_ACCESS_KEY_ID: s3.accessKeyID,
-    SUPABASE_S3_BUCKET: s3.bucket,
     SUPABASE_S3_ENDPOINT: s3.endpoint,
     SUPABASE_S3_REGION: s3.region,
     SUPABASE_S3_SECRET_ACCESS_KEY: s3.secretAccessKey,
@@ -150,17 +144,11 @@ export function siteVariables({
   }
 }
 
-export function appVariables({
-  publishableKey,
-  siteURL,
-  supabaseURL,
-  gtmContainerID,
-}) {
+export function appVariables({ publishableKey, siteURL, supabaseURL }) {
   return {
     EXPO_PUBLIC_SITE_URL: siteURL,
     EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: publishableKey,
     EXPO_PUBLIC_SUPABASE_URL: supabaseURL,
-    ...(gtmContainerID ? { EXPO_PUBLIC_GTM_CONTAINER_ID: gtmContainerID } : {}),
   }
 }
 

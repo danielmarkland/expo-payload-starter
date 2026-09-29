@@ -13,6 +13,7 @@ vi.mock('next/navigation', () => ({
 }))
 
 import { GET } from '@/app/(frontend)/api/preview/route'
+import { getPreviewSecret } from '@/lib/serverConfig'
 
 describe('CMS preview route', () => {
   afterEach(() => {
@@ -21,9 +22,10 @@ describe('CMS preview route', () => {
   })
 
   it('redirects a home page preview to the homepage and enables draft mode', async () => {
-    vi.stubEnv('PREVIEW_SECRET', 'preview-test-secret')
+    vi.stubEnv('PAYLOAD_SECRET', 'payload-test-secret')
+    const secret = getPreviewSecret()
     const request = new Request(
-      'http://localhost/api/preview?collection=pages&slug=home&secret=preview-test-secret',
+      `http://localhost/api/preview?collection=pages&slug=home&secret=${secret}`,
     )
 
     await expect(GET(request)).rejects.toThrow('redirect:/')
@@ -31,14 +33,13 @@ describe('CMS preview route', () => {
   })
 
   it('keeps post preview URLs working and rejects unsupported collections', async () => {
-    vi.stubEnv('PREVIEW_SECRET', 'preview-test-secret')
-    const postRequest = new Request(
-      'http://localhost/api/preview?slug=first-post&secret=preview-test-secret',
-    )
+    vi.stubEnv('PAYLOAD_SECRET', 'payload-test-secret')
+    const secret = getPreviewSecret()
+    const postRequest = new Request(`http://localhost/api/preview?slug=first-post&secret=${secret}`)
     await expect(GET(postRequest)).rejects.toThrow('redirect:/posts/first-post')
 
     const invalidRequest = new Request(
-      'http://localhost/api/preview?collection=users&slug=admin&secret=preview-test-secret',
+      `http://localhost/api/preview?collection=users&slug=admin&secret=${secret}`,
     )
     const response = await GET(invalidRequest)
     expect(response.status).toBe(401)

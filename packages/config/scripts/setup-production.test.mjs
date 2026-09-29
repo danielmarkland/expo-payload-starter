@@ -61,36 +61,32 @@ test('reads Vercel environment names from supported response shapes', () => {
 
 test('builds the site and app variable sets', () => {
   const site = siteVariables({
-    appURL: 'https://app.example.com',
     database: 'postgresql://secret',
     payloadSecret: 'payload',
-    previewSecret: 'preview',
     s3: {
       accessKeyID: 'access',
-      bucket: 'cms-media',
       endpoint: 'https://ref.storage.supabase.co/storage/v1/s3',
       region: 'us-west-2',
       secretAccessKey: 'secret',
     },
     siteURL: 'https://www.example.com',
   })
-  assert.equal(site.NEXT_PUBLIC_SITE_URL, 'https://www.example.com')
-  assert.equal(site.SUPABASE_S3_BUCKET, 'cms-media')
+  assert.equal(site.SITE_URL, 'https://www.example.com')
+  assert.equal('PREVIEW_SECRET' in site, false)
+  assert.equal('SUPABASE_S3_BUCKET' in site, false)
 
   const landing = siteVariables({
     database: 'postgresql://secret',
     payloadSecret: 'payload',
-    previewSecret: 'preview',
     s3: {
       accessKeyID: 'access',
-      bucket: 'cms-media',
       endpoint: 'https://ref.storage.supabase.co/storage/v1/s3',
       region: 'us-west-2',
       secretAccessKey: 'secret',
     },
-    siteURL: 'https://www.example.com',
+    siteURL: null,
   })
-  assert.equal('NEXT_PUBLIC_APP_URL' in landing, false)
+  assert.equal('SITE_URL' in landing, false)
 
   const app = appVariables({
     publishableKey: 'publishable',
@@ -183,11 +179,11 @@ test('redacts connection strings, keys, and sensitive variable values', () => {
   assert.deepEqual(
     redactedVariableSummary({
       DATABASE_URL: 'secret',
-      NEXT_PUBLIC_SITE_URL: 'https://example.com',
+      SITE_URL: 'https://example.com',
     }),
     {
       DATABASE_URL: '[sensitive]',
-      NEXT_PUBLIC_SITE_URL: 'https://example.com',
+      SITE_URL: 'https://example.com',
     },
   )
 })

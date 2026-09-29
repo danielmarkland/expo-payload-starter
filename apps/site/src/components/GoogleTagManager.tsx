@@ -1,10 +1,9 @@
 import Script from 'next/script'
 
-export function GoogleTagManager() {
-  const containerId = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID
+export function GoogleTagManager({ containerId }: { containerId?: null | string }) {
   if (!containerId) return null
   if (!/^GTM-[A-Z0-9]+$/i.test(containerId)) {
-    throw new Error('NEXT_PUBLIC_GTM_CONTAINER_ID must be a valid GTM container ID (GTM-…).')
+    throw new Error('Google Tag Manager must use a valid GTM container ID (GTM-…).')
   }
 
   return (

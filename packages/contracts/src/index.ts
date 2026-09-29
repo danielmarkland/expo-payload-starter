@@ -10,20 +10,6 @@ export const profileSchema = z.object({
 
 export type Profile = z.infer<typeof profileSchema>
 
-export const welcomeEmailRequestSchema = z.object({
-  idempotencyKey: z.uuid(),
-})
-
-export type WelcomeEmailRequest = z.infer<typeof welcomeEmailRequestSchema>
-
-export const emailDeliveryEventSchema = z.object({
-  createdAt: z.iso.datetime(),
-  emailId: z.string().min(1),
-  status: z.enum(['sent', 'delivered', 'bounced', 'complained']),
-})
-
-export type EmailDeliveryEvent = z.infer<typeof emailDeliveryEventSchema>
-
 export const contactSubmissionSchema = z.object({
   email: z.email().max(254),
   message: z.string().trim().min(10).max(5000),
@@ -76,6 +62,16 @@ export const themeColorsSchema = z.object({
 
 export const siteConfigSchema = z.object({
   version: z.literal(1),
+  integrations: z
+    .object({
+      googleTagManagerId: z
+        .string()
+        .regex(/^GTM-[A-Z0-9]+$/i)
+        .nullable()
+        .default(null),
+      turnstileSiteKey: z.string().min(1).nullable().default(null),
+    })
+    .default({ googleTagManagerId: null, turnstileSiteKey: null }),
   identity: z.object({
     appTitle: z.string().min(1).max(100),
     darkLogoUrl: z.url().nullable().default(null),
@@ -87,6 +83,11 @@ export const siteConfigSchema = z.object({
     shortName: z.string().min(1).max(12),
     siteTitle: z.string().min(1).max(100),
   }),
+  links: z
+    .object({
+      appUrl: z.url().nullable().default(null),
+    })
+    .default({ appUrl: null }),
   theme: z.object({
     allowToggle: z.boolean(),
     buttonShape: buttonShapeSchema.default('square'),

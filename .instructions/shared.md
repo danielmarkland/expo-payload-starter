@@ -16,7 +16,6 @@ to become a plugin framework.
 - `packages/core/` — framework-independent product rules.
 - `packages/auth/` — provider-neutral identity and authorization interfaces.
 - `packages/data/` — typed Supabase repositories and generated database types.
-- `packages/email/` — email content and React Email templates.
 - `packages/design-tokens/` — shared brand metadata, visual tokens, and assets.
 - `packages/config/` — shared tooling configuration and boundary checks.
 - `supabase/` — product database migrations, RLS policies, seeds, and functions.
@@ -40,7 +39,8 @@ references; this file captures the agent-facing guardrails.
 - Keep service-role, Payload database, S3, and Resend credentials server-side.
   Never expose them with an `EXPO_PUBLIC_` variable or in client bundles.
 - Privileged product workflows belong in narrowly scoped Supabase Edge
-  Functions. Do not add generic client-callable admin or email endpoints.
+  Functions. Public website email is sent by the server-only Next.js contact
+  endpoint; do not add generic client-callable admin or email endpoints.
 - Keep database migration ownership separate: Supabase migrations may alter
   product tables in the `app` schema and Supabase-owned storage policies;
   Payload migrations own Payload tables in `public`. Never alter the other

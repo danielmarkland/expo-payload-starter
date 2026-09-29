@@ -21,7 +21,12 @@ describe('runtime site config', () => {
         appTitle: 'Acme App',
         buttons: { shape: 'pill' },
         darkLogo: { url: '/api/media/file/logo-dark.svg' },
+        integrations: {
+          googleTagManagerId: 'GTM-ABC123',
+          turnstileSiteKey: 'turnstile-site-key',
+        },
         lightLogo: { url: '/api/media/file/logo-light.svg' },
+        links: { appUrl: 'https://app.example.com' },
         shortName: 'Acme',
         siteTitle: 'Acme Studio',
         theme: {
@@ -40,6 +45,9 @@ describe('runtime site config', () => {
     expect(config.identity.darkLogoUrl).toBe('https://example.com/api/media/file/logo-dark.svg')
     expect(config.identity.lightLogoUrl).toBe('https://example.com/api/media/file/logo-light.svg')
     expect(config.identity.logoUrl).toBe('https://example.com/api/media/file/logo-dark.svg')
+    expect(config.integrations.googleTagManagerId).toBe('GTM-ABC123')
+    expect(config.integrations.turnstileSiteKey).toBe('turnstile-site-key')
+    expect(config.links.appUrl).toBe('https://app.example.com')
     expect(config.theme.dark.primary).toBe('#123456')
     expect(config.theme.buttonShape).toBe('pill')
     expect(config.theme.dark.secondary).toBe('#ffffff')

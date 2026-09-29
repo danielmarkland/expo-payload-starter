@@ -11,6 +11,7 @@ export async function GET() {
 
   return Response.json(config, {
     headers: {
+      'access-control-allow-origin': '*',
       'cache-control': 'public, max-age=60, stale-while-revalidate=300',
     },
   })

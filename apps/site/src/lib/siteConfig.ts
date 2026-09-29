@@ -1,6 +1,7 @@
 import type { SiteConfig } from '@starter/contracts'
 import { brand, getPresetTokens, layout, radii, themes, typography } from '@starter/design-tokens'
 import type { SiteSetting } from '@/payload-types'
+import { getSiteURL } from '@/lib/serverConfig'
 
 type ResolvedThemeColors = SiteConfig['theme']['dark']
 type PaletteInput = Partial<
@@ -76,15 +77,16 @@ function mediaURL(value: MediaValue, siteURL: string) {
   return url ? new URL(url, siteURL).toString() : null
 }
 
-export function resolveSiteConfig(
-  settings: SiteSetting,
-  siteURL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-): SiteConfig {
+export function resolveSiteConfig(settings: SiteSetting, siteURL = getSiteURL()): SiteConfig {
   const darkLogoUrl = mediaURL(settings.darkLogo, siteURL)
   const lightLogoUrl = mediaURL(settings.lightLogo, siteURL)
 
   return {
     version: 1,
+    integrations: {
+      googleTagManagerId: settings.integrations?.googleTagManagerId || null,
+      turnstileSiteKey: settings.integrations?.turnstileSiteKey || null,
+    },
     identity: {
       appTitle: settings.appTitle || brand.appTitle,
       darkLogoUrl,
@@ -94,6 +96,9 @@ export function resolveSiteConfig(
       logoUrl: darkLogoUrl,
       shortName: settings.shortName || brand.shortName,
       siteTitle: settings.siteTitle || brand.siteTitle,
+    },
+    links: {
+      appUrl: settings.links?.appUrl || null,
     },
     theme: {
       allowToggle: settings.theme?.allowToggle ?? true,

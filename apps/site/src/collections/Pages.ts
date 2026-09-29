@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { pageBlocks } from '@/blocks'
+import { getPreviewSecret, getSiteURL } from '@/lib/serverConfig'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -8,8 +9,8 @@ export const Pages: CollectionConfig = {
   admin: {
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
     preview: ({ data }) => {
-      const siteURL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-      const secret = process.env.PREVIEW_SECRET || ''
+      const siteURL = getSiteURL()
+      const secret = getPreviewSecret()
       const slug = (data as { slug?: unknown }).slug
       return `${siteURL}/api/preview?collection=pages&slug=${encodeURIComponent(String(slug ?? ''))}&secret=${encodeURIComponent(secret)}`
     },

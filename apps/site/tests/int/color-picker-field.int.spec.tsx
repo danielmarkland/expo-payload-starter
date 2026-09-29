@@ -78,6 +78,7 @@ describe('Payload color picker field', () => {
         { label: 'General' },
         { label: 'Branding' },
         { label: 'Appearance' },
+        { label: 'Integrations' },
         { label: 'SEO' },
       ],
       type: 'tabs',
@@ -150,7 +151,13 @@ describe('Payload color picker field', () => {
     expect(tabs?.type).toBe('tabs')
     if (!tabs || tabs.type !== 'tabs') throw new Error('Site settings tabs are missing')
 
-    expect(tabs.tabs.map((tab) => tab.label)).toEqual(['General', 'Branding', 'Appearance', 'SEO'])
+    expect(tabs.tabs.map((tab) => tab.label)).toEqual([
+      'General',
+      'Branding',
+      'Appearance',
+      'Integrations',
+      'SEO',
+    ])
     const seoTab = tabs.tabs.find((tab) => tab.label === 'SEO')
     expect(seoTab?.fields).toEqual(
       expect.arrayContaining([

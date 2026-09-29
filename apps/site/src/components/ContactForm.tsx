@@ -4,6 +4,7 @@ import Script from 'next/script'
 import { type FormEvent, useState } from 'react'
 
 import { buttonClassName, type ButtonVariant } from '@/lib/buttonVariants'
+import { useSiteConfig } from '@/components/SiteConfigProvider'
 
 type FormStatus = 'error' | 'idle' | 'sending' | 'success'
 
@@ -23,7 +24,7 @@ export function ContactForm({
   successMessage: string
 }) {
   const [status, setStatus] = useState<FormStatus>('idle')
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+  const siteKey = useSiteConfig().integrations.turnstileSiteKey
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()

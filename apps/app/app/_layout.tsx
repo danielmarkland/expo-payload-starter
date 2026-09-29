@@ -26,9 +26,9 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <GoogleTagManager />
       <QueryClientProvider client={queryClient}>
         <SiteConfigProvider>
+          <GoogleTagManager />
           <ThemeProvider>
             <AuthProvider>
               <RootNavigator />

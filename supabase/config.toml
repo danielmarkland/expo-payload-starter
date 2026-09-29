@@ -36,9 +36,3 @@ enable_signup = true
 enable_signup = true
 double_confirm_changes = true
 enable_confirmations = true
-
-[functions.send-welcome-email]
-verify_jwt = true
-
-[functions.resend-webhook]
-verify_jwt = false

@@ -9,33 +9,6 @@ export type Json =
 export type Database = {
   app: {
     Tables: {
-      email_delivery_events: {
-        Row: {
-          created_at: string
-          email_id: string
-          event_type: string
-          id: string
-          occurred_at: string
-          payload: Json
-        }
-        Insert: {
-          created_at?: string
-          email_id: string
-          event_type: string
-          id?: string
-          occurred_at: string
-          payload: Json
-        }
-        Update: {
-          created_at?: string
-          email_id?: string
-          event_type?: string
-          id?: string
-          occurred_at?: string
-          payload?: Json
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null

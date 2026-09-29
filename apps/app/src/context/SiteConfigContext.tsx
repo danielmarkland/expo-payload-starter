@@ -17,6 +17,10 @@ import { publicEnv } from '@/src/config/env'
 const CACHE_KEY = 'site-config-v1'
 
 export const fallbackSiteConfig: SiteConfig = {
+  integrations: {
+    googleTagManagerId: null,
+    turnstileSiteKey: null,
+  },
   identity: {
     appTitle: brand.appTitle,
     darkLogoUrl: null,
@@ -27,6 +31,7 @@ export const fallbackSiteConfig: SiteConfig = {
     shortName: brand.shortName,
     siteTitle: brand.siteTitle,
   },
+  links: { appUrl: null },
   theme: {
     allowToggle: true,
     buttonShape: 'square',
