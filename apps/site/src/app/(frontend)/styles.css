@@ -64,7 +64,8 @@ a {
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   color: var(--color-ink-muted);
   margin-top: var(--space-3xl);
-  padding: var(--space-3xl) max(var(--space-lg), calc((100% - var(--layout-content)) / 2));
+  padding: var(--space-3xl) max(var(--space-lg), calc((100% - var(--layout-content)) / 2))
+    var(--space-xl);
 }
 .site-footer-main {
   display: grid;
@@ -1077,7 +1078,7 @@ h1 {
   }
   .site-footer {
     margin-top: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
+    padding-bottom: var(--space-xl);
     padding-top: var(--space-2xl);
   }
   .site-footer-main {
