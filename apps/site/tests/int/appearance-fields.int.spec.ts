@@ -8,11 +8,12 @@ import {
   socialLinkFields,
   submitButtonFields,
 } from '@/fields/linkFields'
+import { HeaderNavigation } from '@/globals/HeaderNavigation'
 
 type TestField = {
   admin?: {
     className?: string
-    components?: { RowLabel?: string }
+    components?: { Field?: string; RowLabel?: string }
     condition?: (data: unknown, siblingData: Record<string, unknown>) => boolean
     description?: string
     initCollapsed?: boolean
@@ -85,6 +86,12 @@ describe('page-block appearance fields', () => {
     expect(namedField(primaryRow.fields || [], 'icon').admin?.className).toBe(
       'compact-link-row__icon',
     )
+    expect(namedField(primaryRow.fields || [], 'icon').admin?.components?.Field).toBe(
+      '@/components/admin/IconPickerField#IconPickerField',
+    )
+    expect(
+      namedField(HeaderNavigation.fields as TestField[], 'searchIcon').admin?.components?.Field,
+    ).toBe('@/components/admin/IconPickerField#IconPickerField')
 
     expect(linkArrayPresentation).toEqual({
       admin: {

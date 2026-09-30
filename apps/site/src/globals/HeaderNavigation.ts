@@ -1,5 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
+import { iconPickerFieldComponent } from '@/fields/linkFields'
+
 import { headerNavigationIconOptions, navigationItemsField } from './navigationFields'
 
 export const HeaderNavigation: GlobalConfig = {
@@ -31,6 +33,7 @@ export const HeaderNavigation: GlobalConfig = {
       name: 'searchIcon',
       type: 'select',
       admin: {
+        components: iconPickerFieldComponent,
         condition: (data) => data?.showSearch !== false,
         description: 'Optional icon that replaces the visible Search label.',
       },

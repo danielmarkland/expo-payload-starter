@@ -100,10 +100,11 @@ in **Header navigation** and **Footer navigation** Globals. **Site settings**
 holds the site/app titles, short name, light/dark logos, favicon, fallback SEO
 description, social preview metadata, runtime theme, Google Tag Manager ID, and
 Turnstile site key. Header navigation owns
-only the header links. Header links can use a
-curated set of Lucide icons; icon-only links retain their configured label for
-assistive technology. The built-in Search link can be hidden or replaced with
-any curated icon from the same Header navigation settings. Footer navigation
+only the header links. Header links use the shared searchable icon picker, which
+combines recognizable social-media brand marks with a curated set of general
+interface icons; icon-only links retain their configured label for assistive
+technology. The built-in Search link can be hidden or replaced with any icon
+from the same picker. Footer navigation
 controls the footer tagline, social profiles, legal and utility links, latest-posts
 section, copyright owner, and optional site-wide newsletter and contact sections.
 Header and footer navigation, styled actions, link grids, portfolio cards, and linked
@@ -406,8 +407,8 @@ margins on that side, including when the selected value is none.
 
 Other CMS-owned design surfaces are **Header navigation**, **Footer navigation**,
 Media, Pages, Posts, Authors, Categories, Tags, Redirects, and SEO metadata.
-Header and footer links support a curated Lucide icon set and optional icon-only
-display; the header may also be sticky. Post SEO images also
+Header and footer links share the searchable brand and general-purpose icon picker
+and support optional icon-only display; the header may also be sticky. Post SEO images also
 serve as featured images on article and listing views. Editors can enable a
 generated table of contents for an individual post; it links level-two and
 level-three headings. Content designs must account for draft/preview behavior

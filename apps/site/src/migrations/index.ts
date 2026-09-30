@@ -20,6 +20,7 @@ import * as migration_20260929_015744_minimal_runtime_configuration from './2026
 import * as migration_20260929_025039_global_footer_conversion_sections from './20260929_025039_global_footer_conversion_sections'
 import * as migration_20260929_031022_remove_footer_app_link from './20260929_031022_remove_footer_app_link'
 import * as migration_20260930_014425_consistent_link_controls from './20260930_014425_consistent_link_controls'
+import * as migration_20260930_023515_expanded_icon_picker from './20260930_023515_expanded_icon_picker'
 
 export const migrations = [
   {
@@ -131,5 +132,10 @@ export const migrations = [
     up: migration_20260930_014425_consistent_link_controls.up,
     down: migration_20260930_014425_consistent_link_controls.down,
     name: '20260930_014425_consistent_link_controls',
+  },
+  {
+    up: migration_20260930_023515_expanded_icon_picker.up,
+    down: migration_20260930_023515_expanded_icon_picker.down,
+    name: '20260930_023515_expanded_icon_picker',
   },
 ]

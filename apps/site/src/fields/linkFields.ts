@@ -1,26 +1,13 @@
 import type { ArrayField, Field } from 'payload'
 
 import { buttonVariantOptions, type ButtonVariant } from '@/lib/buttonVariants'
+import { linkIconOptions, socialIconOptions } from '@/lib/linkIcons'
 
-export const linkIconOptions = [
-  { label: 'Arrow right', value: 'arrow-right' },
-  { label: 'Book', value: 'book-open' },
-  { label: 'External link', value: 'external-link' },
-  { label: 'GitHub', value: 'github' },
-  { label: 'Home', value: 'home' },
-  { label: 'Info', value: 'info' },
-  { label: 'LinkedIn', value: 'linkedin' },
-  { label: 'Email', value: 'mail' },
-  { label: 'Search', value: 'search' },
-  { label: 'Shop', value: 'shopping-bag' },
-  { label: 'Account', value: 'user' },
-  { label: 'YouTube', value: 'youtube' },
-  { label: 'X / Twitter', value: 'twitter' },
-] as const
+export { linkIconOptions, socialIconOptions }
 
-export const socialIconOptions = linkIconOptions.filter(({ value }) =>
-  ['github', 'linkedin', 'mail', 'twitter', 'youtube'].includes(value),
-)
+export const iconPickerFieldComponent = {
+  Field: '@/components/admin/IconPickerField#IconPickerField',
+} as const
 
 export const linkArrayPresentation = {
   admin: {
@@ -131,7 +118,10 @@ export function iconFields({ allowIconOnly = false }: { allowIconOnly?: boolean 
       name: 'icon',
       type: 'select',
       options: linkIconOptions.map((option) => ({ ...option })),
-      admin: { description: 'Optional icon displayed with the link label.' },
+      admin: {
+        components: iconPickerFieldComponent,
+        description: 'Optional icon displayed with the link label.',
+      },
     },
     ...(allowIconOnly
       ? [
@@ -296,7 +286,11 @@ export function socialLinkFields(): Field[] {
         {
           name: 'icon',
           type: 'select',
-          admin: { className: 'compact-link-row__icon', width: '20%' },
+          admin: {
+            className: 'compact-link-row__icon',
+            components: iconPickerFieldComponent,
+            width: '20%',
+          },
           options: socialIconOptions,
           required: true,
         },
