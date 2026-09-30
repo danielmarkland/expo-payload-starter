@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { siteConfigSchema } from '@starter/contracts'
+import { siteConfigSchema } from '@danielmarkland/contracts'
 import { resolveSiteConfig, siteConfigCSS } from '@/lib/siteConfig'
 import type { SiteSetting } from '@/payload-types'
 

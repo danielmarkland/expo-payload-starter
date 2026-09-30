@@ -35,7 +35,7 @@ export function ContactForm({
     setStatus('sending')
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('/api/v1/contact', {
         body: JSON.stringify({
           email: data.get('email'),
           message: data.get('message'),

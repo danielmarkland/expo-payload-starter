@@ -2,19 +2,19 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import React from 'react'
 
-import { THEME_STORAGE_KEY } from '@starter/design-tokens'
-import favicon from '@starter/design-tokens/assets/favicon.png'
-import appIcon from '@starter/design-tokens/assets/icon.png'
+import { THEME_STORAGE_KEY } from '@danielmarkland/design-tokens'
+import favicon from '@danielmarkland/design-tokens/assets/favicon.png'
+import appIcon from '@danielmarkland/design-tokens/assets/icon.png'
 
 import { GoogleTagManager } from '@/components/GoogleTagManager'
 import { SiteFooter } from '@/components/SiteFooter'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteConfigProvider } from '@/components/SiteConfigProvider'
-import { getSiteSettings } from '@/lib/getSiteSettings'
+import { getSitePresentation } from '@/lib/getSiteSettings'
 import { getSiteURL } from '@/lib/serverConfig'
-import { resolveSiteConfig, siteConfigCSS } from '@/lib/siteConfig'
+import { siteConfigCSS } from '@/lib/siteConfig'
 
-import '@starter/design-tokens/theme.css'
+import '@danielmarkland/design-tokens/theme.css'
 import './styles.css'
 
 const font = localFont({
@@ -41,34 +41,27 @@ const font = localFont({
 })
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings()
-  const siteConfig = resolveSiteConfig(settings)
-  const socialImage = settings.meta?.image
-  const socialImageURL = socialImage && typeof socialImage === 'object' ? socialImage.url : null
-  const uploadedFavicon = settings.favicon
-  const faviconURL =
-    uploadedFavicon && typeof uploadedFavicon === 'object' ? uploadedFavicon.url : null
+  const { config: siteConfig, metadata } = await getSitePresentation()
 
   return {
     applicationName: siteConfig.identity.siteTitle,
-    description: settings.meta?.description || siteConfig.identity.description,
-    icons: { apple: appIcon.src, icon: faviconURL || favicon.src },
+    description: metadata.description,
+    icons: { apple: appIcon.src, icon: metadata.faviconUrl || favicon.src },
     metadataBase: new URL(getSiteURL()),
     openGraph: {
-      description: settings.meta?.description || siteConfig.identity.description,
-      images: socialImageURL ? [socialImageURL] : undefined,
+      description: metadata.description,
+      images: metadata.socialImageUrl ? [metadata.socialImageUrl] : undefined,
       siteName: siteConfig.identity.siteTitle,
     },
     title: {
-      default: settings.meta?.title || siteConfig.identity.siteTitle,
+      default: metadata.title,
       template: `%s · ${siteConfig.identity.siteTitle}`,
     },
   }
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSiteSettings()
-  const siteConfig = resolveSiteConfig(settings)
+  const { config: siteConfig } = await getSitePresentation()
   const bootstrap = `(function(){try{var s=${siteConfig.theme.allowToggle ? `localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)})` : 'null'};var d=${JSON.stringify(siteConfig.theme.defaultMode)};var t=s==='light'||s==='dark'?s:d==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):d;document.documentElement.dataset.theme=t}catch(e){}})()`
 
   return (

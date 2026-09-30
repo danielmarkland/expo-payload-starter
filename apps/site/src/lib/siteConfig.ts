@@ -1,5 +1,12 @@
-import type { SiteConfig } from '@starter/contracts'
-import { brand, getPresetTokens, layout, radii, themes, typography } from '@starter/design-tokens'
+import type { SiteConfig } from '@danielmarkland/contracts'
+import {
+  brand,
+  getPresetTokens,
+  layout,
+  radii,
+  themes,
+  typography,
+} from '@danielmarkland/design-tokens'
 import type { SiteSetting } from '@/payload-types'
 import { getSiteURL } from '@/lib/serverConfig'
 

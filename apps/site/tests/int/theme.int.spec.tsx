@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { THEME_STORAGE_KEY } from '@starter/design-tokens'
+import { THEME_STORAGE_KEY } from '@danielmarkland/design-tokens'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
 function setSystemTheme(theme: 'dark' | 'light') {

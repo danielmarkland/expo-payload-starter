@@ -36,7 +36,7 @@ export function NewsletterForm({
     setStatus('sending')
 
     try {
-      const response = await fetch('/api/newsletter', {
+      const response = await fetch('/api/v1/newsletter', {
         body: JSON.stringify({
           email: data.get('email'),
           firstName: data.get('firstName'),

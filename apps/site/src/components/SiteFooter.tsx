@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { getPayload } from 'payload'
 
-import type { SiteConfig } from '@starter/contracts'
+import type { SiteConfig } from '@danielmarkland/contracts'
 import { ContactForm } from '@/components/ContactForm'
 import { NewsletterForm } from '@/components/NewsletterForm'
 import { ContentLink } from '@/components/LinkAction'
@@ -9,20 +8,14 @@ import { SiteBrand } from '@/components/SiteBrand'
 import { getHeaderNavigationIcon } from '@/lib/headerNavigationIcons'
 import { getNavigationHref, getSafeExternalHref } from '@/lib/navigation'
 import { sectionAppearanceClassName } from '@/lib/sectionAppearance'
-import config from '@/payload.config'
+import { getNavigationDocuments, getPublishedPosts } from '@/lib/api/content'
 
 export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
-  const payload = await getPayload({ config })
-  const navigationPromise = payload.findGlobal({ slug: 'footerNavigation', depth: 1 })
-  const postsPromise = payload.find({
-    collection: 'posts',
-    depth: 0,
-    limit: 2,
-    overrideAccess: false,
-    sort: '-publishedAt',
-    where: { _status: { equals: 'published' } },
-  })
-  const [navigation, posts] = await Promise.all([navigationPromise, postsPromise])
+  const [navigationResult, posts] = await Promise.all([
+    getNavigationDocuments(),
+    getPublishedPosts('?limit=2'),
+  ])
+  const navigation = navigationResult.footer
   const socialLinks =
     navigation.socialLinks?.flatMap((item) => {
       const href = getSafeExternalHref(item.url)

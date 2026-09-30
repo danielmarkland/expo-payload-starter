@@ -1,8 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { getPayload } from 'payload'
-
-import config from '@/payload.config'
+import { getPublishedPosts } from '@/lib/api/content'
 
 export async function LatestPostsSection({
   eyebrow,
@@ -13,15 +11,7 @@ export async function LatestPostsSection({
   heading?: string | null
   limit?: number | null
 }) {
-  const payload = await getPayload({ config })
-  const posts = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: limit || 3,
-    overrideAccess: false,
-    sort: '-publishedAt',
-    where: { _status: { equals: 'published' } },
-  })
+  const posts = await getPublishedPosts(`?limit=${limit || 3}`)
 
   if (posts.docs.length === 0) return null
 

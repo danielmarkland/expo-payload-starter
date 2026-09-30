@@ -1,12 +1,11 @@
 import 'react-native-url-polyfill/auto'
 
 import { createClient } from '@supabase/supabase-js'
-import { createProfileRepository, type Database } from '@starter/data'
 import { Platform } from 'react-native'
 
 import { authStorage } from '@/src/auth/storage'
 import { publicEnv } from '@/src/config/env'
-export const supabase = createClient<Database, 'app'>(
+export const supabase = createClient(
   publicEnv.EXPO_PUBLIC_SUPABASE_URL,
   publicEnv.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   {
@@ -16,8 +15,5 @@ export const supabase = createClient<Database, 'app'>(
       persistSession: true,
       storage: authStorage,
     },
-    db: { schema: 'app' },
   },
 )
-
-export const profiles = createProfileRepository(supabase)

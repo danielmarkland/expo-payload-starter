@@ -1,8 +1,16 @@
-import { getPayload } from 'payload'
+import { siteConfigSchema, siteMetadataSchema } from '@danielmarkland/contracts'
+import { internalApiRequest } from '@/lib/api/internal'
 
-import config from '@/payload.config'
-
-export async function getSiteSettings() {
-  const payload = await getPayload({ config })
-  return payload.findGlobal({ slug: 'siteSettings', depth: 1 })
+export async function getSitePresentation() {
+  const [configResponse, metadataResponse] = await Promise.all([
+    internalApiRequest('/site-config'),
+    internalApiRequest('/site-metadata'),
+  ])
+  if (!configResponse.ok || !metadataResponse.ok) {
+    throw new Error('Site presentation API request failed.')
+  }
+  return {
+    config: siteConfigSchema.parse(await configResponse.json()),
+    metadata: siteMetadataSchema.parse(await metadataResponse.json()),
+  }
 }

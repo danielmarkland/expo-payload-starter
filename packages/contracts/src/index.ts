@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+export * from './api.js'
+
 export const profileSchema = z.object({
   avatarUrl: z.url().nullable(),
   createdAt: z.iso.datetime(),

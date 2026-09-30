@@ -17,12 +17,16 @@ workflows. Expo owns the authenticated web, iOS, and Android experience.
 
 ## Data flow
 
-1. Expo clients authenticate with Supabase and access product tables under RLS.
-2. Public Next.js pages use Payload's Local API on the server.
-3. Published CMS content can be exposed through Payload REST endpoints.
-4. Privileged product workflows use narrowly scoped Supabase Edge Functions.
-5. The public contact form uses a narrow server-only Next.js endpoint. There is
-   no generic client-callable email or admin endpoint.
+1. Expo clients authenticate directly with Supabase Auth, then send the access
+   token to the versioned BFF for product-data requests.
+2. The Next.js frontend invokes the same Hono BFF handlers in process; browser
+   forms and Expo call `/api/v1` over HTTP.
+3. BFF adapters use Payload's Local API for CMS reads and request-scoped
+   Supabase clients for RLS-protected product data.
+4. Payload Admin uses Payload's authenticated native API as an explicit
+   protocol exception. Presentation code does not consume that API.
+5. OpenAPI is generated from route schemas at `/api/v1/openapi.json`, with
+   Swagger UI at `/api/v1/docs`.
 
 ## Shared code
 
@@ -32,14 +36,16 @@ rendering, accessibility, and deployment constraints.
 
 ## Package boundaries
 
-The reusable packages are private workspace packages intended to make a fork
-easy to understand and change, not to form a plugin framework.
+The workspace remains a starter rather than a plugin framework. The stable
+contracts and design-token packages are also published privately for approved
+downstream products; all other packages stay workspace-private.
 
 ```text
-apps -> auth/data -> core/contracts
+apps -> api-client/auth/data -> core/contracts
 ```
 
 - `contracts` owns wire and domain schemas.
+- `api-client` owns provider-neutral HTTP transport for those contracts.
 - `core` owns pure, framework-independent product rules.
 - `auth` owns product identity and authorization interfaces, not provider SDKs.
 - `data` owns typed Supabase repositories and generated database types.

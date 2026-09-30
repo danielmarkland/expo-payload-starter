@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { getPayload } from 'payload'
 
-import type { SiteConfig } from '@starter/contracts'
+import type { SiteConfig } from '@danielmarkland/contracts'
 import { SiteBrand } from '@/components/SiteBrand'
 import { ContentLink } from '@/components/LinkAction'
 import { ThemeToggle } from '@/components/ThemeToggle'
@@ -10,11 +9,10 @@ import {
   getHeaderNavigationPresentation,
   getSearchNavigationPresentation,
 } from '@/lib/headerNavigationIcons'
-import config from '@/payload.config'
+import { getNavigationDocuments } from '@/lib/api/content'
 
 export async function SiteHeader({ siteConfig }: { siteConfig: SiteConfig }) {
-  const payload = await getPayload({ config })
-  const navigation = await payload.findGlobal({ slug: 'headerNavigation', depth: 1 })
+  const { header: navigation } = await getNavigationDocuments()
   const search = getSearchNavigationPresentation(navigation)
   const SearchIcon = search.Icon
 

@@ -1,24 +1,16 @@
 import { draftMode } from 'next/headers'
-import { getPayload } from 'payload'
 
-import config from '@/payload.config'
+import { pageSchema } from '@danielmarkland/contracts'
+import { internalApiRequest } from '@/lib/api/internal'
+import { getPreviewSecret } from '@/lib/serverConfig'
+import type { Page } from '@/payload-types'
 
 export async function getPage(slug: string) {
   const { isEnabled } = await draftMode()
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: 'pages',
-    depth: 1,
-    draft: isEnabled,
-    limit: 1,
-    overrideAccess: isEnabled,
-    where: {
-      and: [
-        { slug: { equals: slug } },
-        ...(isEnabled ? [] : [{ _status: { equals: 'published' as const } }]),
-      ],
-    },
+  const response = await internalApiRequest(`/pages/${encodeURIComponent(slug)}`, {
+    headers: isEnabled ? { 'x-preview-secret': getPreviewSecret() } : undefined,
   })
-
-  return result.docs[0]
+  if (response.status === 404) return null
+  if (!response.ok) throw new Error(`Page API request failed (${response.status}).`)
+  return pageSchema.parse(await response.json()) as unknown as Page
 }

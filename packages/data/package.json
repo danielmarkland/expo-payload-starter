@@ -22,7 +22,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@starter/contracts": "workspace:*",
+    "@danielmarkland/contracts": "workspace:*",
     "@supabase/supabase-js": "^2.117.2"
   },
   "devDependencies": {

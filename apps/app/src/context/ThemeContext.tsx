@@ -15,7 +15,7 @@ import {
   fonts as bundledFonts,
   getPresetTokens,
   type ThemeMode,
-} from '@starter/design-tokens'
+} from '@danielmarkland/design-tokens'
 import { useSiteConfig } from '@/src/context/SiteConfigContext'
 
 type ThemeContextValue = {

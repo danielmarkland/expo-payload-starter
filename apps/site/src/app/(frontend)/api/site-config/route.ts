@@ -1,18 +1,8 @@
-import { siteConfigSchema } from '@starter/contracts'
-import { getSiteSettings } from '@/lib/getSiteSettings'
-import { resolveSiteConfig } from '@/lib/siteConfig'
+import { forwardToV1 } from '@/lib/api/internal'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-export async function GET() {
-  const settings = await getSiteSettings()
-  const config = siteConfigSchema.parse(resolveSiteConfig(settings))
-
-  return Response.json(config, {
-    headers: {
-      'access-control-allow-origin': '*',
-      'cache-control': 'public, max-age=60, stale-while-revalidate=300',
-    },
-  })
+export function GET(request: Request) {
+  return forwardToV1(request, '/site-config')
 }

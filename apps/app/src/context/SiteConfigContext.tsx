@@ -10,9 +10,9 @@ import {
 } from 'react'
 import { AppState, Platform } from 'react-native'
 
-import { siteConfigSchema, type SiteConfig } from '@starter/contracts'
-import { brand, themes } from '@starter/design-tokens'
-import { publicEnv } from '@/src/config/env'
+import { siteConfigSchema, type SiteConfig } from '@danielmarkland/contracts'
+import { brand, themes } from '@danielmarkland/design-tokens'
+import { api } from '@/src/lib/api'
 
 const CACHE_KEY = 'site-config-v1'
 
@@ -60,13 +60,14 @@ export function SiteConfigProvider({ children }: PropsWithChildren) {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 5_000)
     try {
-      const response = await fetch(
-        `${publicEnv.EXPO_PUBLIC_SITE_URL}/api/site-config`,
-        { signal: controller.signal },
-      )
-      if (!response.ok)
-        throw new Error(`Site config request failed (${response.status})`)
-      const next = siteConfigSchema.parse(await response.json())
+      const next = await Promise.race([
+        api.getSiteConfig(),
+        new Promise<never>((_, reject) => {
+          controller.signal.addEventListener('abort', () =>
+            reject(new Error('Site config timed out.')),
+          )
+        }),
+      ])
       setConfig(next)
       await writeCache(JSON.stringify(next))
     } catch {

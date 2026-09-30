@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getPayload } from 'payload'
 
 import { PostList } from '@/components/PostList'
-import config from '@/payload.config'
+import { getPublishedPosts, getTaxonomyDocument } from '@/lib/api/content'
+import type { Category } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,13 +12,7 @@ interface Props {
 }
 
 async function getCategory(slug: string) {
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: 'categories',
-    limit: 1,
-    where: { slug: { equals: slug } },
-  })
-  return result.docs[0]
+  return (await getTaxonomyDocument('categories', slug)) as Category | null
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -29,17 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params }: Props) {
   const category = await getCategory((await params).slug)
   if (!category) notFound()
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 100,
-    overrideAccess: false,
-    sort: '-publishedAt',
-    where: {
-      and: [{ _status: { equals: 'published' } }, { categories: { equals: category.id } }],
-    },
-  })
+  const result = await getPublishedPosts(`?limit=100&categoryId=${category.id}`)
 
   return (
     <main className="archive-shell">

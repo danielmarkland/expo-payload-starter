@@ -1,6 +1,6 @@
 import type { Field, GlobalConfig } from 'payload'
 
-import { brand, themes } from '@starter/design-tokens'
+import { brand, themes } from '@danielmarkland/design-tokens'
 import { type PaletteColorName, validatePaletteColor } from '@/lib/colorContrast'
 
 function colorField(name: PaletteColorName, label: string, defaultValue: string): Field {

@@ -8,6 +8,7 @@ authenticated application.
 - `apps/app` — Expo Router application for web, iOS, and Android.
 - `apps/site` — Next.js public website, Payload CMS, preview, and admin UI.
 - `packages/contracts` — stable Zod contracts shared across trust boundaries.
+- `packages/api-client` — framework-neutral client for the versioned application API.
 - `packages/core` — pure example-domain rules with no framework dependencies.
 - `packages/auth` — provider-neutral identity and authorization interfaces.
 - `packages/data` — typed Supabase repositories and generated database types.
@@ -87,6 +88,24 @@ Expo web, start `pnpm dev:site` in another terminal.
 | `pnpm setup:hosted`                  | Configure Supabase and Vercel environments interactively.         |
 | `pnpm setup:production`              | Run the backward-compatible single-app production setup.          |
 | `pnpm check`                         | Run all checks and builds; requires the local Supabase stack.     |
+| `pnpm changeset`                     | Record a releasable shared-package change.                        |
+
+### Versioned application API
+
+The public site and universal app use the Hono BFF mounted at `/api/v1` for
+content, forms, runtime configuration, and product data. Its OpenAPI document
+is available at `/api/v1/openapi.json` and interactive Swagger documentation
+at `/api/v1/docs`. Public reads return published content. Product routes such
+as `/api/v1/me/profile` require the Supabase access token as a Bearer token and
+continue to rely on Supabase RLS.
+
+Supabase Auth remains a direct protocol integration for OAuth, refresh, and
+sign-out. Payload Admin similarly retains its authenticated native API because
+that is the admin application's transport. Application presentation code does
+not query Payload or Supabase product tables directly: Next.js invokes the
+same Hono handlers in process, while Expo uses `@starter/api-client` over HTTP.
+The older site-config, contact, newsletter, and preview URLs remain as
+compatibility shims for deployed clients.
 
 The public homepage is a Payload Page with the slug `home`. After the first
 Payload migration, open `/admin`, create a Page with that slug, compose its
@@ -183,20 +202,22 @@ and [Supabase API keys](https://supabase.com/docs/guides/getting-started/api-key
 
 ### Website and Payload (`apps/site/.env`)
 
-| Variable                        | Handling   | Purpose                                                                                                                                                                                   |
-| ------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`                  | **Secret** | Required server-only Payload Postgres connection string. For hosted setup, use the Supabase Session pooler URI from the same project.                                                     |
-| `PAYLOAD_SECRET`                | **Secret** | Required Payload signing/encryption secret. Draft-preview authorization is derived from this value, so no separate preview secret is needed.                                              |
-| `RESEND_API_KEY`                | **Secret** | Optional Resend API key used by Payload and the contact endpoint.                                                                                                                         |
-| `EMAIL_FROM_ADDRESS`            | Config     | Sender address for Payload and contact email. The site title is used as the display name.                                                                                                 |
-| `CONTACT_TO_ADDRESS`            | **Secret** | Optional contact recipient. When omitted, `EMAIL_FROM_ADDRESS` is used.                                                                                                                   |
-| `TURNSTILE_SECRET_KEY`          | **Secret** | Server-only Cloudflare Turnstile verification secret.                                                                                                                                     |
-| `MAILERLITE_API_KEY`            | **Secret** | Optional server-only MailerLite API key used by the global newsletter signup. The target group ID is configured in Footer Navigation.                                                     |
-| `SUPABASE_S3_ACCESS_KEY_ID`     | **Secret** | Supabase Storage S3 access key for Payload media uploads.                                                                                                                                 |
-| `SUPABASE_S3_SECRET_ACCESS_KEY` | **Secret** | Secret half of the S3 credential pair.                                                                                                                                                    |
-| `SUPABASE_S3_ENDPOINT`          | Config     | Supabase Storage S3 endpoint.                                                                                                                                                             |
-| `SUPABASE_S3_REGION`            | Config     | S3 signing region; the local default is `local`.                                                                                                                                          |
-| `SITE_URL`                      | Config     | Optional canonical URL override for local or non-Vercel deployments. Vercel uses its system-provided production URL automatically; local development defaults to `http://localhost:3000`. |
+| Variable                               | Handling      | Purpose                                                                                                                                                                                   |
+| -------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                         | **Secret**    | Required server-only Payload Postgres connection string. For hosted setup, use the Supabase Session pooler URI from the same project.                                                     |
+| `PAYLOAD_SECRET`                       | **Secret**    | Required Payload signing/encryption secret. Draft-preview authorization is derived from this value, so no separate preview secret is needed.                                              |
+| `RESEND_API_KEY`                       | **Secret**    | Optional Resend API key used by Payload and the contact endpoint.                                                                                                                         |
+| `EMAIL_FROM_ADDRESS`                   | Config        | Sender address for Payload and contact email. The site title is used as the display name.                                                                                                 |
+| `CONTACT_TO_ADDRESS`                   | **Secret**    | Optional contact recipient. When omitted, `EMAIL_FROM_ADDRESS` is used.                                                                                                                   |
+| `TURNSTILE_SECRET_KEY`                 | **Secret**    | Server-only Cloudflare Turnstile verification secret.                                                                                                                                     |
+| `MAILERLITE_API_KEY`                   | **Secret**    | Optional server-only MailerLite API key used by the global newsletter signup. The target group ID is configured in Footer Navigation.                                                     |
+| `SUPABASE_S3_ACCESS_KEY_ID`            | **Secret**    | Supabase Storage S3 access key for Payload media uploads.                                                                                                                                 |
+| `SUPABASE_S3_SECRET_ACCESS_KEY`        | **Secret**    | Secret half of the S3 credential pair.                                                                                                                                                    |
+| `SUPABASE_S3_ENDPOINT`                 | Config        | Supabase Storage S3 endpoint.                                                                                                                                                             |
+| `SUPABASE_S3_REGION`                   | Config        | S3 signing region; the local default is `local`.                                                                                                                                          |
+| `SITE_URL`                             | Config        | Optional canonical URL override for local or non-Vercel deployments. Vercel uses its system-provided production URL automatically; local development defaults to `http://localhost:3000`. |
+| `EXPO_PUBLIC_SUPABASE_URL`             | Public config | Supabase project URL used by authenticated BFF product routes.                                                                                                                            |
+| `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public key    | Supabase publishable key used with the caller's Bearer token; never use a service-role key here.                                                                                          |
 
 Payload always uses the migration-created `cms-media` bucket, so there is no
 bucket-name variable. See [Supabase Storage S3 authentication](https://supabase.com/docs/guides/storage/s3/authentication) for credentials and connection details.
@@ -275,7 +296,7 @@ requirement without making the design less coherent.
    across both the website and universal app.
 
 The public site renders Site settings server-side as CSS variables. The Expo
-app fetches the validated public `/api/site-config` contract at launch and when
+app fetches the validated public `/api/v1/site-config` contract at launch and when
 it returns to the foreground, caches the last valid response, and uses packaged
 defaults while offline. Web and native components remain platform-specific but
 consume the same semantic design values.
@@ -354,7 +375,7 @@ narrow copy, 760px for articles, and 460px for cards, with a 260px card minimum.
 | Danger / warning    | Red `#F44336` / yellow `#FACC15` | Red `#F44336` / yellow `#FACC15` |
 
 After editing packaged tokens, run
-`pnpm --filter @starter/design-tokens generate:css`. `pnpm check` verifies that
+`pnpm --filter @danielmarkland/design-tokens generate:css`. `pnpm check` verifies that
 the generated CSS is current. Change shared tokens instead of duplicating
 palette values inside platform components.
 
@@ -786,7 +807,7 @@ the project's **Logs** view in Vercel. See the [`vercel logs` reference](https:/
   `packages/design-tokens/assets/` with your logo, icons, splash art, and fonts.
 - Customize colors, typography, spacing, radii, and layout tokens in
   `packages/design-tokens/src/tokens.json`, then regenerate the site CSS with
-  `pnpm --filter @starter/design-tokens generate:css`.
+  `pnpm --filter @danielmarkland/design-tokens generate:css`.
 - Set a unique Expo `slug`, `scheme`, iOS bundle identifier, and Android
   package in `apps/app/app.config.js`. These platform-specific identifiers are
   separate from the shared brand settings.

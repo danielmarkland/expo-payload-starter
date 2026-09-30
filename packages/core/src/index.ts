@@ -1,4 +1,4 @@
-import type { Profile } from '@starter/contracts'
+import type { Profile } from '@danielmarkland/contracts'
 
 export interface ProductUser {
   email: string | null

@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { typography } from '@starter/design-tokens'
+import { typography } from '@danielmarkland/design-tokens'
 import { useTheme } from '@/src/context/ThemeContext'
 
 export function ThemeToggle() {

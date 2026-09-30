@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@starter/contracts": "workspace:*"
+    "@danielmarkland/contracts": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.9.2",

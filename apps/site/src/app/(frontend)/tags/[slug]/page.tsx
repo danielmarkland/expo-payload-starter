@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getPayload } from 'payload'
 
 import { PostList } from '@/components/PostList'
-import config from '@/payload.config'
+import { getPublishedPosts, getTaxonomyDocument } from '@/lib/api/content'
+import type { Tag } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,13 +12,7 @@ interface Props {
 }
 
 async function getTag(slug: string) {
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: 'tags',
-    limit: 1,
-    where: { slug: { equals: slug } },
-  })
-  return result.docs[0]
+  return (await getTaxonomyDocument('tags', slug)) as Tag | null
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -29,17 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function TagPage({ params }: Props) {
   const tag = await getTag((await params).slug)
   if (!tag) notFound()
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 100,
-    overrideAccess: false,
-    sort: '-publishedAt',
-    where: {
-      and: [{ _status: { equals: 'published' } }, { tags: { equals: tag.id } }],
-    },
-  })
+  const result = await getPublishedPosts(`?limit=100&tagId=${tag.id}`)
 
   return (
     <main className="archive-shell">

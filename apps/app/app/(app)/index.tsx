@@ -3,10 +3,10 @@ import { useMemo } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { profileLabel } from '@starter/core'
-import { typography } from '@starter/design-tokens'
+import { typography } from '@danielmarkland/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
 import { useTheme } from '@/src/context/ThemeContext'
-import { profiles } from '@/src/lib/supabase'
+import { api } from '@/src/lib/api'
 
 export default function HomeScreen() {
   const { signOut, user } = useAuth()
@@ -17,7 +17,7 @@ export default function HomeScreen() {
   )
   const profile = useQuery({
     enabled: Boolean(user),
-    queryFn: () => profiles.findById(user!.id),
+    queryFn: () => api.getProfile(),
     queryKey: ['profile', user?.id],
   })
   const label = user ? profileLabel(profile.data ?? null, user) : 'Member'

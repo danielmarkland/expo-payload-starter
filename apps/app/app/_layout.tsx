@@ -6,7 +6,7 @@ import { ActivityIndicator, View } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-import { fonts as bundledFonts } from '@starter/design-tokens'
+import { fonts as bundledFonts } from '@danielmarkland/design-tokens'
 import { ThemeToggle } from '@/src/components/ThemeToggle'
 import { GoogleTagManager } from '@/src/components/GoogleTagManager'
 import { AuthProvider, useAuth } from '@/src/context/AuthContext'
@@ -16,10 +16,10 @@ import { ThemeProvider, useTheme } from '@/src/context/ThemeContext'
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient())
   const [fontsLoaded] = useFonts({
-    [bundledFonts.regular]: require('@starter/design-tokens/assets/fonts/Poppins_400Regular.ttf'),
-    [bundledFonts.medium]: require('@starter/design-tokens/assets/fonts/Poppins_500Medium.ttf'),
-    [bundledFonts.semibold]: require('@starter/design-tokens/assets/fonts/Poppins_600SemiBold.ttf'),
-    [bundledFonts.bold]: require('@starter/design-tokens/assets/fonts/Poppins_700Bold.ttf'),
+    [bundledFonts.regular]: require('@danielmarkland/design-tokens/assets/fonts/Poppins_400Regular.ttf'),
+    [bundledFonts.medium]: require('@danielmarkland/design-tokens/assets/fonts/Poppins_500Medium.ttf'),
+    [bundledFonts.semibold]: require('@danielmarkland/design-tokens/assets/fonts/Poppins_600SemiBold.ttf'),
+    [bundledFonts.bold]: require('@danielmarkland/design-tokens/assets/fonts/Poppins_700Bold.ttf'),
   })
 
   if (!fontsLoaded) return null

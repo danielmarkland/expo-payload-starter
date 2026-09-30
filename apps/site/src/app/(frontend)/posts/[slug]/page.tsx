@@ -4,11 +4,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
-import { getPayload } from 'payload'
 
-import config from '@/payload.config'
-import { getSiteSettings } from '@/lib/getSiteSettings'
+import { postSchema } from '@danielmarkland/contracts'
+import { internalApiRequest } from '@/lib/api/internal'
+import { getSitePresentation } from '@/lib/getSiteSettings'
+import { getPreviewSecret } from '@/lib/serverConfig'
 import { extractPostHeadings, postHeadingConverters } from '@/lib/postHeadings'
+import type { Post } from '@/payload-types'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -16,30 +18,21 @@ interface Props {
 
 async function findPost(slug: string) {
   const { isEnabled } = await draftMode()
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    draft: isEnabled,
-    limit: 1,
-    overrideAccess: isEnabled,
-    where: {
-      and: [
-        { slug: { equals: slug } },
-        ...(isEnabled ? [] : [{ _status: { equals: 'published' as const } }]),
-      ],
-    },
+  const response = await internalApiRequest(`/posts/${encodeURIComponent(slug)}`, {
+    headers: isEnabled ? { 'x-preview-secret': getPreviewSecret() } : undefined,
   })
-  return result.docs[0]
+  if (response.status === 404) return null
+  if (!response.ok) throw new Error(`Post API request failed (${response.status}).`)
+  return postSchema.parse(await response.json()) as unknown as Post
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await findPost((await params).slug)
   if (!post) return {}
-  const settings = await getSiteSettings()
+  const { metadata } = await getSitePresentation()
   const image = post.meta?.image && typeof post.meta.image === 'object' ? post.meta.image.url : null
   return {
-    description: post.meta?.description || post.summary || settings.siteDescription,
+    description: post.meta?.description || post.summary || metadata.description,
     openGraph: image ? { images: [image] } : undefined,
     title: post.meta?.title || post.title,
   }

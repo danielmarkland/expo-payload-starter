@@ -1,16 +1,12 @@
 import type { MetadataRoute } from 'next'
 
-import appIcon from '@starter/design-tokens/assets/icon.png'
-import { getSiteSettings } from '@/lib/getSiteSettings'
-import { resolveSiteConfig } from '@/lib/siteConfig'
+import appIcon from '@danielmarkland/design-tokens/assets/icon.png'
+import { getSitePresentation } from '@/lib/getSiteSettings'
 
 export const dynamic = 'force-dynamic'
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  const settings = await getSiteSettings()
-  const siteConfig = resolveSiteConfig(settings)
-  const favicon = settings.favicon
-  const faviconURL = favicon && typeof favicon === 'object' ? favicon.url : null
+  const { config: siteConfig, metadata } = await getSitePresentation()
 
   return {
     background_color: siteConfig.theme.dark.surface,
@@ -20,7 +16,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
       {
         purpose: 'any',
         sizes: 'any',
-        src: faviconURL || appIcon.src,
+        src: metadata.faviconUrl || appIcon.src,
       },
     ],
     name: siteConfig.identity.siteTitle,

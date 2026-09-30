@@ -5,7 +5,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
-import { themes } from '@starter/design-tokens'
+import { themes } from '@danielmarkland/design-tokens'
 
 export const heroHeadlineEditor = lexicalEditor({
   features: () => [

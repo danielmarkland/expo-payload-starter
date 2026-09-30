@@ -60,7 +60,7 @@ if (process.argv.includes('--check')) {
   } catch {}
   if (existing !== css) {
     console.error(
-      'Generated theme.css is out of date. Run pnpm --filter @starter/design-tokens generate:css.',
+      'Generated theme.css is out of date. Run pnpm --filter @danielmarkland/design-tokens generate:css.',
     )
     process.exitCode = 1
   }

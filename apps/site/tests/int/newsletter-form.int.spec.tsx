@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { SiteConfig } from '@starter/contracts'
+import type { SiteConfig } from '@danielmarkland/contracts'
 import { NewsletterForm } from '@/components/NewsletterForm'
 import { SiteConfigProvider } from '@/components/SiteConfigProvider'
 
@@ -44,7 +44,7 @@ describe('newsletter form', () => {
 
     await waitFor(() => expect(screen.getByText('Subscribed.')).toBeTruthy())
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/newsletter',
+      '/api/v1/newsletter',
       expect.objectContaining({ method: 'POST' }),
     )
   })

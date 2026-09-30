@@ -1,22 +1,13 @@
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
 
 import { PostList } from '@/components/PostList'
-import config from '@/payload.config'
+import { getPublishedPosts } from '@/lib/api/content'
 
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = { title: 'Posts' }
 
 export default async function PostsIndexPage() {
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 100,
-    overrideAccess: false,
-    sort: '-publishedAt',
-    where: { _status: { equals: 'published' } },
-  })
+  const result = await getPublishedPosts('?limit=100')
 
   return (
     <main className="archive-shell">

@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { SiteConfig } from '@starter/contracts'
+import type { SiteConfig } from '@danielmarkland/contracts'
 import { SiteConfigProvider } from '@/components/SiteConfigProvider'
 
 const payload = vi.hoisted(() => ({
@@ -72,12 +72,29 @@ describe('SiteFooter', () => {
       tagline: 'Trading strategies, built in public.',
     })
     payload.find.mockResolvedValue({
+      hasNextPage: false,
+      hasPrevPage: false,
+      limit: 2,
+      nextPage: null,
+      page: 1,
+      prevPage: null,
+      totalDocs: 2,
+      totalPages: 1,
       docs: [
-        { id: 2, publishedAt: '2026-06-30T12:00:00.000Z', slug: 'risk', title: 'What Risk Means' },
         {
+          body: {},
+          id: 2,
+          publishedAt: '2026-06-30T12:00:00.000Z',
+          slug: 'risk',
+          summary: '',
+          title: 'What Risk Means',
+        },
+        {
+          body: {},
           id: 1,
           publishedAt: '2026-06-16T12:00:00.000Z',
           slug: 'backtesting',
+          summary: '',
           title: 'Backtesting',
         },
       ],
@@ -111,7 +128,17 @@ describe('SiteFooter', () => {
       latestPosts: { show: false },
       socialLinks: [],
     })
-    payload.find.mockResolvedValue({ docs: [] })
+    payload.find.mockResolvedValue({
+      docs: [],
+      hasNextPage: false,
+      hasPrevPage: false,
+      limit: 2,
+      nextPage: null,
+      page: 1,
+      prevPage: null,
+      totalDocs: 0,
+      totalPages: 0,
+    })
 
     render(await SiteFooter({ siteConfig }))
 
@@ -140,7 +167,17 @@ describe('SiteFooter', () => {
       },
       socialLinks: [],
     })
-    payload.find.mockResolvedValue({ docs: [] })
+    payload.find.mockResolvedValue({
+      docs: [],
+      hasNextPage: false,
+      hasPrevPage: false,
+      limit: 2,
+      nextPage: null,
+      page: 1,
+      prevPage: null,
+      totalDocs: 0,
+      totalPages: 0,
+    })
 
     const { container } = render(
       <SiteConfigProvider config={siteConfig}>

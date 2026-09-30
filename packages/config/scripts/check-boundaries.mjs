@@ -2,12 +2,17 @@ import { readFile, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const allowedDependencies = {
+  '@starter/api-client': new Set(['@danielmarkland/contracts', 'zod']),
   '@starter/auth': new Set(['@starter/core']),
-  '@starter/core': new Set(['@starter/contracts']),
-  '@starter/data': new Set(['@starter/contracts', '@supabase/supabase-js']),
+  '@starter/core': new Set(['@danielmarkland/contracts']),
+  '@starter/data': new Set([
+    '@danielmarkland/contracts',
+    '@supabase/supabase-js',
+  ]),
 }
 
 const packageDirectories = {
+  'api-client': '@starter/api-client',
   auth: '@starter/auth',
   core: '@starter/core',
   data: '@starter/data',
@@ -33,6 +38,29 @@ for (const [directory, packageName] of Object.entries(packageDirectories)) {
   }
 }
 
+for (const file of await recursiveSourceFiles(join('apps', 'app'))) {
+  const source = await readFile(file, 'utf8')
+  if (
+    source.includes('@starter/data') ||
+    /\.from\(['"][^'"]+['"]\)/.test(source)
+  ) {
+    errors.push(`${file}: Expo product data must use @starter/api-client`)
+  }
+}
+
+for (const file of await recursiveSourceFiles(join('apps', 'site', 'src'))) {
+  if (
+    file.endsWith(join('lib', 'api', 'services.ts')) ||
+    file.includes(`${join('src', 'scripts')}/`)
+  ) {
+    continue
+  }
+  const source = await readFile(file, 'utf8')
+  if (source.includes("from 'payload'") && source.includes('getPayload')) {
+    errors.push(`${file}: website content and product data must use the BFF`)
+  }
+}
+
 if (errors.length) {
   console.error(errors.join('\n'))
   process.exitCode = 1
@@ -49,4 +77,18 @@ async function sourceFiles(directory) {
         ? [join(directory, entry.name)]
         : [],
   )
+}
+
+async function recursiveSourceFiles(directory) {
+  const entries = await readdir(directory, { withFileTypes: true })
+  const files = await Promise.all(
+    entries.map((entry) => {
+      const path = join(directory, entry.name)
+      if (entry.isDirectory()) return recursiveSourceFiles(path)
+      return entry.name.endsWith('.ts') || entry.name.endsWith('.tsx')
+        ? [path]
+        : []
+    }),
+  )
+  return files.flat()
 }

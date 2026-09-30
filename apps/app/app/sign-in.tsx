@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native'
 
-import { layout, typography } from '@starter/design-tokens'
+import { layout, typography } from '@danielmarkland/design-tokens'
 import { useAuth } from '@/src/context/AuthContext'
 import { useSiteConfig } from '@/src/context/SiteConfigContext'
 import { useTheme } from '@/src/context/ThemeContext'

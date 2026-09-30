@@ -2,7 +2,7 @@
 
 import { createContext, type PropsWithChildren, useContext } from 'react'
 
-import type { SiteConfig } from '@starter/contracts'
+import type { SiteConfig } from '@danielmarkland/contracts'
 
 const SiteConfigContext = createContext<SiteConfig | null>(null)
 

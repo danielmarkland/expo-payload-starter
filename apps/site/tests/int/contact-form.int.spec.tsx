@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import type { ComponentProps } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { SiteConfig } from '@starter/contracts'
+import type { SiteConfig } from '@danielmarkland/contracts'
 import { ContactForm } from '@/components/ContactForm'
 import { SiteConfigProvider } from '@/components/SiteConfigProvider'
 
@@ -54,7 +54,7 @@ describe('contact form', () => {
 
     await waitFor(() => expect(screen.getByText('Message received.')).toBeTruthy())
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/contact',
+      '/api/v1/contact',
       expect.objectContaining({ method: 'POST' }),
     )
   })

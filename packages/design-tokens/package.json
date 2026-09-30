@@ -1,7 +1,7 @@
 {
-  "name": "@starter/design-tokens",
+  "name": "@danielmarkland/design-tokens",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,12 +20,23 @@
     "src/brand.json",
     "assets"
   ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielmarkland/expo-payload-starter.git",
+    "directory": "packages/design-tokens"
+  },
   "scripts": {
-    "build": "node scripts/generate-theme-css.mjs --check && tsc -p tsconfig.json",
+    "build": "pnpm clean && node scripts/generate-theme-css.mjs --check && tsc -p tsconfig.json",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
     "generate:css": "node scripts/generate-theme-css.mjs",
     "lint": "node scripts/generate-theme-css.mjs --check && tsc --noEmit",
     "test": "vitest run --passWithNoTests --dir src",
-    "typecheck": "node scripts/generate-theme-css.mjs --check && tsc --noEmit"
+    "typecheck": "node scripts/generate-theme-css.mjs --check && tsc --noEmit",
+    "prepack": "pnpm build"
   },
   "devDependencies": {
     "typescript": "^5.9.2",

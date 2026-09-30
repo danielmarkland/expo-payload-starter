@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { themes } from '@starter/design-tokens'
+import { themes } from '@danielmarkland/design-tokens'
 import { colorContrastRatio, validatePaletteColor } from '@/lib/colorContrast'
 
 describe('palette color contrast', () => {

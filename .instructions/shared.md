@@ -12,11 +12,12 @@ to become a plugin framework.
 
 - `apps/app/` — Expo Router app for web, iOS, and Android.
 - `apps/site/` — Next.js public site, Payload CMS, preview, and admin UI.
-- `packages/contracts/` — stable schemas shared across trust boundaries.
+- `packages/contracts/` — stable schemas shared across trust boundaries and published as `@danielmarkland/contracts`.
+- `packages/api-client/` — framework-neutral client for the versioned BFF.
 - `packages/core/` — framework-independent product rules.
 - `packages/auth/` — provider-neutral identity and authorization interfaces.
 - `packages/data/` — typed Supabase repositories and generated database types.
-- `packages/design-tokens/` — shared brand metadata, visual tokens, and assets.
+- `packages/design-tokens/` — shared brand metadata, visual tokens, and assets, published as `@danielmarkland/design-tokens`.
 - `packages/config/` — shared tooling configuration and boundary checks.
 - `supabase/` — product database migrations, RLS policies, seeds, and functions.
 
@@ -38,9 +39,9 @@ references; this file captures the agent-facing guardrails.
   editors and CMS administrators.
 - Keep service-role, Payload database, S3, and Resend credentials server-side.
   Never expose them with an `EXPO_PUBLIC_` variable or in client bundles.
-- Privileged product workflows belong in narrowly scoped Supabase Edge
-  Functions. Public website email is sent by the server-only Next.js contact
-  endpoint; do not add generic client-callable admin or email endpoints.
+- Application data flows through the versioned Hono BFF. Supabase Auth and
+  Payload Admin's authenticated transport are explicit protocol exceptions.
+  Privileged product workflows still belong in narrowly scoped server code.
 - Keep database migration ownership separate: Supabase migrations may alter
   product tables in the `app` schema and Supabase-owned storage policies;
   Payload migrations own Payload tables in `public`. Never alter the other
@@ -60,7 +61,7 @@ references; this file captures the agent-facing guardrails.
   typography, spacing, radii, and layout values.
 - Shared image, icon, and font files live in `packages/design-tokens/assets/`.
 - After changing tokens, regenerate CSS with
-  `pnpm --filter @starter/design-tokens generate:css`. `pnpm check` verifies
+  `pnpm --filter @danielmarkland/design-tokens generate:css`. `pnpm check` verifies
   generated output is current.
 - Platform-specific identity such as Expo slug, URL scheme, and native package
   IDs stays in `apps/app/app.config.js`.

@@ -1,9 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { getPayload } from 'payload'
 
+import { getRedirectDocuments } from './lib/api/content'
 import { resolveRedirect } from './lib/redirects'
 import type { Redirect } from './payload-types'
-import payloadConfig from './payload.config'
 
 const redirectCacheTTL = 30_000
 let redirectCache: { expiresAt: number; docs: Redirect[] } | null = null
@@ -21,15 +20,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  const payload = await getPayload({ config: payloadConfig })
   if (!redirectCache || redirectCache.expiresAt <= Date.now()) {
-    const redirects = await payload.find({
-      collection: 'redirects',
-      depth: 1,
-      limit: 1000,
-      overrideAccess: true,
-    })
-    redirectCache = { docs: redirects.docs, expiresAt: Date.now() + redirectCacheTTL }
+    redirectCache = {
+      docs: await getRedirectDocuments(),
+      expiresAt: Date.now() + redirectCacheTTL,
+    }
   }
   const match = redirectCache.docs.find((redirect) => redirect.from === pathname)
   if (!match) return NextResponse.next()
