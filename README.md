@@ -106,6 +106,11 @@ assistive technology. The built-in Search link can be hidden or replaced with
 any curated icon from the same Header navigation settings. Footer navigation
 controls the footer tagline, social profiles, legal and utility links, latest-posts
 section, copyright owner, and optional site-wide newsletter and contact sections.
+Header and footer navigation, styled actions, link grids, portfolio cards, and linked
+logos use the same destination controls: select a published Page or Post, or enter a
+safe relative, HTTPS, email, or telephone URL. Link and action editors share the
+curated icon picker; styled actions also support left/right icon placement, while
+navigation links may display an accessible icon without visible label text.
 When both conversion sections are enabled, the MailerLite newsletter signup appears
 before the contact form on every public page. The footer automatically lists the two
 newest published Posts when its latest-posts section is enabled.
@@ -310,7 +315,8 @@ Public actions use four boxed variants: **Primary Filled**, **Primary Outline**,
 primary palette pair; secondary variants use the accent color and its
 contrast-validated inverse. The shared treatment uses substantial 56px controls,
 strong contrasting borders, and a subtle hover lift. Page editors choose a
-variant for each CMS action and Contact Form submit button; new and legacy
+variant for each CMS action and form submit button. Styled actions and form submits
+also support an optional curated icon with left/right placement. New and legacy
 contact forms default to Primary Filled, as does search.
 
 When a mode-specific logo is absent, the header displays the site title. Native
@@ -366,8 +372,8 @@ appear above the section content.
 | Image          | Standalone editorial image                | Media upload and optional caption.                                                             |
 | Feature grid   | Repeated benefits or capabilities         | Eyebrow, heading, intro, card or stacked layout, title/description items, and optional action. |
 | Split content  | Copy paired with media                    | Anchor, eyebrow, heading, rich text, image, left/right image position, and optional action.    |
-| Link grid      | Resource or destination list              | Anchor, heading content, label/URL items, and optional action.                                 |
-| Portfolio grid | Projects, people, or case-study summaries | Anchor, heading content, name/role/description/URL cards, and optional action.                 |
+| Link grid      | Resource or destination list              | Anchor, heading content, linked items with optional icons, and an optional action.             |
+| Portfolio grid | Projects, people, or case-study summaries | Anchor, heading content, linked name/role/description cards, and an optional action.           |
 | Call to action | Focused conversion prompt                 | Heading, body, and one required styled action.                                                 |
 | Testimonials   | Social proof                              | Optional heading and quote/name/role items.                                                    |
 | Logo cloud     | Clients, partners, or tools               | Anchor, heading, intro, and linked logo uploads.                                               |
@@ -400,8 +406,8 @@ margins on that side, including when the selected value is none.
 
 Other CMS-owned design surfaces are **Header navigation**, **Footer navigation**,
 Media, Pages, Posts, Authors, Categories, Tags, Redirects, and SEO metadata.
-Header links support a curated Lucide icon set, optional icon-only display, and
-an optional sticky header; footer links are text-only. Post SEO images also
+Header and footer links support a curated Lucide icon set and optional icon-only
+display; the header may also be sticky. Post SEO images also
 serve as featured images on article and listing views. Editors can enable a
 generated table of contents for an individual post; it links level-two and
 level-three headings. Content designs must account for draft/preview behavior

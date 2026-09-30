@@ -1,10 +1,10 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { RichText, type JSXConvertersFunction } from '@payloadcms/richtext-lexical/react'
 
 import { ContactForm } from '@/components/ContactForm'
 import { LatestPostsSection } from '@/components/LatestPostsSection'
-import { buttonClassName } from '@/lib/buttonVariants'
+import { ActionLink, ContentLink } from '@/components/LinkAction'
+import { getNavigationHref } from '@/lib/navigation'
 import { sectionAppearanceClassName } from '@/lib/sectionAppearance'
 import type { Media, Page } from '@/payload-types'
 
@@ -20,19 +20,6 @@ function blockClassName(block: PageBlock): string {
 
 function resolveMedia(media: number | Media | null | undefined): Media | null {
   return media && typeof media === 'object' ? media : null
-}
-
-function safeHref(value?: string | null): string | null {
-  if (!value) return null
-  if (/^#[a-z][a-z0-9-]*$/.test(value)) return value
-  if (value.startsWith('/') && !value.startsWith('//')) return value
-
-  try {
-    const protocol = new URL(value).protocol
-    return ['http:', 'https:', 'mailto:', 'tel:'].includes(protocol) ? value : null
-  } catch {
-    return null
-  }
 }
 
 function SectionHeading({
@@ -55,23 +42,8 @@ function SectionHeading({
   )
 }
 
-function SectionAction({
-  action,
-}: {
-  action?: { label?: null | string; url?: null | string; variant?: null | string }
-}) {
-  const href = safeHref(action?.url)
-  if (!action?.label || !href) return null
-
-  return (
-    <Link
-      className={`${buttonClassName(action.variant, 'primary-outline')} section-action`}
-      href={href}
-    >
-      {action.label}
-      <span aria-hidden="true"> →</span>
-    </Link>
-  )
+function SectionAction({ action }: { action?: Parameters<typeof ActionLink>[0]['action'] }) {
+  return <ActionLink action={action} className="section-action" fallbackVariant="primary-outline" />
 }
 
 function HeroHeadline({ data, primary }: { data: HeroBlock['heading']; primary: boolean }) {
@@ -95,8 +67,8 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
   switch (block.blockType) {
     case 'hero': {
       const image = resolveMedia(block.image)
-      const headingHref = safeHref(block.primaryButton?.url)
-      const secondaryHref = safeHref(block.secondaryButton?.url)
+      const headingHref = block.primaryButton ? getNavigationHref(block.primaryButton) : null
+      const secondaryHref = block.secondaryButton ? getNavigationHref(block.secondaryButton) : null
       return (
         <section className={`page-hero${image?.url ? '' : ' page-hero-without-image'}`}>
           <div className="page-hero-copy">
@@ -108,21 +80,9 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
             {block.body ? <p className="lede">{block.body}</p> : null}
             {headingHref || secondaryHref ? (
               <div className="actions">
-                {block.primaryButton?.label && headingHref ? (
-                  <Link
-                    className={buttonClassName(block.primaryButton.variant, 'primary-filled')}
-                    href={headingHref}
-                  >
-                    {block.primaryButton.label}
-                  </Link>
-                ) : null}
-                {block.secondaryButton?.label && secondaryHref ? (
-                  <Link
-                    className={buttonClassName(block.secondaryButton.variant, 'secondary-outline')}
-                    href={secondaryHref}
-                  >
-                    {block.secondaryButton.label}
-                  </Link>
+                {headingHref ? <ActionLink action={block.primaryButton} /> : null}
+                {secondaryHref ? (
+                  <ActionLink action={block.secondaryButton} fallbackVariant="secondary-outline" />
                 ) : null}
               </div>
             ) : null}
@@ -218,16 +178,10 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
           <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
           <ul className="link-grid">
             {block.items?.map((item) => {
-              const href = safeHref(item.url)
+              const href = getNavigationHref(item)
               return (
                 <li key={item.id || item.label}>
-                  {href ? (
-                    <Link href={href} rel="noreferrer" target="_blank">
-                      {item.label}
-                    </Link>
-                  ) : (
-                    <span>{item.label}</span>
-                  )}
+                  {href ? <ContentLink link={item} /> : <span>{item.label}</span>}
                 </li>
               )
             })}
@@ -241,7 +195,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
           <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.intro} />
           <div className="portfolio-grid">
             {block.items?.map((item) => {
-              const href = safeHref(item.url)
+              const href = getNavigationHref(item)
               const content = (
                 <>
                   <h3>{item.name}</h3>
@@ -252,9 +206,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
               return (
                 <article className="portfolio-card" key={item.id || item.name}>
                   {href ? (
-                    <Link href={href} rel="noreferrer" target="_blank">
-                      {content}
-                    </Link>
+                    <ContentLink link={item}>{content}</ContentLink>
                   ) : (
                     <div className="portfolio-content">{content}</div>
                   )}
@@ -266,7 +218,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
         </section>
       )
     case 'callToAction': {
-      const buttonHref = safeHref(block.buttonUrl)
+      const buttonHref = getNavigationHref(block.action)
       return (
         <section className="page-cta">
           <div>
@@ -274,14 +226,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
             <h2>{block.heading}</h2>
             {block.body ? <p>{block.body}</p> : null}
           </div>
-          {buttonHref ? (
-            <Link
-              className={buttonClassName(block.buttonVariant, 'primary-filled')}
-              href={buttonHref}
-            >
-              {block.buttonLabel}
-            </Link>
-          ) : null}
+          {buttonHref ? <ActionLink action={block.action} /> : null}
         </section>
       )
     }
@@ -309,7 +254,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
           <ul className="logo-cloud" aria-label={block.heading || 'Organizations'}>
             {block.items?.map((item) => {
               const image = resolveMedia(item.image)
-              const href = safeHref(item.url)
+              const href = getNavigationHref(item)
               const logo = image?.url ? (
                 <Image
                   alt={item.name}
@@ -323,13 +268,7 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
               )
               return (
                 <li key={item.id || item.name}>
-                  {href ? (
-                    <Link href={href} rel="noreferrer" target="_blank">
-                      {logo}
-                    </Link>
-                  ) : (
-                    logo
-                  )}
+                  {href ? <ContentLink link={item}>{logo}</ContentLink> : logo}
                 </li>
               )
             })}
@@ -341,6 +280,8 @@ function PageBlockView({ block, primaryHero }: { block: PageBlock; primaryHero: 
         <section className="page-section contact-section">
           <SectionHeading eyebrow={block.eyebrow} heading={block.heading} intro={block.body} />
           <ContactForm
+            submitIcon={block.icon}
+            submitIconPosition={block.iconPosition}
             submitButtonVariant={block.submitButtonVariant}
             submitLabel={block.submitLabel}
             successMessage={block.successMessage}

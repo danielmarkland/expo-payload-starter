@@ -48,7 +48,16 @@ describe('SiteFooter', () => {
   it('renders configured sections and the newest published posts semantically', async () => {
     payload.findGlobal.mockResolvedValue({
       copyrightOwner: 'Example, LLC',
-      items: [{ id: 'privacy', label: 'Privacy', type: 'url', url: '/privacy' }],
+      items: [
+        {
+          icon: 'info',
+          id: 'privacy',
+          label: 'Privacy',
+          newTab: true,
+          type: 'url',
+          url: '/privacy',
+        },
+      ],
       latestPosts: { heading: 'Research & Analysis', show: true },
       socialLinks: [
         {
@@ -82,6 +91,9 @@ describe('SiteFooter', () => {
       'https://youtube.com/example',
     )
     expect(screen.queryByRole('link', { name: 'Unsafe' })).toBeNull()
+    const privacy = screen.getByRole('link', { name: /Privacy/ })
+    expect(privacy.getAttribute('target')).toBe('_blank')
+    expect(privacy.querySelector('.link-icon')).toBeTruthy()
     expect(screen.getByRole('heading', { name: 'Research & Analysis' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'What Risk Means' }).getAttribute('href')).toBe(
       '/posts/risk',

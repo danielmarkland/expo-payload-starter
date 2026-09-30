@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import type { SiteConfig } from '@starter/contracts'
 import { ContactForm } from '@/components/ContactForm'
 import { NewsletterForm } from '@/components/NewsletterForm'
+import { ContentLink } from '@/components/LinkAction'
 import { SiteBrand } from '@/components/SiteBrand'
 import { getHeaderNavigationIcon } from '@/lib/headerNavigationIcons'
 import { getNavigationHref, getSafeExternalHref } from '@/lib/navigation'
@@ -56,6 +57,8 @@ export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
               buttonVariant={newsletter.submitButtonVariant}
               consentText={newsletter.consentText}
               submitLabel={newsletter.submitLabel}
+              submitIcon={newsletter.icon}
+              submitIconPosition={newsletter.iconPosition}
               successMessage={newsletter.successMessage}
             />
           </div>
@@ -77,6 +80,8 @@ export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
             <ContactForm
               submitButtonVariant={contactForm.submitButtonVariant}
               submitLabel={contactForm.submitLabel}
+              submitIcon={contactForm.icon}
+              submitIconPosition={contactForm.iconPosition}
               successMessage={contactForm.successMessage}
             />
           </div>
@@ -107,14 +112,7 @@ export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
           {legalLinks.length ? (
             <nav aria-label="Legal and utility" className="footer-navigation">
               {legalLinks.map((item) => (
-                <Link
-                  href={item.href}
-                  key={item.id || item.label}
-                  rel={item.newTab ? 'noreferrer' : undefined}
-                  target={item.newTab ? '_blank' : undefined}
-                >
-                  {item.label}
-                </Link>
+                <ContentLink key={item.id || item.label} link={item} />
               ))}
             </nav>
           ) : null}

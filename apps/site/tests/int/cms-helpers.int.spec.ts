@@ -53,8 +53,13 @@ describe('CMS helpers', () => {
   it('accepts supported footer destinations and rejects unsafe protocols', () => {
     expect(getSafeExternalHref('https://example.com/profile')).toBe('https://example.com/profile')
     expect(getSafeExternalHref('mailto:hello@example.com')).toBe('mailto:hello@example.com')
+    expect(getSafeExternalHref('#contact')).toBe('#contact')
     expect(getSafeExternalHref('javascript:alert(1)')).toBeNull()
     expect(getSafeExternalHref('//example.com')).toBeNull()
+  })
+
+  it('keeps URL-only records working during the destination migration', () => {
+    expect(getNavigationHref({ url: '/legacy-link' })).toBe('/legacy-link')
   })
 
   it('renders curated header icons and only hides labels when an icon is available', () => {

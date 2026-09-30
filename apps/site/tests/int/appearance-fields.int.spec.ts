@@ -52,7 +52,9 @@ describe('page-block appearance fields', () => {
     expect(
       namedField(namedField(featureGrid.fields, 'action').fields || [], 'variant').defaultValue,
     ).toBe('primary-outline')
-    expect(namedField(callToAction.fields, 'buttonVariant').defaultValue).toBe('primary-filled')
+    expect(
+      namedField(namedField(callToAction.fields, 'action').fields || [], 'variant').defaultValue,
+    ).toBe('primary-filled')
     expect(namedField(contactForm.fields, 'submitButtonVariant').defaultValue).toBe(
       'primary-filled',
     )

@@ -1,29 +1,21 @@
 import type { Block, Field } from 'payload'
 
-import { buttonVariantOptions } from '@/lib/buttonVariants'
+import {
+  actionFields,
+  destinationFields,
+  linkFields,
+  submitButtonFields,
+} from '@/fields/linkFields'
 import { heroHeadlineEditor, validateHeroHeadline } from '@/lib/heroHeadline'
 
 export { buttonVariantOptions } from '@/lib/buttonVariants'
-
-function buttonFields(defaultVariant: string): Field[] {
-  return [
-    { name: 'label', type: 'text' },
-    { name: 'url', type: 'text' },
-    {
-      name: 'variant',
-      type: 'select',
-      defaultValue: defaultVariant,
-      options: buttonVariantOptions,
-    },
-  ]
-}
 
 function optionalActionField(): Field {
   return {
     name: 'action',
     type: 'group',
     admin: { description: 'Optional single link shown after the section content.' },
-    fields: buttonFields('primary-outline'),
+    fields: actionFields('primary-outline'),
   }
 }
 
@@ -203,13 +195,13 @@ export const HeroBlock: Block = {
       name: 'primaryButton',
       type: 'group',
       required: false,
-      fields: buttonFields('primary-filled'),
+      fields: actionFields('primary-filled'),
     },
     {
       name: 'secondaryButton',
       type: 'group',
       required: false,
-      fields: buttonFields('secondary-outline'),
+      fields: actionFields('secondary-outline'),
     },
     { name: 'image', type: 'upload', relationTo: 'media' },
   ]),
@@ -297,10 +289,7 @@ export const LinkGridBlock: Block = {
       name: 'items',
       type: 'array',
       minRows: 1,
-      fields: [
-        { name: 'label', type: 'text', required: true },
-        { name: 'url', type: 'text' },
-      ],
+      fields: linkFields({ defaultType: 'url', destinationRequired: false, required: true }),
     },
     optionalActionField(),
   ]),
@@ -322,7 +311,7 @@ export const PortfolioGridBlock: Block = {
         { name: 'name', type: 'text', required: true },
         { name: 'role', type: 'text' },
         { name: 'description', type: 'textarea', required: true },
-        { name: 'url', type: 'text' },
+        ...destinationFields({ defaultType: 'url' }),
       ],
     },
     optionalActionField(),
@@ -335,13 +324,11 @@ export const CallToActionBlock: Block = {
   fields: withAppearance([
     { name: 'heading', type: 'text', required: true },
     { name: 'body', type: 'textarea' },
-    { name: 'buttonLabel', type: 'text', required: true },
-    { name: 'buttonUrl', type: 'text', required: true },
     {
-      name: 'buttonVariant',
-      type: 'select',
-      defaultValue: 'primary-filled',
-      options: buttonVariantOptions,
+      name: 'action',
+      type: 'group',
+      fields: actionFields('primary-filled', { required: true }),
+      required: true,
     },
   ]),
 }
@@ -378,7 +365,7 @@ export const LogoCloudBlock: Block = {
       fields: [
         { name: 'name', type: 'text', required: true },
         { name: 'image', type: 'upload', relationTo: 'media', required: true },
-        { name: 'url', type: 'text' },
+        ...destinationFields({ defaultType: 'url' }),
       ],
     },
   ]),
@@ -396,12 +383,7 @@ export const ContactFormBlock: Block = {
     { name: 'heading', type: 'text', required: true },
     { name: 'body', type: 'textarea' },
     { name: 'submitLabel', type: 'text', defaultValue: 'Send message', required: true },
-    {
-      name: 'submitButtonVariant',
-      type: 'select',
-      defaultValue: 'primary-filled',
-      options: buttonVariantOptions,
-    },
+    ...submitButtonFields('primary-filled'),
     {
       name: 'successMessage',
       type: 'text',

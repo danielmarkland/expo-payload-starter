@@ -142,7 +142,14 @@ describe('Payload page renderer', () => {
         heading: 'What we do',
         layout: 'stacked',
         items: [{ id: 'feature-one', title: 'Strategy', description: 'Plan the work.' }],
-        action: { label: 'Explore services', url: '#about', variant: 'primary-outline' },
+        action: {
+          icon: 'arrow-right',
+          iconPosition: 'right',
+          label: 'Explore services',
+          type: 'url',
+          url: '#about',
+          variant: 'primary-outline',
+        },
       },
       {
         id: 'split-content',
@@ -187,8 +194,13 @@ describe('Payload page renderer', () => {
         ...sectionMeta('expertise'),
         heading: 'Expertise',
         items: [
-          { id: 'typescript', label: 'TypeScript', url: 'https://www.typescriptlang.org' },
-          { id: 'unsafe', label: 'Unsafe expertise', url: 'javascript:alert(1)' },
+          {
+            id: 'typescript',
+            label: 'TypeScript',
+            type: 'url',
+            url: 'https://www.typescriptlang.org',
+          },
+          { id: 'unsafe', label: 'Unsafe expertise', type: 'url', url: 'javascript:alert(1)' },
         ],
       },
       {
@@ -211,9 +223,12 @@ describe('Payload page renderer', () => {
         blockType: 'callToAction',
         ...sectionMeta('cta'),
         heading: 'Start a conversation',
-        buttonLabel: 'Email us',
-        buttonUrl: 'mailto:hello@example.com',
-        buttonVariant: 'secondary-outline',
+        action: {
+          label: 'Email us',
+          type: 'url',
+          url: 'mailto:hello@example.com',
+          variant: 'secondary-outline',
+        },
       },
       {
         id: 'testimonials',
@@ -269,6 +284,7 @@ describe('Payload page renderer', () => {
     expect(markup).toContain('feature-grid-stacked')
     expect(markup).toContain('Explore services')
     expect(markup).toContain('button button-primary-outline section-action')
+    expect(markup).toContain('lucide-arrow-right')
     expect(markup).toContain('Biography content')
     expect(markup).toContain('TypeScript')
     expect(markup).toContain('Example Client')

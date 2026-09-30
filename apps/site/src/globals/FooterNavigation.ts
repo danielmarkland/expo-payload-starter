@@ -1,18 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
-import { appearanceField, buttonVariantOptions } from '@/blocks'
-import { footerSocialIconOptions, navigationItemsField } from './navigationFields'
-
-function validateSocialURL(value: unknown) {
-  if (typeof value !== 'string') return 'Enter a valid https, mailto, or tel URL.'
-  try {
-    return ['https:', 'mailto:', 'tel:'].includes(new URL(value).protocol)
-      ? true
-      : 'Enter a valid https, mailto, or tel URL.'
-  } catch {
-    return 'Enter a valid https, mailto, or tel URL.'
-  }
-}
+import { appearanceField } from '@/blocks'
+import { socialLinkFields, submitButtonFields } from '@/fields/linkFields'
+import { navigationItemsField } from './navigationFields'
 
 export const FooterNavigation: GlobalConfig = {
   slug: 'footerNavigation',
@@ -63,12 +53,7 @@ export const FooterNavigation: GlobalConfig = {
                   : 'A MailerLite group ID is required when newsletter signup is enabled.',
             },
             { name: 'submitLabel', type: 'text', defaultValue: 'Subscribe', required: true },
-            {
-              name: 'submitButtonVariant',
-              type: 'select',
-              defaultValue: 'primary-filled',
-              options: buttonVariantOptions,
-            },
+            ...submitButtonFields('primary-filled'),
             {
               name: 'successMessage',
               type: 'text',
@@ -107,12 +92,7 @@ export const FooterNavigation: GlobalConfig = {
             { name: 'heading', type: 'text', defaultValue: 'How can I help?', required: true },
             { name: 'body', type: 'textarea' },
             { name: 'submitLabel', type: 'text', defaultValue: 'Send message', required: true },
-            {
-              name: 'submitButtonVariant',
-              type: 'select',
-              defaultValue: 'primary-filled',
-              options: buttonVariantOptions,
-            },
+            ...submitButtonFields('primary-filled'),
             {
               name: 'successMessage',
               type: 'text',
@@ -134,20 +114,9 @@ export const FooterNavigation: GlobalConfig = {
     {
       name: 'socialLinks',
       type: 'array',
-      fields: [
-        { name: 'label', type: 'text', required: true },
-        { name: 'icon', type: 'select', options: footerSocialIconOptions, required: true },
-        {
-          name: 'url',
-          type: 'text',
-          admin: { description: 'Use an https, mailto, or tel URL.' },
-          required: true,
-          validate: validateSocialURL,
-        },
-        { name: 'newTab', type: 'checkbox', defaultValue: true },
-      ],
+      fields: socialLinkFields(),
     },
-    navigationItemsField({ label: 'Legal and utility links' }),
+    navigationItemsField({ includeIcons: true, label: 'Legal and utility links' }),
     {
       name: 'latestPosts',
       type: 'group',

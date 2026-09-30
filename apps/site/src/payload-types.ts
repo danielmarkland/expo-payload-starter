@@ -306,12 +306,68 @@ export interface Page {
         body?: string | null;
         primaryButton?: {
           label?: string | null;
+          type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
           url?: string | null;
+          newTab?: boolean | null;
+          /**
+           * Optional icon displayed with the link label.
+           */
+          icon?:
+            | (
+                | 'arrow-right'
+                | 'book-open'
+                | 'external-link'
+                | 'github'
+                | 'home'
+                | 'info'
+                | 'linkedin'
+                | 'mail'
+                | 'search'
+                | 'shopping-bag'
+                | 'user'
+                | 'youtube'
+                | 'twitter'
+              )
+            | null;
+          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         secondaryButton?: {
           label?: string | null;
+          type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
           url?: string | null;
+          newTab?: boolean | null;
+          /**
+           * Optional icon displayed with the link label.
+           */
+          icon?:
+            | (
+                | 'arrow-right'
+                | 'book-open'
+                | 'external-link'
+                | 'github'
+                | 'home'
+                | 'info'
+                | 'linkedin'
+                | 'mail'
+                | 'search'
+                | 'shopping-bag'
+                | 'user'
+                | 'youtube'
+                | 'twitter'
+              )
+            | null;
+          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         image?: (number | null) | Media;
@@ -447,7 +503,35 @@ export interface Page {
          */
         action?: {
           label?: string | null;
+          type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
           url?: string | null;
+          newTab?: boolean | null;
+          /**
+           * Optional icon displayed with the link label.
+           */
+          icon?:
+            | (
+                | 'arrow-right'
+                | 'book-open'
+                | 'external-link'
+                | 'github'
+                | 'home'
+                | 'info'
+                | 'linkedin'
+                | 'mail'
+                | 'search'
+                | 'shopping-bag'
+                | 'user'
+                | 'youtube'
+                | 'twitter'
+              )
+            | null;
+          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         /**
@@ -504,7 +588,35 @@ export interface Page {
          */
         action?: {
           label?: string | null;
+          type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
           url?: string | null;
+          newTab?: boolean | null;
+          /**
+           * Optional icon displayed with the link label.
+           */
+          icon?:
+            | (
+                | 'arrow-right'
+                | 'book-open'
+                | 'external-link'
+                | 'github'
+                | 'home'
+                | 'info'
+                | 'linkedin'
+                | 'mail'
+                | 'search'
+                | 'shopping-bag'
+                | 'user'
+                | 'youtube'
+                | 'twitter'
+              )
+            | null;
+          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         /**
@@ -543,7 +655,35 @@ export interface Page {
         items?:
           | {
               label: string;
+              type?: ('page' | 'post' | 'url') | null;
+              page?: (number | null) | Page;
+              post?: (number | null) | Post;
+              /**
+               * Use a relative path, https, mailto, or tel URL.
+               */
               url?: string | null;
+              newTab?: boolean | null;
+              /**
+               * Optional icon displayed with the link label.
+               */
+              icon?:
+                | (
+                    | 'arrow-right'
+                    | 'book-open'
+                    | 'external-link'
+                    | 'github'
+                    | 'home'
+                    | 'info'
+                    | 'linkedin'
+                    | 'mail'
+                    | 'search'
+                    | 'shopping-bag'
+                    | 'user'
+                    | 'youtube'
+                    | 'twitter'
+                  )
+                | null;
+              iconPosition?: ('left' | 'right') | null;
               id?: string | null;
             }[]
           | null;
@@ -552,7 +692,35 @@ export interface Page {
          */
         action?: {
           label?: string | null;
+          type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
           url?: string | null;
+          newTab?: boolean | null;
+          /**
+           * Optional icon displayed with the link label.
+           */
+          icon?:
+            | (
+                | 'arrow-right'
+                | 'book-open'
+                | 'external-link'
+                | 'github'
+                | 'home'
+                | 'info'
+                | 'linkedin'
+                | 'mail'
+                | 'search'
+                | 'shopping-bag'
+                | 'user'
+                | 'youtube'
+                | 'twitter'
+              )
+            | null;
+          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         /**
@@ -593,7 +761,14 @@ export interface Page {
               name: string;
               role?: string | null;
               description: string;
+              type?: ('page' | 'post' | 'url') | null;
+              page?: (number | null) | Page;
+              post?: (number | null) | Post;
+              /**
+               * Use a relative path, https, mailto, or tel URL.
+               */
               url?: string | null;
+              newTab?: boolean | null;
               id?: string | null;
             }[]
           | null;
@@ -602,7 +777,35 @@ export interface Page {
          */
         action?: {
           label?: string | null;
+          type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
           url?: string | null;
+          newTab?: boolean | null;
+          /**
+           * Optional icon displayed with the link label.
+           */
+          icon?:
+            | (
+                | 'arrow-right'
+                | 'book-open'
+                | 'external-link'
+                | 'github'
+                | 'home'
+                | 'info'
+                | 'linkedin'
+                | 'mail'
+                | 'search'
+                | 'shopping-bag'
+                | 'user'
+                | 'youtube'
+                | 'twitter'
+              )
+            | null;
+          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         /**
@@ -641,9 +844,39 @@ export interface Page {
         eyebrow?: string | null;
         heading: string;
         body?: string | null;
-        buttonLabel: string;
-        buttonUrl: string;
-        buttonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+        action: {
+          label: string;
+          type: 'page' | 'post' | 'url';
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
+          /**
+           * Optional icon displayed with the link label.
+           */
+          icon?:
+            | (
+                | 'arrow-right'
+                | 'book-open'
+                | 'external-link'
+                | 'github'
+                | 'home'
+                | 'info'
+                | 'linkedin'
+                | 'mail'
+                | 'search'
+                | 'shopping-bag'
+                | 'user'
+                | 'youtube'
+                | 'twitter'
+              )
+            | null;
+          iconPosition?: ('left' | 'right') | null;
+          variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+        };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
          */
@@ -727,7 +960,14 @@ export interface Page {
           | {
               name: string;
               image: number | Media;
+              type?: ('page' | 'post' | 'url') | null;
+              page?: (number | null) | Page;
+              post?: (number | null) | Post;
+              /**
+               * Use a relative path, https, mailto, or tel URL.
+               */
               url?: string | null;
+              newTab?: boolean | null;
               id?: string | null;
             }[]
           | null;
@@ -765,6 +1005,27 @@ export interface Page {
         heading: string;
         body?: string | null;
         submitLabel: string;
+        /**
+         * Optional icon displayed with the link label.
+         */
+        icon?:
+          | (
+              | 'arrow-right'
+              | 'book-open'
+              | 'external-link'
+              | 'github'
+              | 'home'
+              | 'info'
+              | 'linkedin'
+              | 'mail'
+              | 'search'
+              | 'shopping-bag'
+              | 'user'
+              | 'youtube'
+              | 'twitter'
+            )
+          | null;
+        iconPosition?: ('left' | 'right') | null;
         submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         successMessage: string;
         /**
@@ -1205,14 +1466,26 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     label?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
+                    icon?: T;
+                    iconPosition?: T;
                     variant?: T;
                   };
               secondaryButton?:
                 | T
                 | {
                     label?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
+                    icon?: T;
+                    iconPosition?: T;
                     variant?: T;
                   };
               image?: T;
@@ -1318,7 +1591,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     label?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
+                    icon?: T;
+                    iconPosition?: T;
                     variant?: T;
                   };
               appearance?:
@@ -1357,7 +1636,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     label?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
+                    icon?: T;
+                    iconPosition?: T;
                     variant?: T;
                   };
               appearance?:
@@ -1394,14 +1679,26 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     label?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
+                    icon?: T;
+                    iconPosition?: T;
                     id?: T;
                   };
               action?:
                 | T
                 | {
                     label?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
+                    icon?: T;
+                    iconPosition?: T;
                     variant?: T;
                   };
               appearance?:
@@ -1440,14 +1737,24 @@ export interface PagesSelect<T extends boolean = true> {
                     name?: T;
                     role?: T;
                     description?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
                     id?: T;
                   };
               action?:
                 | T
                 | {
                     label?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
+                    icon?: T;
+                    iconPosition?: T;
                     variant?: T;
                   };
               appearance?:
@@ -1480,9 +1787,19 @@ export interface PagesSelect<T extends boolean = true> {
               eyebrow?: T;
               heading?: T;
               body?: T;
-              buttonLabel?: T;
-              buttonUrl?: T;
-              buttonVariant?: T;
+              action?:
+                | T
+                | {
+                    label?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
+                    url?: T;
+                    newTab?: T;
+                    icon?: T;
+                    iconPosition?: T;
+                    variant?: T;
+                  };
               appearance?:
                 | T
                 | {
@@ -1555,7 +1872,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     name?: T;
                     image?: T;
+                    type?: T;
+                    page?: T;
+                    post?: T;
                     url?: T;
+                    newTab?: T;
                     id?: T;
                   };
               appearance?:
@@ -1589,6 +1910,8 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               body?: T;
               submitLabel?: T;
+              icon?: T;
+              iconPosition?: T;
               submitButtonVariant?: T;
               successMessage?: T;
               appearance?:
@@ -1808,11 +2131,20 @@ export interface HeaderNavigation {
   items?:
     | {
         label: string;
+        type: 'page' | 'post' | 'url';
+        page?: (number | null) | Page;
+        post?: (number | null) | Post;
         /**
-         * Optional Lucide icon displayed alongside the link label.
+         * Use a relative path, https, mailto, or tel URL.
+         */
+        url?: string | null;
+        newTab?: boolean | null;
+        /**
+         * Optional icon displayed with the link label.
          */
         icon?:
           | (
+              | 'arrow-right'
               | 'book-open'
               | 'external-link'
               | 'github'
@@ -1828,14 +2160,9 @@ export interface HeaderNavigation {
             )
           | null;
         /**
-         * Hide the visible label. The link label remains available to screen readers.
+         * The label remains available to screen readers.
          */
         iconOnly?: boolean | null;
-        type: 'page' | 'post' | 'url';
-        page?: (number | null) | Page;
-        post?: (number | null) | Post;
-        url?: string | null;
-        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -1852,6 +2179,7 @@ export interface HeaderNavigation {
    */
   searchIcon?:
     | (
+        | 'arrow-right'
         | 'book-open'
         | 'external-link'
         | 'github'
@@ -1885,6 +2213,27 @@ export interface FooterNavigation {
      */
     groupId?: string | null;
     submitLabel: string;
+    /**
+     * Optional icon displayed with the link label.
+     */
+    icon?:
+      | (
+          | 'arrow-right'
+          | 'book-open'
+          | 'external-link'
+          | 'github'
+          | 'home'
+          | 'info'
+          | 'linkedin'
+          | 'mail'
+          | 'search'
+          | 'shopping-bag'
+          | 'user'
+          | 'youtube'
+          | 'twitter'
+        )
+      | null;
+    iconPosition?: ('left' | 'right') | null;
     submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
     successMessage: string;
     consentText?: string | null;
@@ -1916,6 +2265,27 @@ export interface FooterNavigation {
     heading: string;
     body?: string | null;
     submitLabel: string;
+    /**
+     * Optional icon displayed with the link label.
+     */
+    icon?:
+      | (
+          | 'arrow-right'
+          | 'book-open'
+          | 'external-link'
+          | 'github'
+          | 'home'
+          | 'info'
+          | 'linkedin'
+          | 'mail'
+          | 'search'
+          | 'shopping-bag'
+          | 'user'
+          | 'youtube'
+          | 'twitter'
+        )
+      | null;
+    iconPosition?: ('left' | 'right') | null;
     submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
     successMessage: string;
     /**
@@ -1962,8 +2332,35 @@ export interface FooterNavigation {
         type: 'page' | 'post' | 'url';
         page?: (number | null) | Page;
         post?: (number | null) | Post;
+        /**
+         * Use a relative path, https, mailto, or tel URL.
+         */
         url?: string | null;
         newTab?: boolean | null;
+        /**
+         * Optional icon displayed with the link label.
+         */
+        icon?:
+          | (
+              | 'arrow-right'
+              | 'book-open'
+              | 'external-link'
+              | 'github'
+              | 'home'
+              | 'info'
+              | 'linkedin'
+              | 'mail'
+              | 'search'
+              | 'shopping-bag'
+              | 'user'
+              | 'youtube'
+              | 'twitter'
+            )
+          | null;
+        /**
+         * The label remains available to screen readers.
+         */
+        iconOnly?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -2069,13 +2466,13 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
     | T
     | {
         label?: T;
-        icon?: T;
-        iconOnly?: T;
         type?: T;
         page?: T;
         post?: T;
         url?: T;
         newTab?: T;
+        icon?: T;
+        iconOnly?: T;
         id?: T;
       };
   sticky?: T;
@@ -2099,6 +2496,8 @@ export interface FooterNavigationSelect<T extends boolean = true> {
         body?: T;
         groupId?: T;
         submitLabel?: T;
+        icon?: T;
+        iconPosition?: T;
         submitButtonVariant?: T;
         successMessage?: T;
         consentText?: T;
@@ -2131,6 +2530,8 @@ export interface FooterNavigationSelect<T extends boolean = true> {
         heading?: T;
         body?: T;
         submitLabel?: T;
+        icon?: T;
+        iconPosition?: T;
         submitButtonVariant?: T;
         successMessage?: T;
         appearance?:
@@ -2173,6 +2574,8 @@ export interface FooterNavigationSelect<T extends boolean = true> {
         post?: T;
         url?: T;
         newTab?: T;
+        icon?: T;
+        iconOnly?: T;
         id?: T;
       };
   latestPosts?:

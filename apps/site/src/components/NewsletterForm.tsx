@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from 'react'
 
 import { buttonClassName, type ButtonVariant } from '@/lib/buttonVariants'
+import { LinkLabel } from '@/components/LinkAction'
 import { useSiteConfig } from '@/components/SiteConfigProvider'
 import { TurnstileField } from '@/components/TurnstileField'
 
@@ -12,11 +13,15 @@ export function NewsletterForm({
   buttonVariant,
   consentText,
   submitLabel,
+  submitIcon,
+  submitIconPosition,
   successMessage,
 }: {
   buttonVariant?: ButtonVariant | null
   consentText?: null | string
   submitLabel: string
+  submitIcon?: null | string
+  submitIconPosition?: 'left' | 'right' | null
   successMessage: string
 }) {
   const [status, setStatus] = useState<FormStatus>('idle')
@@ -85,7 +90,11 @@ export function NewsletterForm({
         disabled={status === 'sending' || !siteKey}
         type="submit"
       >
-        {status === 'sending' ? 'Subscribing…' : submitLabel}
+        {status === 'sending' ? (
+          'Subscribing…'
+        ) : (
+          <LinkLabel icon={submitIcon} iconPosition={submitIconPosition} label={submitLabel} />
+        )}
       </button>
       <div aria-live="polite">
         {status === 'success' ? <p className="form-message success">{successMessage}</p> : null}

@@ -1,10 +1,19 @@
-import type { FooterNavigation, HeaderNavigation } from '@/payload-types'
+interface LinkDocument {
+  _status?: null | string
+  slug?: null | string
+}
 
-type NavigationItem =
-  NonNullable<HeaderNavigation['items']>[number] | NonNullable<FooterNavigation['items']>[number]
+export interface LinkData {
+  newTab?: boolean | null
+  page?: LinkDocument | number | null
+  post?: LinkDocument | number | null
+  type?: 'page' | 'post' | 'url' | null
+  url?: null | string
+}
 
 export function getSafeExternalHref(value?: null | string): string | null {
   if (!value) return null
+  if (/^#[a-z][a-z0-9-]*$/.test(value)) return value
   if (value.startsWith('/') && !value.startsWith('//')) return value
 
   try {
@@ -14,12 +23,13 @@ export function getSafeExternalHref(value?: null | string): string | null {
   }
 }
 
-export function getNavigationHref(item: NavigationItem): string | null {
+export function getNavigationHref(item: LinkData): string | null {
   if (
     item.type === 'page' &&
     item.page &&
     typeof item.page === 'object' &&
-    item.page._status === 'published'
+    item.page._status === 'published' &&
+    item.page.slug
   ) {
     return item.page.slug === 'home' ? '/' : `/${encodeURIComponent(item.page.slug)}`
   }
@@ -28,11 +38,12 @@ export function getNavigationHref(item: NavigationItem): string | null {
     item.type === 'post' &&
     item.post &&
     typeof item.post === 'object' &&
-    item.post._status === 'published'
+    item.post._status === 'published' &&
+    item.post.slug
   ) {
     return `/posts/${encodeURIComponent(item.post.slug)}`
   }
 
-  if (item.type !== 'url') return null
+  if (item.type && item.type !== 'url') return null
   return getSafeExternalHref(item.url)
 }

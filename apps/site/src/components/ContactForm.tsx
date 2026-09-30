@@ -3,6 +3,7 @@
 import { type FormEvent, useState } from 'react'
 
 import { buttonClassName, type ButtonVariant } from '@/lib/buttonVariants'
+import { LinkLabel } from '@/components/LinkAction'
 import { useSiteConfig } from '@/components/SiteConfigProvider'
 import { TurnstileField } from '@/components/TurnstileField'
 
@@ -10,10 +11,14 @@ type FormStatus = 'error' | 'idle' | 'sending' | 'success'
 
 export function ContactForm({
   submitButtonVariant,
+  submitIcon,
+  submitIconPosition,
   submitLabel,
   successMessage,
 }: {
   submitButtonVariant?: ButtonVariant | null
+  submitIcon?: null | string
+  submitIconPosition?: 'left' | 'right' | null
   submitLabel: string
   successMessage: string
 }) {
@@ -84,7 +89,11 @@ export function ContactForm({
           disabled={status === 'sending' || !siteKey}
           type="submit"
         >
-          {status === 'sending' ? 'Sending…' : submitLabel}
+          {status === 'sending' ? (
+            'Sending…'
+          ) : (
+            <LinkLabel icon={submitIcon} iconPosition={submitIconPosition} label={submitLabel} />
+          )}
         </button>
         <div aria-live="polite">
           {status === 'success' ? <p className="form-message success">{successMessage}</p> : null}

@@ -1,4 +1,5 @@
 import {
+  ArrowRight,
   BriefcaseBusiness,
   BookOpen,
   CirclePlay,
@@ -15,6 +16,7 @@ import {
 import type { HeaderNavigation } from '@/payload-types'
 
 const icons = {
+  'arrow-right': ArrowRight,
   'book-open': BookOpen,
   'external-link': ExternalLink,
   github: CodeXml,
@@ -29,14 +31,17 @@ const icons = {
   youtube: CirclePlay,
 }
 
-type HeaderNavigationItem = NonNullable<HeaderNavigation['items']>[number]
-
-export function getHeaderNavigationIcon(icon?: null | string) {
+export function getLinkIcon(icon?: null | string) {
   return icon ? icons[icon as keyof typeof icons] : undefined
 }
 
-export function getHeaderNavigationPresentation(item: HeaderNavigationItem) {
-  const Icon = getHeaderNavigationIcon(item.icon)
+export const getHeaderNavigationIcon = getLinkIcon
+
+export function getHeaderNavigationPresentation(item: {
+  icon?: null | string
+  iconOnly?: null | boolean
+}) {
+  const Icon = getLinkIcon(item.icon)
   return { Icon, iconOnly: Boolean(Icon && item.iconOnly) }
 }
 
@@ -44,7 +49,7 @@ export function getSearchNavigationPresentation(
   navigation: Pick<HeaderNavigation, 'searchIcon' | 'showSearch'>,
 ) {
   return {
-    Icon: getHeaderNavigationIcon(navigation.searchIcon),
+    Icon: getLinkIcon(navigation.searchIcon),
     show: navigation.showSearch !== false,
   }
 }

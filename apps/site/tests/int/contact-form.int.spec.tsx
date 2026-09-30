@@ -109,4 +109,17 @@ describe('contact form', () => {
       'button button-primary-filled',
     )
   })
+
+  it('renders a configured submit icon after the label', () => {
+    renderForm({
+      submitIcon: 'arrow-right',
+      submitIconPosition: 'right',
+      submitLabel: 'Send message',
+      successMessage: 'Message received.',
+    })
+
+    const button = screen.getByRole('button', { name: 'Send message' })
+    expect(button.querySelector('.lucide-arrow-right')).toBeTruthy()
+    expect(button.lastElementChild?.classList.contains('link-icon')).toBe(true)
+  })
 })

@@ -47,7 +47,14 @@ a {
   display: inline-flex;
   gap: var(--space-xs);
 }
-.header-navigation-icon {
+.footer-navigation a {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--space-xs);
+}
+.header-navigation-icon,
+.link-icon {
+  flex: 0 0 auto;
   height: 1em;
   width: 1em;
 }
@@ -949,10 +956,12 @@ h1 {
 }
 .link-grid a,
 .link-grid span {
+  align-items: center;
   background: var(--color-surface-raised);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  display: block;
+  display: flex;
+  gap: var(--space-xs);
   font-weight: var(--font-weight-semibold);
   padding: var(--space-md);
   text-decoration-color: transparent;
