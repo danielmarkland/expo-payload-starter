@@ -1,6 +1,6 @@
 import type { Field } from 'payload'
 
-import { linkFields, linkIconOptions } from '@/fields/linkFields'
+import { linkArrayPresentation, linkFields, linkIconOptions } from '@/fields/linkFields'
 
 export const headerNavigationIconOptions = linkIconOptions.map((option) => ({ ...option }))
 
@@ -11,6 +11,7 @@ export function navigationItemsField({
   return {
     name: 'items',
     type: 'array',
+    ...linkArrayPresentation,
     label,
     fields: linkFields({ allowIconOnly: includeIcons, includeIcon: includeIcons, required: true }),
   }

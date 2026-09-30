@@ -1,9 +1,23 @@
 import { describe, expect, it } from 'vitest'
 
 import { buttonVariantOptions, pageBlocks } from '@/blocks'
+import {
+  actionFields,
+  linkArrayPresentation,
+  linkFields,
+  socialLinkFields,
+  submitButtonFields,
+} from '@/fields/linkFields'
 
 type TestField = {
-  admin?: { description?: string; initCollapsed?: boolean }
+  admin?: {
+    className?: string
+    components?: { RowLabel?: string }
+    condition?: (data: unknown, siblingData: Record<string, unknown>) => boolean
+    description?: string
+    initCollapsed?: boolean
+    width?: string
+  }
   defaultValue?: unknown
   fields?: TestField[]
   label?: string
@@ -16,8 +30,16 @@ const blocks = pageBlocks as unknown as Array<{ fields: TestField[]; slug: strin
 
 function namedField(fields: TestField[], name: string): TestField {
   const field = fields.find((candidate) => candidate.name === name)
-  if (!field) throw new Error(`Missing ${name} field`)
-  return field
+  if (field) return field
+  for (const candidate of fields) {
+    if (!candidate.fields) continue
+    try {
+      return namedField(candidate.fields, name)
+    } catch {
+      // Continue searching sibling layout fields.
+    }
+  }
+  throw new Error(`Missing ${name} field`)
 }
 
 function labeledField(fields: TestField[], label: string): TestField {
@@ -27,6 +49,91 @@ function labeledField(fields: TestField[], label: string): TestField {
 }
 
 describe('page-block appearance fields', () => {
+  it('uses compact shared rows for link and button editors', () => {
+    const linkEditor = linkFields({ required: true }) as TestField[]
+    const primaryRow = linkEditor[0]
+    expect(primaryRow.type).toBe('row')
+    expect(primaryRow.admin?.className).toBe('compact-link-row')
+    expect(primaryRow.fields?.map((field) => field.name)).toEqual([
+      'label',
+      'type',
+      'icon',
+      'page',
+      'post',
+      'url',
+      'newTab',
+      'iconPosition',
+    ])
+    expect(primaryRow.fields?.map((field) => field.admin?.width)).toEqual([
+      '18%',
+      '16%',
+      '16%',
+      '26%',
+      '26%',
+      '26%',
+      '12%',
+      '12%',
+    ])
+    expect(namedField(primaryRow.fields || [], 'url').admin?.description).toBe(
+      'Use a relative path, https, mailto, or tel URL.',
+    )
+    const newTab = namedField(primaryRow.fields || [], 'newTab')
+    expect(newTab.admin?.className).toBe('compact-link-row__new-tab')
+    expect(newTab.label).toBe('New tab')
+    expect(newTab.admin?.condition?.({}, { type: 'url' })).toBe(true)
+    expect(newTab.admin?.condition?.({}, { type: 'page' })).toBe(false)
+    expect(namedField(primaryRow.fields || [], 'icon').admin?.className).toBe(
+      'compact-link-row__icon',
+    )
+
+    expect(linkArrayPresentation).toEqual({
+      admin: {
+        className: 'compact-link-array',
+        components: {
+          RowLabel: '@/components/admin/LinkRowLabel#LinkRowLabel',
+        },
+      },
+      labels: { plural: 'Links', singular: 'Link' },
+    })
+
+    const iconOnlyEditor = linkFields({ allowIconOnly: true }) as TestField[]
+    expect(iconOnlyEditor).toHaveLength(1)
+    expect(iconOnlyEditor[0]?.fields?.at(-1)?.name).toBe('iconOnly')
+
+    const actionEditor = actionFields('primary-filled') as TestField[]
+    expect(actionEditor).toHaveLength(1)
+    expect(actionEditor[0]?.fields?.map((field) => field.name)).toEqual([
+      'label',
+      'type',
+      'icon',
+      'page',
+      'post',
+      'url',
+      'newTab',
+      'iconPosition',
+      'variant',
+    ])
+    expect(namedField(actionEditor, 'variant').admin?.width).toBe('12%')
+
+    const submitEditor = submitButtonFields('primary-filled') as TestField[]
+    expect(submitEditor[0]?.fields?.map((field) => field.name)).toEqual([
+      'icon',
+      'iconPosition',
+      'submitButtonVariant',
+    ])
+    expect(namedField(submitEditor, 'iconPosition').admin?.width).toBe('33%')
+    expect(namedField(submitEditor, 'submitButtonVariant').admin?.width).toBe('33%')
+
+    const socialEditor = socialLinkFields() as TestField[]
+    expect(socialEditor[0]?.fields?.map((field) => field.name)).toEqual([
+      'label',
+      'icon',
+      'url',
+      'newTab',
+    ])
+    expect(namedField(socialEditor, 'newTab').admin?.width).toBe('15%')
+  })
+
   it('offers four button variants with role-appropriate defaults', () => {
     expect(buttonVariantOptions.map((option) => option.value)).toEqual([
       'primary-filled',

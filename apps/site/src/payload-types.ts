@@ -307,13 +307,6 @@ export interface Page {
         primaryButton?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -334,19 +327,19 @@ export interface Page {
                 | 'twitter'
               )
             | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
           iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
         secondaryButton?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -367,6 +360,13 @@ export interface Page {
                 | 'twitter'
               )
             | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
           iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
@@ -504,13 +504,6 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -531,6 +524,13 @@ export interface Page {
                 | 'twitter'
               )
             | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
           iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
@@ -589,13 +589,6 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -616,6 +609,13 @@ export interface Page {
                 | 'twitter'
               )
             | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
           iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
@@ -656,13 +656,6 @@ export interface Page {
           | {
               label: string;
               type?: ('page' | 'post' | 'url') | null;
-              page?: (number | null) | Page;
-              post?: (number | null) | Post;
-              /**
-               * Use a relative path, https, mailto, or tel URL.
-               */
-              url?: string | null;
-              newTab?: boolean | null;
               /**
                * Optional icon displayed with the link label.
                */
@@ -683,6 +676,13 @@ export interface Page {
                     | 'twitter'
                   )
                 | null;
+              page?: (number | null) | Page;
+              post?: (number | null) | Post;
+              /**
+               * Use a relative path, https, mailto, or tel URL.
+               */
+              url?: string | null;
+              newTab?: boolean | null;
               iconPosition?: ('left' | 'right') | null;
               id?: string | null;
             }[]
@@ -693,13 +693,6 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -720,6 +713,13 @@ export interface Page {
                 | 'twitter'
               )
             | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
           iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
@@ -778,13 +778,6 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -805,6 +798,13 @@ export interface Page {
                 | 'twitter'
               )
             | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
           iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
@@ -847,13 +847,6 @@ export interface Page {
         action: {
           label: string;
           type: 'page' | 'post' | 'url';
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -874,6 +867,13 @@ export interface Page {
                 | 'twitter'
               )
             | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
           iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
         };
@@ -1467,11 +1467,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
+                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
                     newTab?: T;
-                    icon?: T;
                     iconPosition?: T;
                     variant?: T;
                   };
@@ -1480,11 +1480,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
+                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
                     newTab?: T;
-                    icon?: T;
                     iconPosition?: T;
                     variant?: T;
                   };
@@ -1592,11 +1592,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
+                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
                     newTab?: T;
-                    icon?: T;
                     iconPosition?: T;
                     variant?: T;
                   };
@@ -1637,11 +1637,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
+                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
                     newTab?: T;
-                    icon?: T;
                     iconPosition?: T;
                     variant?: T;
                   };
@@ -1680,11 +1680,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
+                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
                     newTab?: T;
-                    icon?: T;
                     iconPosition?: T;
                     id?: T;
                   };
@@ -1693,11 +1693,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
+                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
                     newTab?: T;
-                    icon?: T;
                     iconPosition?: T;
                     variant?: T;
                   };
@@ -1749,11 +1749,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
+                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
                     newTab?: T;
-                    icon?: T;
                     iconPosition?: T;
                     variant?: T;
                   };
@@ -1792,11 +1792,11 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
+                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
                     newTab?: T;
-                    icon?: T;
                     iconPosition?: T;
                     variant?: T;
                   };
@@ -2132,13 +2132,6 @@ export interface HeaderNavigation {
     | {
         label: string;
         type: 'page' | 'post' | 'url';
-        page?: (number | null) | Page;
-        post?: (number | null) | Post;
-        /**
-         * Use a relative path, https, mailto, or tel URL.
-         */
-        url?: string | null;
-        newTab?: boolean | null;
         /**
          * Optional icon displayed with the link label.
          */
@@ -2159,6 +2152,13 @@ export interface HeaderNavigation {
               | 'twitter'
             )
           | null;
+        page?: (number | null) | Page;
+        post?: (number | null) | Post;
+        /**
+         * Use a relative path, https, mailto, or tel URL.
+         */
+        url?: string | null;
+        newTab?: boolean | null;
         /**
          * The label remains available to screen readers.
          */
@@ -2330,13 +2330,6 @@ export interface FooterNavigation {
     | {
         label: string;
         type: 'page' | 'post' | 'url';
-        page?: (number | null) | Page;
-        post?: (number | null) | Post;
-        /**
-         * Use a relative path, https, mailto, or tel URL.
-         */
-        url?: string | null;
-        newTab?: boolean | null;
         /**
          * Optional icon displayed with the link label.
          */
@@ -2357,6 +2350,13 @@ export interface FooterNavigation {
               | 'twitter'
             )
           | null;
+        page?: (number | null) | Page;
+        post?: (number | null) | Post;
+        /**
+         * Use a relative path, https, mailto, or tel URL.
+         */
+        url?: string | null;
+        newTab?: boolean | null;
         /**
          * The label remains available to screen readers.
          */
@@ -2467,11 +2467,11 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
     | {
         label?: T;
         type?: T;
+        icon?: T;
         page?: T;
         post?: T;
         url?: T;
         newTab?: T;
-        icon?: T;
         iconOnly?: T;
         id?: T;
       };
@@ -2570,11 +2570,11 @@ export interface FooterNavigationSelect<T extends boolean = true> {
     | {
         label?: T;
         type?: T;
+        icon?: T;
         page?: T;
         post?: T;
         url?: T;
         newTab?: T;
-        icon?: T;
         iconOnly?: T;
         id?: T;
       };

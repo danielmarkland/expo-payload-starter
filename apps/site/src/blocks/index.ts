@@ -3,6 +3,7 @@ import type { Block, Field } from 'payload'
 import {
   actionFields,
   destinationFields,
+  linkArrayPresentation,
   linkFields,
   submitButtonFields,
 } from '@/fields/linkFields'
@@ -244,6 +245,7 @@ export const FeatureGridBlock: Block = {
     {
       name: 'items',
       type: 'array',
+      ...linkArrayPresentation,
       minRows: 1,
       fields: [
         { name: 'title', type: 'text', required: true },

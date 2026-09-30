@@ -1,7 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { appearanceField } from '@/blocks'
-import { socialLinkFields, submitButtonFields } from '@/fields/linkFields'
+import { linkArrayPresentation, socialLinkFields, submitButtonFields } from '@/fields/linkFields'
 import { navigationItemsField } from './navigationFields'
 
 export const FooterNavigation: GlobalConfig = {
@@ -114,6 +114,7 @@ export const FooterNavigation: GlobalConfig = {
     {
       name: 'socialLinks',
       type: 'array',
+      ...linkArrayPresentation,
       fields: socialLinkFields(),
     },
     navigationItemsField({ includeIcons: true, label: 'Legal and utility links' }),
