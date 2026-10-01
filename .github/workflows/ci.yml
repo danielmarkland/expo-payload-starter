@@ -28,7 +28,7 @@ jobs:
           version: latest
       - run: pnpm install --frozen-lockfile
       - name: Build shared publishing packages
-        run: pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-core build
+        run: pnpm --filter @danielmarkland/contracts build && pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-core build
       - run: supabase start
       - run: pnpm --filter @starter/site payload migrate
       - run: pnpm format:check
@@ -45,6 +45,7 @@ jobs:
       - name: Check generated Supabase types
         run: |
           supabase gen types typescript --local --schema app > /tmp/database.generated.ts
+          pnpm exec prettier --write /tmp/database.generated.ts
           diff -u packages/data/src/database.ts /tmp/database.generated.ts
 
   e2e:
@@ -66,7 +67,7 @@ jobs:
           version: latest
       - run: pnpm install --frozen-lockfile
       - name: Build shared publishing packages
-        run: pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-core build
+        run: pnpm --filter @danielmarkland/contracts build && pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-core build
       - run: supabase start
       - run: pnpm --filter @starter/site payload migrate
       - run: pnpm --filter @starter/site exec playwright install --with-deps chromium
