@@ -28,7 +28,7 @@ jobs:
           version: latest
       - run: pnpm install --frozen-lockfile
       - name: Build shared publishing packages
-        run: pnpm --filter @danielmarkland/contracts build && pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-core build
+        run: pnpm --filter '@starter/site^...' build
       - run: supabase start
       - run: pnpm --filter @starter/site payload migrate
       - run: pnpm format:check
@@ -67,7 +67,7 @@ jobs:
           version: latest
       - run: pnpm install --frozen-lockfile
       - name: Build shared publishing packages
-        run: pnpm --filter @danielmarkland/contracts build && pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-core build
+        run: pnpm --filter '@starter/site^...' build
       - run: supabase start
       - run: pnpm --filter @starter/site payload migrate
       - run: pnpm --filter @starter/site exec playwright install --with-deps chromium
