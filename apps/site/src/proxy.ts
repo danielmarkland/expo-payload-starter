@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { getRedirectDocuments } from './lib/api/content'
-import { resolveRedirect } from './lib/redirects'
+import { resolveRedirect } from '@danielmarkland/publishing-core'
 import type { Redirect } from './payload-types'
 
 const redirectCacheTTL = 30_000

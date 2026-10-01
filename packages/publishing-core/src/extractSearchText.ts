@@ -8,12 +8,20 @@ function collectText(value: unknown, output: string[]) {
     return
   }
   if (!value || typeof value !== 'object') return
-
-  const record = value as Record<string, unknown>
-  for (const [key, child] of Object.entries(record)) {
-    if (['id', 'type', 'version', 'direction', 'format', 'slug', 'url', 'mimeType'].includes(key)) {
+  for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+    if (
+      [
+        'id',
+        'type',
+        'version',
+        'direction',
+        'format',
+        'slug',
+        'url',
+        'mimeType',
+      ].includes(key)
+    )
       continue
-    }
     collectText(child, output)
   }
 }
@@ -21,5 +29,7 @@ function collectText(value: unknown, output: string[]) {
 export function extractSearchText(value: unknown): string {
   const output: string[] = []
   collectText(value, output)
-  return [...new Set(output.map((part) => part.trim()).filter(Boolean))].join(' ')
+  return [...new Set(output.map((part) => part.trim()).filter(Boolean))].join(
+    ' ',
+  )
 }

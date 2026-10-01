@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import { getPayload } from 'payload'
 
 import config from '../../src/payload.config.js'
-import { createHeroHeadline } from '../../src/lib/heroHeadline.js'
+import { createHeroHeadline } from '@danielmarkland/publishing-core'
 
 test.describe('Frontend', () => {
   const slug = `e2e-page-${Date.now()}`

@@ -7,7 +7,7 @@ import { ContentLink } from '@/components/LinkAction'
 import { SiteBrand } from '@/components/SiteBrand'
 import { getHeaderNavigationIcon } from '@/lib/headerNavigationIcons'
 import { getNavigationHref, getSafeExternalHref } from '@/lib/navigation'
-import { sectionAppearanceClassName } from '@/lib/sectionAppearance'
+import { sectionAppearanceClassName } from '@danielmarkland/publishing-core'
 import { getNavigationDocuments, getPublishedPosts } from '@/lib/api/content'
 
 export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {

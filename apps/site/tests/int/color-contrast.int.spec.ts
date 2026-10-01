@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { themes } from '@danielmarkland/design-tokens'
-import { colorContrastRatio, validatePaletteColor } from '@/lib/colorContrast'
+import { colorContrastRatio, validatePaletteColor } from '@danielmarkland/publishing-core'
 
 describe('palette color contrast', () => {
   it('calculates WCAG contrast ratios', () => {

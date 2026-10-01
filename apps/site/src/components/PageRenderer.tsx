@@ -5,7 +5,7 @@ import { ContactForm } from '@/components/ContactForm'
 import { LatestPostsSection } from '@/components/LatestPostsSection'
 import { ActionLink, ContentLink } from '@/components/LinkAction'
 import { getNavigationHref } from '@/lib/navigation'
-import { sectionAppearanceClassName } from '@/lib/sectionAppearance'
+import { sectionAppearanceClassName } from '@danielmarkland/publishing-core'
 import type { Media, Page } from '@/payload-types'
 
 type PageBlock = Page['layout'][number]

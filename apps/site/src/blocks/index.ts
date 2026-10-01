@@ -1,4 +1,5 @@
 import type { Block, Field } from 'payload'
+import { heroHeadlineEditor, validateHeroHeadline } from '@danielmarkland/publishing-core'
 
 import {
   actionFields,
@@ -7,9 +8,7 @@ import {
   linkFields,
   submitButtonFields,
 } from '@/fields/linkFields'
-import { heroHeadlineEditor, validateHeroHeadline } from '@/lib/heroHeadline'
-
-export { buttonVariantOptions } from '@/lib/buttonVariants'
+export { buttonVariantOptions } from '@danielmarkland/publishing-core'
 
 function optionalActionField(): Field {
   return {

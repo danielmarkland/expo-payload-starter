@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { extractSearchText } from '@/lib/extractSearchText'
+import { extractSearchText, resolveRedirect } from '@danielmarkland/publishing-core'
 import { getNavigationHref, getSafeExternalHref } from '@/lib/navigation'
 import { extractPostHeadings } from '@/lib/postHeadings'
 import {
   getHeaderNavigationPresentation,
   getSearchNavigationPresentation,
 } from '@/lib/headerNavigationIcons'
-import { resolveRedirect } from '@/lib/redirects'
 import type { Redirect } from '@/payload-types'
 
 describe('CMS helpers', () => {

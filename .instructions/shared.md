@@ -18,6 +18,7 @@ to become a plugin framework.
 - `packages/auth/` — provider-neutral identity and authorization interfaces.
 - `packages/data/` — typed Supabase repositories and generated database types.
 - `packages/design-tokens/` — shared brand metadata, visual tokens, and assets, published as `@danielmarkland/design-tokens`.
+- `packages/publishing-core/` — reusable tenant publishing behavior shared by the standalone site and GroovePost, published as `@danielmarkland/publishing-core`.
 - `packages/config/` — shared tooling configuration and boundary checks.
 - `supabase/` — product database migrations, RLS policies, seeds, and functions.
 
@@ -47,9 +48,9 @@ references; this file captures the agent-facing guardrails.
   Payload migrations own Payload tables in `public`. Never alter the other
   system's tables with the wrong migration tool, and avoid cross-owner foreign
   keys. See `docs/database-ownership.md` for details.
-- Keep Next.js and Expo presentation components platform-specific. Share
-  contracts and design values, not UI components that erase platform
-  accessibility or rendering differences.
+- Keep Expo presentation platform-specific. The Next.js tenant site and
+  GroovePost may share publishing behavior and web presentation through
+  explicitly published packages.
 - Packages do not import from `apps/`; `core` remains framework- and provider-
   independent. Keep adapters in the applications.
 

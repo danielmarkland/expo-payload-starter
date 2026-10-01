@@ -21,7 +21,7 @@ import { Tags } from './collections/Tags'
 import { FooterNavigation } from './globals/FooterNavigation'
 import { HeaderNavigation } from './globals/HeaderNavigation'
 import { SiteSettings } from './globals/SiteSettings'
-import { extractSearchText } from './lib/extractSearchText'
+import { extractSearchText } from '@danielmarkland/publishing-core'
 import { getContactEmailConfig, getSiteURL, getStorageConfig } from './lib/serverConfig'
 
 const filename = fileURLToPath(import.meta.url)

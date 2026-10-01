@@ -9,6 +9,11 @@ const allowedDependencies = {
     '@danielmarkland/contracts',
     '@supabase/supabase-js',
   ]),
+  '@danielmarkland/publishing-core': new Set([
+    '@danielmarkland/design-tokens',
+    '@payloadcms/richtext-lexical',
+    'payload',
+  ]),
 }
 
 const packageDirectories = {
@@ -16,6 +21,7 @@ const packageDirectories = {
   auth: '@starter/auth',
   core: '@starter/core',
   data: '@starter/data',
+  'publishing-core': '@danielmarkland/publishing-core',
 }
 const importPattern = /(?:from\s+|import\s*\()['"]([^'"./][^'"]*)['"]/g
 const errors = []

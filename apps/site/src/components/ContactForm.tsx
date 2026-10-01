@@ -2,7 +2,7 @@
 
 import { type FormEvent, useState } from 'react'
 
-import { buttonClassName, type ButtonVariant } from '@/lib/buttonVariants'
+import { buttonClassName, type ButtonVariant } from '@danielmarkland/publishing-core'
 import { LinkLabel } from '@/components/LinkAction'
 import { useSiteConfig } from '@/components/SiteConfigProvider'
 import { TurnstileField } from '@/components/TurnstileField'

@@ -1,4 +1,4 @@
-type SectionAppearance = {
+export type SectionAppearance = {
   background?: null | string
   borderBottom?: null | string
   borderLeft?: null | string
@@ -23,7 +23,6 @@ export function sectionAppearanceClassName(
 ) {
   const classes = [...baseClasses]
   if (!appearance) return classes.join(' ')
-
   const values = [
     ['padding-top', appearance.paddingTop],
     ['padding-right', appearance.paddingRight],
@@ -41,7 +40,8 @@ export function sectionAppearanceClassName(
     ['border-left', appearance.borderLeft],
     ['border-width', appearance.borderWidth],
   ]
-  for (const [prefix, value] of values) if (value) classes.push(`${prefix}-${value}`)
+  for (const [prefix, value] of values)
+    if (value) classes.push(`${prefix}-${value}`)
   if (appearance.rounded) classes.push('page-block-rounded')
   return classes.join(' ')
 }

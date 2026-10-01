@@ -30,14 +30,14 @@ workflows. Expo owns the authenticated web, iOS, and Android experience.
 
 ## Shared code
 
-Share contracts and design values. Do not force the Next.js
-site and Expo app to share presentation components: they have different
-rendering, accessibility, and deployment constraints.
+The standalone Next.js site is the reference tenant implementation. Reusable
+publishing behavior is published for GroovePost; Expo presentation remains
+separate because it has different rendering and accessibility constraints.
 
 ## Package boundaries
 
-The workspace remains a starter rather than a plugin framework. The stable
-contracts and design-token packages are also published privately for approved
+The workspace remains a usable standalone starter. Stable contracts, design
+tokens, and tenant publishing behavior are published privately for approved
 downstream products; all other packages stay workspace-private.
 
 ```text
@@ -50,6 +50,8 @@ apps -> api-client/auth/data -> core/contracts
 - `auth` owns product identity and authorization interfaces, not provider SDKs.
 - `data` owns typed Supabase repositories and generated database types.
 - `design-tokens` owns framework-neutral visual values.
+- `publishing-core` owns reusable Payload and tenant-site behavior without
+  multi-tenant, Supabase, Vercel, or billing assumptions.
 - `config` owns shared tool configuration and dependency checks.
 
 Expo and Payload adapters stay in their applications. Packages never import

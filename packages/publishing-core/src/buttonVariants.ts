@@ -7,7 +7,10 @@ export const buttonVariantValues = [
 
 export type ButtonVariant = (typeof buttonVariantValues)[number]
 
-export const buttonVariantOptions: Array<{ label: string; value: ButtonVariant }> = [
+export const buttonVariantOptions: Array<{
+  label: string
+  value: ButtonVariant
+}> = [
   { label: 'Primary Filled', value: 'primary-filled' },
   { label: 'Primary Outline', value: 'primary-outline' },
   { label: 'Secondary Filled', value: 'secondary-filled' },

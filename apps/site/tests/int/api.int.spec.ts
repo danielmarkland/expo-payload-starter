@@ -1,6 +1,6 @@
 import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
-import { createHeroHeadline } from '@/lib/heroHeadline'
+import { createHeroHeadline } from '@danielmarkland/publishing-core'
 
 import { describe, it, beforeAll, expect } from 'vitest'
 

@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { pageBlocks } from '@/blocks'
 import { PageRenderer } from '@/components/PageRenderer'
-import { createHeroHeadline } from '@/lib/heroHeadline'
+import { createHeroHeadline } from '@danielmarkland/publishing-core'
 import type { Media, Page } from '@/payload-types'
 
 vi.mock('@/components/LatestPostsSection', () => ({

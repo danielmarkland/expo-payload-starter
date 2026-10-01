@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { createHeroHeadline, validateHeroHeadline } from '@/lib/heroHeadline'
+import { createHeroHeadline, validateHeroHeadline } from '@danielmarkland/publishing-core'
 
 describe('hero headline helpers', () => {
   it('marks only configured phrases with the accent text state', () => {
