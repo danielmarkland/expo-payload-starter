@@ -45,7 +45,7 @@ jobs:
       - name: Check generated Supabase types
         run: |
           supabase gen types typescript --local --schema app > /tmp/database.generated.ts
-          pnpm exec prettier --write /tmp/database.generated.ts
+          pnpm exec prettier --config .prettierrc.json --write /tmp/database.generated.ts
           diff -u packages/data/src/database.ts /tmp/database.generated.ts
 
   e2e:
