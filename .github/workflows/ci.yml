@@ -30,7 +30,7 @@ jobs:
       - name: Build shared publishing packages
         run: pnpm --filter '@starter/site^...' build
       - run: supabase start
-      - run: pnpm --filter @starter/site payload migrate
+      - run: pnpm payload:migrate
       - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm typecheck
@@ -69,6 +69,6 @@ jobs:
       - name: Build shared publishing packages
         run: pnpm --filter '@starter/site^...' build
       - run: supabase start
-      - run: pnpm --filter @starter/site payload migrate
+      - run: pnpm payload:migrate
       - run: pnpm --filter @starter/site exec playwright install --with-deps chromium
       - run: pnpm --filter @starter/site test:e2e
