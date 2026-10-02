@@ -3,7 +3,7 @@ import { createElement, type ReactNode } from 'react'
 
 import { getLinkIcon } from '@/lib/headerNavigationIcons'
 import { getNavigationHref, type LinkData } from '@/lib/navigation'
-import { buttonClassName, type ButtonVariant } from '@danielmarkland/publishing-core'
+import { buttonClassName, type ButtonVariant } from '@danielmarkland/publishing-core/buttonVariants'
 
 export interface LinkPresentation extends LinkData {
   icon?: null | string

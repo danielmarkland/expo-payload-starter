@@ -1,6 +1,9 @@
 import type { ArrayField, Field } from 'payload'
 
-import { buttonVariantOptions, type ButtonVariant } from '@danielmarkland/publishing-core'
+import {
+  buttonVariantOptions,
+  type ButtonVariant,
+} from '@danielmarkland/publishing-core/buttonVariants'
 import { linkIconOptions, socialIconOptions } from '@/lib/linkIcons'
 
 export { linkIconOptions, socialIconOptions }
