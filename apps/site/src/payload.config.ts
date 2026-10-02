@@ -26,6 +26,9 @@ import { getContactEmailConfig, getSiteURL, getStorageConfig } from './lib/serve
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const migrationDir = process.cwd().endsWith(path.join('apps', 'site'))
+  ? path.resolve(process.cwd(), 'src/migrations')
+  : path.resolve(process.cwd(), 'apps/site/src/migrations')
 const siteURL = getSiteURL()
 const email = getContactEmailConfig()
 const storage = getStorageConfig()
@@ -97,7 +100,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
-    migrationDir: path.resolve(process.cwd(), 'src/migrations'),
+    migrationDir,
     push: false,
     pool: {
       connectionString: process.env.DATABASE_URL || '',
