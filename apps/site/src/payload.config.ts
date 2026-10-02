@@ -26,9 +26,7 @@ import { getContactEmailConfig, getSiteURL, getStorageConfig } from './lib/serve
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-const migrationDir = process.cwd().endsWith(path.join('apps', 'site'))
-  ? path.resolve(process.cwd(), 'src/migrations')
-  : path.resolve(process.cwd(), 'apps/site/src/migrations')
+const migrationDir = path.resolve(dirname, 'migrations')
 const siteURL = getSiteURL()
 const email = getContactEmailConfig()
 const storage = getStorageConfig()
