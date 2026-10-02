@@ -4,4 +4,4 @@
 
 ### Minor Changes
 
-- 34e7515: Publish the shared platform contracts and design primitives for private downstream use.
+- 34e7515: Publish the shared contracts and design primitives.

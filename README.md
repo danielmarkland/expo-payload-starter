@@ -13,7 +13,7 @@ authenticated application.
 - `packages/auth` — provider-neutral identity and authorization interfaces.
 - `packages/data` — typed Supabase repositories and generated database types.
 - `packages/design-tokens` — framework-neutral design tokens.
-- `packages/publishing-core` — reusable tenant publishing behavior consumed by the standalone site and GroovePost.
+- `packages/publishing-core` — reusable publishing behavior for Payload-backed sites.
 - `packages/config` — shared TypeScript settings and boundary enforcement.
 - `supabase` — product database migrations, RLS policies, and seeds.
 
