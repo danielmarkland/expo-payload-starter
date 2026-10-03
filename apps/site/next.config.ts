@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
+// Payload form providers and shared controls must use one React context instance.
+const payloadUI = path.resolve(dirname, 'node_modules/@payloadcms/ui')
 
 const nextConfig: NextConfig = {
   output: process.env.VERCEL ? undefined : 'standalone',
@@ -16,6 +18,10 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack: (webpackConfig) => {
+    webpackConfig.resolve.alias = {
+      ...webpackConfig.resolve.alias,
+      '@payloadcms/ui': payloadUI,
+    }
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
@@ -26,6 +32,10 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     root: path.resolve(dirname, '../..'),
+    resolveAlias: {
+      '@payloadcms/ui': './node_modules/@payloadcms/ui',
+      '@payloadcms/ui/*': './node_modules/@payloadcms/ui/*',
+    },
   },
 }
 
