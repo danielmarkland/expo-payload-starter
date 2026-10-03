@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation'
 
 import { PostList } from '@/components/PostList'
 import { getPublishedPosts, getTaxonomyDocument } from '@/lib/api/content'
-import type { Author } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,7 +12,7 @@ interface Props {
 }
 
 async function getAuthor(slug: string) {
-  return (await getTaxonomyDocument('authors', slug)) as Author | null
+  return getTaxonomyDocument('authors', slug)
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

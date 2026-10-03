@@ -1,11 +1,9 @@
 import type { JSXConvertersFunction } from '@payloadcms/richtext-lexical/react'
 
-type LexicalNode = {
-  children?: LexicalNode[]
-  tag?: string
-  text?: string
-  type?: string
-}
+import type {
+  ApiRichText,
+  ApiRichTextNode as LexicalNode,
+} from '@danielmarkland/publishing-contracts'
 
 export type PostHeading = {
   id: string
@@ -31,8 +29,8 @@ function headingID(text: string, occurrences: Map<string, number>): string {
   return occurrence === 1 ? base : `${base}-${occurrence}`
 }
 
-export function extractPostHeadings(data: unknown): PostHeading[] {
-  const root = (data as { root?: LexicalNode } | null)?.root
+export function extractPostHeadings(data: ApiRichText): PostHeading[] {
+  const root = data.root
   const occurrences = new Map<string, number>()
   const headings: PostHeading[] = []
 
@@ -58,7 +56,7 @@ export function postHeadingConverters(): JSXConvertersFunction {
     heading: ({ node, nodesToJSX }) => {
       const tag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(node.tag) ? node.tag : 'h2'
       const Tag = tag as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-      const text = nodeText(node as LexicalNode).trim()
+      const text = nodeText(node).trim()
       const id = (tag === 'h2' || tag === 'h3') && text ? headingID(text, occurrences) : undefined
       return <Tag id={id}>{nodesToJSX({ nodes: node.children })}</Tag>
     },

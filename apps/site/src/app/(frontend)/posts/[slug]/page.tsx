@@ -2,32 +2,18 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import { postSchema } from '@danielmarkland/publishing-contracts'
-import { internalApiRequest } from '@/lib/api/internal'
+import { getPost } from '@/lib/getPost'
 import { getSitePresentation } from '@/lib/getSiteSettings'
-import { getPreviewSecret } from '@/lib/serverConfig'
 import { extractPostHeadings, postHeadingConverters } from '@/lib/postHeadings'
-import type { Post } from '@/payload-types'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
-async function findPost(slug: string) {
-  const { isEnabled } = await draftMode()
-  const response = await internalApiRequest(`/posts/${encodeURIComponent(slug)}`, {
-    headers: isEnabled ? { 'x-preview-secret': getPreviewSecret() } : undefined,
-  })
-  if (response.status === 404) return null
-  if (!response.ok) throw new Error(`Post API request failed (${response.status}).`)
-  return postSchema.parse(await response.json()) as unknown as Post
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await findPost((await params).slug)
+  const post = await getPost((await params).slug)
   if (!post) return {}
   const { metadata } = await getSitePresentation()
   const image = post.meta?.image && typeof post.meta.image === 'object' ? post.meta.image.url : null
@@ -39,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PostPage({ params }: Props) {
-  const post = await findPost((await params).slug)
+  const post = await getPost((await params).slug)
   if (!post) notFound()
   const image = post.meta?.image && typeof post.meta.image === 'object' ? post.meta.image : null
   const headings = post.showTableOfContents ? extractPostHeadings(post.body) : []

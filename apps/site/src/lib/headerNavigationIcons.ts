@@ -1,4 +1,4 @@
-import type { HeaderNavigation } from '@/payload-types'
+import type { ApiHeaderNavigation as HeaderNavigation } from '@danielmarkland/publishing-contracts'
 import { getLinkIcon } from '@/lib/linkIcons'
 
 export { getLinkIcon }

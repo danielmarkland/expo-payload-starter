@@ -1,5 +1,7 @@
 import {
   authorSchema,
+  type ApiAuthor,
+  type ApiTaxonomy,
   navigationSchema,
   paginatedPostsSchema,
   redirectsSchema,
@@ -8,22 +10,13 @@ import {
   taxonomySchema,
 } from '@danielmarkland/publishing-contracts'
 import { internalApiRequest } from '@/lib/api/internal'
-import type {
-  Author,
-  Category,
-  FooterNavigation,
-  HeaderNavigation,
-  Redirect,
-  Tag,
-} from '@/payload-types'
-
 export async function getNavigationDocuments() {
   const response = await internalApiRequest('/navigation')
   if (!response.ok) throw new Error(`Navigation API request failed (${response.status}).`)
   const navigation = navigationSchema.parse(await response.json())
   return {
-    footer: navigation.footer as unknown as FooterNavigation,
-    header: navigation.header as unknown as HeaderNavigation,
+    footer: navigation.footer,
+    header: navigation.header,
   }
 }
 
@@ -34,6 +27,15 @@ export async function getPublishedPosts(query = '') {
   return result
 }
 
+export function getTaxonomyDocument(collection: 'authors', slug: string): Promise<ApiAuthor | null>
+export function getTaxonomyDocument(
+  collection: 'categories' | 'tags',
+  slug: string,
+): Promise<ApiTaxonomy | null>
+export function getTaxonomyDocument(
+  collection: 'authors' | 'categories' | 'tags',
+  slug: string,
+): Promise<ApiAuthor | ApiTaxonomy | null>
 export async function getTaxonomyDocument(
   collection: 'authors' | 'categories' | 'tags',
   slug: string,
@@ -45,7 +47,7 @@ export async function getTaxonomyDocument(
     collection === 'authors'
       ? authorSchema.parse(await response.json())
       : taxonomySchema.parse(await response.json())
-  return value as unknown as Author | Category | Tag
+  return value
 }
 
 export async function getSearchResults(query: string) {
@@ -63,5 +65,5 @@ export async function getSitemapDocuments() {
 export async function getRedirectDocuments() {
   const response = await internalApiRequest('/redirects')
   if (!response.ok) throw new Error(`Redirect API request failed (${response.status}).`)
-  return redirectsSchema.parse(await response.json()).redirects as unknown as Redirect[]
+  return redirectsSchema.parse(await response.json()).redirects
 }

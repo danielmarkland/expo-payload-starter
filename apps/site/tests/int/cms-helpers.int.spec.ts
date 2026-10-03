@@ -110,11 +110,36 @@ describe('CMS helpers', () => {
     expect(
       extractPostHeadings({
         root: {
+          type: 'root',
+          version: 1,
+          direction: null,
+          format: '',
+          indent: 0,
           children: [
-            { children: [{ text: 'Introduction', type: 'text' }], tag: 'h2', type: 'heading' },
-            { children: [{ text: 'Details', type: 'text' }], tag: 'h3', type: 'heading' },
-            { children: [{ text: 'Introduction', type: 'text' }], tag: 'h2', type: 'heading' },
-            { children: [{ text: 'Ignored', type: 'text' }], tag: 'h4', type: 'heading' },
+            {
+              children: [{ text: 'Introduction', type: 'text', version: 1 }],
+              tag: 'h2',
+              type: 'heading',
+              version: 1,
+            },
+            {
+              children: [{ text: 'Details', type: 'text', version: 1 }],
+              tag: 'h3',
+              type: 'heading',
+              version: 1,
+            },
+            {
+              children: [{ text: 'Introduction', type: 'text', version: 1 }],
+              tag: 'h2',
+              type: 'heading',
+              version: 1,
+            },
+            {
+              children: [{ text: 'Ignored', type: 'text', version: 1 }],
+              tag: 'h4',
+              type: 'heading',
+              version: 1,
+            },
           ],
         },
       }),

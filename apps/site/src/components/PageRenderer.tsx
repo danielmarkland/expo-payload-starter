@@ -6,9 +6,12 @@ import { LatestPostsSection } from '@/components/LatestPostsSection'
 import { ActionLink, ContentLink } from '@/components/LinkAction'
 import { getNavigationHref } from '@/lib/navigation'
 import { sectionAppearanceClassName } from '@danielmarkland/publishing-core/sectionAppearance'
-import type { Media, Page } from '@/payload-types'
+import type {
+  ApiMedia as Media,
+  ApiPage as Page,
+  ApiPageBlock as PageBlock,
+} from '@danielmarkland/publishing-contracts'
 
-type PageBlock = Page['layout'][number]
 type HeroBlock = Extract<PageBlock, { blockType: 'hero' }>
 
 function blockClassName(block: PageBlock): string {
@@ -18,7 +21,7 @@ function blockClassName(block: PageBlock): string {
   )
 }
 
-function resolveMedia(media: number | Media | null | undefined): Media | null {
+function resolveMedia(media: number | string | Media | null | undefined): Media | null {
   return media && typeof media === 'object' ? media : null
 }
 
@@ -55,7 +58,11 @@ function HeroHeadline({ data, primary }: { data: HeroBlock['heading']; primary: 
     ),
     text: ({ node }) => {
       const content = node.text
-      const tone = (node as typeof node & { $?: { tone?: unknown } }).$?.tone
+      const properties = node.$
+      const tone =
+        properties && typeof properties === 'object' && 'tone' in properties
+          ? properties.tone
+          : undefined
       return tone === 'accent' ? <span className="hero-heading-accent">{content}</span> : content
     },
   })

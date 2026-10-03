@@ -846,3 +846,12 @@ removing its contract and rule from `contracts` and `core`, its repository from
 - Selective Payload content and media promotion between hosted environments.
 - A generic, source-configurable WordPress content importer. This will not
   restore the removed site-specific homepage importer.
+
+### Shared content API contracts
+
+Public content consumers parse responses with `publishing-contracts` and use its
+schema-inferred `ApiPage`, `ApiPageBlock`, `ApiPost`, navigation, link, author,
+taxonomy, and redirect types. Payload-generated types remain within CMS adapters.
+Contracts validate all 14 page blocks and Lexical trees, preserve additive fields,
+and accept string or numeric relationship IDs as well as populated documents.
+Draft preview requests use the same contracts and retain the preview secret boundary.

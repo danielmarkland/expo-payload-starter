@@ -26,7 +26,20 @@ describe('post-card contract', () => {
       }).success,
     ).toBe(false)
     expect(
-      postSchema.parse({ ...card, body: {}, customField: 'extra' }).customField,
+      postSchema.parse({
+        ...card,
+        body: {
+          root: {
+            type: 'root',
+            version: 1,
+            children: [],
+            direction: null,
+            format: '',
+            indent: 0,
+          },
+        },
+        customField: 'extra',
+      }).customField,
     ).toBe('extra')
   })
 })

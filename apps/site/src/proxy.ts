@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 import { getRedirectDocuments } from './lib/api/content'
 import { resolveRedirect } from '@danielmarkland/publishing-core/redirects'
-import type { Redirect } from './payload-types'
+import type { ApiRedirect as Redirect } from '@danielmarkland/publishing-contracts'
 
 const redirectCacheTTL = 30_000
 let redirectCache: { expiresAt: number; docs: Redirect[] } | null = null

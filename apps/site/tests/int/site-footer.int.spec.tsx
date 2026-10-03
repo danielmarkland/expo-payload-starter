@@ -47,6 +47,7 @@ afterEach(() => {
 describe('SiteFooter', () => {
   it('renders configured sections and the newest published posts semantically', async () => {
     payload.findGlobal.mockResolvedValue({
+      showSearch: true,
       copyrightOwner: 'Example, LLC',
       items: [
         {
@@ -82,7 +83,16 @@ describe('SiteFooter', () => {
       totalPages: 1,
       docs: [
         {
-          body: {},
+          body: {
+            root: {
+              type: 'root',
+              version: 1,
+              children: [],
+              direction: null,
+              format: '',
+              indent: 0,
+            },
+          },
           id: 2,
           publishedAt: '2026-06-30T12:00:00.000Z',
           slug: 'risk',
@@ -90,7 +100,16 @@ describe('SiteFooter', () => {
           title: 'What Risk Means',
         },
         {
-          body: {},
+          body: {
+            root: {
+              type: 'root',
+              version: 1,
+              children: [],
+              direction: null,
+              format: '',
+              indent: 0,
+            },
+          },
           id: 1,
           publishedAt: '2026-06-16T12:00:00.000Z',
           slug: 'backtesting',
@@ -124,6 +143,7 @@ describe('SiteFooter', () => {
 
   it('uses site fallbacks and omits empty optional sections', async () => {
     payload.findGlobal.mockResolvedValue({
+      showSearch: true,
       items: [],
       latestPosts: { show: false },
       socialLinks: [],
@@ -150,6 +170,7 @@ describe('SiteFooter', () => {
 
   it('renders enabled global newsletter and contact sections in fixed order', async () => {
     payload.findGlobal.mockResolvedValue({
+      showSearch: true,
       contactForm: {
         heading: 'Start a conversation',
         show: true,

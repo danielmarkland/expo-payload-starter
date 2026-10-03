@@ -5,13 +5,7 @@ import { getLinkIcon } from '@/lib/headerNavigationIcons'
 import { getNavigationHref, type LinkData } from '@/lib/navigation'
 import { buttonClassName, type ButtonVariant } from '@danielmarkland/publishing-core/buttonVariants'
 
-export interface LinkPresentation extends LinkData {
-  icon?: null | string
-  iconOnly?: boolean | null
-  iconPosition?: 'left' | 'right' | null
-  label?: null | string
-  variant?: null | string
-}
+export type LinkPresentation = LinkData
 
 export function LinkLabel({
   icon,

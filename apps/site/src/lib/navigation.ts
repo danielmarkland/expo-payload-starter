@@ -1,15 +1,6 @@
-interface LinkDocument {
-  _status?: null | string
-  slug?: null | string
-}
+import type { ApiLink } from '@danielmarkland/publishing-contracts'
 
-export interface LinkData {
-  newTab?: boolean | null
-  page?: LinkDocument | number | null
-  post?: LinkDocument | number | null
-  type?: 'page' | 'post' | 'url' | null
-  url?: null | string
-}
+export type LinkData = ApiLink
 
 export function getSafeExternalHref(value?: null | string): string | null {
   if (!value) return null

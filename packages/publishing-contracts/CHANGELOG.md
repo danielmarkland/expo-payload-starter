@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-contracts
 
+## 0.3.0
+
+### Minor Changes
+
+- Validate all shared page blocks, Lexical rich text, links, navigation, post details, author and taxonomy relationships, and redirect destinations. Export schema-inferred consumer types while preserving optional and additive fields and populated or unresolved relationships.
+
 ## 0.2.0
 
 ### Minor Changes

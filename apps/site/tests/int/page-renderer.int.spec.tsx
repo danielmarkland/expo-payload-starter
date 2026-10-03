@@ -4,7 +4,11 @@ import { describe, expect, it, vi } from 'vitest'
 import { pageBlocks } from '@/blocks'
 import { PageRenderer } from '@/components/PageRenderer'
 import { createHeroHeadline } from '@danielmarkland/publishing-core'
-import type { Media, Page } from '@/payload-types'
+import {
+  pageSchema,
+  type ApiPage as Page,
+  type ApiMedia as Media,
+} from '@danielmarkland/publishing-contracts'
 
 vi.mock('@/components/LatestPostsSection', () => ({
   LatestPostsSection: ({
@@ -51,7 +55,7 @@ function renderPage(layout: Page['layout'], customCSS?: string) {
     updatedAt: '2026-01-01T00:00:00.000Z',
   }
 
-  return renderToStaticMarkup(<PageRenderer page={page} />)
+  return renderToStaticMarkup(<PageRenderer page={pageSchema.parse(page)} />)
 }
 
 function sectionMeta(name: string) {

@@ -1,5 +1,6 @@
 import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
+import { pageSchema, postSchema, paginatedPostsSchema } from '@danielmarkland/publishing-contracts'
 import { createHeroHeadline } from '@danielmarkland/publishing-core'
 
 import { describe, it, beforeAll, expect } from 'vitest'
@@ -47,6 +48,7 @@ describe('API', () => {
         where: { slug: { equals: slug } },
       })
       expect(previewDraft.docs).toHaveLength(1)
+      expect(pageSchema.parse(previewDraft.docs[0])._status).toBe('draft')
 
       await payload.update({
         collection: 'pages',
@@ -62,6 +64,7 @@ describe('API', () => {
         where: { slug: { equals: slug } },
       })
       expect(publishedPage.docs).toHaveLength(1)
+      expect(pageSchema.parse(publishedPage.docs[0])._status).toBe('published')
     } finally {
       await payload.delete({ collection: 'pages', id: created.id, overrideAccess: true })
     }
@@ -121,6 +124,11 @@ describe('API', () => {
         overrideAccess: true,
       })
       postId = post.id
+      expect(postSchema.parse(post).slug).toBe(post.slug)
+      for (const depth of [0, 2]) {
+        const value = await payload.findByID({ collection: 'posts', id: post.id, depth })
+        expect(postSchema.parse(value).categories).toHaveLength(1)
+      }
 
       const categorizedPosts = await payload.find({
         collection: 'posts',
@@ -133,7 +141,9 @@ describe('API', () => {
           ],
         },
       })
-      expect(categorizedPosts.docs.map(({ id }) => id)).toContain(post.id)
+      expect(paginatedPostsSchema.parse(categorizedPosts).docs.map(({ id }) => id)).toContain(
+        post.id,
+      )
 
       const searchResults = await payload.find({
         collection: 'search',

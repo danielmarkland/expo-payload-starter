@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 
 import { PostList } from '@/components/PostList'
 import { getPublishedPosts, getTaxonomyDocument } from '@/lib/api/content'
-import type { Tag } from '@/payload-types'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,7 +11,7 @@ interface Props {
 }
 
 async function getTag(slug: string) {
-  return (await getTaxonomyDocument('tags', slug)) as Tag | null
+  return getTaxonomyDocument('tags', slug)
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
