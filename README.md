@@ -19,6 +19,12 @@ authenticated application.
 - `packages/config` — shared TypeScript settings and boundary enforcement.
 - `supabase` — product database migrations, RLS policies, and seeds.
 
+Reusable Payload link fields and page blocks are owned by `publishing-core` through
+`createPublishingFields` and `createPublishingBlocks`. The site supplies its icon
+options and Payload admin component references; access rules and migrations remain
+application-owned. Import these factories from the `payloadFields` and
+`payloadBlocks` package subpaths.
+
 ## Requirements
 
 - Node.js 22+

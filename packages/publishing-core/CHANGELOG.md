@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.3.0
+
+### Minor Changes
+
+- Expose configurable Payload publishing field and block factories. Applications supply icon choices and admin component references; schema definitions remain shared.
+
 ## 0.2.1
 
 ### Patch Changes

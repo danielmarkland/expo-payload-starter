@@ -33,6 +33,7 @@ jobs:
       - run: pnpm --filter @danielmarkland/contracts test
       - run: pnpm --filter @danielmarkland/design-tokens test
       - run: pnpm --filter @danielmarkland/publishing-contracts test
+      - run: pnpm --filter @danielmarkland/publishing-core test
       - uses: changesets/action@v1
         with:
           publish: pnpm release
