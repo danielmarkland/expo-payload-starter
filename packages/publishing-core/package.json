@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -49,6 +49,26 @@
     "./payloadNavigation": {
       "types": "./dist/payloadNavigation.d.ts",
       "default": "./dist/payloadNavigation.js"
+    },
+    "./navigation": {
+      "types": "./dist/navigation.d.ts",
+      "default": "./dist/navigation.js"
+    },
+    "./postHeadings": {
+      "types": "./dist/postHeadings.d.ts",
+      "default": "./dist/postHeadings.js"
+    },
+    "./payloadSiteSettings": {
+      "types": "./dist/payloadSiteSettings.d.ts",
+      "default": "./dist/payloadSiteSettings.js"
+    },
+    "./payloadPages": {
+      "types": "./dist/payloadPages.d.ts",
+      "default": "./dist/payloadPages.js"
+    },
+    "./payloadSEO": {
+      "types": "./dist/payloadSEO.d.ts",
+      "default": "./dist/payloadSEO.js"
     }
   },
   "files": [
@@ -72,7 +92,8 @@
     "prepack": "pnpm build"
   },
   "dependencies": {
-    "@danielmarkland/design-tokens": "workspace:*"
+    "@danielmarkland/design-tokens": "workspace:*",
+    "@danielmarkland/publishing-contracts": "workspace:*"
   },
   "peerDependencies": {
     "@payloadcms/richtext-lexical": "3.90.2",
@@ -83,5 +104,13 @@
     "payload": "3.90.2",
     "typescript": "^5.9.2",
     "vitest": "^4.0.18"
+  },
+  "peerDependenciesMeta": {
+    "@payloadcms/richtext-lexical": {
+      "optional": true
+    },
+    "payload": {
+      "optional": true
+    }
   }
 }

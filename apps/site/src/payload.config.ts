@@ -1,3 +1,4 @@
+import { moveSEOFieldsIntoTabs } from '@danielmarkland/publishing-core/payloadSEO'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { resendAdapter } from '@payloadcms/email-resend'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
@@ -6,7 +7,7 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
-import { buildConfig, type Plugin } from 'payload'
+import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
@@ -30,56 +31,6 @@ const migrationDir = path.resolve(dirname, 'migrations')
 const siteURL = getSiteURL()
 const email = getContactEmailConfig()
 const storage = getStorageConfig()
-
-const moveSEOFieldsIntoTabs: Plugin = (config) => ({
-  ...config,
-  collections: config.collections?.map((collection) => {
-    if (collection.slug !== Pages.slug) return collection
-
-    const seoField = collection.fields.find((field) => 'name' in field && field.name === 'meta')
-    const tabsField = collection.fields.find((field) => field.type === 'tabs')
-    if (!seoField || !tabsField || tabsField.type !== 'tabs') return collection
-
-    return {
-      ...collection,
-      fields: collection.fields
-        .filter((field) => field !== seoField)
-        .map((field) =>
-          field === tabsField
-            ? {
-                ...tabsField,
-                tabs: tabsField.tabs.map((tab) =>
-                  tab.label === 'SEO' ? { ...tab, fields: [...tab.fields, seoField] } : tab,
-                ),
-              }
-            : field,
-        ),
-    }
-  }),
-  globals: config.globals?.map((global) => {
-    if (global.slug !== SiteSettings.slug) return global
-
-    const seoField = global.fields.find((field) => 'name' in field && field.name === 'meta')
-    const tabsField = global.fields.find((field) => field.type === 'tabs')
-    if (!seoField || !tabsField || tabsField.type !== 'tabs') return global
-
-    return {
-      ...global,
-      fields: global.fields
-        .filter((field) => field !== seoField)
-        .map((field) =>
-          field === tabsField
-            ? {
-                ...tabsField,
-                tabs: tabsField.tabs.map((tab) =>
-                  tab.label === 'SEO' ? { ...tab, fields: [...tab.fields, seoField] } : tab,
-                ),
-              }
-            : field,
-        ),
-    }
-  }),
-})
 
 export default buildConfig({
   admin: {
@@ -147,7 +98,7 @@ export default buildConfig({
         return collectionSlug === 'posts' ? `${siteURL}/posts/${slug}` : `${siteURL}/${slug}`
       },
     }),
-    moveSEOFieldsIntoTabs,
+    moveSEOFieldsIntoTabs([Pages.slug, SiteSettings.slug]),
     redirectsPlugin({
       collections: ['pages', 'posts'],
       redirectTypes: ['301', '302'],

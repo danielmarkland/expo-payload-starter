@@ -7,11 +7,17 @@ const publicFiles = [
   'SiteBrand',
   'SiteHeader',
   'GoogleTagManager',
+  'PageRenderer',
+  'LinkAction',
+  'SiteFooter',
+  'postHeadings',
 ]
 const clientFiles = [
   'ThemeToggle',
   'SiteConfigProvider',
   'TurnstileField',
+  'ContactForm',
+  'NewsletterForm',
   'admin/index',
   'admin/ColorPickerField',
   'admin/IconPickerField',

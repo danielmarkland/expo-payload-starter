@@ -5,6 +5,7 @@ export { linkIconOptions, socialIconOptions }
 export { validateSafeURL, validateExternalURL } from '@danielmarkland/publishing-core/payloadFields'
 
 export const {
+  navigationItemsField,
   actionFields,
   destinationFields,
   iconFields,

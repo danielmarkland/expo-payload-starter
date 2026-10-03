@@ -68,3 +68,11 @@ own collection/global configuration, access, slug indexes, and preview routing.
 The boundary check parses imports, re-exports, dynamic imports and require calls,
 rejects relative imports outside packages and application aliases, and verifies
 runtime dependency declarations separately from test dependencies.
+
+Page rendering, link and form presentation, footer markup, navigation destinations
+and post headings are shared through explicit entry points. Renderer factories
+accept application components instead of importing request adapters. Application
+wrappers own content loading, route and preview handlers, server credentials,
+icon selection, identity defaults, and collection/global access. Payload and
+Lexical peers are optional for consumers of pure helpers and simple UI; schema
+and rich-text rendering entry points require the corresponding peers.

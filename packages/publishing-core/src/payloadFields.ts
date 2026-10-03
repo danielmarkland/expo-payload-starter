@@ -360,7 +360,24 @@ export function createPublishingFields({
     ]
   }
 
+  function navigationItemsField({
+    includeIcons = false,
+    label,
+  }: { includeIcons?: boolean; label?: string } = {}): Field {
+    return {
+      name: 'items',
+      type: 'array',
+      ...linkArrayPresentation,
+      label,
+      fields: linkFields({
+        allowIconOnly: includeIcons,
+        includeIcon: includeIcons,
+        required: true,
+      }),
+    }
+  }
   return {
+    navigationItemsField,
     actionFields,
     destinationFields,
     iconFields,

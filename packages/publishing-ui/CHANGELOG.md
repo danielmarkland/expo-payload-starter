@@ -1,5 +1,16 @@
 # @danielmarkland/publishing-ui
 
+## 0.1.0
+
+### Minor Changes
+
+- Share safe navigation and post-heading helpers, page rendering, link presentation, forms and footer presentation. Applications inject icons, forms and data-loading components through explicit factories. Keep Payload dependencies optional for consumers of pure entry points.
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-core@0.4.1
+
 ## 0.0.3
 
 ### Patch Changes

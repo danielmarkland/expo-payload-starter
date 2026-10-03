@@ -5,6 +5,8 @@ import { join } from 'node:path'
 const allowedDependencies = {
   '@danielmarkland/publishing-ui': new Set([
     '@danielmarkland/publishing-contracts',
+    '@danielmarkland/publishing-core',
+    '@payloadcms/richtext-lexical',
     'react',
     'react-dom',
     'next',
@@ -26,6 +28,7 @@ const allowedDependencies = {
   ]),
   '@danielmarkland/publishing-core': new Set([
     '@danielmarkland/design-tokens',
+    '@danielmarkland/publishing-contracts',
     '@payloadcms/richtext-lexical',
     'payload',
   ]),

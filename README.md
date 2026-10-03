@@ -861,3 +861,10 @@ Reusable editorial and navigation Payload fields are provided by
 Field factories create independent definitions; the consuming application owns
 slug uniqueness, collection/global access, and preview routing. `pnpm lint`
 checks package imports and dependency declarations, including relative escapes.
+
+Publishing UI also provides factories for page blocks, links, forms and footer
+presentation. Applications supply icon lookup, form components and latest-post
+loading; data queries and route handlers remain in the application. Pure URL and
+post-heading helpers live in `publishing-core/navigation` and `/postHeadings`.
+Payload schema definitions use explicit `/payloadPages`, `/payloadSiteSettings`,
+`/payloadEditorial`, `/payloadNavigation`, and `/payloadSEO` entry points.

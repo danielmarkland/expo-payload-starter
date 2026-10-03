@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.4.1
+
+### Patch Changes
+
+- Share safe navigation and post-heading helpers, page rendering, link presentation, forms and footer presentation. Applications inject icons, forms and data-loading components through explicit factories. Keep Payload dependencies optional for consumers of pure entry points.
+
 ## 0.4.0
 
 ### Minor Changes
