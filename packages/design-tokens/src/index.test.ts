@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { brand, getPresetTokens, resolveThemeMode, themes } from './index.js'
+import { getPresetTokens, resolveThemeMode, themes } from './index.js'
 
-describe('shared brand and theme tokens', () => {
+describe('shared theme tokens', () => {
   it('defines matching colors for both platform themes', () => {
     expect(Object.keys(themes.light).sort()).toEqual(
       Object.keys(themes.dark).sort(),
@@ -24,12 +24,6 @@ describe('shared brand and theme tokens', () => {
     expect(resolveThemeMode('dark', null)).toBe('dark')
     expect(resolveThemeMode(null, null)).toBe('dark')
     expect(resolveThemeMode('unspecified', null)).toBe('dark')
-  })
-
-  it('provides display branding and shared asset references', () => {
-    expect(brand.siteTitle).toBe(brand.appTitle)
-    expect(brand.shortName.length).toBeLessThanOrEqual(12)
-    expect(brand.assets.fonts.regular).toContain('.ttf')
   })
 
   it('resolves curated spacing and shape presets', () => {

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import type { SiteConfig } from '@danielmarkland/contracts'
+import type { SiteConfig } from '@danielmarkland/publishing-contracts'
 
 export function SiteBrand({ siteConfig }: { siteConfig: SiteConfig }) {
   return (

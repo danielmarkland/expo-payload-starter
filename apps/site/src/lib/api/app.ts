@@ -2,6 +2,7 @@ import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
 
+import { profileSchema } from '@danielmarkland/contracts'
 import {
   apiErrorSchema,
   apiOkSchema,
@@ -12,14 +13,13 @@ import {
   pageSchema,
   paginatedPostsSchema,
   postSchema,
-  profileSchema,
   redirectsSchema,
   searchResultsSchema,
   siteConfigSchema,
   siteMetadataSchema,
   sitemapEntriesSchema,
   taxonomySchema,
-} from '@danielmarkland/contracts'
+} from '@danielmarkland/publishing-contracts'
 import { getPreviewSecret } from '@/lib/serverConfig'
 import {
   deliverContact,

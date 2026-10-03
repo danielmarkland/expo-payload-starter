@@ -7,12 +7,14 @@ authenticated application.
 
 - `apps/app` — Expo Router application for web, iOS, and Android.
 - `apps/site` — Next.js public website, Payload CMS, preview, and admin UI.
-- `packages/contracts` — stable Zod contracts shared across trust boundaries.
+- `packages/contracts` — example product-domain Zod contracts.
+- `packages/publishing-contracts` — reusable publishing and site-presentation contracts.
 - `packages/api-client` — framework-neutral client for the versioned application API.
 - `packages/core` — pure example-domain rules with no framework dependencies.
 - `packages/auth` — provider-neutral identity and authorization interfaces.
 - `packages/data` — typed Supabase repositories and generated database types.
-- `packages/design-tokens` — framework-neutral design tokens.
+- `packages/brand` — private starter identity and image assets.
+- `packages/design-tokens` — framework-neutral visual tokens and fonts.
 - `packages/publishing-core` — reusable publishing behavior for Payload-backed sites.
 - `packages/config` — shared TypeScript settings and boundary enforcement.
 - `supabase` — product database migrations, RLS policies, and seeds.
@@ -349,11 +351,12 @@ settings.
 
 ### Packaged defaults
 
-The fallback source of truth is `packages/design-tokens/src/`. `tokens.json`
-defines light/dark colors, Poppins weights, type sizes, line heights, spacing,
-radii, and layout widths. `brand.json` defines titles, short name, description,
-the theme preference key, and asset names. Shared images and fonts belong in
-`packages/design-tokens/assets/`; platform-specific identifiers remain in
+The visual fallback source of truth is `packages/design-tokens/src/tokens.json`,
+which defines light/dark colors, Poppins weights, type sizes, line heights,
+spacing, radii, and layout widths. Starter titles, description, theme preference
+key, and image names live in `packages/brand/src/brand.json`; its image assets
+live in `packages/brand/assets/`. Reusable fonts remain in
+`packages/design-tokens/assets/fonts/`; platform-specific identifiers remain in
 `apps/app/app.config.js`.
 
 The shared typography is Poppins (400, 500, 600, 700), with body text at 16px,
@@ -803,9 +806,10 @@ the project's **Logs** view in Vercel. See the [`vercel logs` reference](https:/
 
 ## Fork checklist
 
-- Replace the shared site/app names, short name, description, and asset references
-  in `packages/design-tokens/src/brand.json`; update the files in
-  `packages/design-tokens/assets/` with your logo, icons, splash art, and fonts.
+- Replace the site/app names, short name, description, and asset references in
+  `packages/brand/src/brand.json`; replace the images in
+  `packages/brand/assets/`. Replace reusable fonts in
+  `packages/design-tokens/assets/fonts/` if needed.
 - Customize colors, typography, spacing, radii, and layout tokens in
   `packages/design-tokens/src/tokens.json`, then regenerate the site CSS with
   `pnpm --filter @danielmarkland/design-tokens generate:css`.

@@ -11,11 +11,11 @@ import {
 import { Platform, useColorScheme } from 'react-native'
 
 import {
-  THEME_STORAGE_KEY,
   fonts as bundledFonts,
   getPresetTokens,
   type ThemeMode,
 } from '@danielmarkland/design-tokens'
+import { THEME_STORAGE_KEY } from '@starter/brand'
 import { useSiteConfig } from '@/src/context/SiteConfigContext'
 
 type ThemeContextValue = {

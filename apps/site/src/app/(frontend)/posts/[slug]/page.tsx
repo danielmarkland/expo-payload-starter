@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import { postSchema } from '@danielmarkland/contracts'
+import { postSchema } from '@danielmarkland/publishing-contracts'
 import { internalApiRequest } from '@/lib/api/internal'
 import { getSitePresentation } from '@/lib/getSiteSettings'
 import { getPreviewSecret } from '@/lib/serverConfig'

@@ -1,6 +1,7 @@
 import type { Field, GlobalConfig } from 'payload'
 
-import { brand, themes } from '@danielmarkland/design-tokens'
+import { themes } from '@danielmarkland/design-tokens'
+import { brand } from '@starter/brand'
 import {
   type PaletteColorName,
   validatePaletteColor,

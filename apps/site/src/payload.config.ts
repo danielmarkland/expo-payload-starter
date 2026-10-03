@@ -10,7 +10,7 @@ import { buildConfig, type Plugin } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { brand } from '@danielmarkland/design-tokens'
+import { brand } from '@starter/brand'
 import { Users } from './collections/Users'
 import { Authors } from './collections/Authors'
 import { Categories } from './collections/Categories'

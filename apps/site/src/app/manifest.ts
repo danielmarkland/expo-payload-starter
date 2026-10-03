@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-import appIcon from '@danielmarkland/design-tokens/assets/icon.png'
+import appIcon from '@starter/brand/assets/icon.png'
 import { getSitePresentation } from '@/lib/getSiteSettings'
 
 export const dynamic = 'force-dynamic'

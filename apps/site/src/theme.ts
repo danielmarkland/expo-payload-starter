@@ -1,2 +1,2 @@
-export { THEME_STORAGE_KEY } from '@danielmarkland/design-tokens'
+export { THEME_STORAGE_KEY } from '@starter/brand'
 export type { ThemeMode as SiteTheme } from '@danielmarkland/design-tokens'

@@ -1,9 +1,9 @@
 const path = require('node:path')
 
-const brand = require('../../packages/design-tokens/src/brand.json')
+const brand = require('../../packages/brand/src/brand.json')
 const tokens = require('../../packages/design-tokens/src/tokens.json')
 const asset = (filename) =>
-  path.resolve(__dirname, '../../packages/design-tokens/assets', filename)
+  path.resolve(__dirname, '../../packages/brand/assets', filename)
 
 module.exports = {
   name: brand.appTitle,

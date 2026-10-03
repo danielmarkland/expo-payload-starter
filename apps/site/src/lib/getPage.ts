@@ -1,6 +1,6 @@
 import { draftMode } from 'next/headers'
 
-import { pageSchema } from '@danielmarkland/contracts'
+import { pageSchema } from '@danielmarkland/publishing-contracts'
 import { internalApiRequest } from '@/lib/api/internal'
 import { getPreviewSecret } from '@/lib/serverConfig'
 import type { Page } from '@/payload-types'

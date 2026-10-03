@@ -1,15 +1,15 @@
+import { profileSchema } from '@danielmarkland/contracts'
 import {
   apiOkSchema,
   navigationSchema,
   pageSchema,
   paginatedPostsSchema,
   postSchema,
-  profileSchema,
   siteMetadataSchema,
   siteConfigSchema,
   type ContactSubmission,
   type NewsletterSubmission,
-} from '@danielmarkland/contracts'
+} from '@danielmarkland/publishing-contracts'
 import type { z } from 'zod'
 
 export interface ApiClientOptions {

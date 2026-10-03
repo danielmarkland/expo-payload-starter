@@ -23,18 +23,21 @@ importers:
 
   apps/app:
     dependencies:
-      '@danielmarkland/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
       '@danielmarkland/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
+      '@danielmarkland/publishing-contracts':
+        specifier: workspace:*
+        version: link:../../packages/publishing-contracts
       '@starter/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
       '@starter/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@starter/brand':
+        specifier: workspace:*
+        version: link:../../packages/brand
       '@starter/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -117,6 +120,9 @@ importers:
       '@danielmarkland/design-tokens':
         specifier: workspace:*
         version: link:../../packages/design-tokens
+      '@danielmarkland/publishing-contracts':
+        specifier: workspace:*
+        version: link:../../packages/publishing-contracts
       '@danielmarkland/publishing-core':
         specifier: workspace:*
         version: link:../../packages/publishing-core
@@ -156,6 +162,9 @@ importers:
       '@starter/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
+      '@starter/brand':
+        specifier: workspace:*
+        version: link:../../packages/brand
       '@starter/data':
         specifier: workspace:*
         version: link:../../packages/data
@@ -250,6 +259,9 @@ importers:
       '@danielmarkland/contracts':
         specifier: workspace:*
         version: link:../contracts
+      '@danielmarkland/publishing-contracts':
+        specifier: workspace:*
+        version: link:../publishing-contracts
       zod:
         specifier: ^4.6.5
         version: 4.6.5
@@ -266,6 +278,15 @@ importers:
       '@starter/core':
         specifier: workspace:*
         version: link:../core
+    devDependencies:
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@types/node@22.19.9)(happy-dom@20.14.5)(jsdom@28.0.0)(lightningcss@1.33.0)(sass@1.77.4)(terser@5.51.2)(tsx@4.22.4)(yaml@2.9.1)
+
+  packages/brand:
     devDependencies:
       typescript:
         specifier: ^5.9.2
@@ -319,6 +340,19 @@ importers:
         version: 4.0.18(@types/node@22.19.9)(happy-dom@20.14.5)(jsdom@28.0.0)(lightningcss@1.33.0)(sass@1.77.4)(terser@5.51.2)(tsx@4.22.4)(yaml@2.9.1)
 
   packages/design-tokens:
+    devDependencies:
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.3
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@types/node@22.19.9)(happy-dom@20.14.5)(jsdom@28.0.0)(lightningcss@1.33.0)(sass@1.77.4)(terser@5.51.2)(tsx@4.22.4)(yaml@2.9.1)
+
+  packages/publishing-contracts:
+    dependencies:
+      zod:
+        specifier: ^4.6.5
+        version: 4.6.5
     devDependencies:
       typescript:
         specifier: ^5.9.2

@@ -2,7 +2,11 @@ import { readFile, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const allowedDependencies = {
-  '@starter/api-client': new Set(['@danielmarkland/contracts', 'zod']),
+  '@starter/api-client': new Set([
+    '@danielmarkland/contracts',
+    '@danielmarkland/publishing-contracts',
+    'zod',
+  ]),
   '@starter/auth': new Set(['@starter/core']),
   '@starter/core': new Set(['@danielmarkland/contracts']),
   '@starter/data': new Set([
@@ -25,6 +29,23 @@ const packageDirectories = {
 }
 const importPattern = /(?:from\s+|import\s*\()['"]([^'"./][^'"]*)['"]/g
 const errors = []
+const publishedPackageDirectories = [
+  'contracts',
+  'design-tokens',
+  'publishing-contracts',
+  'publishing-core',
+]
+
+for (const directory of publishedPackageDirectories) {
+  for (const file of await recursiveSourceFiles(join('packages', directory))) {
+    const source = await readFile(file, 'utf8')
+    if (source.includes('@starter/brand')) {
+      errors.push(
+        `${file}: published packages cannot depend on the private brand package`,
+      )
+    }
+  }
+}
 
 for (const [directory, packageName] of Object.entries(packageDirectories)) {
   const files = await sourceFiles(join('packages', directory, 'src'))

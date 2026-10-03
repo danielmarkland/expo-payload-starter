@@ -10,8 +10,12 @@ import {
 } from 'react'
 import { AppState, Platform } from 'react-native'
 
-import { siteConfigSchema, type SiteConfig } from '@danielmarkland/contracts'
-import { brand, themes } from '@danielmarkland/design-tokens'
+import {
+  siteConfigSchema,
+  type SiteConfig,
+} from '@danielmarkland/publishing-contracts'
+import { themes } from '@danielmarkland/design-tokens'
+import { brand } from '@starter/brand'
 import { api } from '@/src/lib/api'
 
 const CACHE_KEY = 'site-config-v1'

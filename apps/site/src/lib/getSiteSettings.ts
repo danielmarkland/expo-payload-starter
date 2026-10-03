@@ -1,4 +1,4 @@
-import { siteConfigSchema, siteMetadataSchema } from '@danielmarkland/contracts'
+import { siteConfigSchema, siteMetadataSchema } from '@danielmarkland/publishing-contracts'
 import { internalApiRequest } from '@/lib/api/internal'
 
 export async function getSitePresentation() {

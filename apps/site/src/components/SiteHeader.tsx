@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import type { SiteConfig } from '@danielmarkland/contracts'
+import type { SiteConfig } from '@danielmarkland/publishing-contracts'
 import { SiteBrand } from '@/components/SiteBrand'
 import { ContentLink } from '@/components/LinkAction'
 import { ThemeToggle } from '@/components/ThemeToggle'

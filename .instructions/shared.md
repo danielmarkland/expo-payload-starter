@@ -12,12 +12,14 @@ to become a plugin framework.
 
 - `apps/app/` — Expo Router app for web, iOS, and Android.
 - `apps/site/` — Next.js public site, Payload CMS, preview, and admin UI.
-- `packages/contracts/` — stable schemas shared across trust boundaries and published as `@danielmarkland/contracts`.
+- `packages/contracts/` — example product-domain schemas, published as `@danielmarkland/contracts`.
+- `packages/publishing-contracts/` — reusable publishing and site-presentation schemas, published as `@danielmarkland/publishing-contracts`.
 - `packages/api-client/` — framework-neutral client for the versioned BFF.
 - `packages/core/` — framework-independent product rules.
 - `packages/auth/` — provider-neutral identity and authorization interfaces.
 - `packages/data/` — typed Supabase repositories and generated database types.
-- `packages/design-tokens/` — shared brand metadata, visual tokens, and assets, published as `@danielmarkland/design-tokens`.
+- `packages/brand/` — private starter identity, icons, and theme preference key.
+- `packages/design-tokens/` — neutral visual tokens and fonts, published as `@danielmarkland/design-tokens`.
 - `packages/publishing-core/` — reusable publishing behavior for Payload-backed sites, published as `@danielmarkland/publishing-core`.
 - `packages/config/` — shared tooling configuration and boundary checks.
 - `supabase/` — product database migrations, RLS policies, seeds, and functions.
@@ -31,8 +33,8 @@ references; this file captures the agent-facing guardrails.
 
 - Keep product-user identity and product data in Supabase. Keep editorial
   content and CMS editor accounts in Payload. Payload users and product users
-  are separate identities; shared product/brand metadata belongs to the design
-  tokens package.
+  are separate identities; starter-specific identity belongs to the private
+  brand package.
 - Supabase Auth is the product-user identity provider. RLS authorizes product
   rows and storage objects. Client route guards are navigation behavior, not
   authorization.
@@ -55,11 +57,12 @@ references; this file captures the agent-facing guardrails.
 
 ## Shared Brand and Theme
 
-- `packages/design-tokens/src/brand.json` is the source for shared product/site
-  names, descriptions, theme preference key, and asset references.
+- `packages/brand/src/brand.json` is the source for product/site names,
+  descriptions, theme preference key, and asset references.
 - `packages/design-tokens/src/tokens.json` is the source for light/dark colors,
   typography, spacing, radii, and layout values.
-- Shared image, icon, and font files live in `packages/design-tokens/assets/`.
+- Starter image and icon files live in `packages/brand/assets/`. Reusable fonts
+  live in `packages/design-tokens/assets/fonts/`.
 - After changing tokens, regenerate CSS with
   `pnpm --filter @danielmarkland/design-tokens generate:css`. `pnpm check` verifies
   generated output is current.

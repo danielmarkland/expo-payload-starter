@@ -17,7 +17,8 @@
   "dependencies": {
     "@starter/api-client": "workspace:*",
     "@starter/auth": "workspace:*",
-    "@danielmarkland/contracts": "workspace:*",
+    "@starter/brand": "workspace:*",
+    "@danielmarkland/publishing-contracts": "workspace:*",
     "@starter/core": "workspace:*",
     "@danielmarkland/design-tokens": "workspace:*",
     "@supabase/supabase-js": "^2.117.2",

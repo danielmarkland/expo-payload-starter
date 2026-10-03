@@ -36,20 +36,23 @@ separate because it has different rendering and accessibility constraints.
 
 ## Package boundaries
 
-The workspace remains a usable standalone starter. Stable contracts, design
-tokens, and publishing behavior may be published; all other packages stay
-workspace-private.
+The workspace remains a usable standalone starter. Publishing contracts,
+neutral design tokens, and publishing behavior may be published; starter brand
+identity and all other packages stay workspace-private.
 
 ```text
 apps -> api-client/auth/data -> core/contracts
+apps/api-client -> publishing-contracts
 ```
 
-- `contracts` owns wire and domain schemas.
+- `contracts` owns the example product's domain schemas.
+- `publishing-contracts` owns reusable publishing and site-presentation schemas.
 - `api-client` owns provider-neutral HTTP transport for those contracts.
 - `core` owns pure, framework-independent product rules.
 - `auth` owns product identity and authorization interfaces, not provider SDKs.
 - `data` owns typed Supabase repositories and generated database types.
-- `design-tokens` owns framework-neutral visual values.
+- `brand` owns this starter's identity and image assets.
+- `design-tokens` owns framework-neutral visual values and fonts.
 - `publishing-core` owns reusable Payload and site presentation behavior.
 - `config` owns shared tool configuration and dependency checks.
 

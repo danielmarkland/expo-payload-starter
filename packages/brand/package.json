@@ -1,6 +1,6 @@
 {
-  "name": "@starter/api-client",
-  "version": "0.1.1",
+  "name": "@starter/brand",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
@@ -9,18 +9,16 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./assets/*": "./assets/*",
+    "./brand.json": "./src/brand.json"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "pnpm clean && tsc -p tsconfig.json",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
     "lint": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run --passWithNoTests --dir src",
     "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@danielmarkland/contracts": "workspace:*",
-    "@danielmarkland/publishing-contracts": "workspace:*",
-    "zod": "^4.6.5"
   },
   "devDependencies": {
     "typescript": "^5.9.2",

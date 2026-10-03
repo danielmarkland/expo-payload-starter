@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import React from 'react'
 
-import { THEME_STORAGE_KEY } from '@danielmarkland/design-tokens'
-import favicon from '@danielmarkland/design-tokens/assets/favicon.png'
-import appIcon from '@danielmarkland/design-tokens/assets/icon.png'
+import { THEME_STORAGE_KEY } from '@starter/brand'
+import favicon from '@starter/brand/assets/favicon.png'
+import appIcon from '@starter/brand/assets/icon.png'
 
 import { GoogleTagManager } from '@/components/GoogleTagManager'
 import { SiteFooter } from '@/components/SiteFooter'

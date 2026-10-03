@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { SiteConfig } from '@danielmarkland/contracts'
+import type { SiteConfig } from '@danielmarkland/publishing-contracts'
 import { SiteConfigProvider } from '@/components/SiteConfigProvider'
 
 const payload = vi.hoisted(() => ({

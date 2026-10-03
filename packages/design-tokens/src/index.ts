@@ -1,11 +1,8 @@
-import brandConfig from './brand.json' with { type: 'json' }
 import tokenConfig from './tokens.json' with { type: 'json' }
 
 export type ThemeMode = keyof typeof tokenConfig.themes
 export type ThemeColors = (typeof tokenConfig.themes)[ThemeMode]
 
-export const brand = brandConfig
-export const THEME_STORAGE_KEY = brand.themeStorageKey
 export const themes = tokenConfig.themes
 export const typography = {
   family: tokenConfig.fonts.family,

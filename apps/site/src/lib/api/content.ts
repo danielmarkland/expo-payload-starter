@@ -6,7 +6,7 @@ import {
   searchResultsSchema,
   sitemapEntriesSchema,
   taxonomySchema,
-} from '@danielmarkland/contracts'
+} from '@danielmarkland/publishing-contracts'
 import { internalApiRequest } from '@/lib/api/internal'
 import type {
   Author,

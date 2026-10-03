@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { createProfileRepository, type Database } from '@starter/data'
 import { getPayload } from 'payload'
 
-import type { ContactSubmission, NewsletterSubmission } from '@danielmarkland/contracts'
+import type { ContactSubmission, NewsletterSubmission } from '@danielmarkland/publishing-contracts'
 import { getContactEmailConfig, getNewsletterConfig } from '@/lib/serverConfig'
 import { resolveSiteConfig } from '@/lib/siteConfig'
 import config from '@/payload.config'

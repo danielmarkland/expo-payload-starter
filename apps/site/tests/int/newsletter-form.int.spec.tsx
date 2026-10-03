@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { SiteConfig } from '@danielmarkland/contracts'
+import type { SiteConfig } from '@danielmarkland/publishing-contracts'
 import { NewsletterForm } from '@/components/NewsletterForm'
 import { SiteConfigProvider } from '@/components/SiteConfigProvider'
 
