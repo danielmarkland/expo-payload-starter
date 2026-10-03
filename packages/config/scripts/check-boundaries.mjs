@@ -3,6 +3,13 @@ import { readFile, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const allowedDependencies = {
+  '@danielmarkland/contracts': new Set(['zod']),
+  '@danielmarkland/publishing-contracts': new Set([
+    'zod',
+    '@asteasolutions/zod-to-openapi',
+  ]),
+  '@danielmarkland/design-tokens': new Set(),
+  '@starter/brand': new Set(),
   '@danielmarkland/publishing-ui': new Set([
     '@danielmarkland/publishing-contracts',
     '@danielmarkland/publishing-core',
