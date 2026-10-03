@@ -48,3 +48,15 @@ test('public imports keep the optional Payload admin dependency separate', async
   assert.equal(manifest.peerDependenciesMeta.payload.optional, true)
   assert.equal(manifest.peerDependenciesMeta['@payloadcms/ui'].optional, true)
 })
+
+test('exports enumerate supported entry points and exclude test artifacts', async () => {
+  const manifest = JSON.parse(await readFile('package.json', 'utf8'))
+  assert.equal(manifest.exports['./*'], undefined)
+  for (const name of [
+    ...publicFiles,
+    ...clientFiles.filter((name) => name !== 'admin/index'),
+  ]) {
+    assert.ok(manifest.exports[`./${name}`], name)
+  }
+  assert.equal(manifest.exports['./PublishingComponents.test'], undefined)
+})

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { createPostsFields } from '@danielmarkland/publishing-core/payloadEditorial'
 
 import { getPreviewSecret, getSiteURL } from '@/lib/serverConfig'
 
@@ -21,21 +22,5 @@ export const Posts: CollectionConfig = {
     update: ({ req }) => Boolean(req.user),
   },
   versions: { drafts: true },
-  fields: [
-    { name: 'title', type: 'text', required: true },
-    { name: 'slug', type: 'text', index: true, required: true, unique: true },
-    { name: 'summary', type: 'textarea', required: true },
-    { name: 'body', type: 'richText', required: true },
-    { name: 'author', type: 'relationship', relationTo: 'authors' },
-    { name: 'categories', type: 'relationship', relationTo: 'categories', hasMany: true },
-    { name: 'tags', type: 'relationship', relationTo: 'tags', hasMany: true },
-    { name: 'publishedAt', type: 'date' },
-    {
-      name: 'showTableOfContents',
-      type: 'checkbox',
-      admin: { description: 'Show links to level-two and level-three headings in this article.' },
-      defaultValue: false,
-      label: 'Show table of contents',
-    },
-  ],
+  fields: createPostsFields(),
 }

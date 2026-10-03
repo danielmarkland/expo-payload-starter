@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-ui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -14,10 +14,52 @@
       "types": "./dist/admin/index.d.ts",
       "default": "./dist/admin/index.js"
     },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./dist/*.js"
-    }
+    "./TurnstileField": {
+      "types": "./dist/TurnstileField.d.ts",
+      "default": "./dist/TurnstileField.js"
+    },
+    "./SiteBrand": {
+      "types": "./dist/SiteBrand.d.ts",
+      "default": "./dist/SiteBrand.js"
+    },
+    "./SiteConfigProvider": {
+      "types": "./dist/SiteConfigProvider.d.ts",
+      "default": "./dist/SiteConfigProvider.js"
+    },
+    "./LatestPostsSection": {
+      "types": "./dist/LatestPostsSection.d.ts",
+      "default": "./dist/LatestPostsSection.js"
+    },
+    "./ThemeToggle": {
+      "types": "./dist/ThemeToggle.d.ts",
+      "default": "./dist/ThemeToggle.js"
+    },
+    "./PostList": {
+      "types": "./dist/PostList.d.ts",
+      "default": "./dist/PostList.js"
+    },
+    "./GoogleTagManager": {
+      "types": "./dist/GoogleTagManager.d.ts",
+      "default": "./dist/GoogleTagManager.js"
+    },
+    "./SiteHeader": {
+      "types": "./dist/SiteHeader.d.ts",
+      "default": "./dist/SiteHeader.js"
+    },
+    "./admin/LinkRowLabel": {
+      "types": "./dist/admin/LinkRowLabel.d.ts",
+      "default": "./dist/admin/LinkRowLabel.js"
+    },
+    "./admin/ColorPickerField": {
+      "types": "./dist/admin/ColorPickerField.d.ts",
+      "default": "./dist/admin/ColorPickerField.js"
+    },
+    "./admin/IconPickerField": {
+      "types": "./dist/admin/IconPickerField.d.ts",
+      "default": "./dist/admin/IconPickerField.js"
+    },
+    "./admin/ColorPickerField.css": "./dist/admin/ColorPickerField.css",
+    "./admin/IconPickerField.css": "./dist/admin/IconPickerField.css"
   },
   "files": [
     "dist"

@@ -61,3 +61,10 @@ apps/api-client -> publishing-contracts
 
 Expo and Payload adapters stay in their applications. Packages never import
 from `apps`, and `core` never imports React, Expo, Next.js, Payload, or Supabase.
+
+Publishing packages expose named entry points rather than wildcard build files.
+Editorial and navigation field factories live in `publishing-core`; applications
+own collection/global configuration, access, slug indexes, and preview routing.
+The boundary check parses imports, re-exports, dynamic imports and require calls,
+rejects relative imports outside packages and application aliases, and verifies
+runtime dependency declarations separately from test dependencies.

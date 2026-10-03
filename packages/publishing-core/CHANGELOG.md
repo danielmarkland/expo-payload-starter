@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.4.0
+
+### Minor Changes
+
+- Share editorial and navigation field factories and enumerate supported package entry points so build artifacts and tests remain private.
+
 ## 0.3.0
 
 ### Minor Changes

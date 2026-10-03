@@ -1,3 +1,4 @@
+import { checkPackage } from './package-boundaries.mjs'
 import { readFile, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
@@ -30,51 +31,24 @@ const allowedDependencies = {
   ]),
 }
 
-const packageDirectories = {
-  'publishing-ui': '@danielmarkland/publishing-ui',
-  'api-client': '@starter/api-client',
-  auth: '@starter/auth',
-  core: '@starter/core',
-  data: '@starter/data',
-  'publishing-core': '@danielmarkland/publishing-core',
-}
-const importPattern = /(?:from\s+|import\s*\()['"]([^'"./][^'"]*)['"]/g
 const errors = []
-const publishedPackageDirectories = [
-  'contracts',
-  'design-tokens',
-  'publishing-contracts',
-  'publishing-core',
-  'publishing-ui',
-]
-
-for (const directory of publishedPackageDirectories) {
-  for (const file of await recursiveSourceFiles(join('packages', directory))) {
-    const source = await readFile(file, 'utf8')
-    if (source.includes('@starter/brand')) {
-      errors.push(
-        `${file}: published packages cannot depend on the private brand package`,
-      )
-    }
+for (const directory of await readdir('packages')) {
+  let manifest
+  try {
+    manifest = JSON.parse(
+      await readFile(join('packages', directory, 'package.json'), 'utf8'),
+    )
+  } catch (error) {
+    if (error.code === 'ENOENT') continue
+    throw error
   }
-}
-
-for (const [directory, packageName] of Object.entries(packageDirectories)) {
-  const files = await recursiveSourceFiles(join('packages', directory, 'src'))
-  for (const file of files) {
-    const source = await readFile(file, 'utf8')
-    for (const match of source.matchAll(importPattern)) {
-      const dependency = match[1].startsWith('@')
-        ? match[1].split('/').slice(0, 2).join('/')
-        : match[1].split('/')[0]
-      if (
-        !allowedDependencies[packageName].has(dependency) &&
-        dependency !== 'vitest'
-      ) {
-        errors.push(`${file}: ${packageName} cannot import ${dependency}`)
-      }
-    }
-  }
+  if (directory === 'config') continue
+  errors.push(
+    ...(await checkPackage(join('packages', directory), {
+      allowed: allowedDependencies[manifest.name],
+      published: manifest.private === false,
+    })),
+  )
 }
 
 for (const file of await recursiveSourceFiles(join('apps', 'app'))) {

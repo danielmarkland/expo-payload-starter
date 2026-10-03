@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { createAuthorsFields } from '@danielmarkland/publishing-core/payloadEditorial'
 
 export const Authors: CollectionConfig = {
   slug: 'authors',
@@ -10,11 +11,5 @@ export const Authors: CollectionConfig = {
     read: () => true,
     update: ({ req }) => Boolean(req.user),
   },
-  fields: [
-    { name: 'name', type: 'text', required: true },
-    { name: 'slug', type: 'text', required: true, unique: true, index: true },
-    { name: 'bio', type: 'textarea' },
-    { name: 'image', type: 'upload', relationTo: 'media' },
-    { name: 'website', type: 'text' },
-  ],
+  fields: createAuthorsFields(),
 }

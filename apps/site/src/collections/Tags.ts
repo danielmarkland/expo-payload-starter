@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { createTagsFields } from '@danielmarkland/publishing-core/payloadEditorial'
 
 export const Tags: CollectionConfig = {
   slug: 'tags',
@@ -10,9 +11,5 @@ export const Tags: CollectionConfig = {
     read: () => true,
     update: ({ req }) => Boolean(req.user),
   },
-  fields: [
-    { name: 'title', type: 'text', required: true },
-    { name: 'slug', type: 'text', required: true, unique: true, index: true },
-    { name: 'description', type: 'textarea' },
-  ],
+  fields: createTagsFields(),
 }

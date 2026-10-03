@@ -855,3 +855,9 @@ taxonomy, and redirect types. Payload-generated types remain within CMS adapters
 Contracts validate all 14 page blocks and Lexical trees, preserve additive fields,
 and accept string or numeric relationship IDs as well as populated documents.
 Draft preview requests use the same contracts and retain the preview secret boundary.
+
+Reusable editorial and navigation Payload fields are provided by
+`@danielmarkland/publishing-core/payloadEditorial` and `/payloadNavigation`.
+Field factories create independent definitions; the consuming application owns
+slug uniqueness, collection/global access, and preview routing. `pnpm lint`
+checks package imports and dependency declarations, including relative escapes.

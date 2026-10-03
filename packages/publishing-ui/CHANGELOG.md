@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.0.3
+
+### Patch Changes
+
+- Share editorial and navigation field factories and enumerate supported package entry points so build artifacts and tests remain private.
+
 ## 0.0.2
 
 ### Patch Changes

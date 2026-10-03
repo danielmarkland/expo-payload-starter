@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { createCategoriesFields } from '@danielmarkland/publishing-core/payloadEditorial'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -10,10 +11,5 @@ export const Categories: CollectionConfig = {
     read: () => true,
     update: ({ req }) => Boolean(req.user),
   },
-  fields: [
-    { name: 'title', type: 'text', required: true },
-    { name: 'slug', type: 'text', required: true, unique: true, index: true },
-    { name: 'description', type: 'textarea' },
-    { name: 'parent', type: 'relationship', relationTo: 'categories' },
-  ],
+  fields: createCategoriesFields(),
 }

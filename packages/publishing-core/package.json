@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -10,9 +10,45 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./dist/*.js"
+    "./buttonVariants": {
+      "types": "./dist/buttonVariants.d.ts",
+      "default": "./dist/buttonVariants.js"
+    },
+    "./colorContrast": {
+      "types": "./dist/colorContrast.d.ts",
+      "default": "./dist/colorContrast.js"
+    },
+    "./extractSearchText": {
+      "types": "./dist/extractSearchText.d.ts",
+      "default": "./dist/extractSearchText.js"
+    },
+    "./heroHeadline": {
+      "types": "./dist/heroHeadline.d.ts",
+      "default": "./dist/heroHeadline.js"
+    },
+    "./redirects": {
+      "types": "./dist/redirects.d.ts",
+      "default": "./dist/redirects.js"
+    },
+    "./sectionAppearance": {
+      "types": "./dist/sectionAppearance.d.ts",
+      "default": "./dist/sectionAppearance.js"
+    },
+    "./payloadFields": {
+      "types": "./dist/payloadFields.d.ts",
+      "default": "./dist/payloadFields.js"
+    },
+    "./payloadBlocks": {
+      "types": "./dist/payloadBlocks.d.ts",
+      "default": "./dist/payloadBlocks.js"
+    },
+    "./payloadEditorial": {
+      "types": "./dist/payloadEditorial.d.ts",
+      "default": "./dist/payloadEditorial.js"
+    },
+    "./payloadNavigation": {
+      "types": "./dist/payloadNavigation.d.ts",
+      "default": "./dist/payloadNavigation.js"
     }
   },
   "files": [
