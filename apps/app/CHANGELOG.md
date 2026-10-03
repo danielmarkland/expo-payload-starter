@@ -1,5 +1,16 @@
 # @starter/app
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [7fede23]
+  - @danielmarkland/design-tokens@0.3.0
+  - @danielmarkland/publishing-contracts@0.1.0
+  - @starter/api-client@0.1.2
+  - @starter/core@0.1.2
+  - @starter/auth@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
