@@ -13,7 +13,6 @@ import type {
   Category,
   FooterNavigation,
   HeaderNavigation,
-  Post,
   Redirect,
   Tag,
 } from '@/payload-types'
@@ -32,7 +31,7 @@ export async function getPublishedPosts(query = '') {
   const response = await internalApiRequest(`/posts${query}`)
   if (!response.ok) throw new Error(`Posts API request failed (${response.status}).`)
   const result = paginatedPostsSchema.parse(await response.json())
-  return { ...result, docs: result.docs as unknown as Post[] }
+  return result
 }
 
 export async function getTaxonomyDocument(

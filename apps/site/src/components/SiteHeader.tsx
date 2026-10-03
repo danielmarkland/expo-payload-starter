@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
 import type { SiteConfig } from '@danielmarkland/publishing-contracts'
-import { SiteBrand } from '@/components/SiteBrand'
+import { SiteHeader as SharedSiteHeader } from '@danielmarkland/publishing-ui/SiteHeader'
+import { THEME_STORAGE_KEY } from '@/theme'
 import { ContentLink } from '@/components/LinkAction'
-import { ThemeToggle } from '@/components/ThemeToggle'
 import { getNavigationHref } from '@/lib/navigation'
 import {
   getHeaderNavigationPresentation,
@@ -17,22 +17,24 @@ export async function SiteHeader({ siteConfig }: { siteConfig: SiteConfig }) {
   const SearchIcon = search.Icon
 
   return (
-    <header className={`site-header${navigation.sticky ? ' site-header-sticky' : ''}`}>
-      <SiteBrand siteConfig={siteConfig} />
-      <nav aria-label="Main navigation" className="header-navigation">
-        {navigation.items?.map((item) => {
-          const href = getNavigationHref(item)
-          if (!href) return null
-          const { iconOnly } = getHeaderNavigationPresentation(item)
-          return href ? (
-            <ContentLink
-              className={iconOnly ? 'header-navigation-icon-only' : undefined}
-              key={item.id || item.label}
-              link={item}
-            />
-          ) : null
-        })}
-        {search.show ? (
+    <SharedSiteHeader
+      siteConfig={siteConfig}
+      sticky={navigation.sticky}
+      themeStorageKey={THEME_STORAGE_KEY}
+      navigation={navigation.items?.map((item) => {
+        const href = getNavigationHref(item)
+        if (!href) return null
+        const { iconOnly } = getHeaderNavigationPresentation(item)
+        return href ? (
+          <ContentLink
+            className={iconOnly ? 'header-navigation-icon-only' : undefined}
+            key={item.id || item.label}
+            link={item}
+          />
+        ) : null
+      })}
+      search={
+        search.show ? (
           <Link
             aria-label={SearchIcon ? 'Search' : undefined}
             className={SearchIcon ? 'header-navigation-icon-only' : undefined}
@@ -44,11 +46,8 @@ export async function SiteHeader({ siteConfig }: { siteConfig: SiteConfig }) {
               'Search'
             )}
           </Link>
-        ) : null}
-      </nav>
-      {siteConfig.theme.allowToggle ? (
-        <ThemeToggle defaultMode={siteConfig.theme.defaultMode} />
-      ) : null}
-    </header>
+        ) : null
+      }
+    />
   )
 }

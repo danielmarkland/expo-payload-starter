@@ -62,7 +62,25 @@ export const pageSchema = z.looseObject({
   title: z.string(),
 })
 
-export const postSchema = z.looseObject({
+export const postCardSchema = z.object({
+  id: z.union([z.number(), z.string()]),
+  slug: z.string(),
+  title: z.string(),
+  summary: z.string(),
+  publishedAt: z.string().nullable().optional(),
+  meta: z
+    .looseObject({
+      image: z
+        .union([z.number(), z.string(), mediaSchema])
+        .nullable()
+        .optional(),
+    })
+    .nullable()
+    .optional(),
+})
+export type PostCard = z.infer<typeof postCardSchema>
+
+export const postSchema = postCardSchema.loose().extend({
   _status: z.enum(['draft', 'published']).nullable().optional(),
   body: z.record(z.string(), z.unknown()),
   id: z.union([z.number(), z.string()]),

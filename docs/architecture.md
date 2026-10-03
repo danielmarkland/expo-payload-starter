@@ -54,6 +54,9 @@ apps/api-client -> publishing-contracts
 - `brand` owns this starter's identity and image assets.
 - `design-tokens` owns framework-neutral visual values and fonts.
 - `publishing-core` owns reusable Payload and site presentation behavior.
+- `publishing-ui` owns reusable Next.js components and Payload admin controls.
+  Applications supply content, branding, theme storage keys, and icon definitions;
+  data loading and server integrations remain application-owned.
 - `config` owns shared tool configuration and dependency checks.
 
 Expo and Payload adapters stay in their applications. Packages never import

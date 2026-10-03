@@ -2,6 +2,16 @@ import { readFile, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const allowedDependencies = {
+  '@danielmarkland/publishing-ui': new Set([
+    '@danielmarkland/publishing-contracts',
+    'react',
+    'react-dom',
+    'next',
+    'lucide-react',
+    'payload',
+    '@payloadcms/ui',
+    '@testing-library/react',
+  ]),
   '@starter/api-client': new Set([
     '@danielmarkland/contracts',
     '@danielmarkland/publishing-contracts',
@@ -21,6 +31,7 @@ const allowedDependencies = {
 }
 
 const packageDirectories = {
+  'publishing-ui': '@danielmarkland/publishing-ui',
   'api-client': '@starter/api-client',
   auth: '@starter/auth',
   core: '@starter/core',
@@ -34,6 +45,7 @@ const publishedPackageDirectories = [
   'design-tokens',
   'publishing-contracts',
   'publishing-core',
+  'publishing-ui',
 ]
 
 for (const directory of publishedPackageDirectories) {
@@ -48,7 +60,7 @@ for (const directory of publishedPackageDirectories) {
 }
 
 for (const [directory, packageName] of Object.entries(packageDirectories)) {
-  const files = await sourceFiles(join('packages', directory, 'src'))
+  const files = await recursiveSourceFiles(join('packages', directory, 'src'))
   for (const file of files) {
     const source = await readFile(file, 'utf8')
     for (const match of source.matchAll(importPattern)) {
@@ -93,17 +105,6 @@ if (errors.length) {
   process.exitCode = 1
 } else {
   console.log('Package boundaries are valid.')
-}
-
-async function sourceFiles(directory) {
-  const entries = await readdir(directory, { withFileTypes: true })
-  return entries.flatMap((entry) =>
-    entry.isDirectory()
-      ? []
-      : entry.name.endsWith('.ts') || entry.name.endsWith('.tsx')
-        ? [join(directory, entry.name)]
-        : [],
-  )
 }
 
 async function recursiveSourceFiles(directory) {

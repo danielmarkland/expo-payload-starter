@@ -1,5 +1,14 @@
 # @starter/site
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-ui@0.0.1
+  - @danielmarkland/publishing-contracts@0.2.0
+  - @starter/api-client@0.1.3
+
 ## 1.0.4
 
 ### Patch Changes

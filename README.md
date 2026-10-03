@@ -16,6 +16,7 @@ authenticated application.
 - `packages/brand` — private starter identity and image assets.
 - `packages/design-tokens` — framework-neutral visual tokens and fonts.
 - `packages/publishing-core` — reusable publishing behavior for Payload-backed sites.
+- `packages/publishing-ui` — shared Next.js publishing components and Payload admin controls.
 - `packages/config` — shared TypeScript settings and boundary enforcement.
 - `supabase` — product database migrations, RLS policies, and seeds.
 
