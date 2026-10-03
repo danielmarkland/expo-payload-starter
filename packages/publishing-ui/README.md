@@ -21,3 +21,7 @@ React and Next.js are peers. Payload and its UI are optional peers needed only
 when using the admin entry point. Existing public-site CSS classes are preserved;
 the consuming site owns their stylesheet. No application brand defaults are
 included.
+
+Build before packing or publishing. The release command builds dependencies in
+order; prepack verifies compiled entry points, client directives, and styles
+without rebuilding dependencies during concurrent publication.
