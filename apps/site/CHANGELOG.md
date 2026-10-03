@@ -1,5 +1,17 @@
 # @starter/site
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [7fede23]
+  - @danielmarkland/contracts@0.3.0
+  - @danielmarkland/design-tokens@0.3.0
+  - @danielmarkland/publishing-contracts@0.1.0
+  - @starter/api-client@0.1.2
+  - @starter/data@0.1.2
+  - @danielmarkland/publishing-core@0.2.1
+
 ## 1.0.2
 
 ### Patch Changes
