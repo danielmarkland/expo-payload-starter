@@ -1,0 +1,38 @@
+project_id = "expo-payload-starter"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["app", "graphql_public"]
+extra_search_path = ["app", "public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[studio]
+enabled = true
+port = 54323
+
+[local_smtp]
+enabled = true
+port = 54324
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:8081"
+additional_redirect_urls = [
+  "http://localhost:8081/auth/callback",
+  "expopayloadstarter://auth/callback"
+]
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true

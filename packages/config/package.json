@@ -1,0 +1,15 @@
+{
+  "name": "@starter/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --check scripts/setup-production.mjs && node --test scripts/setup-production.test.mjs scripts/package-boundaries.test.mjs"
+  },
+  "exports": {
+    "./typescript": "./typescript/strict.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}

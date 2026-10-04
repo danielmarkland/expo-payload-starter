@@ -1,0 +1,29 @@
+.icon-picker-field__option,
+.icon-picker-field__value {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.icon-picker-field__option {
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+}
+
+.icon-picker-field__option[data-focused] {
+  background: var(--theme-elevation-100);
+}
+
+.icon-picker-field__option[data-selected] {
+  background: var(--theme-elevation-150);
+  font-weight: 500;
+}
+
+.icon-picker-field__option svg,
+.icon-picker-field__value svg {
+  flex: 0 0 auto;
+  height: 1.1rem;
+  width: 1.1rem;
+}

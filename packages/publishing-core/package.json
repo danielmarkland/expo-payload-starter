@@ -1,0 +1,116 @@
+{
+  "name": "@danielmarkland/publishing-core",
+  "version": "0.4.1",
+  "private": false,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./buttonVariants": {
+      "types": "./dist/buttonVariants.d.ts",
+      "default": "./dist/buttonVariants.js"
+    },
+    "./colorContrast": {
+      "types": "./dist/colorContrast.d.ts",
+      "default": "./dist/colorContrast.js"
+    },
+    "./extractSearchText": {
+      "types": "./dist/extractSearchText.d.ts",
+      "default": "./dist/extractSearchText.js"
+    },
+    "./heroHeadline": {
+      "types": "./dist/heroHeadline.d.ts",
+      "default": "./dist/heroHeadline.js"
+    },
+    "./redirects": {
+      "types": "./dist/redirects.d.ts",
+      "default": "./dist/redirects.js"
+    },
+    "./sectionAppearance": {
+      "types": "./dist/sectionAppearance.d.ts",
+      "default": "./dist/sectionAppearance.js"
+    },
+    "./payloadFields": {
+      "types": "./dist/payloadFields.d.ts",
+      "default": "./dist/payloadFields.js"
+    },
+    "./payloadBlocks": {
+      "types": "./dist/payloadBlocks.d.ts",
+      "default": "./dist/payloadBlocks.js"
+    },
+    "./payloadEditorial": {
+      "types": "./dist/payloadEditorial.d.ts",
+      "default": "./dist/payloadEditorial.js"
+    },
+    "./payloadNavigation": {
+      "types": "./dist/payloadNavigation.d.ts",
+      "default": "./dist/payloadNavigation.js"
+    },
+    "./navigation": {
+      "types": "./dist/navigation.d.ts",
+      "default": "./dist/navigation.js"
+    },
+    "./postHeadings": {
+      "types": "./dist/postHeadings.d.ts",
+      "default": "./dist/postHeadings.js"
+    },
+    "./payloadSiteSettings": {
+      "types": "./dist/payloadSiteSettings.d.ts",
+      "default": "./dist/payloadSiteSettings.js"
+    },
+    "./payloadPages": {
+      "types": "./dist/payloadPages.d.ts",
+      "default": "./dist/payloadPages.js"
+    },
+    "./payloadSEO": {
+      "types": "./dist/payloadSEO.d.ts",
+      "default": "./dist/payloadSEO.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielmarkland/expo-payload-starter.git",
+    "directory": "packages/publishing-core"
+  },
+  "scripts": {
+    "build": "pnpm clean && tsc -p tsconfig.json",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "@danielmarkland/design-tokens": "workspace:*",
+    "@danielmarkland/publishing-contracts": "workspace:*"
+  },
+  "peerDependencies": {
+    "@payloadcms/richtext-lexical": "3.90.2",
+    "payload": "3.90.2"
+  },
+  "devDependencies": {
+    "@payloadcms/richtext-lexical": "3.90.2",
+    "payload": "3.90.2",
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.18"
+  },
+  "peerDependenciesMeta": {
+    "@payloadcms/richtext-lexical": {
+      "optional": true
+    },
+    "payload": {
+      "optional": true
+    }
+  }
+}

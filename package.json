@@ -1,0 +1,40 @@
+{
+  "name": "expo-payload-starter",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.3.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "dev:app": "pnpm --filter @starter/app dev",
+    "dev:app:web": "pnpm --filter @starter/app web",
+    "dev:site": "pnpm --filter @starter/site dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "generate": "turbo run generate",
+    "generate:payload": "pnpm --filter @starter/site generate",
+    "generate:supabase": "supabase gen types typescript --local --schema app > packages/data/src/database.ts",
+    "lint": "node packages/config/scripts/check-boundaries.mjs && turbo run lint",
+    "payload:migrate": "pnpm --filter @starter/site migrate",
+    "payload:migrate:create": "pnpm --filter @starter/site payload migrate:create",
+    "payload:migrate:status": "pnpm --filter @starter/site payload migrate:status",
+    "setup": "node packages/config/scripts/setup-production.mjs",
+    "setup:hosted": "node packages/config/scripts/setup-production.mjs",
+    "setup:production": "node packages/config/scripts/setup-production.mjs --profile single-app",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm --filter @danielmarkland/contracts build && pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-contracts build && pnpm --filter @danielmarkland/publishing-core build && pnpm --filter @danielmarkland/publishing-ui build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.7",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.6",
+    "typescript": "^5.9.2"
+  }
+}

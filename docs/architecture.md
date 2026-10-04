@@ -1,0 +1,78 @@
+# Architecture
+
+## Surfaces
+
+The public website and the authenticated product are separate deployable
+surfaces. Next.js and Payload own public content, SEO, preview, and editor
+workflows. Expo owns the authenticated web, iOS, and Android experience.
+
+## Trust boundaries
+
+- Supabase Auth is the only product-user identity provider.
+- Payload auth is only for editors and CMS administrators.
+- Expo route guards are navigation behavior, not authorization.
+- Supabase RLS authorizes product rows and Storage objects.
+- Payload access functions authorize CMS documents.
+- Server credentials never use an `EXPO_PUBLIC_` prefix.
+
+## Data flow
+
+1. Expo clients authenticate directly with Supabase Auth, then send the access
+   token to the versioned BFF for product-data requests.
+2. The Next.js frontend invokes the same Hono BFF handlers in process; browser
+   forms and Expo call `/api/v1` over HTTP.
+3. BFF adapters use Payload's Local API for CMS reads and request-scoped
+   Supabase clients for RLS-protected product data.
+4. Payload Admin uses Payload's authenticated native API as an explicit
+   protocol exception. Presentation code does not consume that API.
+5. OpenAPI is generated from route schemas at `/api/v1/openapi.json`, with
+   Swagger UI at `/api/v1/docs`.
+
+## Shared code
+
+The standalone Next.js site is the reference web implementation. Reusable
+publishing behavior lives in `publishing-core`; Expo presentation remains
+separate because it has different rendering and accessibility constraints.
+
+## Package boundaries
+
+The workspace remains a usable standalone starter. Publishing contracts,
+neutral design tokens, and publishing behavior may be published; starter brand
+identity and all other packages stay workspace-private.
+
+```text
+apps -> api-client/auth/data -> core/contracts
+apps/api-client -> publishing-contracts
+```
+
+- `contracts` owns the example product's domain schemas.
+- `publishing-contracts` owns reusable publishing and site-presentation schemas.
+- `api-client` owns provider-neutral HTTP transport for those contracts.
+- `core` owns pure, framework-independent product rules.
+- `auth` owns product identity and authorization interfaces, not provider SDKs.
+- `data` owns typed Supabase repositories and generated database types.
+- `brand` owns this starter's identity and image assets.
+- `design-tokens` owns framework-neutral visual values and fonts.
+- `publishing-core` owns reusable Payload and site presentation behavior.
+- `publishing-ui` owns reusable Next.js components and Payload admin controls.
+  Applications supply content, branding, theme storage keys, and icon definitions;
+  data loading and server integrations remain application-owned.
+- `config` owns shared tool configuration and dependency checks.
+
+Expo and Payload adapters stay in their applications. Packages never import
+from `apps`, and `core` never imports React, Expo, Next.js, Payload, or Supabase.
+
+Publishing packages expose named entry points rather than wildcard build files.
+Editorial and navigation field factories live in `publishing-core`; applications
+own collection/global configuration, access, slug indexes, and preview routing.
+The boundary check parses imports, re-exports, dynamic imports and require calls,
+rejects relative imports outside packages and application aliases, and verifies
+runtime dependency declarations separately from test dependencies.
+
+Page rendering, link and form presentation, footer markup, navigation destinations
+and post headings are shared through explicit entry points. Renderer factories
+accept application components instead of importing request adapters. Application
+wrappers own content loading, route and preview handlers, server credentials,
+icon selection, identity defaults, and collection/global access. Payload and
+Lexical peers are optional for consumers of pure helpers and simple UI; schema
+and rich-text rendering entry points require the corresponding peers.

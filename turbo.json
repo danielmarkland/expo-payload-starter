@@ -1,0 +1,44 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "DATABASE_URL",
+    "CONTACT_TO_ADDRESS",
+    "EMAIL_FROM_ADDRESS",
+    "EXPO_PUBLIC_SITE_URL",
+    "EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "EXPO_PUBLIC_SUPABASE_URL",
+    "MAILERLITE_API_KEY",
+    "PAYLOAD_SECRET",
+    "RESEND_API_KEY",
+    "SITE_URL",
+    "SUPABASE_S3_ACCESS_KEY_ID",
+    "SUPABASE_S3_ENDPOINT",
+    "SUPABASE_S3_REGION",
+    "SUPABASE_S3_SECRET_ACCESS_KEY",
+    "TURNSTILE_SECRET_KEY",
+    "VERCEL_PROJECT_PRODUCTION_URL"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "generate": {
+      "cache": false
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
+    }
+  }
+}

@@ -1,0 +1,42 @@
+.compact-link-row {
+  .row__fields {
+    align-items: flex-start;
+    row-gap: calc(var(--base) * 0.25);
+
+    > * {
+      flex-grow: 1;
+    }
+
+    &:has(> *:nth-child(1)) {
+      margin-bottom: calc(var(--base) * 0.15);
+    }
+  }
+
+  .field-description {
+    font-size: 0.85rem;
+    line-height: 1.25;
+    margin-top: calc(var(--base) * 0.1);
+  }
+
+  .compact-link-row__icon .field-description {
+    display: none;
+  }
+
+  .compact-link-row__new-tab {
+    padding-top: calc(var(--base) * 1.45);
+
+    .checkbox {
+      margin-bottom: 0;
+    }
+
+    .field-label {
+      white-space: nowrap;
+    }
+  }
+}
+
+.compact-link-array {
+  .array-field__row .collapsible__content {
+    padding: calc(var(--base) * 0.4) var(--base) 0;
+  }
+}
