@@ -1,5 +1,13 @@
 # @danielmarkland/publishing-contracts
 
+## 0.4.0
+
+### Minor Changes
+
+- Add a versioned full-site archive and validated Payload replacement engine with
+  relationship remapping, original media, current publishing states, transactional
+  write gates, replacement previews, and backup hooks.
+
 ## 0.3.0
 
 ### Minor Changes

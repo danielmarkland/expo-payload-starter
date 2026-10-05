@@ -1,5 +1,18 @@
 # @danielmarkland/publishing-core
 
+## 0.5.0
+
+### Minor Changes
+
+- Add a versioned full-site archive and validated Payload replacement engine with
+  relationship remapping, original media, current publishing states, transactional
+  write gates, replacement previews, and backup hooks.
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.4.0
+
 ## 0.4.1
 
 ### Patch Changes

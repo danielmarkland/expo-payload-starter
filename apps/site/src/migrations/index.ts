@@ -1,3 +1,4 @@
+import * as siteTransferGates from './20261005_site_transfer_gates'
 import * as migration_20260926_033310_initial_cms from './20260926_033310_initial_cms'
 import * as migration_20260926_205749_add_pages from './20260926_205749_add_pages'
 import * as migration_20260926_210416_add_latest_posts from './20260926_210416_add_latest_posts'
@@ -138,4 +139,5 @@ export const migrations = [
     down: migration_20260930_023515_expanded_icon_picker.down,
     name: '20260930_023515_expanded_icon_picker',
   },
+  { name: '20261005_site_transfer_gates', up: siteTransferGates.up, down: siteTransferGates.down },
 ]
