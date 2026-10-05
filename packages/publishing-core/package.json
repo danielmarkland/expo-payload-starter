@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -73,6 +73,10 @@
     "./siteTransfer": {
       "types": "./dist/siteTransfer.d.ts",
       "default": "./dist/siteTransfer.js"
+    },
+    "./designCapabilities": {
+      "types": "./dist/designCapabilities.d.ts",
+      "default": "./dist/designCapabilities.js"
     }
   },
   "files": [

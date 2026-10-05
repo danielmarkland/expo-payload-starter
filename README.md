@@ -887,3 +887,15 @@ Public-repository commits must occur outside Monday–Friday, 8:00 a.m.–4:00 p
 America/Chicago, with current time checked immediately before each commit and
 actual timestamps. Editing, testing, and staging may happen during that window.
 Delivery actions require the applicable user authorization.
+
+### Portable design capabilities
+
+`publishing-core/designCapabilities` exports `describeDesignFields`,
+`describeDesignResources`, `designTransferResources`, and `validateDesignRecords`.
+Hosts generate a portable, hook-free field manifest from their final Payload
+resource definitions and add renderer-specific guidance. Offline authoring tools
+can validate required content, choices, rich text and links with record/field
+locations, then use the existing archive encoder and `validateSiteArchive` without
+initializing a database. The archive format remains version 1. Hero accent text
+state now survives portable projection. Host-specific behavior, extensions and
+visual acceptance remain the host's responsibility.
