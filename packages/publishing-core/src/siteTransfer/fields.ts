@@ -108,11 +108,20 @@ export function projectState(
       'value',
       'fields',
       'relationTo',
+      '$',
     ])
     for (const [key, entry] of Object.entries(node)) {
       if (!allowed.has(key))
         throw new Error(`Unsupported rich text property ${key}`)
-      if (
+      if (key === '$') {
+        const state = object(entry)
+        if (
+          Object.keys(state).some((name) => name !== 'tone') ||
+          (state.tone !== undefined && state.tone !== 'accent')
+        )
+          throw new Error('Unsupported text state')
+        result[key] = json(state)
+      } else if (
         key === 'value' &&
         (node.type === 'upload' || node.type === 'relationship')
       ) {

@@ -60,7 +60,7 @@ const count = (manifest: SiteTransferManifest) =>
       manifest.records.filter((record) => record.resource === key).length,
     ]),
   )
-function assertResources(options: SiteTransferOptions) {
+function assertResources(options: Pick<SiteTransferOptions, 'resources'>) {
   if (
     !options.resources.length ||
     new Set(options.resources.map((r) => r.key)).size !==
@@ -218,7 +218,7 @@ function materialize(
 }
 export function validateSiteArchive(
   bytes: Buffer,
-  options: SiteTransferOptions,
+  options: Pick<SiteTransferOptions, 'resources' | 'extensions'>,
 ): SiteArchive {
   assertResources(options)
   const site = decodeSiteArchive(bytes)
