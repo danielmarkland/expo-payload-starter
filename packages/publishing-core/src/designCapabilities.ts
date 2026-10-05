@@ -14,6 +14,8 @@ export interface DesignField {
   options?: string[]
   min?: number
   max?: number
+  minLength?: number
+  maxLength?: number
   minRows?: number
   maxRows?: number
   hasMany?: boolean
@@ -63,6 +65,8 @@ export function describeDesignFields(fields: Field[]): DesignField[] {
       'defaultValue',
       'min',
       'max',
+      'minLength',
+      'maxLength',
       'minRows',
       'maxRows',
       'hasMany',
@@ -182,6 +186,23 @@ export function validateDesignRecords(
                 add(path, 'Required value is missing')
               continue
             }
+            if (
+              typeof value === 'string' &&
+              ((field.minLength !== undefined &&
+                value.length < field.minLength) ||
+                (field.maxLength !== undefined &&
+                  value.length > field.maxLength))
+            )
+              add(
+                path,
+                `Expected text length between ${field.minLength ?? 0} and ${field.maxLength ?? 'unlimited'}`,
+              )
+            if (
+              field.name === 'limit' &&
+              typeof value === 'number' &&
+              !Number.isInteger(value)
+            )
+              add(path, 'Expected an integer limit')
             if (
               field.options &&
               !(field.hasMany
