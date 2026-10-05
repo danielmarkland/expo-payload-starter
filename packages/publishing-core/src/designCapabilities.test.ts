@@ -144,4 +144,17 @@ describe('portable design capabilities', () => {
       validateDesignRecords(site, describeDesignResources(resources)),
     ).toEqual([])
   })
+  it('describes and validates declared text length constraints', () => {
+    const fields = [{ name: 'title', type: 'text' as const, maxLength: 12 }]
+    expect(describeDesignFields(fields)[0].maxLength).toBe(12)
+    const site = manifest([])
+    site.records[0].current.data.title = 'This title is too long'
+    delete site.records[0].current.data.layout
+    expect(
+      validateDesignRecords(
+        site,
+        describeDesignResources([{ ...resources[0], fields }]),
+      )[0].message,
+    ).toContain('text length')
+  })
 })

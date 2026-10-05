@@ -1,5 +1,9 @@
 # @danielmarkland/publishing-core
 
+## 0.6.1
+
+- Include declared minimum/maximum text lengths and validate integer post limits.
+
 ## 0.6.0
 
 - Publish portable design capability descriptions and offline authoring diagnostics.
