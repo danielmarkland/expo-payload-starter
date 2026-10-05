@@ -76,6 +76,7 @@ export interface Config {
     pages: Page;
     redirects: Redirect;
     search: Search;
+    'publishing-transfer-gates': PublishingTransferGate;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
+    'publishing-transfer-gates': PublishingTransferGatesSelect<false> | PublishingTransferGatesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -173,7 +175,6 @@ export interface User {
 export interface Media {
   id: number;
   alt: string;
-  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1681,6 +1682,19 @@ export interface Search {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publishing-transfer-gates".
+ */
+export interface PublishingTransferGate {
+  id: number;
+  key: string;
+  nonce: string;
+  lastReplacement?: string | null;
+  backupKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -1811,7 +1825,6 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
-  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -2520,6 +2533,18 @@ export interface SearchSelect<T extends boolean = true> {
   doc?: T;
   excerpt?: T;
   searchText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publishing-transfer-gates_select".
+ */
+export interface PublishingTransferGatesSelect<T extends boolean = true> {
+  key?: T;
+  nonce?: T;
+  lastReplacement?: T;
+  backupKey?: T;
   updatedAt?: T;
   createdAt?: T;
 }

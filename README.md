@@ -868,3 +868,22 @@ loading; data queries and route handlers remain in the application. Pure URL and
 post-heading helpers live in `publishing-core/navigation` and `/postHeadings`.
 Payload schema definitions use explicit `/payloadPages`, `/payloadSiteSettings`,
 `/payloadEditorial`, `/payloadNavigation`, and `/payloadSEO` entry points.
+
+### Full-site export and replacement
+
+The standalone server CLI can export a portable site archive, preview a complete
+replacement, and apply it with a verified destination backup. See
+[full-site export and replacement](docs/site-transfer.md) for coverage, migrations,
+configuration, recovery, and disposable-database tests.
+
+## Git and release workflow
+
+Create feature branches from `develop` and open pull requests into `develop`.
+Squash-merge feature pull requests. Release through a `develop` → `main` pull
+request using a merge commit, then deploy and verify from `main`. Never commit
+or push changes directly to `main`. Agent branches use the `codex/` prefix.
+
+Public-repository commits must occur outside Monday–Friday, 8:00 a.m.–4:00 p.m.
+America/Chicago, with current time checked immediately before each commit and
+actual timestamps. Editing, testing, and staging may happen during that window.
+Delivery actions require the applicable user authorization.

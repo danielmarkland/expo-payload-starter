@@ -71,6 +71,24 @@ references; this file captures the agent-facing guardrails.
 
 ## Implementation and Verification
 
+### Git and release workflow
+
+- Never commit or push changes directly to `main`.
+- Start feature branches from `develop`; use the `codex/` prefix for agent branches.
+- Open feature pull requests into `develop` and squash-merge them.
+- Release through a pull request from `develop` into `main`. Use a merge commit
+  for releases to preserve shared branch ancestry.
+- Deploy and verify releases from `main` after the release pull request is merged.
+- Attribute commits to Daniel Markland <daniel@codeassassins.com>.
+- Do not commit Monday–Friday between 08:00 inclusive and 16:00 exclusive in
+  `America/Chicago`. Editing, testing, and staging are allowed during that window.
+  Check the current time immediately before committing and use actual timestamps.
+- Commit, push, pull request creation, merging, publication, and deployment require
+  the applicable user authorization. These workflow rules do not authorize delivery
+  actions by themselves.
+
+### Checks and change scope
+
 - Use pnpm from the repository root; do not introduce a second package manager.
 - Add or update tests when behavior changes. Keep tests aligned with the owning
   package or application.

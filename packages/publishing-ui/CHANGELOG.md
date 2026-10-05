@@ -1,5 +1,13 @@
 # @danielmarkland/publishing-ui
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.4.0
+  - @danielmarkland/publishing-core@0.5.0
+
 ## 0.1.0
 
 ### Minor Changes

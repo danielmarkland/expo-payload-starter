@@ -1,3 +1,4 @@
+import { siteTransferGatePlugin } from '@danielmarkland/publishing-core/siteTransfer'
 import { moveSEOFieldsIntoTabs } from '@danielmarkland/publishing-core/payloadSEO'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { resendAdapter } from '@payloadcms/email-resend'
@@ -128,6 +129,20 @@ export default buildConfig({
         excerpt: collectionSlug === 'posts' ? originalDoc.summary || '' : '',
         searchText: extractSearchText(originalDoc),
       }),
+    }),
+    siteTransferGatePlugin({
+      collections: [
+        'media',
+        'authors',
+        'categories',
+        'tags',
+        'posts',
+        'pages',
+        'redirects',
+        'search',
+      ],
+      globals: ['siteSettings', 'headerNavigation', 'footerNavigation'],
+      scopes: async () => ['site'],
     }),
   ],
 })
