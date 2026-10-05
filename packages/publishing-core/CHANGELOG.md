@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.6.0
+
+- Publish portable design capability descriptions and offline authoring diagnostics.
+- Allow archive validation with resource/extension metadata without a Payload instance.
+- Preserve supported accent text state in hero rich-text transfers.
+
 ## 0.5.0
 
 ### Minor Changes
