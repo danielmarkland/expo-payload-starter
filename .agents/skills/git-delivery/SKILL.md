@@ -47,8 +47,12 @@ multiple steps authorizes each named step.
 - Use the repository's GitHub remote and `gh` CLI. Confirm that the CLI is
   available and authenticated before attempting PR creation; if not, report
   what is missing and stop.
-- Target the repository's default branch unless the user specifies another
-  base. If the current branch is the base branch, do not open a PR from it;
+- Target `develop` for feature pull requests and squash-merge them when merging
+  is authorized. Release through a pull request from `develop` into `main`,
+  using a merge commit when merging is authorized. Deploy and verify releases
+  from `main` after that release pull request is merged.
+- Never commit or push changes directly to `main`. Start agent feature branches
+  from `develop` with the `codex/` prefix. If the current branch is the base branch, do not open a PR from it;
   create/use a descriptive topic branch for the requested work before pushing.
 - Keep the PR title concise and its body factual: summarize the change, list
   checks actually run, and disclose any checks that could not be completed.
@@ -57,3 +61,8 @@ multiple steps authorizes each named step.
 After the authorized steps, report the commit SHA, branch, remote/PR URL as
 applicable, checks run, and any remaining work. Leave unrelated worktree changes
 untouched.
+
+Before every public-repository commit, check the current time in
+`America/Chicago`. Do not commit Monday–Friday from 08:00 inclusive to 16:00
+exclusive; editing, testing, and staging remain allowed. Use actual commit
+timestamps and the author Daniel Markland <daniel@codeassassins.com>.
