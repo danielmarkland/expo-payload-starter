@@ -156,6 +156,7 @@
   },
   "devDependencies": {
     "@payloadcms/richtext-lexical": "3.90.2",
+    "@types/node": "22.19.9",
     "payload": "3.90.2",
     "typescript": "^5.9.2",
     "vitest": "^4.0.18"
