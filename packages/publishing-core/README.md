@@ -39,3 +39,8 @@ not supply a guessed tenant or runtime domain fallback.
 `publishingHttp` provides framework-independent API response/error, preview and
 cache policies. The host’s HTTP handler keeps logging and security context. Route
 descriptors and request schemas are in publishing-contracts/publishingApi.
+
+Build before packing or publishing. The release command builds dependencies in
+order; prepack verifies every exported output instead of rebuilding during
+concurrent publication. This prevents another package's clean step from removing
+a dependency while core compiles. Run test:package to build and verify locally.
