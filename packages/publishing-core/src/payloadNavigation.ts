@@ -1,4 +1,5 @@
 import type { ArrayField, Field, SelectField } from 'payload'
+import { contactFields } from './presentationFields.js'
 
 interface NavigationFieldOptions {
   navigationItemsField: (options: {
@@ -161,6 +162,7 @@ export function createFooterNavigationFields({
               required: true,
             },
             { name: 'body', type: 'textarea' },
+            ...contactFields(),
             {
               name: 'submitLabel',
               type: 'text',
@@ -201,6 +203,17 @@ export function createFooterNavigationFields({
       name: 'latestPosts',
       type: 'group',
       fields: [
+        {
+          name: 'limit',
+          type: 'number',
+          min: 1,
+          max: 12,
+          defaultValue: 2,
+          validate: (value: number | null | undefined) =>
+            value == null || Number.isInteger(value)
+              ? true
+              : 'Use a whole number.',
+        },
         {
           name: 'show',
           type: 'checkbox',

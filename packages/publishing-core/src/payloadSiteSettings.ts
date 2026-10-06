@@ -1,4 +1,5 @@
 import type { Field } from 'payload'
+import { archiveFields } from './presentationFields.js'
 import { themes } from '@danielmarkland/design-tokens'
 import { type PaletteColorName, validatePaletteColor } from './colorContrast.js'
 
@@ -216,6 +217,7 @@ export function createSiteSettingsFields({
             },
           ],
         },
+        { label: 'Archives', fields: [archiveFields()] },
         {
           label: 'Integrations',
           fields: [

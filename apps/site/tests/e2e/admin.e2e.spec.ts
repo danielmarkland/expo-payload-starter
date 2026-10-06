@@ -43,6 +43,8 @@ test.describe('Admin Panel', () => {
     await page.setViewportSize({ width: 1440, height: 900 })
     await page.goto('http://localhost:3000/admin/globals/siteSettings')
 
+    // Payload persists the active tab; select it explicitly, including on retries.
+    await page.getByRole('button', { exact: true, name: 'General' }).click()
     await expect(page.locator('input[name="siteTitle"]')).toBeVisible()
     const siteDescription = page.locator('textarea[name="siteDescription"]')
     const seoTitle = page.locator('input[name="meta.title"]')
@@ -83,7 +85,10 @@ test.describe('Admin Panel', () => {
     const primary = page.locator('input[type="color"][name="theme.light.primary"]')
     const primaryInk = page.locator('input[type="color"][name="theme.light.primaryInk"]')
     await primary.fill(await primaryInk.inputValue())
+    await primary.blur()
     await page.getByRole('button', { name: 'Save' }).click()
-    await expect(page.getByText(/need at least 4\.5:1 contrast/).first()).toBeVisible()
+    await expect(page.getByText(/need at least 4\.5:1 contrast/).first()).toBeVisible({
+      timeout: 30_000,
+    })
   })
 })

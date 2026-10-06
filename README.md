@@ -899,3 +899,7 @@ locations, then use the existing archive encoder and `validateSiteArchive` witho
 initializing a database. The archive format remains version 1. Hero accent text
 state now survives portable projection. Host-specific behavior, extensions and
 visual acceptance remain the host's responsibility.
+
+## Practical site layouts
+
+See [practical site layouts](docs/practical-layouts.md) for hero variants, curated artwork grids, archive pagination, booking forms, screenshot mappings, and package rollout.

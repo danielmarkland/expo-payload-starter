@@ -189,6 +189,7 @@ describe('page-block appearance fields', () => {
     const border = labeledField(appearance.fields || [], 'Border')
 
     expect(appearance.fields?.map((field) => field.label)).toEqual([
+      'Layout',
       'Container and surface',
       'Spacing',
       'Border',

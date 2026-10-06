@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 const publicFiles = [
   'PostList',
+  'PostArchive',
   'LatestPostsSection',
   'SiteBrand',
   'SiteHeader',

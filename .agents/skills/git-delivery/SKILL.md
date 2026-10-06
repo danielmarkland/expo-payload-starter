@@ -51,8 +51,8 @@ multiple steps authorizes each named step.
   is authorized. Release through a pull request from `develop` into `main`,
   using a merge commit when merging is authorized. Deploy and verify releases
   from `main` after that release pull request is merged.
-- Never commit or push changes directly to `main`. Start agent feature branches
-  from `develop` with the `codex/` prefix. If the current branch is the base branch, do not open a PR from it;
+- Never commit or push changes directly to `main`. Start feature branches
+  from `develop` using the type-based naming convention in `.instructions/shared.md`. If the current branch is the base branch, do not open a PR from it;
   create/use a descriptive topic branch for the requested work before pushing.
 - Keep the PR title concise and its body factual: summarize the change, list
   checks actually run, and disclose any checks that could not be completed.

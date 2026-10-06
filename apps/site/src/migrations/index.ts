@@ -1,4 +1,3 @@
-import * as siteTransferGates from './20261005_site_transfer_gates'
 import * as migration_20260926_033310_initial_cms from './20260926_033310_initial_cms'
 import * as migration_20260926_205749_add_pages from './20260926_205749_add_pages'
 import * as migration_20260926_210416_add_latest_posts from './20260926_210416_add_latest_posts'
@@ -22,6 +21,8 @@ import * as migration_20260929_025039_global_footer_conversion_sections from './
 import * as migration_20260929_031022_remove_footer_app_link from './20260929_031022_remove_footer_app_link'
 import * as migration_20260930_014425_consistent_link_controls from './20260930_014425_consistent_link_controls'
 import * as migration_20260930_023515_expanded_icon_picker from './20260930_023515_expanded_icon_picker'
+import * as migration_20261005_230402_practical_layout_coverage from './20261005_230402_practical_layout_coverage'
+import * as migration_20261005_site_transfer_gates from './20261005_site_transfer_gates'
 
 export const migrations = [
   {
@@ -139,5 +140,14 @@ export const migrations = [
     down: migration_20260930_023515_expanded_icon_picker.down,
     name: '20260930_023515_expanded_icon_picker',
   },
-  { name: '20261005_site_transfer_gates', up: siteTransferGates.up, down: siteTransferGates.down },
+  {
+    up: migration_20261005_site_transfer_gates.up,
+    down: migration_20261005_site_transfer_gates.down,
+    name: '20261005_site_transfer_gates',
+  },
+  {
+    up: migration_20261005_230402_practical_layout_coverage.up,
+    down: migration_20261005_230402_practical_layout_coverage.down,
+    name: '20261005_230402_practical_layout_coverage',
+  },
 ]

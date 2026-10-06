@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -77,6 +77,10 @@
     "./designCapabilities": {
       "types": "./dist/designCapabilities.d.ts",
       "default": "./dist/designCapabilities.js"
+    },
+    "./postSelection": {
+      "types": "./dist/postSelection.d.ts",
+      "default": "./dist/postSelection.js"
     }
   },
   "files": [

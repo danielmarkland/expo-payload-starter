@@ -1,5 +1,16 @@
 # @danielmarkland/publishing-core
 
+## 0.7.0
+
+### Minor Changes
+
+- 492df9e: Add portable hero and section layout controls, curated artwork grids, archive presentation and pagination, and booking form fields. Preserve existing content defaults.
+
+### Patch Changes
+
+- Updated dependencies [492df9e]
+  - @danielmarkland/publishing-contracts@0.5.0
+
 ## 0.6.1
 
 - Include declared minimum/maximum text lengths and validate integer post limits.

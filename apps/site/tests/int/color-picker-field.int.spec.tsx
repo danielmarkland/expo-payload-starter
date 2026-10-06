@@ -78,6 +78,7 @@ describe('Payload color picker field', () => {
         { label: 'General' },
         { label: 'Branding' },
         { label: 'Appearance' },
+        { label: 'Archives' },
         { label: 'Integrations' },
         { label: 'SEO' },
       ],
@@ -155,6 +156,7 @@ describe('Payload color picker field', () => {
       'General',
       'Branding',
       'Appearance',
+      'Archives',
       'Integrations',
       'SEO',
     ])

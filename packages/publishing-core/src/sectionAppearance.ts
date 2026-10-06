@@ -1,4 +1,7 @@
 export type SectionAppearance = {
+  headingAlignment?: null | string
+  actionAlignment?: null | string
+  columns?: null | string
   background?: null | string
   borderBottom?: null | string
   borderLeft?: null | string
@@ -24,6 +27,9 @@ export function sectionAppearanceClassName(
   const classes = [...baseClasses]
   if (!appearance) return classes.join(' ')
   const values = [
+    ['heading-alignment', appearance.headingAlignment],
+    ['action-alignment', appearance.actionAlignment],
+    ['columns', appearance.columns],
     ['padding-top', appearance.paddingTop],
     ['padding-right', appearance.paddingRight],
     ['padding-bottom', appearance.paddingBottom],
