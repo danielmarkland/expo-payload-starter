@@ -144,7 +144,8 @@
     "lint": "tsc --noEmit",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "prepack": "pnpm build"
+    "prepack": "node --test tests/package-check.mjs",
+    "test:package": "pnpm build && node --test tests/package-check.mjs"
   },
   "dependencies": {
     "@danielmarkland/design-tokens": "workspace:*",
