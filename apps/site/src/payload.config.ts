@@ -1,3 +1,9 @@
+import { publishingDocumentPath } from '@danielmarkland/publishing-core/preview'
+import { createPublishingRedirectAccess } from '@danielmarkland/publishing-core/payloadCollections'
+import {
+  createPublishingSearchOptions,
+  publishingDescription,
+} from '@danielmarkland/publishing-core/publishingRules'
 import { siteTransferGatePlugin } from '@danielmarkland/publishing-core/siteTransfer'
 import { moveSEOFieldsIntoTabs } from '@danielmarkland/publishing-core/payloadSEO'
 import { postgresAdapter } from '@payloadcms/db-postgres'
@@ -24,7 +30,13 @@ import { FooterNavigation } from './globals/FooterNavigation'
 import { HeaderNavigation } from './globals/HeaderNavigation'
 import { SiteSettings } from './globals/SiteSettings'
 import { extractSearchText } from '@danielmarkland/publishing-core/extractSearchText'
-import { getContactEmailConfig, getSiteURL, getStorageConfig } from './lib/serverConfig'
+import {
+  getContactEmailConfig,
+  getSiteURL,
+  getStorageConfig,
+  getDatabasePoolConfig,
+  getPayloadStorageOptions,
+} from './lib/serverConfig'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -52,9 +64,7 @@ export default buildConfig({
   db: postgresAdapter({
     migrationDir,
     push: false,
-    pool: {
-      connectionString: process.env.DATABASE_URL || '',
-    },
+    pool: getDatabasePoolConfig(),
   }),
   email:
     email.apiKey && email.fromAddress
@@ -66,37 +76,16 @@ export default buildConfig({
       : undefined,
   sharp,
   plugins: [
-    s3Storage({
-      // Payload must use remote storage on Vercel; silently disabling the adapter
-      // makes uploads fall back to an unavailable local filesystem.
-      enabled:
-        process.env.VERCEL === '1' || Boolean(storage.accessKeyId && storage.secretAccessKey),
-      bucket: storage.bucket,
-      collections: { media: true },
-      config: {
-        credentials: {
-          accessKeyId: storage.accessKeyId,
-          secretAccessKey: storage.secretAccessKey,
-        },
-        endpoint: storage.endpoint,
-        forcePathStyle: true,
-        region: storage.region,
-      },
-    }),
+    s3Storage(getPayloadStorageOptions(storage)),
     seoPlugin({
       collections: ['pages', 'posts'],
       globals: ['siteSettings'],
       uploadsCollection: 'media',
       generateTitle: ({ doc }) => (typeof doc?.title === 'string' ? doc.title : brand.siteTitle),
-      generateDescription: ({ doc }) =>
-        typeof doc?.summary === 'string'
-          ? doc.summary
-          : typeof doc?.siteDescription === 'string'
-            ? doc.siteDescription
-            : undefined,
+      generateDescription: ({ doc }) => publishingDescription(doc) || '',
       generateURL: ({ doc, collectionSlug }) => {
         const slug = typeof doc?.slug === 'string' ? doc.slug : ''
-        return collectionSlug === 'posts' ? `${siteURL}/posts/${slug}` : `${siteURL}/${slug}`
+        return `${siteURL}${publishingDocumentPath(collectionSlug === 'posts' ? 'posts' : 'pages', slug)}`
       },
     }),
     moveSEOFieldsIntoTabs([Pages.slug, SiteSettings.slug]),
@@ -105,31 +94,10 @@ export default buildConfig({
       redirectTypes: ['301', '302'],
       overrides: {
         dbName: 'cms_redirects',
-        access: {
-          create: ({ req }) => Boolean(req.user),
-          delete: ({ req }) => Boolean(req.user),
-          update: ({ req }) => Boolean(req.user),
-        },
+        access: createPublishingRedirectAccess(),
       },
     }),
-    searchPlugin({
-      collections: ['pages', 'posts'],
-      defaultPriorities: { pages: 10, posts: 20 },
-      searchOverrides: {
-        dbName: 'cms_search',
-        access: { create: () => false, delete: () => false, update: () => false, read: () => true },
-        fields: ({ defaultFields }) => [
-          ...defaultFields,
-          { name: 'excerpt', type: 'textarea' },
-          { name: 'searchText', type: 'textarea', index: true },
-        ],
-      },
-      beforeSync: ({ collectionSlug, originalDoc, searchDoc }) => ({
-        ...searchDoc,
-        excerpt: collectionSlug === 'posts' ? originalDoc.summary || '' : '',
-        searchText: extractSearchText(originalDoc),
-      }),
-    }),
+    searchPlugin(createPublishingSearchOptions()),
     siteTransferGatePlugin({
       collections: [
         'media',

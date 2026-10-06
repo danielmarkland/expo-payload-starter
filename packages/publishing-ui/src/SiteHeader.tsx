@@ -11,6 +11,9 @@ export interface SiteHeaderProps {
     >
     theme: Pick<SiteConfig['theme'], 'allowToggle' | 'defaultMode'>
   }
+  variant?: 'standard' | 'minimal' | null
+  helpLink?: ReactNode
+  socialLinks?: ReactNode
   navigation: ReactNode
   search?: ReactNode
   sticky?: boolean | null
@@ -19,17 +22,27 @@ export interface SiteHeaderProps {
 
 export function SiteHeader({
   siteConfig,
+  variant,
+  helpLink,
+  socialLinks,
   navigation,
   search,
   sticky,
   themeStorageKey,
 }: SiteHeaderProps) {
   return (
-    <header className={`site-header${sticky ? ' site-header-sticky' : ''}`}>
+    <header
+      data-header-default={variant || 'standard'}
+      className={`site-header${sticky ? ' site-header-sticky' : ''}`}
+    >
       <SiteBrand siteConfig={siteConfig} />
       <nav aria-label="Main navigation" className="header-navigation">
+        {socialLinks}
         {navigation}
         {search}
+      </nav>
+      <nav aria-label="Help" className="header-minimal-navigation">
+        {helpLink}
       </nav>
       {siteConfig.theme.allowToggle ? (
         <ThemeToggle

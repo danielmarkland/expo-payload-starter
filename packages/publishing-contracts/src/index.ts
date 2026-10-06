@@ -34,7 +34,12 @@ export const newsletterSubmissionSchema = z.object({
 export type NewsletterSubmission = z.infer<typeof newsletterSubmissionSchema>
 
 export const themeModeSchema = z.enum(['system', 'light', 'dark'])
-export const fontPresetSchema = z.enum(['poppins', 'system'])
+export const fontPresetSchema = z.enum([
+  'poppins',
+  'system',
+  'inter',
+  'ibm-plex-mono',
+])
 export const shapePresetSchema = z.enum(['square', 'soft', 'rounded'])
 export const buttonShapeSchema = z.enum(['square', 'soft', 'rounded', 'pill'])
 export const densityPresetSchema = z.enum([
@@ -45,6 +50,9 @@ export const densityPresetSchema = z.enum([
 export const hexColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/)
 
 export const themeColorsSchema = z.object({
+  darkSurface: hexColorSchema.optional(),
+  darkInk: hexColorSchema.optional(),
+  darkInkMuted: hexColorSchema.optional(),
   accentSoft: hexColorSchema,
   border: hexColorSchema,
   borderInput: hexColorSchema,
@@ -122,9 +130,19 @@ export const siteConfigSchema = z.object({
     defaultMode: themeModeSchema,
     densityPreset: densityPresetSchema,
     fontPreset: fontPresetSchema,
+    headingFont: fontPresetSchema.nullable().optional(),
+    bodyFont: fontPresetSchema.nullable().optional(),
+    labelFont: fontPresetSchema.nullable().optional(),
+    headingWeight: z.enum(['600', '700', '800']).nullable().optional(),
+    typographyPreset: z
+      .enum(['compact', 'standard', 'editorial'])
+      .nullable()
+      .optional(),
     light: themeColorsSchema,
     shapePreset: shapePresetSchema,
   }),
 })
 
 export type SiteConfig = z.infer<typeof siteConfigSchema>
+
+export * from './landingPages.js'

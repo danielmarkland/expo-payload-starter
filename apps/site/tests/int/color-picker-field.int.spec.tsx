@@ -128,7 +128,7 @@ describe('Payload color picker field', () => {
       const row = palette.fields[0]
       expect(row).toMatchObject({ type: 'row' })
       if (row.type !== 'row') throw new Error('Palette row is missing')
-      expect(row.fields).toHaveLength(8)
+      expect(row.fields).toHaveLength(10)
       expect(row.fields).toContainEqual(
         expect.objectContaining({ name: 'accent', label: 'Accent' }),
       )
@@ -199,6 +199,7 @@ describe('Payload color picker field', () => {
 
     expect(generalTab?.fields.map((field) => ('name' in field ? field.name : undefined))).toEqual([
       'title',
+      'headerVariant',
       'slug',
     ])
     expect(layoutTab?.fields).toEqual(

@@ -9,7 +9,7 @@ import {
 } from '@/lib/serverConfig'
 
 describe('server configuration', () => {
-  it('resolves canonical site URLs in explicit, Vercel, and local order', () => {
+  it('resolves canonical site URLs in explicit and Vercel configuration', () => {
     expect(
       getSiteURL({
         SITE_URL: 'https://preview.example.com/',
@@ -19,7 +19,7 @@ describe('server configuration', () => {
     expect(getSiteURL({ VERCEL_PROJECT_PRODUCTION_URL: 'www.example.com' })).toBe(
       'https://www.example.com',
     )
-    expect(getSiteURL({})).toBe('http://localhost:3000')
+    expect(() => getSiteURL({})).toThrow('SITE_URL or VERCEL_PROJECT_PRODUCTION_URL is required.')
   })
 
   it('derives a stable preview token from Payload secret material', () => {

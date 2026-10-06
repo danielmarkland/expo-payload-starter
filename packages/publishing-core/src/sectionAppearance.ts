@@ -1,6 +1,10 @@
 export type SectionAppearance = {
   headingAlignment?: null | string
   actionAlignment?: null | string
+  mobileColumns?: null | string
+  innerWidth?: null | string
+  cardPadding?: null | string
+  headingSpacing?: null | string
   columns?: null | string
   background?: null | string
   borderBottom?: null | string
@@ -30,6 +34,10 @@ export function sectionAppearanceClassName(
     ['heading-alignment', appearance.headingAlignment],
     ['action-alignment', appearance.actionAlignment],
     ['columns', appearance.columns],
+    ['mobile-columns', appearance.mobileColumns],
+    ['inner-width', appearance.innerWidth],
+    ['card-padding', appearance.cardPadding],
+    ['heading-spacing', appearance.headingSpacing],
     ['padding-top', appearance.paddingTop],
     ['padding-right', appearance.paddingRight],
     ['padding-bottom', appearance.paddingBottom],

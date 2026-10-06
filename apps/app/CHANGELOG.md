@@ -1,5 +1,14 @@
 # @starter/app
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/design-tokens@0.4.0
+  - @danielmarkland/publishing-contracts@0.6.0
+  - @starter/api-client@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

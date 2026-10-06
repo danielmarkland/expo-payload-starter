@@ -1,21 +1,13 @@
-import { createHeaderNavigationFields } from '@danielmarkland/publishing-core/payloadNavigation'
-import type { GlobalConfig } from 'payload'
+import { createHeaderNavigationGlobal } from '@danielmarkland/publishing-core/payloadCollections'
 
 import { iconPickerFieldComponent } from '@/fields/linkFields'
 
-import { headerNavigationIconOptions, navigationItemsField } from './navigationFields'
+import { headerNavigationIconOptions, navigationItemsField } from '@/fields/linkFields'
 
-export const HeaderNavigation: GlobalConfig = {
-  slug: 'headerNavigation',
-  label: 'Header navigation',
-  dbName: 'cms_header_navigation',
-  access: {
-    read: () => true,
-    update: ({ req }) => Boolean(req.user),
-  },
-  fields: createHeaderNavigationFields({
-    navigationItemsField,
-    iconPickerFieldComponent,
-    headerNavigationIconOptions,
-  }),
-}
+import { settingsAccess } from '@/lib/publishingPolicy'
+export const HeaderNavigation = createHeaderNavigationGlobal({
+  access: settingsAccess,
+  navigationItemsField,
+  iconPickerFieldComponent,
+  headerNavigationIconOptions,
+})

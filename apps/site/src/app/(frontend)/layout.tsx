@@ -1,5 +1,7 @@
+import { siteDocumentMetadata } from '@danielmarkland/publishing-core/publishingRules'
+import { themeBootstrapScript } from '@danielmarkland/publishing-core/siteConfig'
 import type { Metadata } from 'next'
-import localFont from 'next/font/local'
+import { publishingFontClassName } from '@danielmarkland/publishing-ui/fonts'
 import React from 'react'
 
 import { THEME_STORAGE_KEY } from '@starter/brand'
@@ -16,54 +18,20 @@ import { siteConfigCSS } from '@/lib/siteConfig'
 
 import '@danielmarkland/design-tokens/theme.css'
 import './styles.css'
-import '@danielmarkland/publishing-ui/layout.css'
-
-const font = localFont({
-  display: 'swap',
-  src: [
-    {
-      path: '../../../../../packages/design-tokens/assets/fonts/Poppins_400Regular.ttf',
-      weight: '400',
-    },
-    {
-      path: '../../../../../packages/design-tokens/assets/fonts/Poppins_500Medium.ttf',
-      weight: '500',
-    },
-    {
-      path: '../../../../../packages/design-tokens/assets/fonts/Poppins_600SemiBold.ttf',
-      weight: '600',
-    },
-    {
-      path: '../../../../../packages/design-tokens/assets/fonts/Poppins_700Bold.ttf',
-      weight: '700',
-    },
-  ],
-  variable: '--font-family-sans',
-})
 
 export async function generateMetadata(): Promise<Metadata> {
   const { config: siteConfig, metadata } = await getSitePresentation()
 
-  return {
-    applicationName: siteConfig.identity.siteTitle,
-    description: metadata.description,
-    icons: { apple: appIcon.src, icon: metadata.faviconUrl || favicon.src },
-    metadataBase: new URL(getSiteURL()),
-    openGraph: {
-      description: metadata.description,
-      images: metadata.socialImageUrl ? [metadata.socialImageUrl] : undefined,
-      siteName: siteConfig.identity.siteTitle,
-    },
-    title: {
-      default: metadata.title,
-      template: `%s · ${siteConfig.identity.siteTitle}`,
-    },
-  }
+  return siteDocumentMetadata(siteConfig, metadata, {
+    siteURL: getSiteURL(),
+    icon: favicon.src,
+    appleIcon: appIcon.src,
+  })
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { config: siteConfig } = await getSitePresentation()
-  const bootstrap = `(function(){try{var s=${siteConfig.theme.allowToggle ? `localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)})` : 'null'};var d=${JSON.stringify(siteConfig.theme.defaultMode)};var t=s==='light'||s==='dark'?s:d==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):d;document.documentElement.dataset.theme=t}catch(e){}})()`
+  const bootstrap = themeBootstrapScript(siteConfig.theme, THEME_STORAGE_KEY)
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -71,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <style dangerouslySetInnerHTML={{ __html: siteConfigCSS(siteConfig) }} />
         <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
       </head>
-      <body className={font.variable}>
+      <body className={publishingFontClassName}>
         <SiteConfigProvider config={siteConfig}>
           <GoogleTagManager containerId={siteConfig.integrations.googleTagManagerId} />
           <SiteHeader siteConfig={siteConfig} />
