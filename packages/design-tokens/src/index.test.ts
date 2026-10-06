@@ -32,3 +32,21 @@ describe('shared theme tokens', () => {
     expect(getPresetTokens('spacious', 'rounded').radii.lg).toBe(27)
   })
 })
+
+it('resolves independent bundled fonts and leaves legacy typography unspecified', async () => {
+  const { presentationTypographyCSS } = await import('./index.js')
+  const legacy = presentationTypographyCSS({ fontPreset: 'poppins' })
+  expect(legacy).not.toContain('--heading-weight')
+  expect(legacy).not.toContain('--font-size-hero')
+  const css = presentationTypographyCSS({
+    fontPreset: 'poppins',
+    bodyFont: 'inter',
+    headingFont: 'inter',
+    labelFont: 'ibm-plex-mono',
+    headingWeight: '800',
+    typographyPreset: 'editorial',
+  })
+  expect(css).toContain('--font-family-label:var(--font-family-mono)')
+  expect(css).toContain('--heading-weight:800')
+  expect(css).toContain('--font-size-hero-max:64px')
+})

@@ -13,6 +13,11 @@ export function createPagesFields(
           fields: [
             { name: 'title', type: 'text', required: true },
             {
+              name: 'headerVariant',
+              type: 'select',
+              options: ['inherit', 'standard', 'minimal'],
+            },
+            {
               name: 'slug',
               type: 'text',
               index: true,

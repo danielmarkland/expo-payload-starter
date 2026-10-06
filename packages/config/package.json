@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --check scripts/setup-production.mjs && node --test scripts/setup-production.test.mjs scripts/package-boundaries.test.mjs"
+    "test": "node --check scripts/setup-production.mjs && node --test scripts/setup-production.test.mjs scripts/package-boundaries.test.mjs scripts/presentation-boundaries.test.mjs"
   },
   "exports": {
     "./typescript": "./typescript/strict.json"

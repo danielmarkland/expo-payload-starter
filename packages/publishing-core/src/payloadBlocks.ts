@@ -81,6 +81,10 @@ export function createPublishingBlocks({
             choice('headingAlignment', ['left', 'center']),
             choice('actionAlignment', ['left', 'center']),
             choice('columns', ['auto', '2', '3', '4']),
+            choice('mobileColumns', ['1', '2']),
+            choice('innerWidth', ['reading', 'standard', 'wide', 'full']),
+            choice('cardPadding', ['none', 'sm', 'md', 'lg', 'xl']),
+            choice('headingSpacing', ['none', 'sm', 'md', 'lg', 'xl']),
           ],
         },
         {
@@ -347,9 +351,11 @@ export function createPublishingBlocks({
           { label: 'Cards', value: 'cards' },
           { label: 'Stacked', value: 'stacked' },
           { label: 'Plain columns', value: 'plain' },
+          { label: 'Process steps', value: 'process' },
         ],
       },
       { name: 'numbered', type: 'checkbox', label: 'Number steps' },
+      choice('cardTreatment', ['separated', 'joined']),
       {
         name: 'items',
         type: 'array',
@@ -358,6 +364,8 @@ export function createPublishingBlocks({
         fields: [
           { name: 'title', type: 'text', required: true },
           { name: 'description', type: 'textarea', required: true },
+          { name: 'metadata', type: 'text' },
+          { name: 'body', type: 'richText' },
           {
             name: 'ruleColor',
             type: 'text',
@@ -434,6 +442,8 @@ export function createPublishingBlocks({
           { name: 'name', type: 'text', required: true },
           { name: 'role', type: 'text' },
           { name: 'description', type: 'textarea', required: true },
+          { name: 'metadata', type: 'text' },
+          { name: 'body', type: 'richText' },
           ...destinationFields({ defaultType: 'url' }),
         ],
       },
@@ -445,6 +455,8 @@ export function createPublishingBlocks({
     slug: 'callToAction',
     labels: { plural: 'Call to action sections', singular: 'Call to action' },
     fields: withAppearance([
+      choice('variant', ['bordered', 'band']),
+      choice('buttonSurface', ['default', 'light']),
       { name: 'heading', type: 'text', required: true },
       { name: 'body', type: 'textarea' },
       {
@@ -548,6 +560,7 @@ export function createPublishingBlocks({
     slug: 'faq',
     labels: { plural: 'FAQ sections', singular: 'FAQ' },
     fields: withAppearance([
+      choice('variant', ['disclosure', 'rows']),
       { name: 'heading', type: 'text' },
       {
         name: 'items',

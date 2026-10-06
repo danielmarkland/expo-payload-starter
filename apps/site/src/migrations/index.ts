@@ -23,6 +23,7 @@ import * as migration_20260930_014425_consistent_link_controls from './20260930_
 import * as migration_20260930_023515_expanded_icon_picker from './20260930_023515_expanded_icon_picker'
 import * as migration_20261005_230402_practical_layout_coverage from './20261005_230402_practical_layout_coverage'
 import * as migration_20261005_site_transfer_gates from './20261005_site_transfer_gates'
+import * as migration_20261006_155757_landing_design_controls from './20261006_155757_landing_design_controls'
 
 export const migrations = [
   {
@@ -141,13 +142,18 @@ export const migrations = [
     name: '20260930_023515_expanded_icon_picker',
   },
   {
+    up: migration_20261005_230402_practical_layout_coverage.up,
+    down: migration_20261005_230402_practical_layout_coverage.down,
+    name: '20261005_230402_practical_layout_coverage',
+  },
+  {
     up: migration_20261005_site_transfer_gates.up,
     down: migration_20261005_site_transfer_gates.down,
     name: '20261005_site_transfer_gates',
   },
   {
-    up: migration_20261005_230402_practical_layout_coverage.up,
-    down: migration_20261005_230402_practical_layout_coverage.down,
-    name: '20261005_230402_practical_layout_coverage',
+    up: migration_20261006_155757_landing_design_controls.up,
+    down: migration_20261006_155757_landing_design_controls.down,
+    name: '20261006_155757_landing_design_controls',
   },
 ]

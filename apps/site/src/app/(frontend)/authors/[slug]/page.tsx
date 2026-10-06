@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
-import { PostArchive } from '@danielmarkland/publishing-ui/PostArchive'
+import { EditorialArchive } from '@danielmarkland/publishing-ui/EditorialArchive'
 import { archivePageNumber } from '@danielmarkland/publishing-core/postSelection'
 import { getSitePresentation } from '@/lib/getSiteSettings'
 import { getPublishedPosts, getTaxonomyDocument } from '@/lib/api/content'
@@ -36,34 +35,15 @@ export default async function AuthorPage({ params, searchParams }: Props) {
   if (page > Math.max(1, result.totalPages)) notFound()
 
   return (
-    <PostArchive
-      settings={settings}
+    <EditorialArchive
+      eyebrow="Author"
+      title={author.name}
+      description={author.bio}
+      image={author.image}
+      website={author.website}
       posts={result.docs}
+      settings={settings}
       pagination={result}
-      header={
-        <>
-          <p className="eyebrow">Author</p>
-          <h1>{author.name}</h1>
-          {author.image && typeof author.image === 'object' && author.image.url ? (
-            <Image
-              alt={author.image.alt || author.name}
-              className="author-profile-image"
-              height={author.image.height || 240}
-              src={author.image.url}
-              unoptimized
-              width={author.image.width || 240}
-            />
-          ) : null}
-          {author.bio ? <p className="lede">{author.bio}</p> : null}
-          {author.website && /^https?:\/\//i.test(author.website) ? (
-            <p>
-              <a href={author.website} rel="noreferrer" target="_blank">
-                Author website
-              </a>
-            </p>
-          ) : null}
-        </>
-      }
     />
   )
 }

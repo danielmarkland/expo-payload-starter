@@ -1,3 +1,7 @@
+import {
+  OpenAPIRegistry,
+  OpenApiGeneratorV3,
+} from '@asteasolutions/zod-to-openapi'
 import { describe, expect, it } from 'vitest'
 import {
   authorSchema,
@@ -216,4 +220,19 @@ describe('content contracts', () => {
         .success,
     ).toBe(false)
   })
+})
+
+it('documents recursive rich-text cards without expanding the tree indefinitely', () => {
+  const registry = new OpenAPIRegistry()
+  registry.register('PublishingPage', pageSchema)
+  const document = new OpenApiGeneratorV3(
+    registry.definitions,
+  ).generateDocument({
+    openapi: '3.0.0',
+    info: { title: 'Publishing', version: '1' },
+  })
+  expect(document.components?.schemas?.PublishingRichTextNode).toBeDefined()
+  expect(JSON.stringify(document)).toContain(
+    '#/components/schemas/PublishingRichTextNode',
+  )
 })

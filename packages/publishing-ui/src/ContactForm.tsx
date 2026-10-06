@@ -1,6 +1,6 @@
 'use client'
 
-import { type FormEvent, useState } from 'react'
+import { usePublishingFormSubmission } from './usePublishingFormSubmission.js'
 
 import {
   buttonClassName,
@@ -10,8 +10,6 @@ import type { ComponentType, ComponentProps } from 'react'
 import type { createLinkComponents } from './LinkAction.js'
 import { useSiteConfig } from './SiteConfigProvider.js'
 import { TurnstileField } from './TurnstileField.js'
-
-type FormStatus = 'error' | 'idle' | 'sending' | 'success'
 
 export function createContactForm({
   LinkLabel,
@@ -37,47 +35,19 @@ export function createContactForm({
     submitLabel: string
     successMessage: string
   }) {
-    const [status, setStatus] = useState<FormStatus>('idle')
-    const [turnstileKey, setTurnstileKey] = useState(0)
     const siteKey = useSiteConfig().integrations.turnstileSiteKey
-
-    async function submit(event: FormEvent<HTMLFormElement>) {
-      event.preventDefault()
-      if (status === 'sending' || !siteKey) return
-
-      const form = event.currentTarget
-      const data = new FormData(form)
-      setStatus('sending')
-
-      try {
-        const response = await fetch('/api/v1/contact', {
-          body: JSON.stringify({
-            email: data.get('email'),
-            message: data.get('message'),
-            ...(nameMode === 'separate'
-              ? {
-                  firstName: data.get('firstName'),
-                  lastName: data.get('lastName'),
-                }
-              : { name: data.get('name') }),
-            ...(showCompany ? { company: data.get('company') } : {}),
-            turnstileToken: data.get('cf-turnstile-response'),
-            website: data.get('website'),
-          }),
-          headers: { 'content-type': 'application/json' },
-          method: 'POST',
-        })
-
-        if (!response.ok) throw new Error('Contact request failed')
-
-        form.reset()
-        setTurnstileKey((value) => value + 1)
-        setStatus('success')
-      } catch {
-        setTurnstileKey((value) => value + 1)
-        setStatus('error')
-      }
-    }
+    const { status, turnstileKey, submit } = usePublishingFormSubmission({
+      endpoint: '/api/v1/contact',
+      siteKey,
+      fields: (data) => ({
+        email: data.get('email'),
+        message: data.get('message'),
+        ...(nameMode === 'separate'
+          ? { firstName: data.get('firstName'), lastName: data.get('lastName') }
+          : { name: data.get('name') }),
+        ...(showCompany ? { company: data.get('company') } : {}),
+      }),
+    })
 
     return (
       <>

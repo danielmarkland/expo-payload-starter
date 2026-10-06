@@ -1,3 +1,4 @@
+import { sitemapURLs } from '@danielmarkland/publishing-core/publishingRules'
 import type { MetadataRoute } from 'next'
 import { getSitemapDocuments } from '@/lib/api/content'
 import { getSiteURL } from '@/lib/serverConfig'
@@ -8,12 +9,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteURL = getSiteURL()
   const entries = await getSitemapDocuments()
 
-  return [
-    { url: siteURL, lastModified: new Date() },
-    { url: `${siteURL}/posts`, lastModified: new Date() },
-    ...entries.map((entry) => ({
-      url: `${siteURL}${entry.path}`,
-      lastModified: entry.updatedAt,
-    })),
-  ]
+  return sitemapURLs(siteURL, entries)
 }

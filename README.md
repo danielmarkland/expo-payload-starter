@@ -16,14 +16,13 @@ authenticated application.
 - `packages/brand` — private starter identity and image assets.
 - `packages/design-tokens` — framework-neutral visual tokens and fonts.
 - `packages/publishing-core` — reusable publishing behavior for Payload-backed sites.
-- `packages/publishing-ui` — shared Next.js publishing components and Payload admin controls.
+- `packages/publishing-ui` — shared public views, CSS, font loading, icons and Payload admin controls.
 - `packages/config` — shared TypeScript settings and boundary enforcement.
 - `supabase` — product database migrations, RLS policies, and seeds.
 
 Reusable Payload link fields and page blocks are owned by `publishing-core` through
-`createPublishingFields` and `createPublishingBlocks`. The site supplies its icon
-options and Payload admin component references; access rules and migrations remain
-application-owned. Import these factories from the `payloadFields` and
+`createPublishingFields` and `createPublishingBlocks`. Shared icon options come from the publishing packages; the site supplies Payload
+admin component references, access policies and migration history. Import these factories from the `payloadFields` and
 `payloadBlocks` package subpaths.
 
 ## Requirements
@@ -212,22 +211,22 @@ and [Supabase API keys](https://supabase.com/docs/guides/getting-started/api-key
 
 ### Website and Payload (`apps/site/.env`)
 
-| Variable                               | Handling      | Purpose                                                                                                                                                                                   |
-| -------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`                         | **Secret**    | Required server-only Payload Postgres connection string. For hosted setup, use the Supabase Session pooler URI from the same project.                                                     |
-| `PAYLOAD_SECRET`                       | **Secret**    | Required Payload signing/encryption secret. Draft-preview authorization is derived from this value, so no separate preview secret is needed.                                              |
-| `RESEND_API_KEY`                       | **Secret**    | Optional Resend API key used by Payload and the contact endpoint.                                                                                                                         |
-| `EMAIL_FROM_ADDRESS`                   | Config        | Sender address for Payload and contact email. The site title is used as the display name.                                                                                                 |
-| `CONTACT_TO_ADDRESS`                   | **Secret**    | Optional contact recipient. When omitted, `EMAIL_FROM_ADDRESS` is used.                                                                                                                   |
-| `TURNSTILE_SECRET_KEY`                 | **Secret**    | Server-only Cloudflare Turnstile verification secret.                                                                                                                                     |
-| `MAILERLITE_API_KEY`                   | **Secret**    | Optional server-only MailerLite API key used by the global newsletter signup. The target group ID is configured in Footer Navigation.                                                     |
-| `SUPABASE_S3_ACCESS_KEY_ID`            | **Secret**    | Supabase Storage S3 access key for Payload media uploads.                                                                                                                                 |
-| `SUPABASE_S3_SECRET_ACCESS_KEY`        | **Secret**    | Secret half of the S3 credential pair.                                                                                                                                                    |
-| `SUPABASE_S3_ENDPOINT`                 | Config        | Supabase Storage S3 endpoint.                                                                                                                                                             |
-| `SUPABASE_S3_REGION`                   | Config        | S3 signing region; the local default is `local`.                                                                                                                                          |
-| `SITE_URL`                             | Config        | Optional canonical URL override for local or non-Vercel deployments. Vercel uses its system-provided production URL automatically; local development defaults to `http://localhost:3000`. |
-| `EXPO_PUBLIC_SUPABASE_URL`             | Public config | Supabase project URL used by authenticated BFF product routes.                                                                                                                            |
-| `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public key    | Supabase publishable key used with the caller's Bearer token; never use a service-role key here.                                                                                          |
+| Variable                               | Handling      | Purpose                                                                                                                                                  |
+| -------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                         | **Secret**    | Required server-only Payload Postgres connection string. For hosted setup, use the Supabase Session pooler URI from the same project.                    |
+| `PAYLOAD_SECRET`                       | **Secret**    | Required Payload signing/encryption secret. Draft-preview authorization is derived from this value, so no separate preview secret is needed.             |
+| `RESEND_API_KEY`                       | **Secret**    | Optional Resend API key used by Payload and the contact endpoint.                                                                                        |
+| `EMAIL_FROM_ADDRESS`                   | Config        | Sender address for Payload and contact email. The site title is used as the display name.                                                                |
+| `CONTACT_TO_ADDRESS`                   | **Secret**    | Optional contact recipient. When omitted, `EMAIL_FROM_ADDRESS` is used.                                                                                  |
+| `TURNSTILE_SECRET_KEY`                 | **Secret**    | Server-only Cloudflare Turnstile verification secret.                                                                                                    |
+| `MAILERLITE_API_KEY`                   | **Secret**    | Optional server-only MailerLite API key used by the global newsletter signup. The target group ID is configured in Footer Navigation.                    |
+| `SUPABASE_S3_ACCESS_KEY_ID`            | **Secret**    | Supabase Storage S3 access key for Payload media uploads.                                                                                                |
+| `SUPABASE_S3_SECRET_ACCESS_KEY`        | **Secret**    | Secret half of the S3 credential pair.                                                                                                                   |
+| `SUPABASE_S3_ENDPOINT`                 | Config        | Supabase Storage S3 endpoint.                                                                                                                            |
+| `SUPABASE_S3_REGION`                   | Config        | S3 signing region; the local default is `local`.                                                                                                         |
+| `SITE_URL`                             | Config        | Required canonical URL outside Vercel; Vercel uses its configured production URL. Set `SITE_URL=http://localhost:3000` explicitly for local development. |
+| `EXPO_PUBLIC_SUPABASE_URL`             | Public config | Supabase project URL used by authenticated BFF product routes.                                                                                           |
+| `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public key    | Supabase publishable key used with the caller's Bearer token; never use a service-role key here.                                                         |
 
 Payload always uses the migration-created `cms-media` bucket, so there is no
 bucket-name variable. See [Supabase Storage S3 authentication](https://supabase.com/docs/guides/storage/s3/authentication) for credentials and connection details.
@@ -859,12 +858,13 @@ Draft preview requests use the same contracts and retain the preview secret boun
 Reusable editorial and navigation Payload fields are provided by
 `@danielmarkland/publishing-core/payloadEditorial` and `/payloadNavigation`.
 Field factories create independent definitions; the consuming application owns
-slug uniqueness, collection/global access, and preview routing. `pnpm lint`
+slug uniqueness, collection/global access, and preview route registration. Shared
+preview helpers own URL construction and request validation. `pnpm lint`
 checks package imports and dependency declarations, including relative escapes.
 
-Publishing UI also provides factories for page blocks, links, forms and footer
-presentation. Applications supply icon lookup, form components and latest-post
-loading; data queries and route handlers remain in the application. Pure URL and
+Publishing UI owns page blocks, links, forms, footer presentation and shared icon
+lookup. Applications supply scoped content loading, integration configuration and
+route registration; reusable delivery protocols live in publishing-core. Pure URL and
 post-heading helpers live in `publishing-core/navigation` and `/postHeadings`.
 Payload schema definitions use explicit `/payloadPages`, `/payloadSiteSettings`,
 `/payloadEditorial`, `/payloadNavigation`, and `/payloadSEO` entry points.
@@ -881,7 +881,8 @@ configuration, recovery, and disposable-database tests.
 Create feature branches from `develop` and open pull requests into `develop`.
 Squash-merge feature pull requests. Release through a `develop` → `main` pull
 request using a merge commit, then deploy and verify from `main`. Never commit
-or push changes directly to `main`. Agent branches use the `codex/` prefix.
+or push changes directly to `main`. Feature branches use a type prefix such as `feat/`, `fix/`, or `docs/`, including
+agent-created branches, as required by `.instructions/shared.md`.
 
 Public-repository commits must occur outside Monday–Friday, 8:00 a.m.–4:00 p.m.
 America/Chicago, with current time checked immediately before each commit and
@@ -903,3 +904,42 @@ visual acceptance remain the host's responsibility.
 ## Practical site layouts
 
 See [practical site layouts](docs/practical-layouts.md) for hero variants, curated artwork grids, archive pagination, booking forms, screenshot mappings, and package rollout.
+
+### Native landing-page design controls
+
+Publishing settings now support independent curated heading/body/label fonts
+(system, Poppins, Inter, IBM Plex Mono), heading weights, typography presets,
+and configurable dark section colors. Fonts are bundled and served locally.
+Optional section settings control inner width, heading spacing and card padding.
+Feature grids support explicit desktop/mobile columns, joined cards, metadata,
+rich-text bodies and numbered process steps. FAQs can use disclosure or visible
+rows; CTAs can use a bordered container or full-width band with a contrasting
+light button. Headers support social links, accent links and minimal mode, with
+per-page inheritance; footer presets support brand/details or stacked layouts.
+Existing content retains its previous defaults. Apply the new Payload migration
+before using these fields. The migration removes the full-body B-tree search
+index: long pages exceed its key-size limit, and it cannot accelerate the
+existing substring queries. Search behavior and content are retained.
+
+Native section containers share horizontal gutters regardless of surface color.
+Full-width first/last native sections own their page-edge spacing. Adjacent native
+sections with no top borders on the same surface share the larger vertical padding
+preset; explicit margins keep authored separation. Terminal rich-text margins do
+not add hidden section spacing. Omitted native width settings retain legacy layout.
+
+## Publishing ownership
+
+Public presentation lives in the publishing packages. Site routes and components
+are data/metadata adapters, with document shells and Payload registration as explicit host
+responsibilities. Both repositories enforce the shared presentation boundary
+during lint. See [publishing boundaries](docs/publishing-boundaries.md).
+
+Publishing ownership now includes native CMS factories, preview flows, content clients,
+search/metadata rules and form delivery. HTTP routes are adapters over separate
+business services. See [publishing boundaries](docs/publishing-boundaries.md).
+
+Canonical publishing endpoint definitions and query validation live in
+`publishing-contracts/publishingApi`; framework-independent cache/error/preview
+policy lives in `publishing-core/publishingHttp`. Both hosts support selected post
+IDs in authored order, filtered by publication and host access policy. Contact and
+newsletter forms share submission, retry and captcha state in publishing-ui.

@@ -99,3 +99,28 @@ describe('publishing presentation', () => {
     expect(screen.queryByRole('button')).toBeNull()
   })
 })
+
+it('keeps minimal help and standard social navigation independent', () => {
+  render(
+    <SiteHeader
+      siteConfig={{
+        identity: { siteTitle: 'Example' },
+        theme: { allowToggle: false, defaultMode: 'light' },
+      }}
+      variant="minimal"
+      navigation={<a href="/sell">Sell</a>}
+      helpLink={<a href="/help">Need help?</a>}
+      socialLinks={<a href="https://example.test/profile">Social profile</a>}
+      themeStorageKey="example"
+    />,
+  )
+  expect(screen.getByRole('banner').getAttribute('data-header-default')).toBe(
+    'minimal',
+  )
+  expect(screen.getByRole('navigation', { name: 'Help' }).textContent).toBe(
+    'Need help?',
+  )
+  expect(
+    screen.getByRole('navigation', { name: 'Main navigation' }).textContent,
+  ).toBe('Social profileSell')
+})
