@@ -17,6 +17,7 @@ while (!existsSync(path.join(payloadUI, 'package.json'))) {
 const payloadUIAlias = `./${path.relative(dirname, payloadUI).split(path.sep).join('/')}`
 
 const nextConfig: NextConfig = {
+  transpilePackages: ['@danielmarkland/publishing-ui'],
   output: process.env.VERCEL ? undefined : 'standalone',
   images: {
     localPatterns: [

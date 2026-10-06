@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { PostArchive } from '@danielmarkland/publishing-ui/PostArchive'
+import { EditorialArchive } from '@danielmarkland/publishing-ui/EditorialArchive'
 import { archivePageNumber } from '@danielmarkland/publishing-core/postSelection'
 import { getSitePresentation } from '@/lib/getSiteSettings'
 import { getPublishedPosts, getTaxonomyDocument } from '@/lib/api/content'
@@ -33,17 +33,13 @@ export default async function TagPage({ params, searchParams }: Props) {
   if (page > Math.max(1, result.totalPages)) notFound()
 
   return (
-    <PostArchive
-      settings={settings}
+    <EditorialArchive
+      eyebrow="Tag"
+      title={tag.title}
+      description={tag.description}
       posts={result.docs}
+      settings={settings}
       pagination={result}
-      header={
-        <>
-          <p className="eyebrow">Tag</p>
-          <h1>{tag.title}</h1>
-          {tag.description ? <p className="lede">{tag.description}</p> : null}
-        </>
-      }
     />
   )
 }

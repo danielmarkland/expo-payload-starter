@@ -4,6 +4,8 @@ const HEX_COLOR = /^#[0-9a-fA-F]{6}$/
 const MINIMUM_TEXT_CONTRAST = 4.5
 
 export type PaletteColorName =
+  | 'darkSurface'
+  | 'darkInk'
   | 'accent'
   | 'border'
   | 'ink'
@@ -14,6 +16,8 @@ export type PaletteColorName =
   | 'surfaceRaised'
 
 const labels: Record<PaletteColorName, string> = {
+  darkSurface: 'Dark section background',
+  darkInk: 'Dark section text',
   accent: 'Accent',
   border: 'Borders',
   ink: 'Primary text',
@@ -25,6 +29,8 @@ const labels: Record<PaletteColorName, string> = {
 }
 
 const contrastPairs: Partial<Record<PaletteColorName, PaletteColorName[]>> = {
+  darkSurface: ['darkInk'],
+  darkInk: ['darkSurface'],
   accent: ['surface', 'surfaceRaised'],
   ink: ['surface', 'surfaceRaised'],
   inkMuted: ['surface', 'surfaceRaised'],

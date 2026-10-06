@@ -58,8 +58,30 @@ export function createSiteFooter({
     const newsletter = navigation.newsletter
     const contactForm = navigation.contactForm
 
+    const socialNavigation = (
+      <>
+        {socialLinks.length ? (
+          <nav aria-label="Social media" className="footer-social-navigation">
+            {socialLinks.map(({ Icon, href, ...item }) => (
+              <a
+                aria-label={item.label}
+                className="footer-social-link"
+                href={href}
+                key={item.id || `${item.icon}-${href}`}
+                rel={item.newTab ? 'noreferrer' : undefined}
+                target={item.newTab ? '_blank' : undefined}
+              >
+                <Icon aria-hidden="true" />
+              </a>
+            ))}
+          </nav>
+        ) : null}
+      </>
+    )
     return (
-      <footer className="site-footer">
+      <footer
+        className={`site-footer footer-layout-${navigation.layoutPreset || 'default'} footer-details-${navigation.detailsAlignment || 'end'}`}
+      >
         {newsletter?.show ? (
           <section
             className={sectionAppearanceClassName(
@@ -133,25 +155,7 @@ export function createSiteFooter({
             <p className="site-footer-tagline">
               {navigation.tagline || siteConfig.identity.description}
             </p>
-            {socialLinks.length ? (
-              <nav
-                aria-label="Social media"
-                className="footer-social-navigation"
-              >
-                {socialLinks.map(({ Icon, href, ...item }) => (
-                  <a
-                    aria-label={item.label}
-                    className="footer-social-link"
-                    href={href}
-                    key={item.id || `${item.icon}-${href}`}
-                    rel={item.newTab ? 'noreferrer' : undefined}
-                    target={item.newTab ? '_blank' : undefined}
-                  >
-                    <Icon aria-hidden="true" />
-                  </a>
-                ))}
-              </nav>
-            ) : null}
+            {navigation.socialPlacement !== 'details' ? socialNavigation : null}
             {legalLinks.length ? (
               <nav aria-label="Legal and utility" className="footer-navigation">
                 {legalLinks.map((item) => (
@@ -160,6 +164,20 @@ export function createSiteFooter({
               </nav>
             ) : null}
           </div>
+          {(navigation.layoutPreset && navigation.layoutPreset !== 'default') ||
+          navigation.details ||
+          navigation.socialPlacement === 'details' ? (
+            <div className="site-footer-details">
+              {navigation.details ? <p>{navigation.details}</p> : null}
+              {navigation.socialPlacement === 'details'
+                ? socialNavigation
+                : null}
+              <small>
+                © {new Date().getFullYear()}{' '}
+                {navigation.copyrightOwner || siteConfig.identity.siteTitle}
+              </small>
+            </div>
+          ) : null}
           {showPosts ? (
             <section
               aria-labelledby="footer-posts-heading"
@@ -194,7 +212,9 @@ export function createSiteFooter({
             </section>
           ) : null}
         </div>
-        <small className="site-footer-copyright">
+        <small
+          className={`site-footer-copyright${(navigation.layoutPreset && navigation.layoutPreset !== 'default') || navigation.details || navigation.socialPlacement === 'details' ? ' footer-copyright-in-details' : ''}`}
+        >
           © {new Date().getFullYear()}{' '}
           {navigation.copyrightOwner || siteConfig.identity.siteTitle}
         </small>

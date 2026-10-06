@@ -55,16 +55,16 @@ apps/api-client -> publishing-contracts
 - `design-tokens` owns framework-neutral visual values and fonts.
 - `publishing-core` owns reusable Payload and site presentation behavior.
 - `publishing-ui` owns reusable Next.js components and Payload admin controls.
-  Applications supply content, branding, theme storage keys, and icon definitions;
-  data loading and server integrations remain application-owned.
+  Applications supply content, branding and theme storage keys;
+  icon presentation is shared. Data loading and server policy remain host-owned.
 - `config` owns shared tool configuration and dependency checks.
 
 Expo and Payload adapters stay in their applications. Packages never import
 from `apps`, and `core` never imports React, Expo, Next.js, Payload, or Supabase.
 
 Publishing packages expose named entry points rather than wildcard build files.
-Editorial and navigation field factories live in `publishing-core`; applications
-own collection/global configuration, access, slug indexes, and preview routing.
+Editorial and navigation field factories live in `publishing-core`; shared factories own collection/global configuration; hosts inject
+access, slug indexes, preview destinations and framework registration.
 The boundary check parses imports, re-exports, dynamic imports and require calls,
 rejects relative imports outside packages and application aliases, and verifies
 runtime dependency declarations separately from test dependencies.
@@ -76,3 +76,9 @@ wrappers own content loading, route and preview handlers, server credentials,
 icon selection, identity defaults, and collection/global access. Payload and
 Lexical peers are optional for consumers of pure helpers and simple UI; schema
 and rich-text rendering entry points require the corresponding peers.
+
+Publishing HTTP definitions use shared request/response schemas and route
+descriptors. Hosts bind their service calls explicitly. Shared protocol policy
+formats errors, verifies preview headers and controls caching. This keeps tenant
+security visible without duplicating the endpoint definitions or requiring a
+generic service/plugin framework.

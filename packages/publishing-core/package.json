@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -81,10 +81,53 @@
     "./postSelection": {
       "types": "./dist/postSelection.d.ts",
       "default": "./dist/postSelection.js"
+    },
+    "./siteConfig": {
+      "types": "./dist/siteConfig.d.ts",
+      "default": "./dist/siteConfig.js"
+    },
+    "./presentationBoundary": "./src/presentationBoundary.mjs",
+    "./payloadCollections": {
+      "types": "./dist/payloadCollections.d.ts",
+      "default": "./dist/payloadCollections.js"
+    },
+    "./preview": {
+      "types": "./dist/preview.d.ts",
+      "default": "./dist/preview.js"
+    },
+    "./serverEnvironment": {
+      "types": "./dist/serverEnvironment.d.ts",
+      "default": "./dist/serverEnvironment.js"
+    },
+    "./contentClient": {
+      "types": "./dist/contentClient.d.ts",
+      "default": "./dist/contentClient.js"
+    },
+    "./formDelivery": {
+      "types": "./dist/formDelivery.d.ts",
+      "default": "./dist/formDelivery.js"
+    },
+    "./serviceErrors": {
+      "types": "./dist/serviceErrors.d.ts",
+      "default": "./dist/serviceErrors.js"
+    },
+    "./publishingRules": {
+      "types": "./dist/publishingRules.d.ts",
+      "default": "./dist/publishingRules.js"
+    },
+    "./payloadLandingPages": {
+      "types": "./dist/payloadLandingPages.d.ts",
+      "default": "./dist/payloadLandingPages.js"
+    },
+    "./publishingBoundary": "./src/presentationBoundary.mjs",
+    "./publishingHttp": {
+      "types": "./dist/publishingHttp.d.ts",
+      "default": "./dist/publishingHttp.js"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "src/presentationBoundary.mjs"
   ],
   "publishConfig": {
     "access": "restricted",
@@ -113,6 +156,7 @@
   },
   "devDependencies": {
     "@payloadcms/richtext-lexical": "3.90.2",
+    "@types/node": "22.19.9",
     "payload": "3.90.2",
     "typescript": "^5.9.2",
     "vitest": "^4.0.18"

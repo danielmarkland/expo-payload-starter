@@ -1,3 +1,5 @@
+import ts from 'typescript'
+import { checkPublishingBoundaries } from '../../publishing-core/src/presentationBoundary.mjs'
 import { checkPackage } from './package-boundaries.mjs'
 import { readFile, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
@@ -18,6 +20,8 @@ const allowedDependencies = {
     'react-dom',
     'next',
     'lucide-react',
+    'react-icons',
+    '@danielmarkland/design-tokens',
     'payload',
     '@payloadcms/ui',
     '@testing-library/react',
@@ -73,16 +77,19 @@ for (const file of await recursiveSourceFiles(join('apps', 'app'))) {
 
 for (const file of await recursiveSourceFiles(join('apps', 'site', 'src'))) {
   if (
-    file.endsWith(join('lib', 'api', 'services.ts')) ||
+    file.endsWith(join('lib', 'publishing', 'repository.ts')) ||
+    file.endsWith(join('lib', 'publishing', 'forms.ts')) ||
     file.includes(`${join('src', 'scripts')}/`)
   ) {
     continue
   }
   const source = await readFile(file, 'utf8')
-  if (source.includes("from 'payload'") && source.includes('getPayload')) {
+  if (source.includes("from 'payload'") && /\bgetPayload\b/.test(source)) {
     errors.push(`${file}: website content and product data must use the BFF`)
   }
 }
+
+errors.push(...(await checkPublishingBoundaries('apps/site', ts)))
 
 if (errors.length) {
   console.error(errors.join('\n'))

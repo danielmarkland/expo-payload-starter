@@ -5,6 +5,7 @@ extendZodWithOpenApi(z)
 
 export const apiErrorCodeSchema = z.enum([
   'bad_request',
+  'conflict',
   'forbidden',
   'internal_error',
   'not_found',
@@ -75,7 +76,13 @@ export const richTextNodeSchema = z
     tag: z.string().optional(),
     $: z.looseObject({ tone: z.string().optional() }).optional(),
     get children(): z.ZodOptional<z.ZodArray<typeof richTextNodeSchema>> {
-      return z.array(richTextNodeSchema).optional()
+      return z
+        .array(richTextNodeSchema)
+        .optional()
+        .openapi({
+          type: 'array',
+          items: { $ref: '#/components/schemas/PublishingRichTextNode' },
+        })
     },
   })
   .openapi('PublishingRichTextNode')
@@ -119,6 +126,13 @@ export const sectionAppearanceSchema = z.looseObject({
     .optional(),
   headingAlignment: z.enum(['left', 'center']).nullable().optional(),
   actionAlignment: z.enum(['left', 'center']).nullable().optional(),
+  mobileColumns: z.enum(['1', '2']).nullable().optional(),
+  innerWidth: z
+    .enum(['reading', 'standard', 'wide', 'full'])
+    .nullable()
+    .optional(),
+  cardPadding: spacing,
+  headingSpacing: spacing,
   columns: z.enum(['auto', '2', '3', '4']).nullable().optional(),
   rounded: optionalBoolean,
   paddingTop: spacing,
@@ -185,14 +199,20 @@ export const pageBlockSchema = z.discriminatedUnion('blockType', [
     blockType: z.literal('featureGrid'),
     heading: z.string(),
     intro: optionalText,
-    layout: z.enum(['cards', 'stacked', 'plain']).nullable().optional(),
+    layout: z
+      .enum(['cards', 'stacked', 'plain', 'process'])
+      .nullable()
+      .optional(),
     numbered: optionalBoolean,
+    cardTreatment: z.enum(['separated', 'joined']).nullable().optional(),
     action,
     items: z
       .array(
         itemBase.extend({
           title: z.string(),
           description: z.string(),
+          metadata: optionalText,
+          body: richTextSchema.nullable().optional(),
           ruleColor: z
             .string()
             .regex(/^#[0-9a-fA-F]{6}$/)
@@ -232,6 +252,8 @@ export const pageBlockSchema = z.discriminatedUnion('blockType', [
           name: z.string(),
           role: optionalText,
           description: z.string(),
+          metadata: optionalText,
+          body: richTextSchema.nullable().optional(),
         }),
       )
       .nullable()
@@ -239,6 +261,8 @@ export const pageBlockSchema = z.discriminatedUnion('blockType', [
   }),
   blockBase.extend({
     blockType: z.literal('callToAction'),
+    variant: z.enum(['bordered', 'band']).nullable().optional(),
+    buttonSurface: z.enum(['default', 'light']).nullable().optional(),
     heading: z.string(),
     body: optionalText,
     action: linkSchema,
@@ -276,6 +300,7 @@ export const pageBlockSchema = z.discriminatedUnion('blockType', [
   }),
   blockBase.extend({
     blockType: z.literal('faq'),
+    variant: z.enum(['disclosure', 'rows']).nullable().optional(),
     items: z
       .array(itemBase.extend({ question: z.string(), answer: z.string() }))
       .nullable()
@@ -310,6 +335,10 @@ export const pageSchema = z.looseObject({
   layout: z.array(pageBlockSchema),
   slug: z.string(),
   title: z.string(),
+  headerVariant: z
+    .enum(['inherit', 'standard', 'minimal'])
+    .nullable()
+    .optional(),
   customCSS: optionalText,
   meta: contentMetaSchema.nullable().optional(),
   createdAt: optionalText,
@@ -341,10 +370,23 @@ export const postSchema = postCardSchema.extend({
   updatedAt: optionalText,
 })
 const navigationItemSchema = linkSchema.extend({
+  treatment: z.enum(['default', 'accent']).nullable().optional(),
   label: z.string(),
   type: z.enum(['page', 'post', 'url']),
 })
 export const headerNavigationSchema = z.looseObject({
+  variant: z.enum(['standard', 'minimal']).nullable().optional(),
+  helpLink: linkSchema.nullable().optional(),
+  socialLinks: z
+    .array(
+      linkSchema.extend({
+        label: z.string(),
+        icon: z.string(),
+        url: z.string(),
+      }),
+    )
+    .nullable()
+    .optional(),
   id: documentIDSchema.optional(),
   items: z.array(navigationItemSchema).nullable().optional(),
   sticky: optionalBoolean,
@@ -353,6 +395,13 @@ export const headerNavigationSchema = z.looseObject({
 })
 const footerFormSchema = blockBase.extend({ ...formFields, show: z.boolean() })
 export const footerNavigationSchema = z.looseObject({
+  layoutPreset: z
+    .enum(['default', 'brand-details', 'stacked'])
+    .nullable()
+    .optional(),
+  detailsAlignment: z.enum(['start', 'end']).nullable().optional(),
+  socialPlacement: z.enum(['brand', 'details']).nullable().optional(),
+  details: optionalText,
   id: documentIDSchema.optional(),
   tagline: optionalText,
   copyrightOwner: optionalText,

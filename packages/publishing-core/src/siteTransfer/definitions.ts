@@ -6,7 +6,7 @@ const fieldsByResource: Record<string, string[]> = {
   authors: ['name', 'slug', 'bio', 'image', 'website'],
   categories: ['title', 'slug', 'description', 'parent'],
   tags: ['title', 'slug', 'description'],
-  pages: ['title', 'slug', 'layout', 'customCSS', 'meta'],
+  pages: ['headerVariant', 'title', 'slug', 'layout', 'customCSS', 'meta'],
   posts: [
     'title',
     'slug',
@@ -36,6 +36,9 @@ const fieldsByResource: Record<string, string[]> = {
     'meta',
   ],
   'header-navigation': [
+    'variant',
+    'helpLink',
+    'socialLinks',
     'items',
     'appearance',
     'sticky',
@@ -43,6 +46,10 @@ const fieldsByResource: Record<string, string[]> = {
     'searchIcon',
   ],
   'footer-navigation': [
+    'layoutPreset',
+    'detailsAlignment',
+    'socialPlacement',
+    'details',
     'items',
     'appearance',
     'newsletter',

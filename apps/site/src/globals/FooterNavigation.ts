@@ -1,23 +1,15 @@
-import { createFooterNavigationFields } from '@danielmarkland/publishing-core/payloadNavigation'
-import type { GlobalConfig } from 'payload'
+import { createFooterNavigationGlobal } from '@danielmarkland/publishing-core/payloadCollections'
 
 import { appearanceField } from '@/blocks'
 import { linkArrayPresentation, socialLinkFields, submitButtonFields } from '@/fields/linkFields'
-import { navigationItemsField } from './navigationFields'
+import { navigationItemsField } from '@/fields/linkFields'
 
-export const FooterNavigation: GlobalConfig = {
-  slug: 'footerNavigation',
-  label: 'Footer navigation',
-  dbName: 'cms_footer_navigation',
-  access: {
-    read: () => true,
-    update: ({ req }) => Boolean(req.user),
-  },
-  fields: createFooterNavigationFields({
-    navigationItemsField,
-    appearanceField,
-    linkArrayPresentation,
-    socialLinkFields,
-    submitButtonFields,
-  }),
-}
+import { settingsAccess } from '@/lib/publishingPolicy'
+export const FooterNavigation = createFooterNavigationGlobal({
+  access: settingsAccess,
+  navigationItemsField,
+  appearanceField,
+  linkArrayPresentation,
+  socialLinkFields,
+  submitButtonFields,
+})

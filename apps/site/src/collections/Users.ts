@@ -8,10 +8,29 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   access: {
-    create: ({ req }) => !req.user || req.user.role === 'admin',
+    create: ({ req }) => req.user?.role === 'admin',
     delete: ({ req }) => req.user?.role === 'admin',
     read: ({ req }) => Boolean(req.user),
     update: ({ req }) => (req.user?.role === 'admin' ? true : { id: { equals: req.user?.id } }),
+  },
+  hooks: {
+    beforeChange: [
+      async ({ data, operation, req }) => {
+        if (operation === 'create') {
+          const existing = await req.payload.find({
+            collection: 'users',
+            limit: 1,
+            depth: 0,
+            overrideAccess: true,
+            req,
+          })
+          // Payload's first-user operation bypasses collection access. Ensure that
+          // first account can actually administer the standalone CMS.
+          if (!existing.totalDocs) data.role = 'admin'
+        }
+        return data
+      },
+    ],
   },
   fields: [
     {
@@ -21,6 +40,10 @@ export const Users: CollectionConfig = {
       options: ['admin', 'editor'],
       required: true,
       saveToJWT: true,
+      access: {
+        create: ({ req }) => req.user?.role === 'admin',
+        update: ({ req }) => req.user?.role === 'admin',
+      },
     },
   ],
 }

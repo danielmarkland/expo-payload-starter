@@ -65,7 +65,7 @@ describe('portable design capabilities', () => {
     )!
     expect(feature.fields.find((f) => f.name === 'layout')).toMatchObject({
       defaultValue: 'cards',
-      options: ['cards', 'stacked', 'plain'],
+      options: ['cards', 'stacked', 'plain', 'process'],
     })
     expect(
       describeDesignFields([

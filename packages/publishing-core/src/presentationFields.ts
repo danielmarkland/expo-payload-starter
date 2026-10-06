@@ -13,6 +13,10 @@ export function choice(
           : 'pub_archive_presentation'
         : (
             {
+              mobileColumns: 'mc',
+              innerWidth: 'iw',
+              cardPadding: 'cp',
+              headingSpacing: 'hs',
               headingAlignment: 'pub_heading_align',
               actionAlignment: 'pub_action_align',
               columns: 'pub_columns',
