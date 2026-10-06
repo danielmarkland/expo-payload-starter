@@ -175,6 +175,7 @@ export interface User {
 export interface Media {
   id: number;
   alt: string;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -303,6 +304,12 @@ export interface Page {
           };
           [k: string]: unknown;
         };
+        variant?: ('split' | 'text' | 'background') | null;
+        alignment?: ('left' | 'center') | null;
+        height?: ('compact' | 'standard' | 'tall') | null;
+        focalX?: number | null;
+        focalY?: number | null;
+        overlay?: number | null;
         secondaryHeading?: string | null;
         body?: string | null;
         primaryButton?: {
@@ -474,8 +481,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -524,8 +534,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -560,8 +573,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -589,11 +605,13 @@ export interface Page {
         eyebrow?: string | null;
         heading: string;
         intro?: string | null;
-        layout?: ('cards' | 'stacked') | null;
+        layout?: ('cards' | 'stacked' | 'plain') | null;
+        numbered?: boolean | null;
         items?:
           | {
               title: string;
               description: string;
+              ruleColor?: string | null;
               id?: string | null;
             }[]
           | null;
@@ -686,8 +704,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -820,8 +841,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1022,8 +1046,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1156,8 +1183,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1274,8 +1304,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1317,8 +1350,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1368,8 +1404,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1397,6 +1436,8 @@ export interface Page {
         eyebrow?: string | null;
         heading: string;
         body?: string | null;
+        nameMode?: ('combined' | 'separate') | null;
+        showCompany?: boolean | null;
         submitLabel: string;
         /**
          * Optional icon displayed with the link label.
@@ -1474,8 +1515,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1516,8 +1560,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1558,8 +1605,11 @@ export interface Page {
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1589,13 +1639,109 @@ export interface Page {
          */
         eyebrow?: string | null;
         heading?: string | null;
+        source?: ('latest' | 'category' | 'selected') | null;
+        category?: (number | null) | Category;
+        /**
+         * Select up to twelve posts in display order.
+         */
+        selectedPosts?: (number | Post)[] | null;
+        imageProportion?: ('landscape' | 'square' | 'original') | null;
+        presentation?: ('card' | 'imageOnly' | 'simple') | null;
+        /**
+         * Optional single link shown after the section content.
+         */
+        action?: {
+          label?: string | null;
+          type?: ('page' | 'post' | 'url') | null;
+          /**
+           * Optional icon displayed with the link label.
+           */
+          icon?:
+            | (
+                | 'apple'
+                | 'bluesky'
+                | 'discord'
+                | 'facebook'
+                | 'github'
+                | 'google-play'
+                | 'instagram'
+                | 'linkedin'
+                | 'mastodon'
+                | 'medium'
+                | 'pinterest'
+                | 'reddit'
+                | 'slack'
+                | 'spotify'
+                | 'telegram'
+                | 'threads'
+                | 'tiktok'
+                | 'twitch'
+                | 'whatsapp'
+                | 'twitter'
+                | 'youtube'
+                | 'arrow-right'
+                | 'arrow-up-right'
+                | 'bell'
+                | 'book-open'
+                | 'calendar'
+                | 'camera'
+                | 'check'
+                | 'chevron-right'
+                | 'help'
+                | 'cloud'
+                | 'download'
+                | 'external-link'
+                | 'file-text'
+                | 'globe'
+                | 'heart'
+                | 'home'
+                | 'image'
+                | 'info'
+                | 'link'
+                | 'lock'
+                | 'log-in'
+                | 'mail'
+                | 'map-pin'
+                | 'menu'
+                | 'message'
+                | 'phone'
+                | 'play'
+                | 'podcast'
+                | 'radio'
+                | 'rss'
+                | 'search'
+                | 'send'
+                | 'settings'
+                | 'share'
+                | 'shopping-bag'
+                | 'shopping-cart'
+                | 'sparkles'
+                | 'star'
+                | 'user'
+                | 'users'
+                | 'zap'
+              )
+            | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
+          newTab?: boolean | null;
+          iconPosition?: ('left' | 'right') | null;
+          variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+        };
         limit?: number | null;
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
          */
         appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-          background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1825,6 +1971,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1914,6 +2061,12 @@ export interface PagesSelect<T extends boolean = true> {
               anchor?: T;
               eyebrow?: T;
               heading?: T;
+              variant?: T;
+              alignment?: T;
+              height?: T;
+              focalX?: T;
+              focalY?: T;
+              overlay?: T;
               secondaryHeading?: T;
               body?: T;
               primaryButton?:
@@ -1946,6 +2099,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -1976,6 +2132,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2006,6 +2165,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2034,11 +2196,13 @@ export interface PagesSelect<T extends boolean = true> {
               heading?: T;
               intro?: T;
               layout?: T;
+              numbered?: T;
               items?:
                 | T
                 | {
                     title?: T;
                     description?: T;
+                    ruleColor?: T;
                     id?: T;
                   };
               action?:
@@ -2057,6 +2221,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2102,6 +2269,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2158,6 +2328,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2214,6 +2387,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2257,6 +2433,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2294,6 +2473,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2336,6 +2518,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2363,6 +2548,8 @@ export interface PagesSelect<T extends boolean = true> {
               eyebrow?: T;
               heading?: T;
               body?: T;
+              nameMode?: T;
+              showCompany?: T;
               submitLabel?: T;
               icon?: T;
               iconPosition?: T;
@@ -2371,6 +2558,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2407,6 +2597,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2443,6 +2636,9 @@ export interface PagesSelect<T extends boolean = true> {
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2469,10 +2665,31 @@ export interface PagesSelect<T extends boolean = true> {
               anchor?: T;
               eyebrow?: T;
               heading?: T;
+              source?: T;
+              category?: T;
+              selectedPosts?: T;
+              imageProportion?: T;
+              presentation?: T;
+              action?:
+                | T
+                | {
+                    label?: T;
+                    type?: T;
+                    icon?: T;
+                    page?: T;
+                    post?: T;
+                    url?: T;
+                    newTab?: T;
+                    iconPosition?: T;
+                    variant?: T;
+                  };
               limit?: T;
               appearance?:
                 | T
                 | {
+                    headingAlignment?: T;
+                    actionAlignment?: T;
+                    columns?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2854,8 +3071,11 @@ export interface FooterNavigation {
      * Optional layout and surface overrides. Defaults use the site design system.
      */
     appearance?: {
+      headingAlignment?: ('left' | 'center') | null;
+      actionAlignment?: ('left' | 'center') | null;
+      columns?: ('auto' | '2' | '3' | '4') | null;
       contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-      background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+      background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
       rounded?: boolean | null;
       paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
       paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -2877,6 +3097,8 @@ export interface FooterNavigation {
     eyebrow?: string | null;
     heading: string;
     body?: string | null;
+    nameMode?: ('combined' | 'separate') | null;
+    showCompany?: boolean | null;
     submitLabel: string;
     /**
      * Optional icon displayed with the link label.
@@ -2954,8 +3176,11 @@ export interface FooterNavigation {
      * Optional layout and surface overrides. Defaults use the site design system.
      */
     appearance?: {
+      headingAlignment?: ('left' | 'center') | null;
+      actionAlignment?: ('left' | 'center') | null;
+      columns?: ('auto' | '2' | '3' | '4') | null;
       contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
-      background?: ('default' | 'raised' | 'accent' | 'dark') | null;
+      background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
       rounded?: boolean | null;
       paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
       paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -3102,6 +3327,7 @@ export interface FooterNavigation {
       }[]
     | null;
   latestPosts: {
+    limit?: number | null;
     show: boolean;
     heading?: string | null;
   };
@@ -3168,6 +3394,15 @@ export interface SiteSetting {
      * Controls button corners independently from the site-wide shape preset.
      */
     shape: 'square' | 'soft' | 'rounded' | 'pill';
+  };
+  archive?: {
+    pageSize?: number | null;
+    columns?: ('auto' | '2' | '3' | '4') | null;
+    imageProportion?: ('landscape' | 'square' | 'original') | null;
+    presentation?: ('card' | 'simple') | null;
+    titleAlignment?: ('left' | 'center') | null;
+    titleSurface?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
+    listSurface?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
   };
   integrations?: {
     /**
@@ -3241,6 +3476,9 @@ export interface FooterNavigationSelect<T extends boolean = true> {
         appearance?:
           | T
           | {
+              headingAlignment?: T;
+              actionAlignment?: T;
+              columns?: T;
               contentWidth?: T;
               background?: T;
               rounded?: T;
@@ -3266,6 +3504,8 @@ export interface FooterNavigationSelect<T extends boolean = true> {
         eyebrow?: T;
         heading?: T;
         body?: T;
+        nameMode?: T;
+        showCompany?: T;
         submitLabel?: T;
         icon?: T;
         iconPosition?: T;
@@ -3274,6 +3514,9 @@ export interface FooterNavigationSelect<T extends boolean = true> {
         appearance?:
           | T
           | {
+              headingAlignment?: T;
+              actionAlignment?: T;
+              columns?: T;
               contentWidth?: T;
               background?: T;
               rounded?: T;
@@ -3318,6 +3561,7 @@ export interface FooterNavigationSelect<T extends boolean = true> {
   latestPosts?:
     | T
     | {
+        limit?: T;
         show?: T;
         heading?: T;
       };
@@ -3374,6 +3618,17 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | T
     | {
         shape?: T;
+      };
+  archive?:
+    | T
+    | {
+        pageSize?: T;
+        columns?: T;
+        imageProportion?: T;
+        presentation?: T;
+        titleAlignment?: T;
+        titleSurface?: T;
+        listSurface?: T;
       };
   integrations?:
     | T

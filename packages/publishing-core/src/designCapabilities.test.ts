@@ -65,7 +65,7 @@ describe('portable design capabilities', () => {
     )!
     expect(feature.fields.find((f) => f.name === 'layout')).toMatchObject({
       defaultValue: 'cards',
-      options: ['cards', 'stacked'],
+      options: ['cards', 'stacked', 'plain'],
     })
     expect(
       describeDesignFields([
@@ -96,6 +96,29 @@ describe('portable design capabilities', () => {
         }),
         expect.objectContaining({
           path: 'current.data.layout.0.items.0.description',
+        }),
+      ]),
+    )
+  })
+  it('rejects malformed feature rule colors in portable designs', () => {
+    const diagnostics = validateDesignRecords(
+      manifest([
+        {
+          blockType: 'featureGrid',
+          heading: 'Steps',
+          layout: 'plain',
+          items: [
+            { title: 'Research', description: 'Details', ruleColor: 'green' },
+          ],
+        },
+      ]),
+      describeDesignResources(resources),
+    )
+    expect(diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: 'current.data.layout.0.items.0.ruleColor',
+          message: 'Expected a six-digit hex color',
         }),
       ]),
     )

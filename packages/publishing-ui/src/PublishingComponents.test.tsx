@@ -33,7 +33,7 @@ describe('publishing presentation', () => {
   it('renders validated card content and encodes its link', () => {
     render(<PostList posts={[post]} />)
     expect(
-      screen.getByRole('link', { name: 'A post' }).getAttribute('href'),
+      screen.getAllByRole('link', { name: 'A post' })[0].getAttribute('href'),
     ).toBe('/posts/news%2Fone')
     expect(screen.getByRole('img', { name: 'Cover' }).getAttribute('src')).toBe(
       '/cover.jpg',

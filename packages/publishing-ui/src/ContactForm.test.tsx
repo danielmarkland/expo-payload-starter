@@ -79,6 +79,42 @@ describe('contact form', () => {
     )
   })
 
+  it('submits separate booking names and company without a combined name', async () => {
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(
+        new Response(JSON.stringify({ ok: true }), { status: 200 }),
+      )
+    renderForm({
+      submitLabel: 'Send',
+      successMessage: 'Received',
+      nameMode: 'separate',
+      showCompany: true,
+    })
+    for (const [label, value] of [
+      ['First name', 'Daniel'],
+      ['Last name', 'Markland'],
+      ['Company', 'Code Assassins'],
+      ['Email', 'daniel@example.com'],
+      ['Message', 'Please book a date.'],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } })
+    const form = screen.getByRole('button', { name: 'Send' }).closest('form')!
+    const token = document.createElement('input')
+    token.name = 'cf-turnstile-response'
+    token.value = 'verified-token'
+    form.append(token)
+    fireEvent.submit(form)
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    const body = JSON.parse(fetchMock.mock.calls[0][1]?.body as string)
+    expect(body).toMatchObject({
+      firstName: 'Daniel',
+      lastName: 'Markland',
+      company: 'Code Assassins',
+    })
+    expect(body).not.toHaveProperty('name')
+  })
+
   it('disables submission when Turnstile is not configured', () => {
     renderForm(undefined, null)
 

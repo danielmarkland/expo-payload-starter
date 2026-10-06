@@ -1,3 +1,4 @@
+import { orderSelectedPosts } from '@danielmarkland/publishing-core/postSelection'
 import { createClient } from '@supabase/supabase-js'
 import { createProfileRepository, type Database } from '@starter/data'
 import { getPayload } from 'payload'
@@ -44,6 +45,7 @@ export async function findPost(slug: string, draft = false) {
 }
 
 export async function findPosts({
+  ids,
   authorId,
   categoryId,
   limit = 12,
@@ -51,6 +53,7 @@ export async function findPosts({
   search,
   tagId,
 }: {
+  ids?: number[]
   authorId?: number
   categoryId?: number
   limit?: number
@@ -59,15 +62,16 @@ export async function findPosts({
   tagId?: number
 }) {
   const payload = await getPayload({ config })
-  return payload.find({
+  const result = await payload.find({
     collection: 'posts',
     depth: 1,
-    limit,
-    page,
+    limit: ids ? ids.length : limit,
+    page: ids ? 1 : page,
     overrideAccess: false,
     sort: '-publishedAt',
     where: {
       and: [
+        ...(ids ? [{ id: { in: ids } }] : []),
         { _status: { equals: 'published' } },
         ...(search
           ? [
@@ -82,6 +86,7 @@ export async function findPosts({
       ],
     },
   })
+  return ids ? { ...result, docs: orderSelectedPosts(result.docs, ids) } : result
 }
 
 export async function searchContent(query: string) {
@@ -220,12 +225,17 @@ export async function deliverContact(submission: ContactSubmission, request: Req
   }
   await verifyTurnstile(submission.turnstileToken, 'contact', request, email.turnstileSecret)
   const payload = await getPayload({ config })
+  const name = submission.name || `${submission.firstName} ${submission.lastName}`
+  const companyHTML = submission.company
+    ? `<p><strong>Company:</strong> ${escapeHTML(submission.company)}</p>`
+    : ''
+  const companyText = submission.company ? `Company: ${submission.company}\n` : ''
   try {
     await payload.sendEmail({
-      html: `<h1>New website inquiry</h1><p><strong>Name:</strong> ${escapeHTML(submission.name)}</p><p><strong>Email:</strong> ${escapeHTML(submission.email)}</p><p><strong>Message:</strong></p><p>${escapeHTML(submission.message).replace(/\n/g, '<br>')}</p>`,
+      html: `<h1>New website inquiry</h1><p><strong>Name:</strong> ${escapeHTML(name)}</p><p><strong>Email:</strong> ${escapeHTML(submission.email)}</p>${companyHTML}<p><strong>Message:</strong></p><p>${escapeHTML(submission.message).replace(/\n/g, '<br>')}</p>`,
       replyTo: submission.email,
-      subject: `Website inquiry from ${submission.name}`,
-      text: `Name: ${submission.name}\nEmail: ${submission.email}\n\n${submission.message}`,
+      subject: `Website inquiry from ${name}`,
+      text: `Name: ${name}\nEmail: ${submission.email}\n${companyText}\n${submission.message}`,
       to: email.toAddress,
     })
   } catch {

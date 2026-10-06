@@ -2,13 +2,24 @@ import { z } from 'zod'
 
 export * from './api.js'
 
-export const contactSubmissionSchema = z.object({
-  email: z.email().max(254),
-  message: z.string().trim().min(10).max(5000),
-  name: z.string().trim().min(2).max(100),
-  turnstileToken: z.string().min(1).max(2048),
-  website: z.string().max(200).optional().default(''),
-})
+export const contactSubmissionSchema = z
+  .object({
+    email: z.email().max(254),
+    message: z.string().trim().min(10).max(5000),
+    name: z.string().trim().min(2).max(100).optional(),
+    firstName: z.string().trim().min(1).max(100).optional(),
+    lastName: z.string().trim().min(1).max(100).optional(),
+    company: z.string().trim().max(200).optional(),
+    turnstileToken: z.string().min(1).max(2048),
+    website: z.string().max(200).optional().default(''),
+  })
+  .refine(
+    (value) => Boolean(value.name || (value.firstName && value.lastName)),
+    {
+      message: 'Provide a name or both first and last names.',
+      path: ['name'],
+    },
+  )
 
 export type ContactSubmission = z.infer<typeof contactSubmissionSchema>
 
@@ -62,7 +73,27 @@ export const themeColorsSchema = z.object({
   warning: hexColorSchema,
 })
 
+export const archivePresentationSchema = z.object({
+  pageSize: z.number().int().min(1).max(48).default(12),
+  columns: z.enum(['auto', '2', '3', '4']).default('auto'),
+  imageProportion: z
+    .enum(['landscape', 'square', 'original'])
+    .default('landscape'),
+  presentation: z.enum(['card', 'simple']).default('card'),
+  titleAlignment: z.enum(['left', 'center']).default('left'),
+  titleSurface: z
+    .enum(['default', 'raised', 'accent', 'dark', 'light'])
+    .default('default'),
+  listSurface: z
+    .enum(['default', 'raised', 'accent', 'dark', 'light'])
+    .default('default'),
+})
+export type ArchivePresentation = z.infer<typeof archivePresentationSchema>
+
 export const siteConfigSchema = z.object({
+  archive: archivePresentationSchema.default(() =>
+    archivePresentationSchema.parse({}),
+  ),
   version: z.literal(1),
   integrations: z
     .object({

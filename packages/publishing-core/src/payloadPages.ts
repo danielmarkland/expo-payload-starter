@@ -1,6 +1,9 @@
 import type { Block, Field } from 'payload'
 
-export function createPagesFields(pageBlocks: Block[]): Field[] {
+export function createPagesFields(
+  pageBlocks: Block[],
+  { uniqueSlug = true }: { uniqueSlug?: boolean } = {},
+): Field[] {
   return [
     {
       type: 'tabs',
@@ -14,7 +17,7 @@ export function createPagesFields(pageBlocks: Block[]): Field[] {
               type: 'text',
               index: true,
               required: true,
-              unique: true,
+              unique: uniqueSlug,
             },
           ],
         },

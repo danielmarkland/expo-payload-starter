@@ -198,7 +198,7 @@ export function validateDesignRecords(
                 `Expected text length between ${field.minLength ?? 0} and ${field.maxLength ?? 'unlimited'}`,
               )
             if (
-              field.name === 'limit' &&
+              ['limit', 'pageSize'].includes(field.name) &&
               typeof value === 'number' &&
               !Number.isInteger(value)
             )
@@ -275,7 +275,7 @@ export function validateDesignRecords(
                 )
             }
             if (
-              field.name === 'color' ||
+              ['color', 'ruleColor'].includes(field.name) ||
               /^(primary|primaryInk|accent|surface|surfaceRaised|ink|inkMuted|border)$/.test(
                 field.name,
               )

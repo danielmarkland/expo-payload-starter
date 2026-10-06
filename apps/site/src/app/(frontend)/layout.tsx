@@ -16,6 +16,7 @@ import { siteConfigCSS } from '@/lib/siteConfig'
 
 import '@danielmarkland/design-tokens/theme.css'
 import './styles.css'
+import '@danielmarkland/publishing-ui/layout.css'
 
 const font = localFont({
   display: 'swap',

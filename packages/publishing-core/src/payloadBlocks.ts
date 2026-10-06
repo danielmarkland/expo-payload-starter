@@ -1,4 +1,5 @@
 import type { Block, Field } from 'payload'
+import { choice, contactFields } from './presentationFields.js'
 import { heroHeadlineEditor, validateHeroHeadline } from './heroHeadline.js'
 import type { createPublishingFields } from './payloadFields.js'
 
@@ -74,6 +75,16 @@ export function createPublishingBlocks({
       fields: [
         {
           type: 'collapsible',
+          label: 'Layout',
+          admin: { initCollapsed: true },
+          fields: [
+            choice('headingAlignment', ['left', 'center']),
+            choice('actionAlignment', ['left', 'center']),
+            choice('columns', ['auto', '2', '3', '4']),
+          ],
+        },
+        {
+          type: 'collapsible',
           label: 'Container and surface',
           admin: { initCollapsed: true },
           fields: [
@@ -97,6 +108,7 @@ export function createPublishingBlocks({
                 { label: 'Raised surface', value: 'raised' },
                 { label: 'Accent', value: 'accent' },
                 { label: 'Dark', value: 'dark' },
+                { label: 'Light', value: 'light' },
               ],
             },
             { name: 'rounded', type: 'checkbox', label: 'Rounded container' },
@@ -271,6 +283,19 @@ export function createPublishingBlocks({
         required: true,
         validate: validateHeroHeadline,
       },
+      choice('variant', ['split', 'text', 'background']),
+      choice('alignment', ['left', 'center']),
+      choice('height', ['compact', 'standard', 'tall']),
+      { name: 'focalX', type: 'number', min: 0, max: 100, defaultValue: 50 },
+      { name: 'focalY', type: 'number', min: 0, max: 100, defaultValue: 50 },
+      {
+        name: 'overlay',
+        type: 'number',
+        min: 0,
+        max: 100,
+        defaultValue: 50,
+        label: 'Dark overlay (%)',
+      },
       { name: 'secondaryHeading', type: 'text' },
       { name: 'body', type: 'textarea' },
       {
@@ -321,8 +346,10 @@ export function createPublishingBlocks({
         options: [
           { label: 'Cards', value: 'cards' },
           { label: 'Stacked', value: 'stacked' },
+          { label: 'Plain columns', value: 'plain' },
         ],
       },
+      { name: 'numbered', type: 'checkbox', label: 'Number steps' },
       {
         name: 'items',
         type: 'array',
@@ -331,6 +358,15 @@ export function createPublishingBlocks({
         fields: [
           { name: 'title', type: 'text', required: true },
           { name: 'description', type: 'textarea', required: true },
+          {
+            name: 'ruleColor',
+            type: 'text',
+            label: 'Top rule color (hex)',
+            validate: (value: string | null | undefined) =>
+              !value || /^#[0-9a-fA-F]{6}$/.test(value)
+                ? true
+                : 'Use a six-digit hex color.',
+          },
         ],
       },
       optionalActionField(),
@@ -474,6 +510,7 @@ export function createPublishingBlocks({
       { name: 'eyebrow', type: 'text' },
       { name: 'heading', type: 'text', required: true },
       { name: 'body', type: 'textarea' },
+      ...contactFields(),
       {
         name: 'submitLabel',
         type: 'text',
@@ -529,6 +566,29 @@ export function createPublishingBlocks({
     labels: { plural: 'Latest posts sections', singular: 'Latest posts' },
     fields: withAppearance([
       { name: 'heading', type: 'text', defaultValue: 'Latest posts' },
+      choice('source', ['latest', 'category', 'selected']),
+      {
+        name: 'category',
+        type: 'relationship',
+        relationTo: 'categories',
+        admin: {
+          condition: (_data, sibling) => sibling?.source === 'category',
+        },
+      },
+      {
+        name: 'selectedPosts',
+        type: 'relationship',
+        relationTo: 'posts',
+        hasMany: true,
+        maxRows: 12,
+        admin: {
+          condition: (_data, sibling) => sibling?.source === 'selected',
+          description: 'Select up to twelve posts in display order.',
+        },
+      },
+      choice('imageProportion', ['landscape', 'square', 'original']),
+      choice('presentation', ['card', 'imageOnly', 'simple']),
+      optionalActionField(),
       { name: 'limit', type: 'number', defaultValue: 3, min: 1, max: 12 },
     ]),
   }
