@@ -32,6 +32,7 @@ const fieldsByResource: Record<string, string[]> = {
     'appearance',
     'theme',
     'buttons',
+    'archive',
     'meta',
   ],
   'header-navigation': [

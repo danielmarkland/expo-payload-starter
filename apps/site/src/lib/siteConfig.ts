@@ -1,3 +1,4 @@
+import { archivePresentationSchema } from '@danielmarkland/publishing-contracts'
 import type { SiteConfig } from '@danielmarkland/publishing-contracts'
 import { getPresetTokens, layout, radii, themes, typography } from '@danielmarkland/design-tokens'
 import { brand } from '@starter/brand'
@@ -84,6 +85,11 @@ export function resolveSiteConfig(settings: SiteSetting, siteURL = getSiteURL())
 
   return {
     version: 1,
+    archive: archivePresentationSchema.parse(
+      Object.fromEntries(
+        Object.entries(settings.archive || {}).filter(([, value]) => value != null),
+      ),
+    ),
     integrations: {
       googleTagManagerId: settings.integrations?.googleTagManagerId || null,
       turnstileSiteKey: settings.integrations?.turnstileSiteKey || null,

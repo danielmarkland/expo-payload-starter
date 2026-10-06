@@ -12,9 +12,7 @@ const Footer = createSiteFooter({
   getHeaderNavigationIcon,
 })
 export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
-  const [navigation, posts] = await Promise.all([
-    getNavigationDocuments(),
-    getPublishedPosts('?limit=2'),
-  ])
+  const navigation = await getNavigationDocuments()
+  const posts = await getPublishedPosts(`?limit=${navigation.footer.latestPosts?.limit || 2}`)
   return <Footer siteConfig={siteConfig} navigation={navigation.footer} posts={posts} />
 }

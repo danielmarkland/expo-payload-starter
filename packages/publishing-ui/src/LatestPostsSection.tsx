@@ -1,54 +1,50 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import type { PostCard } from '@danielmarkland/publishing-contracts'
-
+import type { ReactNode } from 'react'
+import type {
+  ApiPageBlock,
+  PostCard,
+} from '@danielmarkland/publishing-contracts'
+import { PostList } from './PostList.js'
+export type LatestPostsOptions = Pick<
+  Extract<ApiPageBlock, { blockType: 'latestPosts' }>,
+  | 'eyebrow'
+  | 'heading'
+  | 'source'
+  | 'limit'
+  | 'category'
+  | 'selectedPosts'
+  | 'imageProportion'
+  | 'presentation'
+  | 'appearance'
+  | 'action'
+>
 export function LatestPostsSection({
   eyebrow,
   heading,
   posts,
-}: {
-  eyebrow?: string | null
-  heading?: string | null
+  imageProportion,
+  presentation,
+  appearance,
+  actionElement,
+}: LatestPostsOptions & {
   posts: readonly PostCard[]
+  actionElement?: ReactNode
 }) {
-  if (posts.length === 0) return null
-
+  if (!posts.length) return null
   return (
     <section aria-label={heading || 'Latest posts'} className="page-section">
       <header className="section-heading">
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
         <h2>{heading || 'Latest posts'}</h2>
       </header>
-      <div className="page-card-grid">
-        {posts.map((post) => {
-          const image =
-            post.meta?.image && typeof post.meta.image === 'object'
-              ? post.meta.image
-              : null
-          return (
-            <article className="page-card post-card" key={post.id}>
-              {image?.url ? (
-                <Image
-                  alt={image.alt || ''}
-                  className="post-card-image"
-                  height={image.height || 630}
-                  src={image.url}
-                  unoptimized
-                  width={image.width || 1200}
-                />
-              ) : null}
-              <div className="post-card-copy">
-                <h3>
-                  <Link href={`/posts/${encodeURIComponent(post.slug)}`}>
-                    {post.title}
-                  </Link>
-                </h3>
-                <p>{post.summary}</p>
-              </div>
-            </article>
-          )
-        })}
-      </div>
+      <PostList
+        posts={posts}
+        imageProportion={imageProportion}
+        presentation={presentation}
+        columns={appearance?.columns}
+        headingLevel={3}
+        showDate={false}
+      />
+      {actionElement}
     </section>
   )
 }

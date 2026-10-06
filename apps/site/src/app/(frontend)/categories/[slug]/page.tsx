@@ -1,13 +1,16 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { PostList } from '@/components/PostList'
+import { PostArchive } from '@danielmarkland/publishing-ui/PostArchive'
+import { archivePageNumber } from '@danielmarkland/publishing-core/postSelection'
+import { getSitePresentation } from '@/lib/getSiteSettings'
 import { getPublishedPosts, getTaxonomyDocument } from '@/lib/api/content'
 
 export const dynamic = 'force-dynamic'
 
 interface Props {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ page?: string | string[] }>
 }
 
 async function getCategory(slug: string) {
@@ -19,19 +22,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return category ? { description: category.description, title: category.title } : {}
 }
 
-export default async function CategoryPage({ params }: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
   const category = await getCategory((await params).slug)
   if (!category) notFound()
-  const result = await getPublishedPosts(`?limit=100&categoryId=${category.id}`)
+  const page = archivePageNumber((await searchParams).page)
+  if (!page) notFound()
+  const { config } = await getSitePresentation()
+  const settings = config.archive
+  const result = await getPublishedPosts(
+    `?limit=${settings.pageSize}&page=${page}&categoryId=${category.id}`,
+  )
+  if (page > Math.max(1, result.totalPages)) notFound()
 
   return (
-    <main className="archive-shell">
-      <header className="page-title">
-        <p className="eyebrow">Category</p>
-        <h1>{category.title}</h1>
-        {category.description ? <p className="lede">{category.description}</p> : null}
-      </header>
-      <PostList posts={result.docs} />
-    </main>
+    <PostArchive
+      settings={settings}
+      posts={result.docs}
+      pagination={result}
+      header={
+        <>
+          <p className="eyebrow">Category</p>
+          <h1>{category.title}</h1>
+          {category.description ? <p className="lede">{category.description}</p> : null}
+        </>
+      }
+    />
   )
 }

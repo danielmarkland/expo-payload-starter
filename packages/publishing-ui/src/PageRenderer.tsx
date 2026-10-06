@@ -133,7 +133,15 @@ export function createPageRenderer({
           : null
         return (
           <section
-            className={`page-hero${image?.url ? '' : ' page-hero-without-image'}`}
+            className={`page-hero hero-variant-${block.variant || 'split'} hero-alignment-${block.alignment || 'left'} hero-height-${block.height || 'standard'}${!image?.url || block.variant === 'text' || block.variant === 'background' ? ' page-hero-without-image' : ''}`}
+            style={
+              block.variant === 'background' && image?.url
+                ? {
+                    backgroundImage: `linear-gradient(rgb(0 0 0 / ${(block.overlay ?? 50) / 100}), rgb(0 0 0 / ${(block.overlay ?? 50) / 100})), url(${JSON.stringify(image.url)})`,
+                    backgroundPosition: `${block.focalX ?? 50}% ${block.focalY ?? 50}%`,
+                  }
+                : undefined
+            }
           >
             <div className="page-hero-copy">
               {block.eyebrow ? (
@@ -160,7 +168,9 @@ export function createPageRenderer({
                 </div>
               ) : null}
             </div>
-            {image?.url ? (
+            {image?.url &&
+            block.variant !== 'background' &&
+            block.variant !== 'text' ? (
               <Image
                 alt={image.alt || ''}
                 className="page-hero-image"
@@ -212,15 +222,27 @@ export function createPageRenderer({
                 block.layout === 'stacked' ? '' : ' page-card-grid'
               }`}
             >
-              {block.items?.map((item) => (
+              {block.items?.map((item, index) => (
                 <article
                   className={
                     block.layout === 'stacked'
                       ? 'feature-stacked-item'
-                      : 'page-card'
+                      : block.layout === 'plain'
+                        ? 'feature-plain-item'
+                        : 'page-card'
                   }
                   key={item.id || item.title}
+                  style={
+                    item.ruleColor
+                      ? { borderTop: `2px solid ${item.ruleColor}` }
+                      : undefined
+                  }
                 >
+                  {block.numbered ? (
+                    <span className="feature-step-number">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  ) : null}
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
                 </article>
@@ -400,6 +422,8 @@ export function createPageRenderer({
               intro={block.body}
             />
             <ContactForm
+              nameMode={block.nameMode}
+              showCompany={block.showCompany}
               submitIcon={block.icon}
               submitIconPosition={block.iconPosition}
               submitButtonVariant={block.submitButtonVariant}
@@ -437,9 +461,8 @@ export function createPageRenderer({
       case 'latestPosts':
         return (
           <LatestPostsSection
-            eyebrow={block.eyebrow}
-            heading={block.heading}
-            limit={block.limit}
+            {...block}
+            actionElement={<SectionAction action={block.action} />}
           />
         )
       default:

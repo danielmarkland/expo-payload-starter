@@ -12,6 +12,7 @@ import { AppState, Platform } from 'react-native'
 
 import {
   siteConfigSchema,
+  archivePresentationSchema,
   type SiteConfig,
 } from '@danielmarkland/publishing-contracts'
 import { themes } from '@danielmarkland/design-tokens'
@@ -21,6 +22,7 @@ import { api } from '@/src/lib/api'
 const CACHE_KEY = 'site-config-v1'
 
 export const fallbackSiteConfig: SiteConfig = {
+  archive: archivePresentationSchema.parse({}),
   integrations: {
     googleTagManagerId: null,
     turnstileSiteKey: null,

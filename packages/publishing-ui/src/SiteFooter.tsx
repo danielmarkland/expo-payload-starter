@@ -114,6 +114,8 @@ export function createSiteFooter({
                 ) : null}
               </header>
               <ContactForm
+                nameMode={contactForm.nameMode}
+                showCompany={contactForm.showCompany}
                 submitButtonVariant={contactForm.submitButtonVariant}
                 submitLabel={contactForm.submitLabel}
                 submitIcon={contactForm.icon}

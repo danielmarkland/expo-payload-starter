@@ -114,9 +114,12 @@ export const sectionAppearanceSchema = z.looseObject({
     .nullable()
     .optional(),
   background: z
-    .enum(['default', 'raised', 'accent', 'dark'])
+    .enum(['default', 'raised', 'accent', 'dark', 'light'])
     .nullable()
     .optional(),
+  headingAlignment: z.enum(['left', 'center']).nullable().optional(),
+  actionAlignment: z.enum(['left', 'center']).nullable().optional(),
+  columns: z.enum(['auto', '2', '3', '4']).nullable().optional(),
   rounded: optionalBoolean,
   paddingTop: spacing,
   paddingRight: spacing,
@@ -150,11 +153,19 @@ const formFields = {
   icon: optionalText,
   iconPosition: z.enum(['left', 'right']).nullable().optional(),
   submitButtonVariant: buttonVariantSchema.nullable().optional(),
+  nameMode: z.enum(['combined', 'separate']).nullable().optional(),
+  showCompany: optionalBoolean,
 }
 export const pageBlockSchema = z.discriminatedUnion('blockType', [
   blockBase.extend({
     blockType: z.literal('hero'),
     heading: richTextSchema,
+    variant: z.enum(['split', 'text', 'background']).nullable().optional(),
+    alignment: z.enum(['left', 'center']).nullable().optional(),
+    height: z.enum(['compact', 'standard', 'tall']).nullable().optional(),
+    focalX: z.number().min(0).max(100).nullable().optional(),
+    focalY: z.number().min(0).max(100).nullable().optional(),
+    overlay: z.number().min(0).max(100).nullable().optional(),
     secondaryHeading: optionalText,
     body: optionalText,
     primaryButton: action,
@@ -174,10 +185,21 @@ export const pageBlockSchema = z.discriminatedUnion('blockType', [
     blockType: z.literal('featureGrid'),
     heading: z.string(),
     intro: optionalText,
-    layout: z.enum(['cards', 'stacked']).nullable().optional(),
+    layout: z.enum(['cards', 'stacked', 'plain']).nullable().optional(),
+    numbered: optionalBoolean,
     action,
     items: z
-      .array(itemBase.extend({ title: z.string(), description: z.string() }))
+      .array(
+        itemBase.extend({
+          title: z.string(),
+          description: z.string(),
+          ruleColor: z
+            .string()
+            .regex(/^#[0-9a-fA-F]{6}$/)
+            .nullable()
+            .optional(),
+        }),
+      )
       .nullable()
       .optional(),
   }),
@@ -261,7 +283,20 @@ export const pageBlockSchema = z.discriminatedUnion('blockType', [
   }),
   blockBase.extend({
     blockType: z.literal('latestPosts'),
-    limit: z.number().nullable().optional(),
+    limit: z.number().int().min(1).max(12).nullable().optional(),
+    source: z.enum(['latest', 'category', 'selected']).nullable().optional(),
+    category: z.union([documentIDSchema, taxonomySchema]).nullable().optional(),
+    selectedPosts: z
+      .array(documentRelationshipSchema)
+      .max(12)
+      .nullable()
+      .optional(),
+    imageProportion: z
+      .enum(['landscape', 'square', 'original'])
+      .nullable()
+      .optional(),
+    presentation: z.enum(['card', 'imageOnly', 'simple']).nullable().optional(),
+    action,
   }),
 ])
 export const contentMetaSchema = z.looseObject({
@@ -328,7 +363,11 @@ export const footerNavigationSchema = z.looseObject({
     .optional(),
   contactForm: footerFormSchema.nullable().optional(),
   latestPosts: z
-    .looseObject({ show: z.boolean(), heading: optionalText })
+    .looseObject({
+      show: z.boolean(),
+      heading: optionalText,
+      limit: z.number().int().min(1).max(12).nullable().optional(),
+    })
     .nullable()
     .optional(),
   socialLinks: z
@@ -429,3 +468,12 @@ export type ApiMedia = z.infer<typeof mediaSchema>
 export type ApiPage = z.infer<typeof pageSchema>
 export type ApiPost = z.infer<typeof postSchema>
 export type ApiTaxonomy = z.infer<typeof taxonomySchema>
+
+export const selectedPostIDsSchema = z
+  .string()
+  .regex(/^[1-9]\d*(,[1-9]\d*)*$/)
+  .transform((value) => [...new Set(value.split(',').map(Number))])
+  .refine(
+    (ids) => ids.length <= 12 && ids.every(Number.isSafeInteger),
+    'Select at most twelve valid post IDs.',
+  )

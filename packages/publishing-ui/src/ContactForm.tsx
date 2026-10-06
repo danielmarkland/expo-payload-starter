@@ -21,12 +21,16 @@ export function createContactForm({
   >
 }) {
   return function ContactForm({
+    nameMode,
+    showCompany,
     submitButtonVariant,
     submitIcon,
     submitIconPosition,
     submitLabel,
     successMessage,
   }: {
+    nameMode?: 'combined' | 'separate' | null
+    showCompany?: boolean | null
     submitButtonVariant?: ButtonVariant | null
     submitIcon?: null | string
     submitIconPosition?: 'left' | 'right' | null
@@ -50,7 +54,13 @@ export function createContactForm({
           body: JSON.stringify({
             email: data.get('email'),
             message: data.get('message'),
-            name: data.get('name'),
+            ...(nameMode === 'separate'
+              ? {
+                  firstName: data.get('firstName'),
+                  lastName: data.get('lastName'),
+                }
+              : { name: data.get('name') }),
+            ...(showCompany ? { company: data.get('company') } : {}),
             turnstileToken: data.get('cf-turnstile-response'),
             website: data.get('website'),
           }),
@@ -72,16 +82,49 @@ export function createContactForm({
     return (
       <>
         <form className="contact-form" onSubmit={submit}>
-          <label>
-            Name
-            <input
-              autoComplete="name"
-              maxLength={100}
-              name="name"
-              required
-              type="text"
-            />
-          </label>
+          {nameMode === 'separate' ? (
+            <div className="contact-name-fields">
+              <label>
+                First name
+                <input
+                  autoComplete="given-name"
+                  maxLength={100}
+                  name="firstName"
+                  required
+                />
+              </label>
+              <label>
+                Last name
+                <input
+                  autoComplete="family-name"
+                  maxLength={100}
+                  name="lastName"
+                  required
+                />
+              </label>
+            </div>
+          ) : (
+            <label>
+              Name
+              <input
+                autoComplete="name"
+                maxLength={100}
+                name="name"
+                required
+                type="text"
+              />
+            </label>
+          )}
+          {showCompany ? (
+            <label>
+              Company
+              <input
+                autoComplete="organization"
+                maxLength={200}
+                name="company"
+              />
+            </label>
+          ) : null}
           <label>
             Email
             <input

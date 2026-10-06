@@ -83,7 +83,12 @@
     "./postHeadings": {
       "types": "./dist/postHeadings.d.ts",
       "default": "./dist/postHeadings.js"
-    }
+    },
+    "./PostArchive": {
+      "types": "./dist/PostArchive.d.ts",
+      "default": "./dist/PostArchive.js"
+    },
+    "./layout.css": "./dist/layout.css"
   },
   "files": [
     "dist"

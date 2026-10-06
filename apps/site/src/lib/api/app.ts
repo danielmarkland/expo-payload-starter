@@ -1,3 +1,4 @@
+import { selectedPostIDsSchema } from '@danielmarkland/publishing-core/postSelection'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
@@ -145,6 +146,7 @@ apiApp.openapi(
     path: '/posts',
     request: {
       query: z.object({
+        ids: selectedPostIDsSchema.optional(),
         authorId: z.coerce.number().int().positive().optional(),
         categoryId: z.coerce.number().int().positive().optional(),
         limit: z.coerce.number().int().min(1).max(100).default(12),

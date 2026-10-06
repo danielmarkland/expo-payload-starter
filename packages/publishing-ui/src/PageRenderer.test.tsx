@@ -434,3 +434,51 @@ describe('Payload page renderer', () => {
     )
   })
 })
+
+describe('practical layouts', () => {
+  it('renders background and centered text heroes with both actions', () => {
+    const html = renderPage([
+      {
+        blockType: 'hero',
+        heading: createHeroHeadline('Headline'),
+        variant: 'background',
+        alignment: 'center',
+        height: 'tall',
+        image: media,
+        focalX: 20,
+        focalY: 80,
+        overlay: 65,
+        primaryButton: { type: 'url', url: '/first', label: 'First' },
+        secondaryButton: { type: 'url', url: '/second', label: 'Second' },
+      },
+    ])
+    expect(html).toContain('hero-variant-background')
+    expect(html).toContain('background-position:20% 80%')
+    expect(html).toContain('rgb(0 0 0 / 0.65)')
+    expect(html).toContain('First')
+    expect(html).toContain('Second')
+    expect(html).not.toContain('page-hero-image')
+  })
+  it('renders numbered plain columns with editor-selected colored rules', () => {
+    const html = renderPage([
+      {
+        blockType: 'featureGrid',
+        heading: 'Process',
+        layout: 'plain',
+        numbered: true,
+        appearance: {
+          columns: '4',
+          headingAlignment: 'center',
+          actionAlignment: 'center',
+        },
+        items: [
+          { title: 'Research', description: 'Details', ruleColor: '#00ff00' },
+        ],
+      },
+    ])
+    expect(html).toContain('columns-4')
+    expect(html).toContain('feature-plain-item')
+    expect(html).toContain('>01</span>')
+    expect(html).toContain('border-top:2px solid #00ff00')
+  })
+})

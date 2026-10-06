@@ -74,7 +74,9 @@ references; this file captures the agent-facing guardrails.
 ### Git and release workflow
 
 - Never commit or push changes directly to `main`.
-- Start feature branches from `develop`; use the `codex/` prefix for agent branches.
+- Start branches from `develop` and name them `<type>/<short-description>`.
+  Use `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`, `test/`, or `perf/`
+  according to the work; do not use an agent-specific prefix.
 - Open feature pull requests into `develop` and squash-merge them.
 - Release through a pull request from `develop` into `main`. Use a merge commit
   for releases to preserve shared branch ancestry.
