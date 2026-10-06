@@ -34,8 +34,8 @@ jobs:
       - run: pnpm --filter @danielmarkland/design-tokens test
       - run: pnpm --filter @danielmarkland/publishing-contracts test
       - run: pnpm --filter @danielmarkland/design-tokens build
-      - run: pnpm --filter @danielmarkland/publishing-core test
       - run: pnpm --filter @danielmarkland/publishing-contracts build
+      - run: pnpm --filter @danielmarkland/publishing-core test
       - run: pnpm --filter @danielmarkland/publishing-core build
       - run: NODE_OPTIONS=--no-experimental-webstorage pnpm --filter @danielmarkland/publishing-ui test
       - run: pnpm --filter @danielmarkland/publishing-ui test:package
