@@ -218,7 +218,7 @@ export function createPageRenderer({
               intro={block.intro}
             />
             <div
-              className={`feature-grid feature-grid-${block.layout || 'cards'}${
+              className={`feature-grid feature-grid-${block.layout || 'cards'} feature-treatment-${block.cardTreatment || 'separated'}${
                 block.layout === 'stacked' ? '' : ' page-card-grid'
               }`}
             >
@@ -227,9 +227,11 @@ export function createPageRenderer({
                   className={
                     block.layout === 'stacked'
                       ? 'feature-stacked-item'
-                      : block.layout === 'plain'
-                        ? 'feature-plain-item'
-                        : 'page-card'
+                      : block.layout === 'process'
+                        ? 'feature-process-item'
+                        : block.layout === 'plain'
+                          ? 'feature-plain-item'
+                          : 'page-card'
                   }
                   key={item.id || item.title}
                   style={
@@ -238,13 +240,23 @@ export function createPageRenderer({
                       : undefined
                   }
                 >
-                  {block.numbered ? (
+                  {block.numbered || block.layout === 'process' ? (
                     <span className="feature-step-number">
+                      {block.layout === 'process' ? 'Step ' : ''}
                       {String(index + 1).padStart(2, '0')}
                     </span>
                   ) : null}
                   <h3>{item.title}</h3>
-                  <p>{item.description}</p>
+                  {item.metadata ? (
+                    <p className="feature-metadata">{item.metadata}</p>
+                  ) : null}
+                  {item.body ? (
+                    <div className="article-body feature-body">
+                      <RichText data={item.body} />
+                    </div>
+                  ) : (
+                    <p>{item.description}</p>
+                  )}
                 </article>
               ))}
             </div>
@@ -319,7 +331,16 @@ export function createPageRenderer({
                     {item.role ? (
                       <p className="portfolio-role">{item.role}</p>
                     ) : null}
-                    <p>{item.description}</p>
+                    {item.metadata ? (
+                      <p className="feature-metadata">{item.metadata}</p>
+                    ) : null}
+                    {item.body ? (
+                      <div className="article-body feature-body">
+                        <RichText data={item.body} />
+                      </div>
+                    ) : (
+                      <p>{item.description}</p>
+                    )}
                   </>
                 )
                 return (
@@ -342,15 +363,32 @@ export function createPageRenderer({
       case 'callToAction': {
         const buttonHref = getNavigationHref(block.action)
         return (
-          <section className="page-cta">
-            <div>
-              {block.eyebrow ? (
-                <p className="eyebrow">{block.eyebrow}</p>
-              ) : null}
-              <h2>{block.heading}</h2>
-              {block.body ? <p>{block.body}</p> : null}
-            </div>
-            {buttonHref ? <ActionLink action={block.action} /> : null}
+          <section
+            className={`page-cta${block.variant === 'band' ? ' page-cta-band' : ''}${block.buttonSurface === 'light' ? ' cta-button-light' : ''}`}
+          >
+            {block.variant === 'band' ? (
+              <div className="page-cta-inner">
+                <div>
+                  {block.eyebrow ? (
+                    <p className="eyebrow">{block.eyebrow}</p>
+                  ) : null}
+                  <h2>{block.heading}</h2>
+                  {block.body ? <p>{block.body}</p> : null}
+                </div>
+                {buttonHref ? <ActionLink action={block.action} /> : null}
+              </div>
+            ) : (
+              <>
+                <div>
+                  {block.eyebrow ? (
+                    <p className="eyebrow">{block.eyebrow}</p>
+                  ) : null}
+                  <h2>{block.heading}</h2>
+                  {block.body ? <p>{block.body}</p> : null}
+                </div>
+                {buttonHref ? <ActionLink action={block.action} /> : null}
+              </>
+            )}
           </section>
         )
       }
@@ -450,12 +488,19 @@ export function createPageRenderer({
         return (
           <section className="page-section faq-section">
             <SectionHeading eyebrow={block.eyebrow} heading={block.heading} />
-            {block.items?.map((item) => (
-              <details className="faq-item" key={item.id || item.question}>
-                <summary>{item.question}</summary>
-                <p>{item.answer}</p>
-              </details>
-            ))}
+            {block.items?.map((item) =>
+              block.variant === 'rows' ? (
+                <article className="faq-row" key={item.id || item.question}>
+                  <h3>{item.question}</h3>
+                  <p>{item.answer}</p>
+                </article>
+              ) : (
+                <details className="faq-item" key={item.id || item.question}>
+                  <summary>{item.question}</summary>
+                  <p>{item.answer}</p>
+                </details>
+              ),
+            )}
           </section>
         )
       case 'latestPosts':
@@ -474,7 +519,11 @@ export function createPageRenderer({
     const firstHero = page.layout.find((block) => block.blockType === 'hero')
 
     return (
-      <main className="page-shell" data-page={page.slug}>
+      <main
+        className="page-shell"
+        data-page={page.slug}
+        data-header-variant={page.headerVariant || 'inherit'}
+      >
         {page.customCSS ? (
           <style dangerouslySetInnerHTML={{ __html: page.customCSS }} />
         ) : null}

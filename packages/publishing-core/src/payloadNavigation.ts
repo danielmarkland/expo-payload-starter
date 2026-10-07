@@ -1,5 +1,6 @@
+import { validateExternalURL } from './payloadFields.js'
 import type { ArrayField, Field, SelectField } from 'payload'
-import { contactFields } from './presentationFields.js'
+import { choice, contactFields } from './presentationFields.js'
 
 interface NavigationFieldOptions {
   navigationItemsField: (options: {
@@ -18,12 +19,54 @@ interface FooterFieldOptions extends NavigationFieldOptions {
   submitButtonFields: (variant: 'primary-filled') => Field[]
 }
 
+function optionalNavigationFields(fields: Field[]): Field[] {
+  return fields.map((field) => {
+    if ('fields' in field)
+      return {
+        ...field,
+        fields: optionalNavigationFields(field.fields),
+      } as Field
+    if ('name' in field)
+      return { ...field, required: false, defaultValue: undefined } as Field
+    return field
+  })
+}
+
 export function createHeaderNavigationFields({
   navigationItemsField,
   iconPickerFieldComponent,
   headerNavigationIconOptions,
 }: HeaderFieldOptions): Field[] {
   return [
+    choice('variant', ['standard', 'minimal']),
+    {
+      name: 'helpLink',
+      type: 'group',
+      fields: optionalNavigationFields(
+        (navigationItemsField({ includeIcons: true }) as ArrayField).fields,
+      ),
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      fields: [
+        { name: 'label', type: 'text', required: true },
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+          validate: validateExternalURL,
+        },
+        {
+          name: 'icon',
+          type: 'select',
+          required: true,
+          options: headerNavigationIconOptions,
+          admin: { components: iconPickerFieldComponent },
+        },
+        { name: 'newTab', type: 'checkbox' },
+      ],
+    },
     navigationItemsField({ includeIcons: true }),
     {
       name: 'sticky',
@@ -67,6 +110,10 @@ export function createFooterNavigationFields({
   submitButtonFields,
 }: FooterFieldOptions): Field[] {
   return [
+    choice('layoutPreset', ['default', 'brand-details', 'stacked']),
+    choice('detailsAlignment', ['start', 'end']),
+    choice('socialPlacement', ['brand', 'details']),
+    { name: 'details', type: 'textarea' },
     {
       type: 'collapsible',
       label: 'Newsletter CTA',

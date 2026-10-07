@@ -369,14 +369,20 @@ export function createPublishingFields({
       type: 'array',
       ...linkArrayPresentation,
       label,
-      fields: linkFields({
-        allowIconOnly: includeIcons,
-        includeIcon: includeIcons,
-        required: true,
-      }),
+      fields: [
+        { name: 'treatment', type: 'select', options: ['default', 'accent'] },
+        ...linkFields({
+          allowIconOnly: includeIcons,
+          includeIcon: includeIcons,
+          required: true,
+        }),
+      ],
     }
   }
   return {
+    headerNavigationIconOptions: linkIconOptions.map((option) =>
+      typeof option === 'string' ? option : { ...option },
+    ),
     navigationItemsField,
     actionFields,
     destinationFields,

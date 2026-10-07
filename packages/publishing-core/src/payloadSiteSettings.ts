@@ -1,5 +1,5 @@
 import type { Field } from 'payload'
-import { archiveFields } from './presentationFields.js'
+import { choice, archiveFields } from './presentationFields.js'
 import { themes } from '@danielmarkland/design-tokens'
 import { type PaletteColorName, validatePaletteColor } from './colorContrast.js'
 
@@ -42,6 +42,8 @@ export function createSiteSettingsFields({
       {
         type: 'row',
         fields: [
+          colorField('darkSurface', 'Dark section background', '#0f0f0f'),
+          colorField('darkInk', 'Dark section text', '#ffffff'),
           colorField('primary', 'Primary', palette.primary),
           colorField('primaryInk', 'Text on primary', palette.primaryInk),
           colorField('accent', 'Accent', palette.secondary),
@@ -153,9 +155,20 @@ export function createSiteSettingsFields({
                   options: [
                     { label: 'Poppins', value: 'poppins' },
                     { label: 'System sans', value: 'system' },
+                    { label: 'Inter', value: 'inter' },
+                    { label: 'IBM Plex Mono', value: 'ibm-plex-mono' },
                   ],
                   required: true,
                 },
+                ...['headingFont', 'bodyFont', 'labelFont'].map((name) =>
+                  choice(name, ['system', 'poppins', 'inter', 'ibm-plex-mono']),
+                ),
+                choice('headingWeight', ['600', '700', '800']),
+                choice('typographyPreset', [
+                  'compact',
+                  'standard',
+                  'editorial',
+                ]),
                 {
                   name: 'shapePreset',
                   type: 'select',

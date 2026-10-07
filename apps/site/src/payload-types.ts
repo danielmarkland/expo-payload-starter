@@ -278,6 +278,7 @@ export interface Post {
 export interface Page {
   id: number;
   title: string;
+  headerVariant?: ('inherit' | 'standard' | 'minimal') | null;
   slug: string;
   layout: (
     | {
@@ -484,6 +485,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -537,6 +542,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -576,6 +585,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -605,12 +618,29 @@ export interface Page {
         eyebrow?: string | null;
         heading: string;
         intro?: string | null;
-        layout?: ('cards' | 'stacked' | 'plain') | null;
+        layout?: ('cards' | 'stacked' | 'plain' | 'process') | null;
         numbered?: boolean | null;
+        cardTreatment?: ('separated' | 'joined') | null;
         items?:
           | {
               title: string;
               description: string;
+              metadata?: string | null;
+              body?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
               ruleColor?: string | null;
               id?: string | null;
             }[]
@@ -707,6 +737,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -844,6 +878,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1049,6 +1087,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1083,6 +1125,22 @@ export interface Page {
               name: string;
               role?: string | null;
               description: string;
+              metadata?: string | null;
+              body?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
               type?: ('page' | 'post' | 'url') | null;
               page?: (number | null) | Page;
               post?: (number | null) | Post;
@@ -1186,6 +1244,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1216,6 +1278,8 @@ export interface Page {
          * Optional short label displayed above the section heading or content.
          */
         eyebrow?: string | null;
+        variant?: ('bordered' | 'band') | null;
+        buttonSurface?: ('default' | 'light') | null;
         heading: string;
         body?: string | null;
         action: {
@@ -1307,6 +1371,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1353,6 +1421,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1407,6 +1479,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1518,6 +1594,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1563,6 +1643,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1593,6 +1677,7 @@ export interface Page {
          * Optional short label displayed above the section heading or content.
          */
         eyebrow?: string | null;
+        variant?: ('disclosure' | 'rows') | null;
         heading?: string | null;
         items?:
           | {
@@ -1608,6 +1693,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -1740,6 +1829,10 @@ export interface Page {
           headingAlignment?: ('left' | 'center') | null;
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
@@ -2051,6 +2144,7 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
+  headerVariant?: T;
   slug?: T;
   layout?:
     | T
@@ -2102,6 +2196,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2135,6 +2233,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2168,6 +2270,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2197,11 +2303,14 @@ export interface PagesSelect<T extends boolean = true> {
               intro?: T;
               layout?: T;
               numbered?: T;
+              cardTreatment?: T;
               items?:
                 | T
                 | {
                     title?: T;
                     description?: T;
+                    metadata?: T;
+                    body?: T;
                     ruleColor?: T;
                     id?: T;
                   };
@@ -2224,6 +2333,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2272,6 +2385,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2331,6 +2448,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2364,6 +2485,8 @@ export interface PagesSelect<T extends boolean = true> {
                     name?: T;
                     role?: T;
                     description?: T;
+                    metadata?: T;
+                    body?: T;
                     type?: T;
                     page?: T;
                     post?: T;
@@ -2390,6 +2513,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2415,6 +2542,8 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               anchor?: T;
               eyebrow?: T;
+              variant?: T;
+              buttonSurface?: T;
               heading?: T;
               body?: T;
               action?:
@@ -2436,6 +2565,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2476,6 +2609,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2521,6 +2658,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2561,6 +2702,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2600,6 +2745,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2625,6 +2774,7 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               anchor?: T;
               eyebrow?: T;
+              variant?: T;
               heading?: T;
               items?:
                 | T
@@ -2639,6 +2789,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2690,6 +2844,10 @@ export interface PagesSelect<T extends boolean = true> {
                     headingAlignment?: T;
                     actionAlignment?: T;
                     columns?: T;
+                    mobileColumns?: T;
+                    innerWidth?: T;
+                    cardPadding?: T;
+                    headingSpacing?: T;
                     contentWidth?: T;
                     background?: T;
                     rounded?: T;
@@ -2811,8 +2969,166 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface HeaderNavigation {
   id: number;
+  variant?: ('standard' | 'minimal') | null;
+  helpLink?: {
+    treatment?: ('default' | 'accent') | null;
+    label?: string | null;
+    type?: ('page' | 'post' | 'url') | null;
+    /**
+     * Optional icon displayed with the link label.
+     */
+    icon?:
+      | (
+          | 'apple'
+          | 'bluesky'
+          | 'discord'
+          | 'facebook'
+          | 'github'
+          | 'google-play'
+          | 'instagram'
+          | 'linkedin'
+          | 'mastodon'
+          | 'medium'
+          | 'pinterest'
+          | 'reddit'
+          | 'slack'
+          | 'spotify'
+          | 'telegram'
+          | 'threads'
+          | 'tiktok'
+          | 'twitch'
+          | 'whatsapp'
+          | 'twitter'
+          | 'youtube'
+          | 'arrow-right'
+          | 'arrow-up-right'
+          | 'bell'
+          | 'book-open'
+          | 'calendar'
+          | 'camera'
+          | 'check'
+          | 'chevron-right'
+          | 'help'
+          | 'cloud'
+          | 'download'
+          | 'external-link'
+          | 'file-text'
+          | 'globe'
+          | 'heart'
+          | 'home'
+          | 'image'
+          | 'info'
+          | 'link'
+          | 'lock'
+          | 'log-in'
+          | 'mail'
+          | 'map-pin'
+          | 'menu'
+          | 'message'
+          | 'phone'
+          | 'play'
+          | 'podcast'
+          | 'radio'
+          | 'rss'
+          | 'search'
+          | 'send'
+          | 'settings'
+          | 'share'
+          | 'shopping-bag'
+          | 'shopping-cart'
+          | 'sparkles'
+          | 'star'
+          | 'user'
+          | 'users'
+          | 'zap'
+        )
+      | null;
+    page?: (number | null) | Page;
+    post?: (number | null) | Post;
+    /**
+     * Use a relative path, https, mailto, or tel URL.
+     */
+    url?: string | null;
+    newTab?: boolean | null;
+    /**
+     * The label remains available to screen readers.
+     */
+    iconOnly?: boolean | null;
+  };
+  socialLinks?:
+    | {
+        label: string;
+        url: string;
+        icon:
+          | 'apple'
+          | 'bluesky'
+          | 'discord'
+          | 'facebook'
+          | 'github'
+          | 'google-play'
+          | 'instagram'
+          | 'linkedin'
+          | 'mastodon'
+          | 'medium'
+          | 'pinterest'
+          | 'reddit'
+          | 'slack'
+          | 'spotify'
+          | 'telegram'
+          | 'threads'
+          | 'tiktok'
+          | 'twitch'
+          | 'whatsapp'
+          | 'twitter'
+          | 'youtube'
+          | 'arrow-right'
+          | 'arrow-up-right'
+          | 'bell'
+          | 'book-open'
+          | 'calendar'
+          | 'camera'
+          | 'check'
+          | 'chevron-right'
+          | 'help'
+          | 'cloud'
+          | 'download'
+          | 'external-link'
+          | 'file-text'
+          | 'globe'
+          | 'heart'
+          | 'home'
+          | 'image'
+          | 'info'
+          | 'link'
+          | 'lock'
+          | 'log-in'
+          | 'mail'
+          | 'map-pin'
+          | 'menu'
+          | 'message'
+          | 'phone'
+          | 'play'
+          | 'podcast'
+          | 'radio'
+          | 'rss'
+          | 'search'
+          | 'send'
+          | 'settings'
+          | 'share'
+          | 'shopping-bag'
+          | 'shopping-cart'
+          | 'sparkles'
+          | 'star'
+          | 'user'
+          | 'users'
+          | 'zap';
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   items?:
     | {
+        treatment?: ('default' | 'accent') | null;
         label: string;
         type: 'page' | 'post' | 'url';
         /**
@@ -2984,6 +3300,10 @@ export interface HeaderNavigation {
  */
 export interface FooterNavigation {
   id: number;
+  layoutPreset?: ('default' | 'brand-details' | 'stacked') | null;
+  detailsAlignment?: ('start' | 'end') | null;
+  socialPlacement?: ('brand' | 'details') | null;
+  details?: string | null;
   newsletter: {
     show: boolean;
     eyebrow?: string | null;
@@ -3074,6 +3394,10 @@ export interface FooterNavigation {
       headingAlignment?: ('left' | 'center') | null;
       actionAlignment?: ('left' | 'center') | null;
       columns?: ('auto' | '2' | '3' | '4') | null;
+      mobileColumns?: ('1' | '2') | null;
+      innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+      cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
       contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
       background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
       rounded?: boolean | null;
@@ -3179,6 +3503,10 @@ export interface FooterNavigation {
       headingAlignment?: ('left' | 'center') | null;
       actionAlignment?: ('left' | 'center') | null;
       columns?: ('auto' | '2' | '3' | '4') | null;
+      mobileColumns?: ('1' | '2') | null;
+      innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+      cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+      headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
       contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
       background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
       rounded?: boolean | null;
@@ -3241,6 +3569,7 @@ export interface FooterNavigation {
     | null;
   items?:
     | {
+        treatment?: ('default' | 'accent') | null;
         label: string;
         type: 'page' | 'post' | 'url';
         /**
@@ -3365,10 +3694,17 @@ export interface SiteSetting {
      */
     defaultMode: 'system' | 'light' | 'dark';
     allowToggle: boolean;
-    fontPreset: 'poppins' | 'system';
+    fontPreset: 'poppins' | 'system' | 'inter' | 'ibm-plex-mono';
+    headingFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
+    bodyFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
+    labelFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
+    headingWeight?: ('600' | '700' | '800') | null;
+    typographyPreset?: ('compact' | 'standard' | 'editorial') | null;
     shapePreset: 'square' | 'soft' | 'rounded';
     densityPreset: 'compact' | 'comfortable' | 'spacious';
     light: {
+      darkSurface: string;
+      darkInk: string;
       primary: string;
       primaryInk: string;
       accent: string;
@@ -3379,6 +3715,8 @@ export interface SiteSetting {
       border: string;
     };
     dark: {
+      darkSurface: string;
+      darkInk: string;
       primary: string;
       primaryInk: string;
       accent: string;
@@ -3434,9 +3772,33 @@ export interface SiteSetting {
  * via the `definition` "headerNavigation_select".
  */
 export interface HeaderNavigationSelect<T extends boolean = true> {
+  variant?: T;
+  helpLink?:
+    | T
+    | {
+        treatment?: T;
+        label?: T;
+        type?: T;
+        icon?: T;
+        page?: T;
+        post?: T;
+        url?: T;
+        newTab?: T;
+        iconOnly?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        icon?: T;
+        newTab?: T;
+        id?: T;
+      };
   items?:
     | T
     | {
+        treatment?: T;
         label?: T;
         type?: T;
         icon?: T;
@@ -3459,6 +3821,10 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
  * via the `definition` "footerNavigation_select".
  */
 export interface FooterNavigationSelect<T extends boolean = true> {
+  layoutPreset?: T;
+  detailsAlignment?: T;
+  socialPlacement?: T;
+  details?: T;
   newsletter?:
     | T
     | {
@@ -3479,6 +3845,10 @@ export interface FooterNavigationSelect<T extends boolean = true> {
               headingAlignment?: T;
               actionAlignment?: T;
               columns?: T;
+              mobileColumns?: T;
+              innerWidth?: T;
+              cardPadding?: T;
+              headingSpacing?: T;
               contentWidth?: T;
               background?: T;
               rounded?: T;
@@ -3517,6 +3887,10 @@ export interface FooterNavigationSelect<T extends boolean = true> {
               headingAlignment?: T;
               actionAlignment?: T;
               columns?: T;
+              mobileColumns?: T;
+              innerWidth?: T;
+              cardPadding?: T;
+              headingSpacing?: T;
               contentWidth?: T;
               background?: T;
               rounded?: T;
@@ -3548,6 +3922,7 @@ export interface FooterNavigationSelect<T extends boolean = true> {
   items?:
     | T
     | {
+        treatment?: T;
         label?: T;
         type?: T;
         icon?: T;
@@ -3587,11 +3962,18 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         defaultMode?: T;
         allowToggle?: T;
         fontPreset?: T;
+        headingFont?: T;
+        bodyFont?: T;
+        labelFont?: T;
+        headingWeight?: T;
+        typographyPreset?: T;
         shapePreset?: T;
         densityPreset?: T;
         light?:
           | T
           | {
+              darkSurface?: T;
+              darkInk?: T;
               primary?: T;
               primaryInk?: T;
               accent?: T;
@@ -3604,6 +3986,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         dark?:
           | T
           | {
+              darkSurface?: T;
+              darkInk?: T;
               primary?: T;
               primaryInk?: T;
               accent?: T;

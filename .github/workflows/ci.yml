@@ -9,6 +9,7 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     env:
+      SITE_URL: http://localhost:3000
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
       EXPO_PUBLIC_SITE_URL: http://localhost:3000
       EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: local-ci-key
@@ -51,6 +52,7 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     env:
+      SITE_URL: http://localhost:3000
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
       PAYLOAD_SECRET: local-ci-payload-secret-at-least-32-characters
     steps:

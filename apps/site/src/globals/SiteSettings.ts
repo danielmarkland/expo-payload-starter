@@ -1,17 +1,9 @@
-import type { GlobalConfig } from 'payload'
 import { brand } from '@starter/brand'
-import { createSiteSettingsFields } from '@danielmarkland/publishing-core/payloadSiteSettings'
+import { createSiteSettingsGlobal } from '@danielmarkland/publishing-core/payloadCollections'
 
-export const SiteSettings: GlobalConfig = {
-  slug: 'siteSettings',
-  label: 'Site settings',
-  dbName: 'cms_site_settings',
-  access: {
-    read: () => true,
-    update: ({ req }) => Boolean(req.user),
-  },
-  fields: createSiteSettingsFields({
-    colorPickerFieldComponent: '@/components/admin/ColorPickerField#ColorPickerField',
-    defaults: brand,
-  }),
-}
+import { settingsAccess } from '@/lib/publishingPolicy'
+export const SiteSettings = createSiteSettingsGlobal({
+  access: settingsAccess,
+  colorPickerFieldComponent: '@/components/admin/ColorPickerField#ColorPickerField',
+  defaults: brand,
+})

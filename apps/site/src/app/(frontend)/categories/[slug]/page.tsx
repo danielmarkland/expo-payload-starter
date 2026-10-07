@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { PostArchive } from '@danielmarkland/publishing-ui/PostArchive'
+import { EditorialArchive } from '@danielmarkland/publishing-ui/EditorialArchive'
 import { archivePageNumber } from '@danielmarkland/publishing-core/postSelection'
 import { getSitePresentation } from '@/lib/getSiteSettings'
 import { getPublishedPosts, getTaxonomyDocument } from '@/lib/api/content'
@@ -35,17 +35,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   if (page > Math.max(1, result.totalPages)) notFound()
 
   return (
-    <PostArchive
-      settings={settings}
+    <EditorialArchive
+      eyebrow="Category"
+      title={category.title}
+      description={category.description}
       posts={result.docs}
+      settings={settings}
       pagination={result}
-      header={
-        <>
-          <p className="eyebrow">Category</p>
-          <h1>{category.title}</h1>
-          {category.description ? <p className="lede">{category.description}</p> : null}
-        </>
-      }
     />
   )
 }

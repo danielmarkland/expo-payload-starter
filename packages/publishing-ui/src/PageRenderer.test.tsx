@@ -482,3 +482,69 @@ describe('practical layouts', () => {
     expect(html).toContain('border-top:2px solid #00ff00')
   })
 })
+
+it('renders imported rich cards, joined layout, process labels, FAQ rows and a CTA band', () => {
+  const html = renderPage([
+    {
+      blockType: 'featureGrid',
+      heading: 'Wanted',
+      cardTreatment: 'joined',
+      appearance: {
+        columns: '3',
+        mobileColumns: '1',
+        innerWidth: 'standard',
+        cardPadding: 'md',
+      },
+      items: [
+        {
+          title: 'Jazz',
+          description: 'Legacy copy',
+          metadata: '1955–1978',
+          body: createHeroHeadline('Blue Note and Prestige'),
+        },
+      ],
+    },
+    {
+      blockType: 'featureGrid',
+      heading: 'Steps',
+      layout: 'process',
+      items: [{ title: 'Send it', description: 'We review it.' }],
+    },
+    {
+      blockType: 'faq',
+      variant: 'rows',
+      items: [{ question: 'How many?', answer: 'Any size.' }],
+    },
+    {
+      blockType: 'callToAction',
+      variant: 'band',
+      buttonSurface: 'light',
+      heading: 'Sell',
+      action: { label: 'Start', type: 'url', url: '/sell' },
+    },
+  ])
+  expect(html).toContain('feature-treatment-joined')
+  expect(html).toContain('mobile-columns-1')
+  expect(html).toContain('1955–1978')
+  expect(html).toContain('Blue Note and Prestige')
+  expect(html).not.toContain('Legacy copy')
+  expect(html).toContain('Step 01')
+  expect(html).toContain('class="faq-row"')
+  expect(html).not.toContain('<details')
+  expect(html).toContain('page-cta-band cta-button-light')
+  expect(html).toContain('href="/sell"')
+})
+
+it('keeps the legacy FAQ and CTA markup when variants are omitted', () => {
+  const html = renderPage([
+    { blockType: 'faq', items: [{ question: 'Question', answer: 'Answer' }] },
+    {
+      blockType: 'callToAction',
+      heading: 'Call',
+      action: { label: 'Start', type: 'url', url: '/sell' },
+    },
+  ])
+  expect(html).toContain('<details')
+  expect(html).toContain('class="page-cta"')
+  expect(html).not.toContain('page-cta-inner')
+})

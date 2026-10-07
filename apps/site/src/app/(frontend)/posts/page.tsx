@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { PostList } from '@/components/PostList'
+import { EditorialArchive } from '@danielmarkland/publishing-ui/EditorialArchive'
 import { getPublishedPosts } from '@/lib/api/content'
 
 export const dynamic = 'force-dynamic'
@@ -10,12 +10,11 @@ export default async function PostsIndexPage() {
   const result = await getPublishedPosts('?limit=100')
 
   return (
-    <main className="archive-shell">
-      <header className="page-title">
-        <p className="eyebrow">From the blog</p>
-        <h1>Posts</h1>
-      </header>
-      <PostList posts={result.docs} />
-    </main>
+    <EditorialArchive
+      eyebrow="From the blog"
+      title={'Posts'}
+      description={undefined}
+      posts={result.docs}
+    />
   )
 }

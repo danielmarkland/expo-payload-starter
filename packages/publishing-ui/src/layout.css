@@ -210,3 +210,461 @@
   --color-surface-input: #1c1c1c;
   --color-border-input: #666;
 }
+
+/* Optional native presentation controls. Omitted settings preserve legacy styles. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-family-heading, inherit);
+  font-weight: var(--heading-weight, revert);
+}
+.eyebrow,
+.feature-metadata,
+.feature-step-number {
+  font-family: var(--font-family-label, inherit);
+}
+.section-heading h2,
+.prose-section h2,
+.page-cta h2 {
+  line-height: var(--heading-line-height, 1.15);
+  letter-spacing: var(--heading-tracking, -0.04em);
+}
+.page-hero h1,
+.page-hero h2.page-hero-heading,
+.page-title h1 {
+  line-height: var(--hero-line-height, 0.98);
+  letter-spacing: var(--hero-tracking, -0.06em);
+}
+.background-dark {
+  --color-surface: var(--color-dark-surface, #0f0f0f);
+  --color-surface-raised: color-mix(
+    in srgb,
+    var(--color-dark-surface, #0f0f0f),
+    var(--color-dark-ink, #fff) 4%
+  );
+  --color-ink: var(--color-dark-ink, #fff);
+  --color-ink-body: color-mix(
+    in srgb,
+    var(--color-dark-ink, #fff),
+    var(--color-dark-surface, #0f0f0f) 8%
+  );
+  --color-ink-muted: var(--color-dark-ink-muted, #bbb);
+  --color-border: color-mix(
+    in srgb,
+    var(--color-dark-surface, #0f0f0f),
+    var(--color-dark-ink, #fff) 20%
+  );
+}
+.inner-width-reading {
+  --section-inner-width: var(--layout-copy);
+}
+.inner-width-standard {
+  --section-inner-width: var(--layout-content);
+}
+.inner-width-wide {
+  --section-inner-width: 1440px;
+}
+.inner-width-full {
+  --section-inner-width: none;
+}
+.page-block[class*='inner-width-'] > .page-section,
+.page-block[class*='inner-width-'] > .page-hero,
+.page-block[class*='inner-width-'] > .page-image,
+.page-block[class*='inner-width-'] > .page-cta:not(.page-cta-band),
+.page-block[class*='inner-width-'] .page-cta-inner {
+  max-width: var(--section-inner-width);
+  margin-inline: auto;
+}
+.page-block[class*='inner-width-'] > .page-section .section-heading,
+.page-block[class*='inner-width-'] > .prose-section,
+.page-block[class*='inner-width-'] > .faq-section {
+  max-width: var(--section-inner-width);
+}
+.feature-grid .article-body {
+  font-size: inherit;
+}
+.feature-grid .article-body p {
+  margin-block: 0 var(--space-sm);
+}
+.feature-metadata {
+  color: var(--color-secondary);
+  font-size: var(--font-size-small);
+  margin-block: var(--space-sm) !important;
+}
+.feature-process-item {
+  border-top: 2px solid var(--color-ink);
+  padding-top: var(--space-md);
+}
+.feature-process-item h3 {
+  margin-block: var(--space-sm);
+}
+.feature-process-item p {
+  color: var(--color-ink-muted);
+  line-height: var(--line-height-reading);
+}
+.feature-process-item .feature-step-number {
+  color: var(--color-secondary);
+  font-size: var(--font-size-small);
+}
+/* Single shared dividers, including incomplete rows at responsive breakpoints. */
+.feature-grid-cards.feature-treatment-joined {
+  gap: 0;
+  padding: 0;
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+}
+.feature-grid-cards.feature-treatment-joined::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--color-border);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+}
+.feature-treatment-joined > .page-card {
+  border: 0;
+  border-inline-start: 1px solid var(--color-border);
+  border-block-start: 1px solid var(--color-border);
+  border-radius: 0;
+}
+.feature-grid > article {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.faq-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+  padding-block: var(--space-lg);
+}
+.faq-row h3 {
+  font-size: var(--font-size-body);
+  margin: 0;
+}
+.faq-row p {
+  margin: 0;
+  color: var(--color-ink-muted);
+  line-height: var(--line-height-reading);
+}
+/* Bands use the same inner container edge as the other native sections. */
+.page-block:has(> .page-cta-band) {
+  margin-inline: calc(50% - 50vw);
+  padding-inline: max(
+    var(--space-lg),
+    calc((100vw - var(--section-inner-width, var(--layout-content))) / 2)
+  );
+}
+.page-cta.page-cta-band {
+  display: block;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding-inline: 0;
+}
+.page-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+.page-cta-inner > div {
+  flex: 1 1 280px;
+}
+.background-accent .page-cta-band {
+  color: var(--color-primary-ink);
+}
+.background-accent .page-cta-band p,
+.background-accent .page-cta-band .eyebrow {
+  color: inherit;
+}
+.cta-button-light .button {
+  --color-primary: #fff;
+  --color-primary-ink: #171717;
+  --color-primary-hover: #eee;
+  --color-secondary: #fff;
+  --color-ink-inverse: #171717;
+  --color-ink: #fff;
+}
+.header-minimal-navigation {
+  display: none;
+  margin-left: auto;
+}
+.site-header .header-navigation {
+  margin-left: auto;
+}
+.header-social-link {
+  display: inline-flex;
+  align-items: center;
+}
+.header-social-link svg {
+  width: 1em;
+  height: 1em;
+}
+.header-navigation a.header-navigation-accent {
+  background: var(--color-primary);
+  color: var(--color-primary-ink);
+  border-radius: var(--radius-button);
+  padding: var(--space-sm) var(--space-md);
+}
+body:not(:has(main[data-header-variant='standard']))
+  .site-header[data-header-default='minimal']
+  .header-navigation,
+body:has(main[data-header-variant='minimal']) .site-header .header-navigation,
+body:not(:has(main[data-header-variant='standard']))
+  .site-header[data-header-default='minimal']
+  > button,
+body:has(main[data-header-variant='minimal']) .site-header > button {
+  display: none;
+}
+body:not(:has(main[data-header-variant='standard']))
+  .site-header[data-header-default='minimal']
+  .header-minimal-navigation,
+body:has(main[data-header-variant='minimal'])
+  .site-header
+  .header-minimal-navigation {
+  display: flex;
+}
+.footer-layout-brand-details .site-footer-main {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.footer-layout-stacked .site-footer-main {
+  grid-template-columns: minmax(0, 1fr);
+}
+.site-footer-details p {
+  white-space: pre-line;
+}
+.footer-details-end .site-footer-details {
+  text-align: end;
+}
+.footer-details-start .site-footer-details {
+  text-align: start;
+}
+.site-footer-details .footer-social-navigation {
+  justify-content: inherit;
+}
+.footer-details-end .site-footer-details .footer-social-navigation {
+  justify-content: flex-end;
+}
+.footer-copyright-in-details {
+  display: none;
+}
+@media (max-width: 600px) {
+  .faq-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-sm);
+  }
+  .mobile-columns-1 .feature-grid:not(.feature-grid-stacked) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mobile-columns-2 .feature-grid:not(.feature-grid-stacked) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 800px) {
+  .footer-layout-brand-details .site-footer-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .site-footer-details {
+    text-align: start;
+  }
+  .footer-details-end .site-footer-details .footer-social-navigation {
+    justify-content: flex-start;
+  }
+}
+
+.card-padding-none :is(.page-card, .portfolio-card, .link-card, .stat-card) {
+  padding: 0px;
+}
+.heading-spacing-none .section-heading {
+  margin-bottom: 0px;
+}
+
+.card-padding-sm :is(.page-card, .portfolio-card, .link-card, .stat-card) {
+  padding: var(--space-md);
+}
+.heading-spacing-sm .section-heading {
+  margin-bottom: var(--space-md);
+}
+
+.card-padding-md :is(.page-card, .portfolio-card, .link-card, .stat-card) {
+  padding: var(--space-xl);
+}
+.heading-spacing-md .section-heading {
+  margin-bottom: var(--space-xl);
+}
+
+.card-padding-lg :is(.page-card, .portfolio-card, .link-card, .stat-card) {
+  padding: var(--space-3xl);
+}
+.heading-spacing-lg .section-heading {
+  margin-bottom: var(--space-3xl);
+}
+
+.card-padding-xl :is(.page-card, .portfolio-card, .link-card, .stat-card) {
+  padding: var(--space-5xl);
+}
+.heading-spacing-xl .section-heading {
+  margin-bottom: var(--space-5xl);
+}
+
+.site-brand {
+  font-family: var(--font-family-heading, inherit);
+  font-weight: var(--heading-weight, var(--font-weight-bold));
+}
+
+.page-block.background-dark {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.page-block[class*='inner-width-'] > .prose-section {
+  display: flow-root;
+}
+.feature-body ul {
+  list-style: none;
+  padding: 0;
+  margin-block: var(--space-sm) var(--space-md);
+  font-family: var(--font-family-label, inherit);
+  font-size: var(--font-size-small);
+}
+
+.footer-layout-brand-details .site-footer-posts {
+  grid-column: 1 / -1;
+}
+
+/* Explicit full-width sections own their boundary spacing; legacy pages keep the shell defaults. */
+.page-shell:has(
+  > .page-block[class*='inner-width-'].content-width-full:first-child
+) {
+  padding-top: 0;
+}
+.page-shell:has(
+  > .page-block[class*='inner-width-'].content-width-full:last-child
+) {
+  padding-bottom: 0;
+}
+.page-block[class*='inner-width-'] .article-body > :last-child {
+  margin-bottom: 0;
+}
+
+.inner-width-full:has(> .page-cta-band) {
+  padding-inline: var(--space-lg);
+}
+
+/* Native section containers keep gutters independent of surface choice. Explicit side padding wins. */
+.page-block[class*='inner-width-'].content-width-full:not(
+    [class*='padding-left-']
+  ) {
+  padding-left: max(
+    var(--space-lg),
+    calc((100vw - var(--section-inner-width, var(--layout-content))) / 2)
+  );
+}
+.page-block[class*='inner-width-'].content-width-full:not(
+    [class*='padding-right-']
+  ) {
+  padding-right: max(
+    var(--space-lg),
+    calc((100vw - var(--section-inner-width, var(--layout-content))) / 2)
+  );
+}
+.page-block.inner-width-full.content-width-full:not([class*='padding-left-']) {
+  padding-left: var(--space-lg);
+}
+.page-block.inner-width-full.content-width-full:not([class*='padding-right-']) {
+  padding-right: var(--space-lg);
+}
+
+/* Adjacent native sections on the same surface share the larger spacing preset.
+   Explicit margins retain author-controlled separation. Legacy sections are unchanged. */
+.page-block[class*='inner-width-'] {
+  --section-padding-bottom: var(--space-3xl);
+  --section-next-padding-top: var(--space-3xl);
+}
+.page-block[class*='inner-width-'].padding-bottom-none {
+  --section-padding-bottom: 0px;
+}
+.page-block[class*='inner-width-']:has(+ .page-block.padding-top-none) {
+  --section-next-padding-top: 0px;
+}
+.page-block[class*='inner-width-'].padding-bottom-sm {
+  --section-padding-bottom: var(--space-md);
+}
+.page-block[class*='inner-width-']:has(+ .page-block.padding-top-sm) {
+  --section-next-padding-top: var(--space-md);
+}
+.page-block[class*='inner-width-'].padding-bottom-md {
+  --section-padding-bottom: var(--space-xl);
+}
+.page-block[class*='inner-width-']:has(+ .page-block.padding-top-md) {
+  --section-next-padding-top: var(--space-xl);
+}
+.page-block[class*='inner-width-'].padding-bottom-lg {
+  --section-padding-bottom: var(--space-3xl);
+}
+.page-block[class*='inner-width-']:has(+ .page-block.padding-top-lg) {
+  --section-next-padding-top: var(--space-3xl);
+}
+.page-block[class*='inner-width-'].padding-bottom-xl {
+  --section-padding-bottom: var(--space-5xl);
+}
+.page-block[class*='inner-width-']:has(+ .page-block.padding-top-xl) {
+  --section-next-padding-top: var(--space-5xl);
+}
+.page-block[class*='inner-width-']:is(
+    .background-default,
+    :not([class*='background-'])
+  ).border-top-none:not([class*='margin-bottom-']):not(
+    .border-bottom-solid
+  ):not(.border-bottom-dashed):not(.border-bottom-dotted):has(
+    + .page-block[class*='inner-width-']:is(
+        .background-default,
+        :not([class*='background-'])
+      ).border-top-none:not([class*='margin-top-'])
+  ),
+.page-block[class*='inner-width-'].background-light.border-top-none:not(
+    [class*='margin-bottom-']
+  ):not(.border-bottom-solid):not(.border-bottom-dashed):not(
+    .border-bottom-dotted
+  ):has(
+    + .page-block[class*='inner-width-'].background-light.border-top-none:not(
+        [class*='margin-top-']
+      )
+  ),
+.page-block[class*='inner-width-'].background-dark.border-top-none:not(
+    [class*='margin-bottom-']
+  ):not(.border-bottom-solid):not(.border-bottom-dashed):not(
+    .border-bottom-dotted
+  ):has(
+    + .page-block[class*='inner-width-'].background-dark.border-top-none:not(
+        [class*='margin-top-']
+      )
+  ),
+.page-block[class*='inner-width-'].background-raised.border-top-none:not(
+    [class*='margin-bottom-']
+  ):not(.border-bottom-solid):not(.border-bottom-dashed):not(
+    .border-bottom-dotted
+  ):has(
+    + .page-block[class*='inner-width-'].background-raised.border-top-none:not(
+        [class*='margin-top-']
+      )
+  ),
+.page-block[class*='inner-width-'].background-accent.border-top-none:not(
+    [class*='margin-bottom-']
+  ):not(.border-bottom-solid):not(.border-bottom-dashed):not(
+    .border-bottom-dotted
+  ):has(
+    + .page-block[class*='inner-width-'].background-accent.border-top-none:not(
+        [class*='margin-top-']
+      )
+  ) {
+  margin-bottom: calc(
+    -1 * min(var(--section-padding-bottom), var(--section-next-padding-top))
+  );
+}

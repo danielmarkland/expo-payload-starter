@@ -69,3 +69,39 @@ export function resolveThemeMode(
 ): ThemeMode {
   return preference ?? (systemMode === 'light' ? 'light' : 'dark')
 }
+
+export const typographyPresets = tokenConfig.typographyPresets
+export type FontPreset = 'system' | 'poppins' | 'inter' | 'ibm-plex-mono'
+export function fontFamilyCSS(font: FontPreset) {
+  return {
+    system: 'ui-sans-serif,system-ui,sans-serif',
+    poppins: 'var(--font-family-sans)',
+    inter: 'var(--font-family-inter)',
+    'ibm-plex-mono': 'var(--font-family-mono)',
+  }[font]
+}
+export function presentationTypographyCSS(theme: {
+  fontPreset: FontPreset
+  headingFont?: FontPreset | null
+  bodyFont?: FontPreset | null
+  labelFont?: FontPreset | null
+  headingWeight?: '600' | '700' | '800' | null
+  typographyPreset?: keyof typeof typographyPresets | null
+}) {
+  const values = [
+    `--font-family-runtime:${fontFamilyCSS(theme.bodyFont || theme.fontPreset)};`,
+  ]
+  if (theme.headingFont)
+    values.push(`--font-family-heading:${fontFamilyCSS(theme.headingFont)};`)
+  if (theme.labelFont)
+    values.push(`--font-family-label:${fontFamilyCSS(theme.labelFont)};`)
+  if (theme.headingWeight)
+    values.push(`--heading-weight:${theme.headingWeight};`)
+  if (theme.typographyPreset) {
+    const p = typographyPresets[theme.typographyPreset]
+    values.push(
+      `--font-size-hero-min:${p.heroMin}px;--font-size-hero-max:${p.heroMax}px;--font-size-section:${p.section}px;--heading-line-height:${p.headingLineHeight};--hero-line-height:${p.heroLineHeight};--heading-tracking:${p.headingTracking}em;--hero-tracking:${p.heroTracking}em;`,
+    )
+  }
+  return values.join('')
+}

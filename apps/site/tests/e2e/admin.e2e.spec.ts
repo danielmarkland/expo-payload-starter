@@ -68,7 +68,7 @@ test.describe('Admin Panel', () => {
     const palettePickers = page.locator(
       'input[type="color"][name^="theme.light."], input[type="color"][name^="theme.dark."]',
     )
-    await expect(palettePickers).toHaveCount(16)
+    await expect(palettePickers).toHaveCount(20)
     await expect(palettePickers.first()).toHaveValue(/^#[0-9a-f]{6}$/)
     await expect(page.getByText(/as a six-digit hexadecimal color/i)).toHaveCount(0)
 
