@@ -14,6 +14,7 @@ const publicFiles = [
   'postHeadings',
 ]
 const clientFiles = [
+  'FunnelControls',
   'ThemeToggle',
   'SiteConfigProvider',
   'TurnstileField',

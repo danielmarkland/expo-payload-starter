@@ -125,7 +125,7 @@ export function createNewsletterDelivery({
 
   return subscribeToNewsletter
 }
-async function verifyTurnstile(
+export async function verifyTurnstile(
   token: string,
   action: string,
   request: Request,
@@ -147,11 +147,13 @@ async function verifyTurnstile(
   )
   const result = (await response.json()) as {
     action?: string
+    hostname?: string
     success?: boolean
   }
   if (!response.ok || !result.success || result.action !== action) {
     throw new ValidationError('Verification failed. Please try again.')
   }
+  return result
 }
 
 function escapeHTML(value: string) {

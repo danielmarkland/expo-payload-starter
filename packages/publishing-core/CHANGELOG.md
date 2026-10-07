@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.8.1
+
+### Patch Changes
+
+- Publish themed customer funnel controls, portable font CSS, and the shared Turnstile verification helper for independent hosted app consumers.
+
 ## 0.8.0
 
 ### Minor Changes

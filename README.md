@@ -943,3 +943,5 @@ Canonical publishing endpoint definitions and query validation live in
 policy lives in `publishing-core/publishingHttp`. Both hosts support selected post
 IDs in authored order, filtered by publication and host access policy. Contact and
 newsletter forms share submission, retry and captcha state in publishing-ui.
+
+Hosted app consumers can import `publishing-ui/FunnelControls`, `FunnelControls.css`, and `PortableFonts.css`. These portable themed controls do not include authentication or tenant policy. `publishing-core/formDelivery` exports server-side `verifyTurnstile`.
