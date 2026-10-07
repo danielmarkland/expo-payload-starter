@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@danielmarkland/design-tokens/fonts/Poppins_400Regular.ttf')
+    format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('@danielmarkland/design-tokens/fonts/Poppins_500Medium.ttf')
+    format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('@danielmarkland/design-tokens/fonts/Poppins_600SemiBold.ttf')
+    format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@danielmarkland/design-tokens/fonts/Poppins_700Bold.ttf')
+    format('truetype');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('@danielmarkland/design-tokens/fonts/Inter-Variable.ttf')
+    format('truetype');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@danielmarkland/design-tokens/fonts/IBMPlexMono-Regular.ttf')
+    format('truetype');
+}
