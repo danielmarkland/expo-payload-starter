@@ -1,5 +1,16 @@
 # @danielmarkland/publishing-ui
 
+## 0.4.0
+
+### Minor Changes
+
+- Publish themed customer funnel controls, portable font CSS, and the shared Turnstile verification helper for independent hosted app consumers.
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-core@0.8.1
+
 ## 0.3.0
 
 ### Minor Changes
