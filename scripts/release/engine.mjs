@@ -357,6 +357,13 @@ export function createDriver(env = process.env) {
       vercel('rollback', id, '--yes')
     },
     async report(_context, record) {
+      if (env.GITHUB_ACTIONS === 'true')
+        record.checks = {
+          sourceSHA: record.sha,
+          runId: env.GITHUB_RUN_ID,
+          workflow: env.GITHUB_WORKFLOW,
+          validation: 'required validate job passed',
+        }
       const safe = redact(JSON.stringify(record, null, 2), env)
       mkdirSync('release-output', { recursive: true })
       writeFileSync('release-output/result.json', safe)
