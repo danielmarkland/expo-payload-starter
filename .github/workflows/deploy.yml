@@ -28,6 +28,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
       DATABASE_MIGRATION_URL: ${{ secrets.DATABASE_MIGRATION_URL }}
       RELEASE_SMOKE_TARGETS: ${{ vars.RELEASE_SMOKE_TARGETS }}
+      SITE_URL: ${{ vars.SITE_URL }}
       NODE_AUTH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +51,7 @@ jobs:
           npm install --global vercel@60.0.1
         env:
           INSTALL_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN || github.token }}
-      - name: Build, migrate, publish, deploy and verify exact commit
+      - name: Cloud build, migrate, publish, activate and verify exact commit
         run: node scripts/release/engine.mjs
       - uses: actions/upload-artifact@v4
         if: always()

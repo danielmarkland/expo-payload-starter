@@ -36,7 +36,7 @@ or bypass a failure. Run `git diff --check` and the repository checks locally.
 
 1. Configure GitHub environment `development` and `production` separately:
    secret `VERCEL_TOKEN`, secret `DATABASE_MIGRATION_URL`; variables
-   `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, and `RELEASE_SMOKE_TARGETS`.
+   `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SITE_URL`, and `RELEASE_SMOKE_TARGETS`.
    The migration connection is privileged and server-only; runtime uses its own
    restricted connection. Package installation uses `PACKAGE_READ_TOKEN` or
    the workflow's scoped GitHub Packages token; publication uses `GITHUB_TOKEN`.
@@ -61,8 +61,8 @@ or bypass a failure. Run `git diff --check` and the repository checks locally.
    Once enabled, main PR policy requires successful dev deployment for its exact
    head. Open develop → main and merge only after `ci` passes.
 
-Actions validate → build → apply pending Supabase SQL migrations → apply pending
-Payload migrations → verify/publish packages on main → deploy prebuilt assets →
+Actions validate → cloud build without moving live domains → apply pending Supabase SQL migrations → apply pending
+Payload migrations → verify/publish packages on main → activate the cloud-built deployment →
 promote → smoke. Build commands never migrate. Development validates package
 candidates without publishing them. Production checks immutable packed contents,
 then verifies publication with a clean registry installation. Shared packages
@@ -88,3 +88,8 @@ Completion requires the hosted smoke result and recorded deployment, not a merge
 or successful local build. Exercise a failed migration in a disposable database,
 retry publication, and confirm simultaneous runs queue. Verify direct pushes are
 rejected after protections are enabled, without risking main with test changes.
+
+Vercel retains sensitive runtime settings. CI uses `vercel deploy --prod --skip-domain`
+to build the exact checkout, then promotes only after migrations/publication pass.
+CI does not download or duplicate runtime secrets. Payload migration uses a temporary
+process-only secret; its database connection is the dedicated migration credential.
