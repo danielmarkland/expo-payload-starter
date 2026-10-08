@@ -34,12 +34,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const bootstrap = themeBootstrapScript(siteConfig.theme, THEME_STORAGE_KEY)
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={publishingFontClassName} suppressHydrationWarning>
       <head>
         <style dangerouslySetInnerHTML={{ __html: siteConfigCSS(siteConfig) }} />
         <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
       </head>
-      <body className={publishingFontClassName}>
+      <body>
         <SiteConfigProvider config={siteConfig}>
           <GoogleTagManager containerId={siteConfig.integrations.googleTagManagerId} />
           <SiteHeader siteConfig={siteConfig} />
