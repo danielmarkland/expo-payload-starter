@@ -68,3 +68,56 @@ for (const branch of ['develop', 'main']) {
     throw new Error(`Protection verification failed for ${branch}`)
   console.info(`${repository}/${branch}: PR/ci protections verified`)
 }
+// Rulesets enforce the merge method on each branch, including the GitHub UI.
+const existingRules = JSON.parse(
+  execFileSync('gh', ['api', `repos/${repository}/rulesets`], {
+    encoding: 'utf8',
+  }),
+)
+for (const branch of ['develop', 'main']) {
+  const name = `Release merge method (${branch})`
+  const existing = existingRules.find(
+    (rule) => rule.name === name && rule.source === repository,
+  )
+  const method = branch === 'main' ? 'merge' : 'squash'
+  const settings = {
+    name,
+    target: 'branch',
+    enforcement: 'active',
+    bypass_actors: [],
+    conditions: {
+      ref_name: { include: [`refs/heads/${branch}`], exclude: [] },
+    },
+    rules: [
+      {
+        type: 'pull_request',
+        parameters: {
+          required_approving_review_count: 0,
+          dismiss_stale_reviews_on_push: true,
+          require_code_owner_review: false,
+          require_last_push_approval: false,
+          required_review_thread_resolution: true,
+          allowed_merge_methods: [method],
+        },
+      },
+    ],
+  }
+  const path = `repos/${repository}/rulesets${existing ? `/${existing.id}` : ''}`
+  const result = JSON.parse(
+    execFileSync(
+      'gh',
+      ['api', '--method', existing ? 'PUT' : 'POST', path, '--input', '-'],
+      { input: JSON.stringify(settings), encoding: 'utf8' },
+    ),
+  )
+  const allowed = result.rules?.find((rule) => rule.type === 'pull_request')
+    ?.parameters.allowed_merge_methods
+  if (
+    result.enforcement !== 'active' ||
+    result.bypass_actors?.length ||
+    allowed?.length !== 1 ||
+    allowed[0] !== method
+  )
+    throw new Error(`Merge-method ruleset verification failed for ${branch}`)
+  console.info(`${repository}/${branch}: ${method}-only ruleset verified`)
+}

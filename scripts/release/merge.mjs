@@ -36,6 +36,19 @@ if (pr.base.ref === 'develop') {
   )
     throw new Error('Production release in progress; pause develop merges')
 }
+const rules = JSON.parse(
+  gh('api', `repos/${repository}/rules/branches/${pr.base.ref}`),
+)
+const method = pr.base.ref === 'main' ? 'merge' : 'squash'
+if (
+  !rules.some(
+    (rule) =>
+      rule.type === 'pull_request' &&
+      rule.parameters.allowed_merge_methods?.length === 1 &&
+      rule.parameters.allowed_merge_methods[0] === method,
+  )
+)
+  throw new Error('Required merge-method ruleset is not active')
 gh('pr', 'checks', number, '--required')
 // GitHub checks protections and this exact head again atomically at merge time.
 process.stdout.write(

@@ -12,8 +12,8 @@ Never push directly to tracked branches or use administrator bypass.
 Required branch protection on develop and main: PRs, latest required `ci`, strict
 up-to-date checks on develop, administrators included, no force pushes or branch deletion.
 Private repositories require a GitHub plan supporting these controls. Do not
-claim enforcement until GitHub confirms the rules. Linear develop history plus disabled rebase merges permits squash only; main
-retains merge commits. No merge queue is needed yet.
+claim enforcement until GitHub confirms the rules. Branch rulesets restrict develop to squash and main to merge commits, with no
+bypass actors. Linear develop history also rejects merge commits. No merge queue is needed yet.
 Enable/verify them with `node scripts/release/protect.mjs` after `ci` exists.
 Main uses passing merge-result checks without requiring develop to contain each
 previous main merge commit; release serialization preserves the branch ancestry.

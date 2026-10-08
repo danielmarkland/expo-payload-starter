@@ -75,6 +75,7 @@ export async function requireDevelopmentDeployment(
     if (!response.ok) throw new Error('Cannot verify deployment status')
     const [latest] = await response.json()
     if (latest?.state === 'success') return
+    break // An older success cannot override the current deployment's failure.
   }
   throw new Error(
     'The exact develop commit must finish controlled deployment and smoke checks before release',
