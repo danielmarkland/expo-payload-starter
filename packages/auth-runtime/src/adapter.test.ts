@@ -234,7 +234,9 @@ describe.skipIf(!databaseURL)('PostgreSQL authentication isolation', () => {
       sendVerificationEmail: async ({ url }: { url: string }) => {
         sent.push(url)
       },
-      sendResetPassword: async () => {},
+      sendResetPassword: async ({ url }: { url: string }) => {
+        sent.push(url)
+      },
     }
     const first = createRealmAuth({ ...base, realm: tenantA })
     const second = createRealmAuth({ ...base, realm: tenantB })
@@ -261,6 +263,34 @@ describe.skipIf(!databaseURL)('PostgreSQL authentication isolation', () => {
     expect(
       await second.api.getSession({ headers: new Headers({ cookie }) }),
     ).toBeNull()
+    await first.api.requestPasswordReset({
+      body: {
+        email: 'seller@example.test',
+        redirectTo: 'http://localhost:3000/reset',
+      },
+    })
+    const token = new URL(sent[1]).pathname.split('/').pop()!
+    await first.api.resetPassword({
+      body: { token, newPassword: 'replacement-password-123!' },
+    })
+    expect(
+      await first.api.getSession({ headers: new Headers({ cookie }) }),
+    ).toBeNull()
+    await expect(
+      first.api.resetPassword({
+        body: { token, newPassword: 'another-password-123!' },
+      }),
+    ).rejects.toThrow()
+    expect(
+      (
+        await first.api.signInEmail({
+          body: {
+            email: 'seller@example.test',
+            password: 'replacement-password-123!',
+          },
+        })
+      ).user.id,
+    ).toBe(signup.user.id)
   })
   it('creates a verified phone customer without exposing or reusing another tenant session', async () => {
     let code = ''
