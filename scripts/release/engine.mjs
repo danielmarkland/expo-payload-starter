@@ -51,8 +51,8 @@ export async function executeRelease(driver, context) {
     }
     record.deployment = await driver.deploy(context)
     record.stages.push('deploy')
+    activated = true // Recovery also covers partial promotion failures.
     await driver.activate(context, record.deployment)
-    activated = true
     await driver.smoke(context)
     record.stages.push('smoke')
     record.status = 'passed'

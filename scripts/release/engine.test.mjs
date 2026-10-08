@@ -105,3 +105,10 @@ test('preflight failure is recorded and cannot build or mutate deployments', asy
   assert.deepEqual(f.calls, ['preflight', 'report'])
   assert.equal(f.report.status, 'failed')
 })
+
+test('partial promotion failure restores the compatible prior deployment', async () => {
+  const f = fixture('activate')
+  await assert.rejects(executeRelease(f.driver, context))
+  assert.ok(f.calls.includes('rollback'))
+  assert.equal(f.calls.includes('smoke'), false)
+})
