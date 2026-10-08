@@ -309,7 +309,17 @@ export function createDriver(env = process.env) {
         throw new Error(
           'Deployment command did not return an immutable deployment URL',
         )
-      return url
+      const deployment = await api(
+        `/v13/deployments/${encodeURIComponent(new URL(url).hostname)}`,
+      )
+      if (
+        deployment.meta?.releaseSha !== context.sha ||
+        deployment.meta?.releaseMigrationDigest !== context.migrationDigest
+      )
+        throw new Error(
+          'Deployment identity/evidence does not match the release',
+        )
+      return { id: deployment.id, url }
     },
     async activate(_context, deployment) {
       vercel('promote', deployment.url, '--yes')
