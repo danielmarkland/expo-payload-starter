@@ -311,8 +311,8 @@ export function createDriver(env = process.env) {
         )
       return url
     },
-    async activate(_context, url) {
-      vercel('promote', url, '--yes')
+    async activate(_context, deployment) {
+      vercel('promote', deployment.url, '--yes')
     },
     async smoke(context) {
       for (const target of context.smokeTargets) {
