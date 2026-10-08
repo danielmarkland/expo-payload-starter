@@ -42,3 +42,11 @@ caller even while the previous login provider is active.
 
 Hosted provider credentials and account migration are deployment prerequisites.
 Library installation or a successful build does not confirm a production cutover.
+
+Existing deployments retain their legacy profile repository until activation. Run
+Payload migrations before deploying the new editorial schema. Apply the product
+identity migration immediately before coordinated activation because it revokes
+legacy browser profile grants; do not leave legacy login active after that step.
+
+Existing Supabase account suspensions are preserved during identity seeding;
+provider migration does not grant roles or lift administrative bans.

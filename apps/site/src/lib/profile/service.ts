@@ -1,5 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
-import { createPostgresProfileRepository, type Database } from '@starter/data'
+import {
+  createProfileRepository,
+  createPostgresProfileRepository,
+  type Database,
+} from '@starter/data'
 import { authenticatedIdentity, betterAuthEnabled, identityDatabase } from '@/lib/identity/server'
 import {
   ServiceUnavailableError,
@@ -39,7 +43,7 @@ async function authenticatedProductContext(authorization: null | string) {
   const { data, error } = await client.auth.getUser(token)
   if (error || !data.user) throw new UnauthorizedError()
   return {
-    profiles: createPostgresProfileRepository(identityDatabase(), data.user.id),
+    profiles: createProfileRepository(client),
     userId: data.user.id,
   }
 }

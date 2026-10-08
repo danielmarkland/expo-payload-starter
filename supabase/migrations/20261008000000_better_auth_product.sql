@@ -63,6 +63,8 @@ insert into identity.records(realm,model,id,data)
 select 'customer:'||c.tenant_id::text,'user',u.id::text,jsonb_build_object(
  'id',u.id::text,'email',coalesce(lower(u.email),'legacy-'||u.id::text||'@identity.invalid'),
  'emailVerified',u.email_confirmed_at is not null,'isAnonymous',false,
+ 'banned',coalesce((to_jsonb(u)->>'banned_until')::timestamptz>now(),false),
+ 'banExpires',(to_jsonb(u)->>'banned_until')::timestamptz,
  'name',coalesce(u.raw_user_meta_data->>'full_name',u.raw_user_meta_data->>'name',u.email,u.id::text),
  'createdAt',u.created_at,'updatedAt',coalesce(u.updated_at,u.created_at))
 from auth.users u cross join app.identity_context c on conflict do nothing;
