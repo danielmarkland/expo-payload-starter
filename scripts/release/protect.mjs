@@ -1,9 +1,23 @@
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 const repository = JSON.parse(
   execFileSync('gh', ['repo', 'view', '--json', 'nameWithOwner'], {
     encoding: 'utf8',
   }),
 ).nameWithOwner
+for (const branch of ['develop', 'main']) {
+  const probe = spawnSync(
+    'gh',
+    ['api', `repos/${repository}/branches/${branch}/protection`],
+    { encoding: 'utf8' },
+  )
+  if (
+    probe.status !== 0 &&
+    !`${probe.stdout}${probe.stderr}`.includes('HTTP 404')
+  )
+    throw new Error(
+      `Cannot manage ${branch} protections; verify repository permissions and GitHub plan before enabling rules`,
+    )
+}
 execFileSync(
   'gh',
   ['api', '--method', 'PATCH', `repos/${repository}`, '--input', '-'],
