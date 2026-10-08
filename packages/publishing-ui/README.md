@@ -40,3 +40,12 @@ wiring remain application-owned, alongside application-specific access policy.
 
 Contact and newsletter forms use one internal submission hook for in-flight
 locking, retry and challenge reset. Each form retains its own fields and markup.
+
+## Funnel layouts
+
+`./FunnelLayout` exports `FunnelLayout`, `StepProgress`, `ChoiceGroup` and
+`UploadCard`; import `./FunnelLayout.css` with `./FunnelControls.css`. Reusable
+markup/styles belong here. Consumers own flow logic and use tenant context for
+branding, public footer text and contact links; no WBUR theme is embedded.
+Native choices support keyboard/form validation. Upload cards handle choosing,
+dropping and replacing a file; persistence and server validation remain adapters.
