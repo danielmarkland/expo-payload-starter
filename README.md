@@ -945,3 +945,7 @@ IDs in authored order, filtered by publication and host access policy. Contact a
 newsletter forms share submission, retry and captcha state in publishing-ui.
 
 Hosted app consumers can import `publishing-ui/FunnelControls`, `FunnelControls.css`, and `PortableFonts.css`. These portable themed controls do not include authentication or tenant policy. `publishing-core/formDelivery` exports server-side `verifyTurnstile`.
+
+## Authentication migration
+
+`@danielmarkland/auth-runtime` supplies the shared Better Auth backend and React/Expo integration. It isolates platform/editor and customer identities in PostgreSQL realms and supports Google, Facebook, SMS and revocable developer OAuth. Existing starter login remains on Supabase Auth until users, application access and CMS roles are reconciled and the deployment is explicitly switched. See [the runtime contract](packages/auth-runtime/README.md); installing the package alone does not migrate an application.

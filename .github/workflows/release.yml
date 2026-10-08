@@ -39,6 +39,8 @@ jobs:
       - run: pnpm --filter @danielmarkland/publishing-core build
       - run: NODE_OPTIONS=--no-experimental-webstorage pnpm --filter @danielmarkland/publishing-ui test
       - run: pnpm --filter @danielmarkland/publishing-ui test:package
+      - run: pnpm --filter @danielmarkland/auth-runtime build
+      - run: pnpm --filter @danielmarkland/auth-runtime test
       - uses: changesets/action@v1
         with:
           publish: pnpm release
