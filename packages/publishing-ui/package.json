@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-ui",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -126,6 +126,11 @@
       "types": "./dist/FunnelControls.d.ts",
       "default": "./dist/FunnelControls.js"
     },
+    "./FunnelLayout": {
+      "types": "./dist/FunnelLayout.d.ts",
+      "default": "./dist/FunnelLayout.js"
+    },
+    "./FunnelLayout.css": "./dist/FunnelLayout.css",
     "./FunnelControls.css": "./dist/FunnelControls.css",
     "./PortableFonts.css": "./dist/PortableFonts.css",
     "./IdentityLogin": {

@@ -1,0 +1,318 @@
+.funnel-layout {
+  color: var(--color-ink);
+  background: var(--color-surface-page, var(--color-surface));
+  font-family: var(--font-family-runtime, sans-serif);
+  min-height: 100vh;
+}
+.funnel-layout-header {
+  width: min(880px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.funnel-layout-brand {
+  font: 800 24px/1.2
+    var(--font-family-heading, var(--font-family-runtime, sans-serif));
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  color: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  text-align: left;
+}
+button.funnel-layout-brand {
+  cursor: pointer;
+}
+.funnel-layout-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.funnel-layout-links button,
+.funnel-layout-help summary {
+  font: 12px/1.4 var(--font-family-label, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.funnel-layout-help {
+  position: relative;
+}
+.funnel-layout-help summary {
+  list-style: none;
+}
+.funnel-layout-help summary::-webkit-details-marker {
+  display: none;
+}
+.funnel-layout-help[open] a {
+  position: absolute;
+  right: 0;
+  top: 28px;
+  z-index: 1;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  white-space: nowrap;
+}
+.funnel-layout-content {
+  max-width: 720px;
+  width: calc(100% - 48px);
+  margin: 0 auto;
+  padding: 60px 0 80px;
+}
+.funnel-layout-content h1 {
+  font: 800 clamp(32px, 4vw, 44px)/1.12
+    var(--font-family-heading, var(--font-family-runtime, sans-serif));
+  letter-spacing: -0.04em;
+  margin: 0 0 16px;
+}
+.funnel-layout-intro {
+  font-size: 18px;
+  color: var(--color-ink-body);
+  line-height: 1.6;
+  margin: 0 0 48px;
+}
+.funnel-layout .funnel-field > label,
+.funnel-choice-group legend {
+  font: 12px/1.5 var(--font-family-label, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.funnel-layout .funnel-field {
+  margin-bottom: 24px;
+  gap: 12px;
+}
+.funnel-layout .funnel-field input,
+.funnel-layout .funnel-field textarea {
+  min-height: 46px;
+  padding: 12px 14px;
+}
+.funnel-layout .funnel-field small {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.funnel-layout-grid {
+  align-items: start;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 20px;
+}
+.funnel-layout-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+.funnel-layout .button {
+  min-height: 50px;
+  padding: 14px 28px;
+  font-weight: 600;
+  border-width: 1px;
+}
+.funnel-layout .button-primary-filled {
+  border-color: var(--color-primary);
+}
+.funnel-layout .button-secondary-outline {
+  border-color: var(--color-border);
+}
+.funnel-layout button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.funnel-layout-saved {
+  font-size: 12px;
+  color: var(--color-ink-body);
+  margin-top: 20px;
+}
+.funnel-step-progress {
+  margin-bottom: 36px;
+}
+.funnel-step-progress p {
+  font: 12px/1.5 var(--font-family-label, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 14px;
+}
+.funnel-step-progress ol {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.funnel-step-progress li {
+  flex: 1;
+  height: 4px;
+  background: var(--color-border);
+}
+.funnel-step-progress li[aria-current='step'],
+.funnel-step-progress li[data-complete='true'] {
+  background: var(--color-accent, var(--color-primary));
+}
+.funnel-step-progress span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.funnel-choice-group {
+  padding: 0;
+  margin: 28px 0 36px;
+  border: 0;
+  min-width: 0;
+}
+.funnel-choice-group legend {
+  margin-bottom: 12px;
+}
+.funnel-choice-group > p {
+  color: var(--color-ink-body);
+  font-size: 14px;
+  margin: 0 0 14px;
+}
+.funnel-choice-group > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.funnel-choice-columns-1 > div {
+  grid-template-columns: 1fr;
+}
+.funnel-choice-group .funnel-choice {
+  margin: 0;
+  padding: 16px;
+  background: var(--color-surface-raised);
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: var(--radius-sm, 0);
+}
+.funnel-choice-group input {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+.funnel-choice-group .funnel-choice:has(input:checked) {
+  border-color: var(--color-primary);
+}
+.funnel-upload-card {
+  border: 1px dashed var(--color-border);
+  background: var(--color-surface-raised);
+  padding: 24px;
+  text-align: center;
+  margin: 0 0 20px;
+}
+.funnel-upload-card h2 {
+  font: 800 24px/1.3
+    var(--font-family-heading, var(--font-family-runtime, sans-serif));
+  margin: 0 0 12px;
+}
+.funnel-upload-card > p {
+  color: var(--color-ink-body);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.funnel-upload-card img {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  margin: 16px auto;
+}
+.funnel-upload-picker {
+  position: relative;
+  display: inline-block;
+  margin-top: 16px;
+}
+.funnel-upload-picker input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.funnel-upload-picker:focus-within {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+.funnel-upload-picker:has(input:disabled) {
+  opacity: 0.5;
+}
+.funnel-layout-footer {
+  background: var(--color-dark-surface, var(--color-ink));
+  color: var(--color-dark-ink, var(--color-surface));
+  padding: 48px max(24px, calc((100% - 880px) / 2));
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+}
+.funnel-layout-footer .funnel-layout-brand {
+  font-size: 22px;
+}
+.funnel-layout-footer p {
+  font: 12px/1.8 var(--font-family-label, monospace);
+  white-space: pre-line;
+  opacity: 0.7;
+}
+.funnel-layout-footer a {
+  color: inherit;
+}
+.funnel-layout-footer nav {
+  display: flex;
+  gap: 18px;
+  margin-top: 20px;
+}
+.funnel-layout-footer svg {
+  width: 18px;
+  height: 18px;
+}
+.funnel-layout-footer-details {
+  text-align: right;
+}
+.funnel-layout-footer-details p + p {
+  margin-top: 24px;
+}
+@media (max-width: 640px) {
+  .funnel-layout-header {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .funnel-layout-brand {
+    font-size: 20px;
+  }
+  .funnel-layout-links {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .funnel-layout-content {
+    padding-top: 40px;
+  }
+  .funnel-layout-grid {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+  .funnel-layout-intro {
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+  .funnel-choice-group > div {
+    grid-template-columns: 1fr;
+  }
+  .funnel-layout-footer {
+    flex-direction: column;
+  }
+  .funnel-layout-footer-details {
+    text-align: left;
+  }
+}
