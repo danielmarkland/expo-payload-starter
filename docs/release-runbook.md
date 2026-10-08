@@ -95,3 +95,6 @@ CI compiles workspace packages locally for migration imports and immutable regis
 checks, while Vercel builds the hosted frontend. CI does not download or duplicate
 runtime secrets. Payload migration uses a temporary
 process-only secret; its database connection is the dedicated migration credential.
+
+Only deployment jobs take the per-environment release lock. Exact-commit validation
+can run concurrently; deployment and publication stay serialized and are never cancelled.
