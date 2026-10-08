@@ -264,9 +264,28 @@ export function createDriver(env = process.env) {
       command('node', ['scripts/release/packages.mjs'])
       if (context.environment !== 'production')
         return JSON.parse(readFileSync('release-output/packages.json', 'utf8'))
+      // Publish with this repository's write token, keeping registry installation credentials separate.
+      const publicationConfig = join(process.cwd(), '.vercel/publication.npmrc')
+      writeFileSync(
+        publicationConfig,
+        '@groovepost:registry=https://npm.pkg.github.com\n@danielmarkland:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}\n',
+      )
+      const publicationEnvironment = {
+        npm_config_userconfig: publicationConfig,
+        NPM_CONFIG_USERCONFIG: publicationConfig,
+      }
       if (env.RELEASE_PROFILE === 'platform')
-        command('node', ['scripts/publish-developer-packages.mjs'])
-      else command('pnpm', ['exec', 'changeset', 'publish'])
+        command(
+          'node',
+          ['scripts/publish-developer-packages.mjs'],
+          publicationEnvironment,
+        )
+      else
+        command(
+          'pnpm',
+          ['exec', 'changeset', 'publish'],
+          publicationEnvironment,
+        )
       command('node', ['scripts/release/packages.mjs', '--clean-install'])
       return JSON.parse(readFileSync('release-output/packages.json', 'utf8'))
     },
