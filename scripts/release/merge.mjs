@@ -26,8 +26,13 @@ if (pr.base.ref === 'develop') {
     gh('api', `repos/${repository}/pulls?state=open&base=main`),
   )
   const runs = JSON.parse(
-    gh('api', `repos/${repository}/actions/runs?branch=main&per_page=100`),
-  ).workflow_runs
+    gh(
+      'api',
+      `repos/${repository}/actions/runs?branch=main&per_page=100`,
+      '--jq',
+      '[.workflow_runs[]|{name,status}]',
+    ),
+  )
   if (
     releases.length ||
     runs.some(
