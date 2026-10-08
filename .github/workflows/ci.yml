@@ -1,12 +1,44 @@
 name: CI
-
 on:
   pull_request:
-  push:
-    branches: [main]
-
+    branches: [develop, main]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      force:
+        type: boolean
+        default: false
+    secrets:
+      PACKAGE_READ_TOKEN:
+        required: false
+permissions:
+  contents: read
+  packages: read
+  deployments: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
+  policy:
+    runs-on: ubuntu-latest
+    outputs:
+      documentation: ${{ steps.change.outputs.documentation }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node --test scripts/release/*.test.mjs
+      - id: change
+        run: node scripts/release/policy.mjs
+        env:
+          RELEASE_AUTOMATION_ENABLED: ${{ vars.RELEASE_AUTOMATION_ENABLED }}
+          GH_TOKEN: ${{ github.token }}
   quality:
+    needs: policy
+    if: inputs.force || needs.policy.outputs.documentation != 'true'
     runs-on: ubuntu-latest
     env:
       PRODUCT_AUTH_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/starter_product_identity_test
@@ -29,9 +61,15 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 2.109.1
-      - run: pnpm install --frozen-lockfile
+      - name: Install packages
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken "$NODE_AUTH_TOKEN" --location=user
+          pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
       - name: Build shared publishing packages
         run: pnpm --filter '@starter/site^...' build
+      - run: node scripts/release/packages.mjs
       - run: supabase start
       - name: Create isolated auth integration database
         run: >-
@@ -56,6 +94,8 @@ jobs:
           diff -u packages/data/src/database.ts /tmp/database.generated.ts
 
   e2e:
+    needs: policy
+    if: inputs.force || needs.policy.outputs.documentation != 'true'
     runs-on: ubuntu-latest
     env:
       SITE_URL: http://localhost:3000
@@ -73,10 +113,33 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 2.109.1
-      - run: pnpm install --frozen-lockfile
+      - name: Install packages
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken "$NODE_AUTH_TOKEN" --location=user
+          pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
       - name: Build shared publishing packages
         run: pnpm --filter '@starter/site^...' build
       - run: supabase start
       - run: pnpm payload:migrate
       - run: pnpm --filter @starter/site exec playwright install --with-deps chromium
       - run: pnpm --filter @starter/site test:e2e
+
+  ci:
+    if: always()
+    needs: [policy, quality, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Required result
+        env:
+          POLICY: ${{ needs.policy.result }}
+          QUALITY: ${{ needs.quality.result }}
+          DOCS: ${{ needs.policy.outputs.documentation }}
+          E2E: ${{ needs.e2e.result }}
+        run: |
+          test "$POLICY" = success
+          if [ "$QUALITY" != success ]; then
+            test "$DOCS" = true && test "$QUALITY" = skipped
+          fi
+          if [ "$QUALITY" = success ]; then test "$E2E" = success; else test "$E2E" = skipped; fi
