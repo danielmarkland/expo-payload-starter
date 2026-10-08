@@ -958,3 +958,5 @@ storage remain supported. Follow [authentication setup](docs/authentication.md)
 for provider callbacks, migrations, staff reconciliation and the coordinated
 backend/app switch; current deployments stay on their existing login until those
 checks pass. Groovepost-hosted custom apps use its SDK authentication bridge.
+
+CMS logout also revokes the Better Auth editorial session after native activation.
