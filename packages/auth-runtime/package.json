@@ -1,0 +1,57 @@
+{
+  "name": "@danielmarkland/auth-runtime",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./expo": {
+      "types": "./dist/expo.d.ts",
+      "default": "./dist/expo.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielmarkland/expo-payload-starter.git",
+    "directory": "packages/auth-runtime"
+  },
+  "dependencies": {
+    "better-auth": "1.7.7",
+    "@better-auth/oauth-provider": "1.7.7",
+    "@better-auth/expo": "1.7.7",
+    "pg": "8.20.0"
+  },
+  "peerDependencies": {
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "@types/pg": "8.20.0",
+    "@types/node": "22.19.9",
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.18"
+  }
+}

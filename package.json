@@ -29,7 +29,7 @@
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm --filter @danielmarkland/contracts build && pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-contracts build && pnpm --filter @danielmarkland/publishing-core build && pnpm --filter @danielmarkland/publishing-ui build && changeset publish"
+    "release": "pnpm --filter @danielmarkland/contracts build && pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-contracts build && pnpm --filter @danielmarkland/publishing-core build && pnpm --filter @danielmarkland/publishing-ui build && pnpm --filter @danielmarkland/auth-runtime build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",

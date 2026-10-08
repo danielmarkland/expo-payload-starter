@@ -17,6 +17,7 @@ to become a plugin framework.
 - `packages/api-client/` — framework-neutral client for the versioned BFF.
 - `packages/core/` — framework-independent product rules.
 - `packages/auth/` — provider-neutral identity and authorization interfaces.
+- `packages/auth-runtime/` — public Better Auth backend/client package; realm isolation lives here. Existing deployments remain on Supabase Auth until the coordinated migration is complete.
 - `packages/data/` — typed Supabase repositories and generated database types.
 - `packages/brand/` — private starter identity, icons, and theme preference key.
 - `packages/design-tokens/` — neutral visual tokens and fonts, published as `@danielmarkland/design-tokens`.
