@@ -147,6 +147,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Linked Better Auth editorial identity UUID. Product identities are separate.
+   */
+  authIdentityId?: string | null;
   role: 'admin' | 'editor';
   updatedAt: string;
   createdAt: string;
@@ -2039,6 +2043,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  authIdentityId?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;

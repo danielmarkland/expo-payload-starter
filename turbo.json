@@ -17,7 +17,15 @@
     "SUPABASE_S3_REGION",
     "SUPABASE_S3_SECRET_ACCESS_KEY",
     "TURNSTILE_SECRET_KEY",
-    "VERCEL_PROJECT_PRODUCTION_URL"
+    "VERCEL_PROJECT_PRODUCTION_URL",
+    "AUTH_PROVIDER",
+    "AUTH_SECRET",
+    "AUTH_TENANT_ID",
+    "AUTH_TRUSTED_ORIGINS",
+    "AUTH_*",
+    "EDITOR_AUTH_*",
+    "EXPO_PUBLIC_AUTH_PROVIDER",
+    "PRODUCT_AUTH_TEST_DATABASE_URL"
   ],
   "tasks": {
     "build": {
@@ -42,6 +50,10 @@
       "dependsOn": ["^build"]
     },
     "@danielmarkland/auth-runtime#test": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "@starter/site#test": {
       "dependsOn": ["^build"],
       "cache": false
     }

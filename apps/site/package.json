@@ -1,6 +1,6 @@
 {
   "name": "@starter/site",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "private": true,
   "description": "A blank template to get started with Payload 3.0",
   "license": "MIT",
@@ -21,7 +21,8 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "typecheck": "tsc --noEmit",
     "site:transfer": "tsx src/scripts/site-transfer.ts",
-    "test:site-transfer": "vitest run --config tests/site-transfer/vitest.config.mts"
+    "test:site-transfer": "vitest run --config tests/site-transfer/vitest.config.mts",
+    "auth:migrate-editors": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/migrate-editor-identities.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1140.0",

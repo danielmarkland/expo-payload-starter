@@ -949,3 +949,12 @@ Hosted app consumers can import `publishing-ui/FunnelControls`, `FunnelControls.
 ## Authentication migration
 
 `@danielmarkland/auth-runtime` supplies the shared Better Auth backend and React/Expo integration. It isolates platform/editor and customer identities in PostgreSQL realms and supports Google, Facebook, SMS and revocable developer OAuth. Existing starter login remains on Supabase Auth until users, application access and CMS roles are reconciled and the deployment is explicitly switched. See [the runtime contract](packages/auth-runtime/README.md); installing the package alone does not migrate an application.
+
+## Better Auth migration
+
+The starter includes an independent Better Auth backend, customer browser/Expo
+client, and a separate editorial identity bridge. PostgreSQL and private file
+storage remain supported. Follow [authentication setup](docs/authentication.md)
+for provider callbacks, migrations, staff reconciliation and the coordinated
+backend/app switch; current deployments stay on their existing login until those
+checks pass. Groovepost-hosted custom apps use its SDK authentication bridge.

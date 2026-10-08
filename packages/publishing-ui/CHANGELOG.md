@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.4.1
+
+### Patch Changes
+
+- Expose a shared editorial sign-in and password recovery view; hosts supply authentication actions.
+
 ## 0.4.0
 
 ### Minor Changes

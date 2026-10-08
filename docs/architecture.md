@@ -82,3 +82,12 @@ descriptors. Hosts bind their service calls explicitly. Shared protocol policy
 formats errors, verifies preview headers and controls caching. This keeps tenant
 security visible without duplicating the endpoint definitions or requiring a
 generic service/plugin framework.
+
+### Identity migration
+
+Better Auth replaces the product provider through a coordinated switch. Customer
+and editorial identities occupy separate PostgreSQL realms; the BFF scopes data
+to verified actors, and Payload independently authorizes explicitly linked staff.
+See [authentication setup](authentication.md). Supabase remains a PostgreSQL and
+storage provider. Hosted Groovepost frontend packages consume its session bridge
+and never host provider secrets or an independent backend.

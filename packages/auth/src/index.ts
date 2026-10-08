@@ -7,6 +7,12 @@ export interface AuthState {
 
 export interface AuthActions {
   signInWithGoogle(): Promise<void>
+  signInWithFacebook(): Promise<void>
+  signInWithEmail(email: string, password: string): Promise<void>
+  signUpWithEmail(email: string, password: string, name: string): Promise<void>
+  sendPhoneCode(phoneNumber: string): Promise<void>
+  verifyPhoneCode(phoneNumber: string, code: string): Promise<void>
+  requestPasswordReset(email: string): Promise<void>
   signOut(): Promise<void>
 }
 
