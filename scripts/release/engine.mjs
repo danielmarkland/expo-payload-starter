@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { createHash } from 'node:crypto'
+import { createHash, randomBytes } from 'node:crypto'
 import {
   existsSync,
   mkdirSync,
@@ -122,6 +122,7 @@ function smokeTargets(value) {
   return entries
 }
 export function createDriver(env = process.env) {
+  let candidate
   const command = (name, args, overrides = {}, capture = false) => {
     try {
       const output = execFileSync(name, args, {
@@ -197,7 +198,7 @@ export function createDriver(env = process.env) {
           key,
         )
       )
-        env[key] = value
+        if (value !== '[SENSITIVE]') env[key] = value
     if (
       env.RELEASE_PROFILE === 'platform' &&
       env.GROOVEPOST_ENVIRONMENT !== context.environment
@@ -205,6 +206,8 @@ export function createDriver(env = process.env) {
       throw new Error(
         'Pulled runtime settings belong to a different environment',
       )
+    // Used only to initialize the migration process; never changes hosted sessions.
+    env.PAYLOAD_SECRET = randomBytes(32).toString('hex')
     env.GROOVEPOST_SITE_TRANSFER_PREPARE = 'false'
     env.VERCEL_GIT_COMMIT_SHA = context.sha
     env.VERCEL_GIT_COMMIT_REF = expectedBranch
@@ -223,9 +226,29 @@ export function createDriver(env = process.env) {
         migrationDigest: previous.meta?.releaseMigrationDigest,
       }
     },
-    async build() {
-      vercel('build', '--prod')
-      return 'passed'
+    async build(context) {
+      const output = vercel(
+        'deploy',
+        '--prod',
+        '--skip-domain',
+        '--yes',
+        '--build-env',
+        'GROOVEPOST_SITE_TRANSFER_PREPARE=false',
+        '--meta',
+        `releaseSha=${context.sha}`,
+        '--meta',
+        `releaseMigrationDigest=${context.migrationDigest}`,
+      )
+      const url = output
+        .trim()
+        .split('\n')
+        .findLast((x) => /^https:\/\/[a-zA-Z0-9.-]+\.vercel\.app$/.test(x))
+      if (!url)
+        throw new Error(
+          'Cloud build did not return an immutable deployment URL',
+        )
+      candidate = { url }
+      return 'cloud build passed; traffic unchanged'
     },
     async migrate() {
       command('supabase', [
@@ -239,6 +262,8 @@ export function createDriver(env = process.env) {
         DATABASE_URL: env.DATABASE_MIGRATION_URL,
         PAYLOAD_MIGRATING: 'true',
         RELEASE_MIGRATION: 'true',
+        VERCEL: '0',
+        DATABASE_POOLER_PORT: '5432',
       }
       if (env.RELEASE_PROFILE === 'platform')
         command(
@@ -290,29 +315,14 @@ export function createDriver(env = process.env) {
       return JSON.parse(readFileSync('release-output/packages.json', 'utf8'))
     },
     async deploy(context) {
-      const output = vercel(
-        'deploy',
-        '--prebuilt',
-        '--prod',
-        '--skip-domain',
-        '--yes',
-        '--meta',
-        `releaseSha=${context.sha}`,
-        '--meta',
-        `releaseMigrationDigest=${context.migrationDigest}`,
-      )
-      const url = output
-        .trim()
-        .split('\n')
-        .findLast((x) => /^https:\/\/[a-zA-Z0-9.-]+\.vercel\.app$/.test(x))
-      if (!url)
-        throw new Error(
-          'Deployment command did not return an immutable deployment URL',
-        )
+      if (!candidate?.url)
+        throw new Error('No completed cloud build for this release')
+      const { url } = candidate
       const deployment = await api(
         `/v13/deployments/${encodeURIComponent(new URL(url).hostname)}`,
       )
       if (
+        deployment.readyState !== 'READY' ||
         deployment.meta?.releaseSha !== context.sha ||
         deployment.meta?.releaseMigrationDigest !== context.migrationDigest
       )

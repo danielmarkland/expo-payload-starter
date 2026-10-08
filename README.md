@@ -966,4 +966,5 @@ CMS logout also revokes the Better Auth editorial session after native activatio
 See [the release runbook](docs/release-runbook.md) for branch ownership, required
 checks, coordinated deployment/publication, handover settings and recovery.
 Controlled automation stays disabled until its environment prerequisites are
-configured and the dev handover is verified.
+configured and the dev handover is verified. Builds run on Vercel with live domains
+unchanged until explicit activation, keeping sensitive runtime settings out of CI.
