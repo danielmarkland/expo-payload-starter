@@ -1,3 +1,4 @@
+import { logoutEditorIdentity } from '@/lib/identity/cmsLogout'
 import { editorIdentityStrategy } from '@/lib/identity/editorStrategy'
 import { betterAuthEnabled } from '@/lib/identity/server'
 import type { CollectionConfig } from 'payload'
@@ -19,6 +20,7 @@ export const Users: CollectionConfig = {
     update: ({ req }) => (req.user?.role === 'admin' ? true : { id: { equals: req.user?.id } }),
   },
   hooks: {
+    afterLogout: [logoutEditorIdentity],
     beforeChange: [
       async ({ data, operation, req }) => {
         if (operation === 'create') {

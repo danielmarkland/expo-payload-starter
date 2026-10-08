@@ -8,7 +8,8 @@ Product customers use `/api/auth` and a customer realm from `app.identity_contex
 Editors use `/api/editor-auth` and the separate platform realm. Payload owns CMS
 roles and only accepts explicitly linked `authIdentityId` accounts. Signing up
 as a customer never grants editorial access. No client receives database or
-provider secrets.
+provider secrets. CMS logout revokes the editorial identity session and expires
+its cookies; the all-sessions option revokes that editor’s native sessions too.
 
 ## Configure and migrate
 
