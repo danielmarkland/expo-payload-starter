@@ -234,7 +234,9 @@ describe.skipIf(!databaseURL)('PostgreSQL authentication isolation', () => {
       sendVerificationEmail: async ({ url }: { url: string }) => {
         sent.push(url)
       },
-      sendResetPassword: async () => {},
+      sendResetPassword: async ({ url }: { url: string }) => {
+        sent.push(url)
+      },
     }
     const first = createRealmAuth({ ...base, realm: tenantA })
     const second = createRealmAuth({ ...base, realm: tenantB })
@@ -261,6 +263,34 @@ describe.skipIf(!databaseURL)('PostgreSQL authentication isolation', () => {
     expect(
       await second.api.getSession({ headers: new Headers({ cookie }) }),
     ).toBeNull()
+    await first.api.requestPasswordReset({
+      body: {
+        email: 'seller@example.test',
+        redirectTo: 'http://localhost:3000/reset',
+      },
+    })
+    const token = new URL(sent[1]).pathname.split('/').pop()!
+    await first.api.resetPassword({
+      body: { token, newPassword: 'replacement-password-123!' },
+    })
+    expect(
+      await first.api.getSession({ headers: new Headers({ cookie }) }),
+    ).toBeNull()
+    await expect(
+      first.api.resetPassword({
+        body: { token, newPassword: 'another-password-123!' },
+      }),
+    ).rejects.toThrow()
+    expect(
+      (
+        await first.api.signInEmail({
+          body: {
+            email: 'seller@example.test',
+            password: 'replacement-password-123!',
+          },
+        })
+      ).user.id,
+    ).toBe(signup.user.id)
   })
   it('creates a verified phone customer without exposing or reusing another tenant session', async () => {
     let code = ''
@@ -307,6 +337,57 @@ describe.skipIf(!databaseURL)('PostgreSQL authentication isolation', () => {
         })
       ).status,
     ).toBeGreaterThanOrEqual(400)
+  })
+  it('does not let email signup reserve or verify another customer phone', async () => {
+    let code = ''
+    const auth = createRealmAuth({
+      pool,
+      realm: tenantA,
+      baseURL: 'http://localhost:3000',
+      secret: 's'.repeat(32),
+      sendPhoneOTP: async (_phone, value) => {
+        code = value
+      },
+      sendVerificationEmail: async () => {},
+      sendResetPassword: async () => {},
+    })
+    const post = (path: string, body: unknown) =>
+      auth.handler(
+        new Request('http://localhost:3000/api/auth/' + path, {
+          method: 'POST',
+          headers: {
+            origin: 'http://localhost:3000',
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }),
+      )
+    await post('sign-up/email', {
+      name: 'Unverified caller',
+      email: 'claim@example.test',
+      password: 'test-password-123!',
+      phoneNumber: '+15555550111',
+      phoneNumberVerified: true,
+      role: 'admin',
+    })
+    const claimed = await pool.query(
+      "select data from identity.records where realm=$1 and model='user' and data->>'phoneNumber'=$2",
+      [realmKey(tenantA), '+15555550111'],
+    )
+    expect(claimed.rows).toHaveLength(0)
+    expect(
+      (await post('phone-number/send-otp', { phoneNumber: '+15555550111' }))
+        .status,
+    ).toBe(200)
+    const verified = await post('phone-number/verify', {
+      phoneNumber: '+15555550111',
+      code,
+    })
+    expect(verified.status).toBe(200)
+    const session = await auth.api.getSession({
+      headers: new Headers({ cookie: verified.headers.get('set-cookie')! }),
+    })
+    expect(session?.user.email).not.toBe('claim@example.test')
   })
   it('completes OAuth PKCE consent, rejects replay, refreshes and revokes access', async () => {
     const { createDeveloperAuth } = await import('./server.js')

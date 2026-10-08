@@ -73,6 +73,10 @@ function RootNavigator() {
             <Stack.Screen name="sign-in" options={{ headerShown: false }} />
           </Stack.Protected>
           <Stack.Screen
+            name="reset-password"
+            options={{ title: 'Password recovery' }}
+          />
+          <Stack.Screen
             name="auth/callback"
             options={{ title: 'Signing in' }}
           />

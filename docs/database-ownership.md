@@ -1,13 +1,13 @@
 # Database ownership
 
 Payload and Supabase share a Postgres database, but never share table ownership.
-Product tables live in the Data API's `app` schema. Payload remains in `public`,
+Product tables live in the `app` schema; private identities live in `identity`. Payload remains in `public`,
 so this does not depend on Payload's experimental custom-schema support.
 
-| Owner    | Tables                                | Migration tool     | Client access          |
-| -------- | ------------------------------------- | ------------------ | ---------------------- |
-| Supabase | `app` schema and Storage policies     | Supabase CLI       | RLS-protected Data API |
-| Payload  | `public.cms_*` and `public.payload_*` | Payload migrations | Payload APIs only      |
+| Owner    | Tables                                | Migration tool     | Client access                         |
+| -------- | ------------------------------------- | ------------------ | ------------------------------------- |
+| Supabase | `app`, `identity`, Storage policies   | Supabase CLI       | Scoped server roles / private storage |
+| Payload  | `public.cms_*` and `public.payload_*` | Payload migrations | Payload APIs only                     |
 
 Rules:
 

@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
-import { createProfileRepository, type Database } from '@starter/data'
+import { createPostgresProfileRepository, type Database } from '@starter/data'
+import { authenticatedIdentity, betterAuthEnabled, identityDatabase } from '@/lib/identity/server'
 import {
   ServiceUnavailableError,
   UnauthorizedError,
@@ -18,6 +19,13 @@ export async function updateAuthenticatedProfile(
 }
 
 async function authenticatedProductContext(authorization: null | string) {
+  if (betterAuthEnabled()) {
+    const session = await authenticatedIdentity(new Headers(authorization ? { authorization } : {}))
+    return {
+      profiles: createPostgresProfileRepository(identityDatabase(), session.user.id),
+      userId: session.user.id,
+    }
+  }
   const token = authorization?.match(/^Bearer\s+(.+)$/i)?.[1]
   if (!token) throw new UnauthorizedError()
   const url = process.env.EXPO_PUBLIC_SUPABASE_URL
@@ -30,5 +38,8 @@ async function authenticatedProductContext(authorization: null | string) {
   })
   const { data, error } = await client.auth.getUser(token)
   if (error || !data.user) throw new UnauthorizedError()
-  return { profiles: createProfileRepository(client), userId: data.user.id }
+  return {
+    profiles: createPostgresProfileRepository(identityDatabase(), data.user.id),
+    userId: data.user.id,
+  }
 }

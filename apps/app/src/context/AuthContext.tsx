@@ -14,7 +14,8 @@ import {
 } from 'react'
 import { AppState, Platform } from 'react-native'
 
-import { supabase } from '@/src/lib/supabase'
+import { identity, betterAuthEnabled } from '@/src/lib/identity'
+import { getSupabaseClient } from '@/src/lib/supabase'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -23,6 +24,69 @@ type AuthContextValue = AuthService
 const AuthContext = createContext<AuthContextValue | null>(null)
 
 export function AuthProvider({ children }: PropsWithChildren) {
+  return betterAuthEnabled ? (
+    <BetterAuthProvider>{children}</BetterAuthProvider>
+  ) : (
+    <LegacyAuthProvider>{children}</LegacyAuthProvider>
+  )
+}
+function BetterAuthProvider({ children }: PropsWithChildren) {
+  const { data, isPending } = identity.useSession()
+  const value: AuthContextValue = {
+    initialized: !isPending,
+    user: data ? { id: data.user.id, email: data.user.email } : null,
+    async signInWithGoogle() {
+      const result = await identity.signIn.social({
+        provider: 'google',
+        callbackURL: Linking.createURL('auth/callback'),
+      })
+      if (result.error) throw Error(result.error.message)
+    },
+    async signInWithFacebook() {
+      const result = await identity.signIn.social({
+        provider: 'facebook',
+        callbackURL: Linking.createURL('auth/callback'),
+      })
+      if (result.error) throw Error(result.error.message)
+    },
+    async signInWithEmail(email, password) {
+      const result = await identity.signIn.email({ email, password })
+      if (result.error) throw Error(result.error.message)
+    },
+    async signUpWithEmail(email, password, name) {
+      const result = await identity.signUp.email({
+        email,
+        password,
+        name,
+        callbackURL: Linking.createURL('auth/callback'),
+      })
+      if (result.error) throw Error(result.error.message)
+    },
+    async sendPhoneCode(phoneNumber) {
+      const result = await identity.phoneNumber.sendOtp({ phoneNumber })
+      if (result.error) throw Error(result.error.message)
+    },
+    async verifyPhoneCode(phoneNumber, code) {
+      const result = await identity.phoneNumber.verify({ phoneNumber, code })
+      if (result.error) throw Error(result.error.message)
+    },
+    async requestPasswordReset(email) {
+      const result = await identity.requestPasswordReset({
+        email,
+        redirectTo: Linking.createURL('reset-password'),
+      })
+      if (result.error) throw Error(result.error.message)
+    },
+    async signOut() {
+      const result = await identity.signOut()
+      if (result.error) throw Error(result.error.message)
+    },
+  }
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+function LegacyAuthProvider({ children }: PropsWithChildren) {
+  const supabase = getSupabaseClient()
+
   const [initialized, setInitialized] = useState(false)
   const [session, setSession] = useState<Session | null>(null)
 
@@ -43,7 +107,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       active = false
       data.subscription.unsubscribe()
     }
-  }, [])
+  }, [supabase.auth])
 
   useEffect(() => {
     if (Platform.OS === 'web') return
@@ -52,7 +116,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       else supabase.auth.stopAutoRefresh()
     })
     return () => subscription.remove()
-  }, [])
+  }, [supabase.auth])
 
   const signInWithGoogle = useCallback(async () => {
     const redirectTo = Linking.createURL('auth/callback')
@@ -72,17 +136,35 @@ export function AuthProvider({ children }: PropsWithChildren) {
       result.url,
     )
     if (exchangeError) throw exchangeError
-  }, [])
+  }, [supabase.auth])
 
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
-  }, [])
+  }, [supabase.auth])
 
   const value = useMemo<AuthContextValue>(
     () => ({
       initialized,
       signInWithGoogle,
+      signInWithFacebook: async () => {
+        throw Error('Activate Better Auth to use Facebook')
+      },
+      signInWithEmail: async () => {
+        throw Error('Activate Better Auth to use email sign in')
+      },
+      signUpWithEmail: async () => {
+        throw Error('Activate Better Auth to use email sign up')
+      },
+      sendPhoneCode: async () => {
+        throw Error('Activate Better Auth to use SMS')
+      },
+      verifyPhoneCode: async () => {
+        throw Error('Activate Better Auth to use SMS')
+      },
+      requestPasswordReset: async () => {
+        throw Error('Activate Better Auth to use password recovery')
+      },
       signOut,
       user: toProductUser(session),
     }),

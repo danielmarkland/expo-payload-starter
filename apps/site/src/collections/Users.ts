@@ -1,3 +1,5 @@
+import { editorIdentityStrategy } from '@/lib/identity/editorStrategy'
+import { betterAuthEnabled } from '@/lib/identity/server'
 import type { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {
@@ -6,7 +8,10 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
   },
-  auth: true,
+  auth: {
+    ...(betterAuthEnabled() ? { disableLocalStrategy: true } : {}),
+    strategies: [editorIdentityStrategy],
+  },
   access: {
     create: ({ req }) => req.user?.role === 'admin',
     delete: ({ req }) => req.user?.role === 'admin',
@@ -33,6 +38,19 @@ export const Users: CollectionConfig = {
     ],
   },
   fields: [
+    {
+      name: 'authIdentityId',
+      type: 'text',
+      unique: true,
+      index: true,
+      admin: {
+        description: 'Linked Better Auth editorial identity UUID. Product identities are separate.',
+      },
+      access: {
+        create: ({ req }) => req.user?.role === 'admin',
+        update: ({ req }) => req.user?.role === 'admin',
+      },
+    },
     {
       name: 'role',
       type: 'select',

@@ -90,14 +90,38 @@ function realmOptions(config: RealmAuthConfiguration): BetterAuthOptions {
     secret: config.secret,
     database: scopedPostgresAdapter(config.pool, config.realm),
     socialProviders: config.socialProviders,
+    user: config.sendPhoneOTP
+      ? {
+          additionalFields: {
+            phoneNumber: {
+              type: 'string',
+              required: false,
+              input: false,
+              unique: true,
+            },
+            phoneNumberVerified: {
+              type: 'boolean',
+              required: false,
+              input: false,
+              defaultValue: false,
+            },
+          },
+        }
+      : undefined,
     emailAndPassword: {
       enabled: Boolean(
         config.sendVerificationEmail && config.sendResetPassword,
       ),
       requireEmailVerification: true,
+      revokeSessionsOnPasswordReset: true,
       sendResetPassword: config.sendResetPassword,
     },
     emailVerification: { sendVerificationEmail: config.sendVerificationEmail },
+    session: {
+      expiresIn:
+        config.realm.kind === 'customer' ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60,
+      cookieCache: { enabled: false },
+    },
     account: { accountLinking: { enabled: false } },
     rateLimit: { enabled: true, storage: 'database', window: 60, max: 100 },
     advanced: {
@@ -135,3 +159,9 @@ function realmOptions(config: RealmAuthConfiguration): BetterAuthOptions {
     ],
   }
 }
+
+export {
+  twilioVerification,
+  sendIdentityEmail,
+  type IdentityProviders,
+} from './providers.js'

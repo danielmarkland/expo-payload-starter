@@ -1,3 +1,4 @@
+import * as migration_20261008_editor_identity from './20261008_editor_identity'
 import * as migration_20260926_033310_initial_cms from './20260926_033310_initial_cms'
 import * as migration_20260926_205749_add_pages from './20260926_205749_add_pages'
 import * as migration_20260926_210416_add_latest_posts from './20260926_210416_add_latest_posts'
@@ -155,5 +156,10 @@ export const migrations = [
     up: migration_20261006_155757_landing_design_controls.up,
     down: migration_20261006_155757_landing_design_controls.down,
     name: '20261006_155757_landing_design_controls',
+  },
+  {
+    up: migration_20261008_editor_identity.up,
+    down: migration_20261008_editor_identity.down,
+    name: '20261008_editor_identity',
   },
 ]

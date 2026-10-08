@@ -9,6 +9,21 @@ export type Json =
 export type Database = {
   app: {
     Tables: {
+      identity_context: {
+        Row: {
+          singleton: boolean
+          tenant_id: string
+        }
+        Insert: {
+          singleton?: boolean
+          tenant_id?: string
+        }
+        Update: {
+          singleton?: boolean
+          tenant_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

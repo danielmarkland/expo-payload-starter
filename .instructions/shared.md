@@ -18,7 +18,7 @@ to become a plugin framework.
 - `packages/core/` — framework-independent product rules.
 - `packages/auth/` — provider-neutral identity and authorization interfaces.
 - `packages/auth-runtime/` — public Better Auth backend/client package; realm isolation lives here. Existing deployments remain on Supabase Auth until the coordinated migration is complete.
-- `packages/data/` — typed Supabase repositories and generated database types.
+- `packages/data/` — scoped PostgreSQL profile repositories and legacy generated Data API types.
 - `packages/brand/` — private starter identity, icons, and theme preference key.
 - `packages/design-tokens/` — neutral visual tokens and fonts, published as `@danielmarkland/design-tokens`.
 - `packages/publishing-core/` — reusable publishing behavior for Payload-backed sites, published as `@danielmarkland/publishing-core`.
@@ -32,22 +32,23 @@ before changing application boundaries, database ownership, authentication,
 storage, or email delivery. Those documents are the detailed architecture
 references; this file captures the agent-facing guardrails.
 
-- Keep product-user identity and product data in Supabase. Keep editorial
+- Keep product-user identity and product data in PostgreSQL (currently Supabase). Keep editorial
   content and CMS editor accounts in Payload. Payload users and product users
   are separate identities; starter-specific identity belongs to the private
   brand package.
-- Supabase Auth is the product-user identity provider. RLS authorizes product
-  rows and storage objects. Client route guards are navigation behavior, not
-  authorization.
+- Better Auth is the target identity provider; coordinated cutover is documented
+  in `docs/authentication.md`. Customer and editorial realms are separate.
+  PostgreSQL actor/realm policies authorize server data access. Route guards are
+  navigation behavior, not authorization. Preserve stable IDs during migration.
 - Payload access functions authorize CMS documents. Payload auth is only for
   editors and CMS administrators.
 - Keep service-role, Payload database, S3, and Resend credentials server-side.
   Never expose them with an `EXPO_PUBLIC_` variable or in client bundles.
-- Application data flows through the versioned Hono BFF. Supabase Auth and
+- Application data flows through the versioned Hono BFF. Better Auth (and legacy Supabase login during migration) and
   Payload Admin's authenticated transport are explicit protocol exceptions.
   Privileged product workflows still belong in narrowly scoped server code.
 - Keep database migration ownership separate: Supabase migrations may alter
-  product tables in the `app` schema and Supabase-owned storage policies;
+  product tables in the `app` and private `identity` schemas and Supabase-owned storage policies;
   Payload migrations own Payload tables in `public`. Never alter the other
   system's tables with the wrong migration tool, and avoid cross-owner foreign
   keys. See `docs/database-ownership.md` for details.

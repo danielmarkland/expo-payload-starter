@@ -31,6 +31,8 @@ Apply `authSchemaSQL` using the migration operator before activation. It owns th
 
 `createDeveloperAuth` adds OAuth 2.1 PKCE, consent, refresh and revocable opaque API tokens. Configure explicit resources, allowed scopes, login/consent pages and client registration policy. Resource servers must use authenticated introspection and check issuer, expiry, resource, scope and caller status; never treat tenant membership as a token capability. This factory supplies OAuth API tokens, not OpenID Connect ID tokens.
 
+Provider helpers `twilioVerification` and `sendIdentityEmail` are exported from `/server`; credentials remain in backend configuration. Phone fields cannot be supplied through email signup, password resets revoke existing sessions, and cached browser session claims are disabled so suspension takes effect immediately. Customer sessions last 30 days; staff sessions last seven days.
+
 Client exports: `createAuthClient` and `phoneNumberClient` from `/react`, `expoClient` from `/expo`, and the corresponding server `expo` plugin from `/server`. Hosted sandboxed app packages use Groovepost's SDK bridge instead of importing backend authentication or handling host credentials.
 
 Run `pnpm --filter @danielmarkland/auth-runtime build`. The test suite requires `AUTH_TEST_DATABASE_URL` pointing to a dedicated local PostgreSQL database whose name ends in `_test`; without it only configuration tests run. Integration coverage includes RLS, pooled-context cleanup, cross-tenant references, OTP replay, transactional rollback, email/SMS login and OAuth token lifecycle.

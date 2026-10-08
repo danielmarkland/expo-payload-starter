@@ -1,5 +1,5 @@
 begin;
-select plan(6);
+select plan(8);
 
 select has_table('app', 'profiles', 'profiles table exists');
 
@@ -11,8 +11,21 @@ select is(
 
 select is(
   (select count(*)::integer from pg_policies where schemaname = 'app' and tablename = 'profiles'),
-  2,
-  'profiles has explicit select and update policies'
+  3,
+  'profiles retains legacy policy definitions and adds the scoped server policy'
+);
+
+select ok(
+  not has_table_privilege('authenticated', 'app.profiles', 'SELECT')
+  and not has_table_privilege('anon', 'app.profiles', 'SELECT'),
+  'browser roles cannot bypass the authenticated profile BFF'
+);
+
+select ok(
+  exists(select 1 from pg_policies where schemaname='app' and tablename='profiles'
+    and policyname='server_profile_actor' and roles=array['starter_product_runtime']::name[]
+    and qual like '%starter.actor%' and with_check like '%starter.actor%'),
+  'server profile access is bound to the verified actor for reads and writes'
 );
 
 select is(
