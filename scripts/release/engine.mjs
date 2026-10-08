@@ -181,14 +181,7 @@ export function createDriver(env = process.env) {
       throw new Error(
         'Vercel project does not match the tracked environment branch',
       )
-    vercel(
-      'pull',
-      '--yes',
-      '--environment',
-      'production',
-      '--git-branch',
-      expectedBranch,
-    )
+    vercel('pull', '--yes', '--environment', 'production')
     const pulled = parseEnv(
       readFileSync('.vercel/.env.production.local', 'utf8'),
     )
@@ -227,6 +220,8 @@ export function createDriver(env = process.env) {
       }
     },
     async build(context) {
+      // Migration imports and registry guards need local compiled packages too.
+      command('pnpm', ['--filter', './packages/**', 'build'])
       const output = vercel(
         'deploy',
         '--prod',
