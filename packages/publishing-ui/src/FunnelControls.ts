@@ -1,6 +1,9 @@
 'use client'
 import {
   createElement as h,
+  cloneElement,
+  isValidElement,
+  type ReactElement,
   useId,
   type InputHTMLAttributes,
   type ButtonHTMLAttributes,
@@ -25,7 +28,24 @@ export function Field({
     'div',
     { className: 'funnel-field' },
     h('label', { htmlFor: props.id || id }, label),
-    children ||
+    (isValidElement(children)
+      ? cloneElement(
+          children as ReactElement<InputHTMLAttributes<HTMLInputElement>>,
+          {
+            id: props.id || id,
+            'aria-invalid': !!error,
+            'aria-describedby':
+              [
+                (children.props as InputHTMLAttributes<HTMLInputElement>)[
+                  'aria-describedby'
+                ],
+                hint || error ? help : undefined,
+              ]
+                .filter(Boolean)
+                .join(' ') || undefined,
+          },
+        )
+      : children) ||
       h('input', {
         ...props,
         id: props.id || id,
