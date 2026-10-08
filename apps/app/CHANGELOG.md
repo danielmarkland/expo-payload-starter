@@ -1,5 +1,12 @@
 # @starter/app
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/auth-runtime@0.1.1
+
 ## 0.1.7
 
 ### Patch Changes
