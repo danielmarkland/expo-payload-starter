@@ -47,3 +47,6 @@ Existing deployments retain their legacy profile repository until activation. Ru
 Payload migrations before deploying the new editorial schema. Apply the product
 identity migration immediately before coordinated activation because it revokes
 legacy browser profile grants; do not leave legacy login active after that step.
+
+Existing Supabase account suspensions are preserved during identity seeding;
+provider migration does not grant roles or lift administrative bans.

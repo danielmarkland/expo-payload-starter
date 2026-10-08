@@ -17,10 +17,10 @@ beforeAll(async () => {
   await pool.query(
     'drop schema if exists identity cascade;drop schema if exists app cascade;drop schema if exists auth cascade;create schema app;create schema auth;',
   )
-  await pool.query(`create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz,raw_user_meta_data jsonb,created_at timestamptz,updated_at timestamptz);
+  await pool.query(`create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz,raw_user_meta_data jsonb,created_at timestamptz,updated_at timestamptz,banned_until timestamptz);
  create table auth.identities(id uuid,user_id uuid,provider text,provider_id text,created_at timestamptz,updated_at timestamptz);
  create table app.profiles(id uuid primary key references auth.users(id),display_name text,avatar_url text,created_at timestamptz default now(),updated_at timestamptz default now());alter table app.profiles enable row level security;
- insert into auth.users values('${owner}','owner@example.test',now(),'{}',now(),now());insert into app.profiles(id) values('${owner}');`)
+ insert into auth.users values('${owner}','owner@example.test',now(),'{}',now(),now(),'2099-01-01');insert into app.profiles(id) values('${owner}');`)
   await pool.query(
     await readFile('../../supabase/migrations/20261008000000_better_auth_product.sql', 'utf8'),
   )
@@ -31,8 +31,9 @@ afterAll(async () => {
 it.skipIf(!connectionString)(
   'preserves product identities and confines profiles to the verified actor, including concurrent callers',
   async () => {
-    const user = await pool.query("select id from identity.records where model='user'")
+    const user = await pool.query("select id,data from identity.records where model='user'")
     expect(user.rows[0].id).toBe(owner)
+    expect(user.rows[0].data.banned).toBe(true)
     const own = createPostgresProfileRepository(pool, owner),
       different = createPostgresProfileRepository(pool, other)
     const rows = await Promise.all([own.findById(owner), different.findById(other)])
