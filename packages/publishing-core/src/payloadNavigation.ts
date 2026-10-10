@@ -122,6 +122,10 @@ export function createFooterNavigationFields({
         {
           name: 'newsletter',
           type: 'group',
+          // Payload treats null as an object when traversing group children.
+          hooks: {
+            beforeValidate: [({ value }) => (value === null ? {} : value)],
+          },
           label: false,
           fields: [
             {
@@ -192,6 +196,10 @@ export function createFooterNavigationFields({
         {
           name: 'contactForm',
           type: 'group',
+          // Payload treats null as an object when traversing group children.
+          hooks: {
+            beforeValidate: [({ value }) => (value === null ? {} : value)],
+          },
           label: false,
           fields: [
             {

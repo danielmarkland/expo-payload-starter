@@ -44,3 +44,16 @@ Build before packing or publishing. The release command builds dependencies in
 order; prepack verifies every exported output instead of rebuilding during
 concurrent publication. This prevents another package's clean step from removing
 a dependency while core compiles. Run test:package to build and verify locally.
+
+## Site transfer writes
+
+Replacement isolates each document's upload buffers and cloud-storage context while
+retaining the transaction and trusted host context. Relationship resolution updates
+must not replay an earlier media upload. Disabled footer form groups accept null
+and omitted values; the CMS applies its normal disabled defaults.
+
+The engine verifies stored original sizes and SHA-256 hashes immediately after
+upload and again after relationship resolution, before committing. Storage hooks
+that change original bytes fail replacement rather than silently corrupting the
+archive. Destination image transformations must preserve the imported original;
+derivatives can be rebuilt independently.

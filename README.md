@@ -960,3 +960,11 @@ backend/app switch; current deployments stay on their existing login until those
 checks pass. Groovepost-hosted custom apps use its SDK authentication bridge.
 
 CMS logout also revokes the Better Auth editorial session after native activation.
+
+## Release workflow
+
+See [the release runbook](docs/release-runbook.md) for branch ownership, required
+checks, coordinated deployment/publication, handover settings and recovery.
+Controlled automation stays disabled until its environment prerequisites are
+configured and the dev handover is verified. Builds run on Vercel with live domains
+unchanged until explicit activation, keeping sensitive runtime settings out of CI.

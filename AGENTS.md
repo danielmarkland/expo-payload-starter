@@ -12,3 +12,14 @@ Before editing a subdirectory, check for more-specific `AGENTS.md` or
 - Both repositories run the same `publishing-core/presentationBoundary` policy during lint. Add acceptance/rejection coverage when changing the boundary; do not bypass it with local renderer copies.
 
 - Use shared publishing collection/global factories and preview/content/form helpers. Keep host authentication, tenancy and storage adapters explicit. Business services must not import HTTP API modules; run the shared publishing boundary lint checks. The public starter must administer its publishing content independently.
+
+## Release coordination
+
+- Follow `docs/release-runbook.md`. Each task owns an isolated worktree and
+  `codex/` feature branch from current develop; never reset another checkout.
+- Feature agents submit PRs. The designated release agent serializes authorized
+  merges and pauses develop during production finalization. Squash into develop;
+  merge same-repo develop into main. No direct tracked-branch pushes or bypass.
+- Require `ci`; do not treat merges/builds as hosted production acceptance.
+- Keep credentials environment-scoped. Release summaries record exact evidence
+  and unmet prerequisites; never claim deferred SMS or simulated services passed.

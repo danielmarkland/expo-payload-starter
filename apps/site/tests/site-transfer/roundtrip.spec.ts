@@ -29,9 +29,11 @@ const url = process.env.SITE_TRANSFER_TEST_DATABASE_URL
 if (
   url &&
   (!['127.0.0.1', 'localhost'].includes(new URL(url).hostname) ||
-    new URL(url).pathname !== '/publishing_site_transfer_tests')
+    !['/publishing_site_transfer_tests', '/publishing_site_transfer_transaction_tests'].includes(
+      new URL(url).pathname,
+    ))
 )
-  throw new Error('Only the disposable local publishing_site_transfer_tests database is allowed')
+  throw new Error('Only the named disposable local site transfer databases are allowed')
 let payload: Payload
 let folder: string
 let backup: Buffer
@@ -67,6 +69,7 @@ describe.skipIf(!url)('real Payload replacement transaction', () => {
     folder = await mkdtemp(join(tmpdir(), 'publishing-transfer-media-'))
     const config = await buildConfig({
       secret: 'disposable-site-transfer-secret',
+      typescript: { autoGenerate: false },
       sharp,
       editor: lexicalEditor(),
       db: postgresAdapter({ pool: { connectionString: url }, push: true }),

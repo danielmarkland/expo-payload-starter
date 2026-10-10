@@ -59,3 +59,10 @@ The suite uses schema push only inside that guarded disposable database. It must
 never be pointed at a working site. Coverage includes populated replacement,
 media, draft/published separation, repeat imports, stale previews, restore, search,
 and injected failure with database rollback and original media retention.
+
+Cloud-storage regression tests use the separate guarded local
+`publishing_site_transfer_repair_tests` database. Set
+`SITE_TRANSFER_REPAIR_DATABASE_URL` alongside the transaction test URL to exercise
+the real Payload cloud-storage hooks with a byte-preserving test adapter. CI runs
+both suites. The transaction suite also accepts the isolated
+`publishing_site_transfer_transaction_tests` database for parallel checkouts.

@@ -1,0 +1,44 @@
+name: Version shared packages
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+concurrency:
+  group: version-shared-packages
+  cancel-in-progress: false
+jobs:
+  version:
+    if: github.ref_name == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: changesets/action@v1
+        id: changesets
+        with:
+          version: pnpm version-packages
+          commit: 'chore: version shared packages'
+          title: 'chore: version shared packages'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Validate token-created version PR
+        if: steps.changesets.outputs.pullRequestNumber != ''
+        run: |
+          REF=$(gh pr view "$PR" --json headRefName --jq .headRefName)
+          gh workflow run ci.yml --ref "$REF"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ steps.changesets.outputs.pullRequestNumber }}

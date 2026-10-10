@@ -1,0 +1,66 @@
+name: Controlled release
+on:
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+  deployments: write
+jobs:
+  validate:
+    uses: ./.github/workflows/ci.yml
+    with:
+      force: true
+    secrets: inherit
+  deploy:
+    needs: validate
+    if: vars.RELEASE_AUTOMATION_ENABLED == 'true' && (github.ref_name == 'develop' || github.ref_name == 'main')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: release-${{ github.repository }}-${{ github.ref_name }}
+      cancel-in-progress: false
+    environment: ${{ github.ref_name == 'main' && 'production' || 'development' }}
+    env:
+      RELEASE_PROFILE: starter
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+      DATABASE_MIGRATION_URL: ${{ secrets.DATABASE_MIGRATION_URL }}
+      RELEASE_SMOKE_TARGETS: ${{ vars.RELEASE_SMOKE_TARGETS }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      NODE_AUTH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.109.1
+      - name: Install dependencies and deployment CLI
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken "$INSTALL_TOKEN" --location=user
+          pnpm install --frozen-lockfile
+          npm install --global vercel@60.0.1
+        env:
+          INSTALL_TOKEN: ${{ secrets.PACKAGE_READ_TOKEN || github.token }}
+      - name: Cloud build, migrate, publish, activate and verify exact commit
+        run: node scripts/release/engine.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-result-${{ github.sha }}-${{ github.run_attempt }}
+          path: release-output/result.json
+          if-no-files-found: ignore
+  handover:
+    if: vars.RELEASE_AUTOMATION_ENABLED != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Controlled deployment is not enabled. Existing deployment triggers remain authoritative.' >> "$GITHUB_STEP_SUMMARY"
