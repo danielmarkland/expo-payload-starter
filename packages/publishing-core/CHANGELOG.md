@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.8.2
+
+### Patch Changes
+
+- 3928295: Isolate per-document cloud upload state during site replacement to prevent media originals being overwritten by a previous image, and normalize null disabled footer form groups before CMS validation.
+
 ## 0.8.1
 
 ### Patch Changes
