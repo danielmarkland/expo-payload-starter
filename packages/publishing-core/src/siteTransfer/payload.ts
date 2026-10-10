@@ -83,6 +83,17 @@ async function request(
     },
   }
 }
+// Payload plugins retain file buffers in request context for nested operations.
+// A replacement spans many independent documents; only transaction and trusted
+// host context may cross those writes, never a previous document's upload cache.
+function writeRequest(req: Partial<PayloadRequest>): Partial<PayloadRequest> {
+  const context = { ...req.context }
+  delete context._payloadCloudStorage
+  delete context.skipCloudStorage
+  context.syncedDocsSet = new Set()
+  return { ...req, file: undefined, payloadUploadSizes: undefined, context }
+}
+
 async function capture(options: SiteTransferOptions): Promise<SiteArchive> {
   assertResources(options)
   const { payload } = options
@@ -434,7 +445,7 @@ export async function replaceSite(
             data,
             draft: drafts(resource),
             overrideAccess: true,
-            req,
+            req: writeRequest(req),
             ...(asset
               ? {
                   file: {
@@ -446,6 +457,13 @@ export async function replaceSite(
                 }
               : {}),
           })
+          if (asset) {
+            const stored = await options.readMedia(object(doc))
+            if (stored.length !== asset.size || sha256(stored) !== asset.sha256)
+              throw new Error(
+                `Imported media verification failed: ${record.key}`,
+              )
+          }
           identities.set(record.key, doc.id)
         }
       }
@@ -453,7 +471,6 @@ export async function replaceSite(
         for (const record of site.manifest.records.filter(
           (r) => r.resource === resource.key,
         )) {
-          req.context!.syncedDocsSet = new Set()
           const apply = async (state: SiteTransferState, draft: boolean) => {
             const data = {
               ...materialize(state, identities),
@@ -482,7 +499,7 @@ export async function replaceSite(
                 slug: resource.slug,
                 data,
                 overrideAccess: true,
-                req,
+                req: writeRequest(req),
               })
             else
               await payload.update({
@@ -496,13 +513,35 @@ export async function replaceSite(
                 },
                 draft,
                 overrideAccess: true,
-                req,
+                req: writeRequest(req),
               })
           }
           if (record.published) await apply(record.published, false)
           if (!record.published || record.draft)
             await apply(record.current, record.draft)
         }
+      }
+      // Metadata hooks can write to cloud storage too. Verify originals again
+      // after resolving references, before recording a successful replacement.
+      for (const record of site.manifest.records.filter(
+        (record) => record.asset,
+      )) {
+        const resource = options.resources.find(
+          (resource) => resource.key === record.resource,
+        )!
+        const asset = site.manifest.assets.find(
+          (asset) => asset.key === record.asset,
+        )!
+        const doc = await payload.findByID({
+          collection: resource.slug,
+          id: identities.get(record.key)!,
+          depth: 0,
+          overrideAccess: true,
+          req: writeRequest(req),
+        })
+        const stored = await options.readMedia(object(doc))
+        if (stored.length !== asset.size || sha256(stored) !== asset.sha256)
+          throw new Error(`Imported media verification failed: ${record.key}`)
       }
       await options.completion?.record(req, backup)
       if (ownsTransaction) {
