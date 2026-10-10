@@ -14,7 +14,7 @@ describe('publishing core', () => {
     )
     expect(extractSearchText({ title: 'Hello', slug: 'ignored' })).toBe('Hello')
     expect(sectionAppearanceClassName(['block'], { rounded: true })).toBe(
-      'block page-block-rounded',
+      'block section-width-page page-block-rounded',
     )
     expect(
       createHeroHeadline('Hello').root.children[0]?.children[0]?.text,

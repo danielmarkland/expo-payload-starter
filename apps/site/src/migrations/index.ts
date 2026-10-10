@@ -1,4 +1,3 @@
-import * as migration_20261008_editor_identity from './20261008_editor_identity'
 import * as migration_20260926_033310_initial_cms from './20260926_033310_initial_cms'
 import * as migration_20260926_205749_add_pages from './20260926_205749_add_pages'
 import * as migration_20260926_210416_add_latest_posts from './20260926_210416_add_latest_posts'
@@ -25,6 +24,8 @@ import * as migration_20260930_023515_expanded_icon_picker from './20260930_0235
 import * as migration_20261005_230402_practical_layout_coverage from './20261005_230402_practical_layout_coverage'
 import * as migration_20261005_site_transfer_gates from './20261005_site_transfer_gates'
 import * as migration_20261006_155757_landing_design_controls from './20261006_155757_landing_design_controls'
+import * as migration_20261008_editor_identity from './20261008_editor_identity'
+import * as migration_20261010_220137_publishing_width from './20261010_220137_publishing_width'
 
 export const migrations = [
   {
@@ -161,5 +162,10 @@ export const migrations = [
     up: migration_20261008_editor_identity.up,
     down: migration_20261008_editor_identity.down,
     name: '20261008_editor_identity',
+  },
+  {
+    up: migration_20261010_220137_publishing_width.up,
+    down: migration_20261010_220137_publishing_width.down,
+    name: '20261010_220137_publishing_width',
   },
 ]

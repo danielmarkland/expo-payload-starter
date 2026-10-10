@@ -22,6 +22,7 @@ import { api } from '@/src/lib/api'
 const CACHE_KEY = 'site-config-v1'
 
 export const fallbackSiteConfig: SiteConfig = {
+  width: 'padded',
   archive: archivePresentationSchema.parse({}),
   integrations: {
     googleTagManagerId: null,

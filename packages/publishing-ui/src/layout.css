@@ -211,7 +211,7 @@
   --color-border-input: #666;
 }
 
-/* Optional native presentation controls. Omitted settings preserve legacy styles. */
+/* Shared native presentation controls. */
 h1,
 h2,
 h3 {
@@ -254,31 +254,6 @@ h3 {
     var(--color-dark-surface, #0f0f0f),
     var(--color-dark-ink, #fff) 20%
   );
-}
-.inner-width-reading {
-  --section-inner-width: var(--layout-copy);
-}
-.inner-width-standard {
-  --section-inner-width: var(--layout-content);
-}
-.inner-width-wide {
-  --section-inner-width: 1440px;
-}
-.inner-width-full {
-  --section-inner-width: none;
-}
-.page-block[class*='inner-width-'] > .page-section,
-.page-block[class*='inner-width-'] > .page-hero,
-.page-block[class*='inner-width-'] > .page-image,
-.page-block[class*='inner-width-'] > .page-cta:not(.page-cta-band),
-.page-block[class*='inner-width-'] .page-cta-inner {
-  max-width: var(--section-inner-width);
-  margin-inline: auto;
-}
-.page-block[class*='inner-width-'] > .page-section .section-heading,
-.page-block[class*='inner-width-'] > .prose-section,
-.page-block[class*='inner-width-'] > .faq-section {
-  max-width: var(--section-inner-width);
 }
 .feature-grid .article-body {
   font-size: inherit;
@@ -350,14 +325,6 @@ h3 {
   margin: 0;
   color: var(--color-ink-muted);
   line-height: var(--line-height-reading);
-}
-/* Bands use the same inner container edge as the other native sections. */
-.page-block:has(> .page-cta-band) {
-  margin-inline: calc(50% - 50vw);
-  padding-inline: max(
-    var(--space-lg),
-    calc((100vw - var(--section-inner-width, var(--layout-content))) / 2)
-  );
 }
 .page-cta.page-cta-band {
   display: block;
@@ -523,7 +490,7 @@ body:has(main[data-header-variant='minimal'])
   color: var(--color-ink);
 }
 
-.page-block[class*='inner-width-'] > .prose-section {
+.page-block > .prose-section {
   display: flow-root;
 }
 .feature-body ul {
@@ -538,133 +505,158 @@ body:has(main[data-header-variant='minimal'])
   grid-column: 1 / -1;
 }
 
-/* Explicit full-width sections own their boundary spacing; legacy pages keep the shell defaults. */
-.page-shell:has(
-  > .page-block[class*='inner-width-'].content-width-full:first-child
-) {
-  padding-top: 0;
-}
-.page-shell:has(
-  > .page-block[class*='inner-width-'].content-width-full:last-child
-) {
-  padding-bottom: 0;
-}
-.page-block[class*='inner-width-'] .article-body > :last-child {
-  margin-bottom: 0;
-}
-
-.inner-width-full:has(> .page-cta-band) {
-  padding-inline: var(--space-lg);
-}
-
-/* Native section containers keep gutters independent of surface choice. Explicit side padding wins. */
-.page-block[class*='inner-width-'].content-width-full:not(
-    [class*='padding-left-']
-  ) {
-  padding-left: max(
-    var(--space-lg),
-    calc((100vw - var(--section-inner-width, var(--layout-content))) / 2)
-  );
-}
-.page-block[class*='inner-width-'].content-width-full:not(
-    [class*='padding-right-']
-  ) {
-  padding-right: max(
-    var(--space-lg),
-    calc((100vw - var(--section-inner-width, var(--layout-content))) / 2)
-  );
-}
-.page-block.inner-width-full.content-width-full:not([class*='padding-left-']) {
-  padding-left: var(--space-lg);
-}
-.page-block.inner-width-full.content-width-full:not([class*='padding-right-']) {
-  padding-right: var(--space-lg);
-}
-
-/* Adjacent native sections on the same surface share the larger spacing preset.
-   Explicit margins retain author-controlled separation. Legacy sections are unchanged. */
-.page-block[class*='inner-width-'] {
+.page-block {
   --section-padding-bottom: var(--space-3xl);
   --section-next-padding-top: var(--space-3xl);
 }
-.page-block[class*='inner-width-'].padding-bottom-none {
+.page-block.padding-bottom-none {
   --section-padding-bottom: 0px;
 }
-.page-block[class*='inner-width-']:has(+ .page-block.padding-top-none) {
+.page-block:has(+ .page-block.padding-top-none) {
   --section-next-padding-top: 0px;
 }
-.page-block[class*='inner-width-'].padding-bottom-sm {
+.page-block.padding-bottom-sm {
   --section-padding-bottom: var(--space-md);
 }
-.page-block[class*='inner-width-']:has(+ .page-block.padding-top-sm) {
+.page-block:has(+ .page-block.padding-top-sm) {
   --section-next-padding-top: var(--space-md);
 }
-.page-block[class*='inner-width-'].padding-bottom-md {
+.page-block.padding-bottom-md {
   --section-padding-bottom: var(--space-xl);
 }
-.page-block[class*='inner-width-']:has(+ .page-block.padding-top-md) {
+.page-block:has(+ .page-block.padding-top-md) {
   --section-next-padding-top: var(--space-xl);
 }
-.page-block[class*='inner-width-'].padding-bottom-lg {
+.page-block.padding-bottom-lg {
   --section-padding-bottom: var(--space-3xl);
 }
-.page-block[class*='inner-width-']:has(+ .page-block.padding-top-lg) {
+.page-block:has(+ .page-block.padding-top-lg) {
   --section-next-padding-top: var(--space-3xl);
 }
-.page-block[class*='inner-width-'].padding-bottom-xl {
+.page-block.padding-bottom-xl {
   --section-padding-bottom: var(--space-5xl);
 }
-.page-block[class*='inner-width-']:has(+ .page-block.padding-top-xl) {
+.page-block:has(+ .page-block.padding-top-xl) {
   --section-next-padding-top: var(--space-5xl);
 }
-.page-block[class*='inner-width-']:is(
+.page-block:is(
     .background-default,
     :not([class*='background-'])
   ).border-top-none:not([class*='margin-bottom-']):not(
     .border-bottom-solid
   ):not(.border-bottom-dashed):not(.border-bottom-dotted):has(
-    + .page-block[class*='inner-width-']:is(
+    + .page-block:is(
         .background-default,
         :not([class*='background-'])
       ).border-top-none:not([class*='margin-top-'])
   ),
-.page-block[class*='inner-width-'].background-light.border-top-none:not(
-    [class*='margin-bottom-']
-  ):not(.border-bottom-solid):not(.border-bottom-dashed):not(
-    .border-bottom-dotted
-  ):has(
-    + .page-block[class*='inner-width-'].background-light.border-top-none:not(
-        [class*='margin-top-']
-      )
+.page-block.background-light.border-top-none:not([class*='margin-bottom-']):not(
+    .border-bottom-solid
+  ):not(.border-bottom-dashed):not(.border-bottom-dotted):has(
+    + .page-block.background-light.border-top-none:not([class*='margin-top-'])
   ),
-.page-block[class*='inner-width-'].background-dark.border-top-none:not(
-    [class*='margin-bottom-']
-  ):not(.border-bottom-solid):not(.border-bottom-dashed):not(
-    .border-bottom-dotted
-  ):has(
-    + .page-block[class*='inner-width-'].background-dark.border-top-none:not(
-        [class*='margin-top-']
-      )
+.page-block.background-dark.border-top-none:not([class*='margin-bottom-']):not(
+    .border-bottom-solid
+  ):not(.border-bottom-dashed):not(.border-bottom-dotted):has(
+    + .page-block.background-dark.border-top-none:not([class*='margin-top-'])
   ),
-.page-block[class*='inner-width-'].background-raised.border-top-none:not(
+.page-block.background-raised.border-top-none:not(
     [class*='margin-bottom-']
   ):not(.border-bottom-solid):not(.border-bottom-dashed):not(
     .border-bottom-dotted
   ):has(
-    + .page-block[class*='inner-width-'].background-raised.border-top-none:not(
-        [class*='margin-top-']
-      )
+    + .page-block.background-raised.border-top-none:not([class*='margin-top-'])
   ),
-.page-block[class*='inner-width-'].background-accent.border-top-none:not(
+.page-block.background-accent.border-top-none:not(
     [class*='margin-bottom-']
   ):not(.border-bottom-solid):not(.border-bottom-dashed):not(
     .border-bottom-dotted
   ):has(
-    + .page-block[class*='inner-width-'].background-accent.border-top-none:not(
-        [class*='margin-top-']
-      )
+    + .page-block.background-accent.border-top-none:not([class*='margin-top-'])
   ) {
   margin-bottom: calc(
     -1 * min(var(--section-padding-bottom), var(--section-next-padding-top))
   );
+}
+
+/* Width ownership stays at the outer section; children never add gutters. */
+:root {
+  --section-side-padding: clamp(16px, 3vw, var(--layout-gutter, 24px));
+  --padded-section-gutter: max(
+    var(--section-side-padding),
+    calc((100% - var(--layout-content)) / 2)
+  );
+}
+.page-shell {
+  --page-section-gutter: var(
+    --site-section-gutter,
+    var(--padded-section-gutter)
+  );
+  max-width: none;
+  padding-inline: 0;
+}
+.page-width-full {
+  --page-section-gutter: 0px;
+}
+.page-width-padded {
+  --page-section-gutter: var(--padded-section-gutter);
+}
+.page-block {
+  --section-gutter: var(
+    --page-section-gutter,
+    var(--site-section-gutter, var(--padded-section-gutter))
+  );
+}
+.page-block.section-width-full {
+  --section-gutter: 0px;
+}
+.page-block.section-width-padded {
+  --section-gutter: var(--padded-section-gutter);
+}
+.page-shell > .page-title {
+  padding-inline: var(--page-section-gutter);
+}
+.page-shell > .page-block,
+.page-shell > .page-block:has(> .page-cta-band) {
+  margin-inline: 0;
+  max-width: none;
+  padding-inline: var(--section-gutter);
+}
+.page-shell
+  > .page-block
+  > :is(
+    .page-section,
+    .page-hero,
+    .page-cta,
+    .page-image,
+    .prose-section,
+    .faq-section
+  ),
+.page-shell > .page-block .page-cta-inner {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+/* Reading measure belongs to paragraphs, independently of section alignment. */
+.page-block .article-body {
+  max-width: none;
+}
+.page-block .article-body :is(p, ul, ol, blockquote) {
+  max-width: var(--layout-copy);
+}
+.site-header {
+  max-width: none;
+  padding-inline: var(--site-section-gutter, var(--padded-section-gutter));
+}
+.site-footer {
+  padding-inline: var(--site-section-gutter, var(--padded-section-gutter));
+}
+.page-block .section-heading {
+  max-width: none;
+}
+.page-block .section-heading .lede {
+  max-width: var(--layout-copy);
+}
+.heading-alignment-center .section-heading .lede {
+  margin-inline: auto;
 }

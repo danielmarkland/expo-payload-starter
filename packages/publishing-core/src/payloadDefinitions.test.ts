@@ -93,7 +93,7 @@ describe('Payload publishing definitions', () => {
         type: 'group',
       })
     }
-    expect(JSON.stringify(blocks.appearanceField())).toContain('"dbName":"cw"')
+    expect(JSON.stringify(blocks.appearanceField())).toContain('"name":"width"')
     expect(blocks.ContactFormBlock.fields[0]).toMatchObject({
       defaultValue: 'contact',
     })

@@ -11,7 +11,7 @@ All layout controls are implemented in the shared publishing packages and work i
 | Strick Biz home    | Full-width background hero with focal position and dark overlay; two latest-post blocks filtered to mixes/remixes or manually curated, three columns, square artwork, image-only presentation, centered headings/actions; accent footer booking section. |
 | Strick Biz archive | Site settings → Archives: page size 12, three columns, square artwork, simple cards, dark title surface and light list surface; footer booking form with separate names and optional company.                                                            |
 
-Hero variants are Split (existing default), Text, and Background. Height choices are Compact (280px), Standard (existing 480px), and Tall (680px desktop/480px mobile). Focal X/Y are percentages; dark overlay is 0–100%. Background heroes retain headline accents and both actions. Set content width Full for edge-to-edge hero sections.
+Hero variants are Split (existing default), Text, and Background. Height choices are Compact (280px), Standard (existing 480px), and Tall (680px desktop/480px mobile). Focal X/Y are percentages; dark overlay is 0–100%. Background heroes retain headline accents and both actions. Set section width Full for edge-to-edge hero sections.
 
 Section appearance controls heading/action alignment and automatic or explicit two/three/four-column grids. Explicit grids collapse to two columns at 900px and one at 600px. Existing cards and stacked services remain available; plain feature columns support optional numbering and colored top rules. Light/dark surfaces control local text and card contrast independently of the visitor theme.
 
@@ -28,3 +28,20 @@ Apply each application's checked-in Payload migration before serving content wit
 Release the publishing-contracts, publishing-core and publishing-ui changesets together. After the packages are published, update GroovePost's exact dependency versions and lockfile together and regenerate the design kit's package compatibility metadata. Package publication, commits and deployments are separate operations.
 
 The current GroovePost integration is verified using locally staged builds of the shared packages. Its registry dependency pins remain unchanged until publication; do not deploy the integration with the old packages.
+
+## Section width inheritance
+
+Site settings offer **Full** and **Padded**, defaulting to Padded. Pages offer
+**Site**, Full and Padded, defaulting to Site. Each block's Appearance offers
+**Page**, Full and Padded, defaulting to Page. Missing values inherit too.
+A full page makes inherited blocks full; either explicit block choice overrides
+its page. Site width also sizes the header and footer.
+
+Full spans the available viewport. Padded uses `layout.content` and a responsive
+16–24px gutter, shared by sections and site navigation. The page shell has no
+horizontal padding; the outer block owns its container, so children cannot add a
+second gutter. Paragraphs and lists retain `layout.copy` as their reading measure.
+
+Design kits set site `width`, page `width`, and block `appearance.width`. These
+fields are described by the shared CMS factories and included in portable
+exports/imports. Use the same three-level choices in external design tools.

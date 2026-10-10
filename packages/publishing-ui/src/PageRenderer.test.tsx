@@ -410,7 +410,7 @@ describe('Payload page renderer', () => {
             marginRight: 'sm',
             marginBottom: 'none',
             marginLeft: 'lg',
-            contentWidth: 'text',
+            width: 'padded',
             background: 'raised',
             borderTop: 'accent',
             borderRight: 'default',
@@ -426,7 +426,7 @@ describe('Payload page renderer', () => {
 
     expect(markup).toContain('data-page="test-page"')
     expect(markup).toContain(
-      'page-block page-block-featureGrid padding-top-sm padding-right-md padding-bottom-xl padding-left-none margin-top-md margin-right-sm margin-bottom-none margin-left-lg content-width-text background-raised border-top-accent border-right-default border-bottom-default border-left-accent border-width-thick page-block-rounded',
+      'page-block page-block-featureGrid section-width-padded padding-top-sm padding-right-md padding-bottom-xl padding-left-none margin-top-md margin-right-sm margin-bottom-none margin-left-lg background-raised border-top-accent border-right-default border-bottom-default border-left-accent border-width-thick page-block-rounded',
     )
     expect(markup).toContain('data-block-type="featureGrid"')
     expect(markup).toContain(
@@ -492,7 +492,7 @@ it('renders imported rich cards, joined layout, process labels, FAQ rows and a C
       appearance: {
         columns: '3',
         mobileColumns: '1',
-        innerWidth: 'standard',
+        width: 'page',
         cardPadding: 'md',
       },
       items: [

@@ -1,5 +1,18 @@
 # @danielmarkland/publishing-core
 
+## 0.9.0
+
+### Minor Changes
+
+- c0a1014: Add site, page, and block width inheritance with shared responsive containers,
+  CMS choices, portable transfer fields, and independent paragraph reading measure.
+
+### Patch Changes
+
+- Updated dependencies [c0a1014]
+  - @danielmarkland/publishing-contracts@0.7.0
+  - @danielmarkland/design-tokens@0.4.1
+
 ## 0.8.2
 
 ### Patch Changes

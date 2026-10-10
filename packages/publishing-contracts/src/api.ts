@@ -113,13 +113,13 @@ export const linkSchema = z.looseObject({
   iconPosition: z.enum(['left', 'right']).nullable().optional(),
   variant: buttonVariantSchema.nullable().optional(),
 })
+export const sectionWidthSchema = z.enum(['full', 'padded'])
+export const pageWidthSchema = z.enum(['site', 'full', 'padded'])
+export const blockWidthSchema = z.enum(['page', 'full', 'padded'])
 const spacing = z.enum(['none', 'sm', 'md', 'lg', 'xl']).nullable().optional()
 const border = z.enum(['default', 'none', 'accent']).nullable().optional()
 export const sectionAppearanceSchema = z.looseObject({
-  contentWidth: z
-    .enum(['default', 'text', 'wide', 'full'])
-    .nullable()
-    .optional(),
+  width: blockWidthSchema.nullable().optional(),
   background: z
     .enum(['default', 'raised', 'accent', 'dark', 'light'])
     .nullable()
@@ -127,10 +127,7 @@ export const sectionAppearanceSchema = z.looseObject({
   headingAlignment: z.enum(['left', 'center']).nullable().optional(),
   actionAlignment: z.enum(['left', 'center']).nullable().optional(),
   mobileColumns: z.enum(['1', '2']).nullable().optional(),
-  innerWidth: z
-    .enum(['reading', 'standard', 'wide', 'full'])
-    .nullable()
-    .optional(),
+
   cardPadding: spacing,
   headingSpacing: spacing,
   columns: z.enum(['auto', '2', '3', '4']).nullable().optional(),
@@ -330,6 +327,7 @@ export const contentMetaSchema = z.looseObject({
   image: mediaRelationshipSchema.nullable().optional(),
 })
 export const pageSchema = z.looseObject({
+  width: pageWidthSchema.nullable().optional(),
   _status: z.enum(['draft', 'published']).nullable().optional(),
   id: documentIDSchema,
   layout: z.array(pageBlockSchema),

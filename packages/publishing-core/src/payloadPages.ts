@@ -1,3 +1,4 @@
+import { sectionWidthField } from './sectionWidth.js'
 import type { Block, Field } from 'payload'
 
 export function createPagesFields(
@@ -11,6 +12,7 @@ export function createPagesFields(
         {
           label: 'General',
           fields: [
+            sectionWidthField('page'),
             { name: 'title', type: 'text', required: true },
             {
               name: 'headerVariant',
