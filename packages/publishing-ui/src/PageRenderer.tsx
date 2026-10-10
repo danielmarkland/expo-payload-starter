@@ -520,7 +520,8 @@ export function createPageRenderer({
 
     return (
       <main
-        className="page-shell"
+        className={`page-shell page-width-${page.width || 'site'}`}
+        data-page-width={page.width || 'site'}
         data-page={page.slug}
         data-header-variant={page.headerVariant || 'inherit'}
       >

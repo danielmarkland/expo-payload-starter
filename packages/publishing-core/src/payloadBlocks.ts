@@ -1,3 +1,4 @@
+import { sectionWidthField } from './sectionWidth.js'
 import type { Block, Field } from 'payload'
 import { choice, contactFields } from './presentationFields.js'
 import { heroHeadlineEditor, validateHeroHeadline } from './heroHeadline.js'
@@ -82,7 +83,7 @@ export function createPublishingBlocks({
             choice('actionAlignment', ['left', 'center']),
             choice('columns', ['auto', '2', '3', '4']),
             choice('mobileColumns', ['1', '2']),
-            choice('innerWidth', ['reading', 'standard', 'wide', 'full']),
+            sectionWidthField('block'),
             choice('cardPadding', ['none', 'sm', 'md', 'lg', 'xl']),
             choice('headingSpacing', ['none', 'sm', 'md', 'lg', 'xl']),
           ],
@@ -92,17 +93,6 @@ export function createPublishingBlocks({
           label: 'Container and surface',
           admin: { initCollapsed: true },
           fields: [
-            {
-              name: 'contentWidth',
-              type: 'select',
-              dbName: 'cw',
-              options: [
-                { label: 'Site default', value: 'default' },
-                { label: 'Text / narrow', value: 'text' },
-                { label: 'Wide', value: 'wide' },
-                { label: 'Full width', value: 'full' },
-              ],
-            },
             {
               name: 'background',
               type: 'select',

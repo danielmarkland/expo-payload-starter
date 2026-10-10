@@ -1,3 +1,4 @@
+import { resolveSectionWidth } from './sectionWidth.js'
 import { colorContrastRatio } from './colorContrast.js'
 import { archivePresentationSchema } from '@danielmarkland/publishing-contracts'
 import type { SiteConfig } from '@danielmarkland/publishing-contracts'
@@ -109,6 +110,7 @@ function mediaURL(value: MediaValue, siteURL: string) {
 
 type NullablePartial<T> = { [K in keyof T]?: T[K] | null }
 export type PublishingSiteSettings = {
+  width?: SiteConfig['width'] | null
   appTitle: string
   siteTitle: string
   shortName: string
@@ -147,6 +149,7 @@ export function resolvePublishingSiteConfig(
 
   return {
     version: 1,
+    width: resolveSectionWidth({ site: settings.width }),
     archive: archivePresentationSchema.parse(
       Object.fromEntries(
         Object.entries(settings.archive || {}).filter(
@@ -221,6 +224,7 @@ export function siteConfigCSS(config: SiteConfig) {
             : radii.pill
     }px;`,
     declarations(layout, 'layout', 'px'),
+    `--site-section-gutter:${config.width === 'full' ? '0px' : 'max(var(--section-side-padding), calc((100% - var(--layout-content)) / 2))'};`,
     presentationTypographyCSS(config.theme),
   ].join('')
   const dark = declarations(config.theme.dark, 'color')

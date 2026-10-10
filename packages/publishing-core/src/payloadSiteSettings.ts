@@ -1,3 +1,4 @@
+import { sectionWidthField } from './sectionWidth.js'
 import type { Field } from 'payload'
 import { choice, archiveFields } from './presentationFields.js'
 import { themes } from '@danielmarkland/design-tokens'
@@ -64,6 +65,7 @@ export function createSiteSettingsFields({
         {
           label: 'General',
           fields: [
+            sectionWidthField('site'),
             {
               name: 'siteTitle',
               type: 'text',

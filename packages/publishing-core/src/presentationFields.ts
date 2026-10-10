@@ -14,7 +14,6 @@ export function choice(
         : (
             {
               mobileColumns: 'mc',
-              innerWidth: 'iw',
               cardPadding: 'cp',
               headingSpacing: 'hs',
               headingAlignment: 'pub_heading_align',

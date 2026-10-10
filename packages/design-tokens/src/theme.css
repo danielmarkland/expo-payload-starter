@@ -134,4 +134,5 @@
   --layout-article: 760px;
   --layout-card: 460px;
   --layout-card-minimum: 260px;
+  --layout-gutter: 24px;
 }

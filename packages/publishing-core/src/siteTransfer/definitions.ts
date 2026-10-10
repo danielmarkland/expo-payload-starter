@@ -6,7 +6,15 @@ const fieldsByResource: Record<string, string[]> = {
   authors: ['name', 'slug', 'bio', 'image', 'website'],
   categories: ['title', 'slug', 'description', 'parent'],
   tags: ['title', 'slug', 'description'],
-  pages: ['headerVariant', 'title', 'slug', 'layout', 'customCSS', 'meta'],
+  pages: [
+    'width',
+    'headerVariant',
+    'title',
+    'slug',
+    'layout',
+    'customCSS',
+    'meta',
+  ],
   posts: [
     'title',
     'slug',
@@ -21,6 +29,7 @@ const fieldsByResource: Record<string, string[]> = {
   ],
   redirects: ['from', 'to', 'type'],
   'site-settings': [
+    'width',
     'siteTitle',
     'appTitle',
     'shortName',
