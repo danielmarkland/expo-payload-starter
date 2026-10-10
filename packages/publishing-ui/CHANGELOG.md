@@ -1,5 +1,12 @@
 # @danielmarkland/publishing-ui
 
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies [3928295]
+  - @danielmarkland/publishing-core@0.8.2
+
 ## 0.4.1
 
 ### Patch Changes
