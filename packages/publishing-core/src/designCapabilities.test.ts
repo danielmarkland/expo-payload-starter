@@ -181,3 +181,35 @@ describe('portable design capabilities', () => {
     ).toContain('text length')
   })
 })
+
+it('preserves inherited and explicit widths through export and reimport', async () => {
+  const { createPagesFields } = await import('./payloadPages.js')
+  const { selectTransferFields } = await import('./siteTransfer/definitions.js')
+  const { decodeSiteArchive } = await import('./siteTransfer.js')
+  const fields = selectTransferFields(createPagesFields(blocks.pageBlocks), [
+    'width',
+    'title',
+    'slug',
+    'layout',
+  ])
+  for (const width of ['site', 'full', 'padded']) {
+    const data = {
+      width,
+      title: 'Disposable width test',
+      slug: 'width-test',
+      layout: [
+        { blockType: 'faq', appearance: { width: 'page' }, items: [] },
+        { blockType: 'faq', appearance: { width: 'full' }, items: [] },
+        { blockType: 'faq', appearance: { width: 'padded' }, items: [] },
+      ],
+    }
+    const current = projectState(data, fields, () => {
+      throw new Error('No relationships expected')
+    })
+    const portable = manifest(data.layout)
+    portable.records[0].current = current
+    const bytes = encodeSiteArchive({ manifest: portable, assets: new Map() })
+    const imported = decodeSiteArchive(bytes).manifest.records[0].current
+    expect(projectState(imported.data, fields, () => '')).toEqual(current)
+  }
+})

@@ -64,3 +64,14 @@ describe('layout compatibility', () => {
       ).toBe(false)
   })
 })
+
+it('accepts only the level-specific width options', async () => {
+  const { sectionWidthSchema, pageWidthSchema, blockWidthSchema } =
+    await import('./api.js')
+  expect(sectionWidthSchema.options).toEqual(['full', 'padded'])
+  expect(pageWidthSchema.options).toEqual(['site', 'full', 'padded'])
+  expect(blockWidthSchema.options).toEqual(['page', 'full', 'padded'])
+  expect(sectionWidthSchema.safeParse('site').success).toBe(false)
+  expect(pageWidthSchema.safeParse('page').success).toBe(false)
+  expect(blockWidthSchema.safeParse('site').success).toBe(false)
+})

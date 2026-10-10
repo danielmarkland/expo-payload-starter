@@ -179,7 +179,6 @@ export interface User {
 export interface Media {
   id: number;
   alt: string;
-  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -281,6 +280,10 @@ export interface Post {
  */
 export interface Page {
   id: number;
+  /**
+   * Full uses the available width. Padded aligns to the shared responsive container.
+   */
+  width?: ('site' | 'full' | 'padded') | null;
   title: string;
   headerVariant?: ('inherit' | 'standard' | 'minimal') | null;
   slug: string;
@@ -490,10 +493,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -547,10 +552,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -590,10 +597,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -742,10 +751,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -883,10 +894,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1092,10 +1105,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1249,10 +1264,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1376,10 +1393,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1426,10 +1445,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1484,10 +1505,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1599,10 +1622,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1648,10 +1673,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1698,10 +1725,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -1834,10 +1863,12 @@ export interface Page {
           actionAlignment?: ('left' | 'center') | null;
           columns?: ('auto' | '2' | '3' | '4') | null;
           mobileColumns?: ('1' | '2') | null;
-          innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
           cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
           headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-          contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
           background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
           rounded?: boolean | null;
           paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -2069,7 +2100,6 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
-  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -2148,6 +2178,7 @@ export interface PostsSelect<T extends boolean = true> {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
+  width?: T;
   title?: T;
   headerVariant?: T;
   slug?: T;
@@ -2202,10 +2233,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2239,10 +2269,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2276,10 +2305,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2339,10 +2367,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2391,10 +2418,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2454,10 +2480,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2519,10 +2544,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2571,10 +2595,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2615,10 +2638,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2664,10 +2686,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2708,10 +2729,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2751,10 +2771,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2795,10 +2814,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -2850,10 +2868,9 @@ export interface PagesSelect<T extends boolean = true> {
                     actionAlignment?: T;
                     columns?: T;
                     mobileColumns?: T;
-                    innerWidth?: T;
+                    width?: T;
                     cardPadding?: T;
                     headingSpacing?: T;
-                    contentWidth?: T;
                     background?: T;
                     rounded?: T;
                     paddingTop?: T;
@@ -3400,10 +3417,12 @@ export interface FooterNavigation {
       actionAlignment?: ('left' | 'center') | null;
       columns?: ('auto' | '2' | '3' | '4') | null;
       mobileColumns?: ('1' | '2') | null;
-      innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+      /**
+       * Full uses the available width. Padded aligns to the shared responsive container.
+       */
+      width?: ('page' | 'full' | 'padded') | null;
       cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
       headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
       background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
       rounded?: boolean | null;
       paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -3509,10 +3528,12 @@ export interface FooterNavigation {
       actionAlignment?: ('left' | 'center') | null;
       columns?: ('auto' | '2' | '3' | '4') | null;
       mobileColumns?: ('1' | '2') | null;
-      innerWidth?: ('reading' | 'standard' | 'wide' | 'full') | null;
+      /**
+       * Full uses the available width. Padded aligns to the shared responsive container.
+       */
+      width?: ('page' | 'full' | 'padded') | null;
       cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
       headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      contentWidth?: ('default' | 'text' | 'wide' | 'full') | null;
       background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
       rounded?: boolean | null;
       paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
@@ -3678,6 +3699,10 @@ export interface FooterNavigation {
  */
 export interface SiteSetting {
   id: number;
+  /**
+   * Full uses the available width. Padded aligns to the shared responsive container.
+   */
+  width?: ('full' | 'padded') | null;
   siteTitle: string;
   appTitle: string;
   shortName: string;
@@ -3851,10 +3876,9 @@ export interface FooterNavigationSelect<T extends boolean = true> {
               actionAlignment?: T;
               columns?: T;
               mobileColumns?: T;
-              innerWidth?: T;
+              width?: T;
               cardPadding?: T;
               headingSpacing?: T;
-              contentWidth?: T;
               background?: T;
               rounded?: T;
               paddingTop?: T;
@@ -3893,10 +3917,9 @@ export interface FooterNavigationSelect<T extends boolean = true> {
               actionAlignment?: T;
               columns?: T;
               mobileColumns?: T;
-              innerWidth?: T;
+              width?: T;
               cardPadding?: T;
               headingSpacing?: T;
-              contentWidth?: T;
               background?: T;
               rounded?: T;
               paddingTop?: T;
@@ -3955,6 +3978,7 @@ export interface FooterNavigationSelect<T extends boolean = true> {
  * via the `definition` "siteSettings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
+  width?: T;
   siteTitle?: T;
   appTitle?: T;
   shortName?: T;

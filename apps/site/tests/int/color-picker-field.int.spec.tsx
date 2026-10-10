@@ -198,6 +198,7 @@ describe('Payload color picker field', () => {
     const seoTab = tabs.tabs.find((tab) => tab.label === 'SEO')
 
     expect(generalTab?.fields.map((field) => ('name' in field ? field.name : undefined))).toEqual([
+      'width',
       'title',
       'headerVariant',
       'slug',

@@ -99,6 +99,7 @@ export const archivePresentationSchema = z.object({
 export type ArchivePresentation = z.infer<typeof archivePresentationSchema>
 
 export const siteConfigSchema = z.object({
+  width: z.enum(['full', 'padded']).default('padded'),
   archive: archivePresentationSchema.default(() =>
     archivePresentationSchema.parse({}),
   ),

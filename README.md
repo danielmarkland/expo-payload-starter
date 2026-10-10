@@ -968,3 +968,8 @@ checks, coordinated deployment/publication, handover settings and recovery.
 Controlled automation stays disabled until its environment prerequisites are
 configured and the dev handover is verified. Builds run on Vercel with live domains
 unchanged until explicit activation, keeping sensitive runtime settings out of CI.
+
+Publishing section widths inherit from site → page → block. Site defaults to
+Padded; pages default to Site and blocks to Page. Full and Padded overrides align
+with the shared header/footer container, while paragraph reading width stays
+independent. See [the layout guide](docs/practical-layouts.md#section-width-inheritance).

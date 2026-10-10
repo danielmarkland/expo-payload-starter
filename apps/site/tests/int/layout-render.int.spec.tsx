@@ -148,7 +148,7 @@ const samples = {
       heading: createHeroHeadline('Mostly House. Sometimes Funk, Jazz & Soul. Always Hip-Hop.'),
       secondaryHeading: 'Dallas, TX Based DJ & Music Producer.',
       image: media,
-      appearance: { contentWidth: 'full' },
+      appearance: { width: 'full' },
     },
     {
       blockType: 'latestPosts',
@@ -177,7 +177,7 @@ const samples = {
       showCompany: true,
       submitLabel: 'Send',
       successMessage: 'Thanks',
-      appearance: { background: 'accent', contentWidth: 'full', headingAlignment: 'center' },
+      appearance: { background: 'accent', width: 'full', headingAlignment: 'center' },
     },
   ],
 }

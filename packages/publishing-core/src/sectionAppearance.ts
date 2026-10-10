@@ -2,7 +2,6 @@ export type SectionAppearance = {
   headingAlignment?: null | string
   actionAlignment?: null | string
   mobileColumns?: null | string
-  innerWidth?: null | string
   cardPadding?: null | string
   headingSpacing?: null | string
   columns?: null | string
@@ -12,7 +11,7 @@ export type SectionAppearance = {
   borderRight?: null | string
   borderTop?: null | string
   borderWidth?: null | string
-  contentWidth?: null | string
+  width?: null | 'page' | 'full' | 'padded'
   marginBottom?: null | string
   marginLeft?: null | string
   marginRight?: null | string
@@ -29,13 +28,13 @@ export function sectionAppearanceClassName(
   appearance?: null | SectionAppearance,
 ) {
   const classes = [...baseClasses]
+  classes.push(`section-width-${appearance?.width || 'page'}`)
   if (!appearance) return classes.join(' ')
   const values = [
     ['heading-alignment', appearance.headingAlignment],
     ['action-alignment', appearance.actionAlignment],
     ['columns', appearance.columns],
     ['mobile-columns', appearance.mobileColumns],
-    ['inner-width', appearance.innerWidth],
     ['card-padding', appearance.cardPadding],
     ['heading-spacing', appearance.headingSpacing],
     ['padding-top', appearance.paddingTop],
@@ -46,7 +45,6 @@ export function sectionAppearanceClassName(
     ['margin-right', appearance.marginRight],
     ['margin-bottom', appearance.marginBottom],
     ['margin-left', appearance.marginLeft],
-    ['content-width', appearance.contentWidth],
     ['background', appearance.background],
     ['border-top', appearance.borderTop],
     ['border-right', appearance.borderRight],

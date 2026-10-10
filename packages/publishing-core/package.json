@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -123,6 +123,10 @@
     "./publishingHttp": {
       "types": "./dist/publishingHttp.d.ts",
       "default": "./dist/publishingHttp.js"
+    },
+    "./sectionWidth": {
+      "types": "./dist/sectionWidth.d.ts",
+      "default": "./dist/sectionWidth.js"
     }
   },
   "files": [
