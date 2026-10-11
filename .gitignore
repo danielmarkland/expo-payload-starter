@@ -22,3 +22,5 @@ supabase/.temp/
 release-output/
 
 .neon
+
+.vercel/
