@@ -39,6 +39,24 @@ export function createHeaderNavigationFields({
 }: HeaderFieldOptions): Field[] {
   return [
     choice('variant', ['standard', 'minimal']),
+    ...(['topBackground', 'scrolledBackground'] as const).map(
+      (name): Field => ({
+        name,
+        type: 'select',
+        label: name === 'topBackground' ? 'Header top' : 'Header scrolled',
+        defaultValue: 'fill',
+        options: [
+          { label: 'Fill', value: 'fill' },
+          { label: 'Transparent', value: 'transparent' },
+        ],
+        admin: {
+          description:
+            name === 'topBackground'
+              ? 'Background at the top of the page. Transparent overlays a leading background hero.'
+              : 'Background after scrolling more than 8px. Enable Sticky header to keep it visible.',
+        },
+      }),
+    ),
     {
       name: 'helpLink',
       type: 'group',

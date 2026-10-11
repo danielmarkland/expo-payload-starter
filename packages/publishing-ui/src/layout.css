@@ -660,3 +660,62 @@ body:has(main[data-header-variant='minimal'])
 .heading-alignment-center .section-heading .lede {
   margin-inline: auto;
 }
+
+/* Background artwork covers section gutters and vertical padding, not just copy. */
+.page-block-background-hero {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.page-shell:has(> .page-block-background-hero:first-of-type) {
+  padding-top: 0;
+}
+.site-header {
+  position: relative;
+  z-index: 20;
+}
+.site-header-sticky {
+  position: sticky;
+  top: 0;
+}
+.site-header[data-header-background='fill'] {
+  background: var(--color-surface);
+  backdrop-filter: none;
+}
+.site-header[data-header-background='transparent'] {
+  background: transparent;
+  backdrop-filter: none;
+}
+/* Keep the overlap constant across scroll states to avoid moving page content. */
+.site-header[data-header-top-background='transparent']:has(
+    ~ .page-shell[data-leading-background-hero='true']
+  ) {
+  margin-bottom: calc(-1 * var(--publishing-header-height, 0px));
+}
+.site-header[data-header-top-background='transparent']
+  ~ .page-shell[data-leading-background-hero='true']
+  > .page-block-background-hero:first-of-type {
+  padding-top: calc(
+    var(--section-padding-top, var(--space-3xl)) +
+      var(--publishing-header-height, 0px)
+  );
+}
+
+/* Retain authored top spacing when adding room for overlay navigation. */
+.page-block {
+  --section-padding-top: var(--space-3xl);
+}
+.page-block.padding-top-none {
+  --section-padding-top: 0px;
+}
+.page-block.padding-top-sm {
+  --section-padding-top: var(--space-md);
+}
+.page-block.padding-top-md {
+  --section-padding-top: var(--space-xl);
+}
+.page-block.padding-top-lg {
+  --section-padding-top: var(--space-3xl);
+}
+.page-block.padding-top-xl {
+  --section-padding-top: var(--space-5xl);
+}

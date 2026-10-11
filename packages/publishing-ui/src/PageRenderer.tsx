@@ -134,14 +134,6 @@ export function createPageRenderer({
         return (
           <section
             className={`page-hero hero-variant-${block.variant || 'split'} hero-alignment-${block.alignment || 'left'} hero-height-${block.height || 'standard'}${!image?.url || block.variant === 'text' || block.variant === 'background' ? ' page-hero-without-image' : ''}`}
-            style={
-              block.variant === 'background' && image?.url
-                ? {
-                    backgroundImage: `linear-gradient(rgb(0 0 0 / ${(block.overlay ?? 50) / 100}), rgb(0 0 0 / ${(block.overlay ?? 50) / 100})), url(${JSON.stringify(image.url)})`,
-                    backgroundPosition: `${block.focalX ?? 50}% ${block.focalY ?? 50}%`,
-                  }
-                : undefined
-            }
           >
             <div className="page-hero-copy">
               {block.eyebrow ? (
@@ -517,12 +509,20 @@ export function createPageRenderer({
 
   function PageRenderer({ page }: { page: Page }) {
     const firstHero = page.layout.find((block) => block.blockType === 'hero')
+    const leadingBlock = page.layout[0]
+    const leadingBackgroundHero =
+      leadingBlock?.blockType === 'hero' &&
+      leadingBlock.variant === 'background' &&
+      !!resolveMedia(leadingBlock.image)?.url
 
     return (
       <main
         className={`page-shell page-width-${page.width || 'site'}`}
         data-page-width={page.width || 'site'}
         data-page={page.slug}
+        data-leading-background-hero={
+          leadingBackgroundHero ? 'true' : undefined
+        }
         data-header-variant={page.headerVariant || 'inherit'}
       >
         {page.customCSS ? (
@@ -535,7 +535,17 @@ export function createPageRenderer({
         ) : null}
         {page.layout.map((block) => (
           <div
-            className={blockClassName(block)}
+            className={`${blockClassName(block)}${block.blockType === 'hero' && block.variant === 'background' ? ' page-block-background-hero' : ''}`}
+            style={
+              block.blockType === 'hero' &&
+              block.variant === 'background' &&
+              resolveMedia(block.image)?.url
+                ? {
+                    backgroundImage: `linear-gradient(rgb(0 0 0 / ${(block.overlay ?? 50) / 100}), rgb(0 0 0 / ${(block.overlay ?? 50) / 100})), url(${JSON.stringify(resolveMedia(block.image)!.url)})`,
+                    backgroundPosition: `${block.focalX ?? 50}% ${block.focalY ?? 50}%`,
+                  }
+                : undefined
+            }
             data-block-type={block.blockType}
             id={block.anchor || undefined}
             key={block.id || block.blockType}

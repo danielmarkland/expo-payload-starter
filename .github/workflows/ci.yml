@@ -127,6 +127,7 @@ jobs:
       - run: supabase start
       - run: pnpm payload:migrate
       - run: pnpm --filter @starter/site exec playwright install --with-deps chromium
+      - run: pnpm --filter @danielmarkland/publishing-ui test:layout
       - run: pnpm --filter @starter/site test:e2e
 
   ci:

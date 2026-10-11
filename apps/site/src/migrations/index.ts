@@ -26,6 +26,7 @@ import * as migration_20261005_site_transfer_gates from './20261005_site_transfe
 import * as migration_20261006_155757_landing_design_controls from './20261006_155757_landing_design_controls'
 import * as migration_20261008_editor_identity from './20261008_editor_identity'
 import * as migration_20261010_220137_publishing_width from './20261010_220137_publishing_width'
+import * as migration_20261011_010628_header_backgrounds from './20261011_010628_header_backgrounds'
 
 export const migrations = [
   {
@@ -167,5 +168,10 @@ export const migrations = [
     up: migration_20261010_220137_publishing_width.up,
     down: migration_20261010_220137_publishing_width.down,
     name: '20261010_220137_publishing_width',
+  },
+  {
+    up: migration_20261011_010628_header_backgrounds.up,
+    down: migration_20261011_010628_header_backgrounds.down,
+    name: '20261011_010628_header_backgrounds',
   },
 ]

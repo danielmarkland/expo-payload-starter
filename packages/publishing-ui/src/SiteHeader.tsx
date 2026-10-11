@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { SiteConfig } from '@danielmarkland/publishing-contracts'
 import { SiteBrand } from './SiteBrand.js'
+import { HeaderSurface } from './HeaderSurface.js'
 import { ThemeToggle } from './ThemeToggle.js'
 
 export interface SiteHeaderProps {
@@ -17,6 +18,8 @@ export interface SiteHeaderProps {
   navigation: ReactNode
   search?: ReactNode
   sticky?: boolean | null
+  topBackground?: 'fill' | 'transparent' | null
+  scrolledBackground?: 'fill' | 'transparent' | null
   themeStorageKey: string
 }
 
@@ -28,12 +31,16 @@ export function SiteHeader({
   navigation,
   search,
   sticky,
+  topBackground,
+  scrolledBackground,
   themeStorageKey,
 }: SiteHeaderProps) {
   return (
-    <header
-      data-header-default={variant || 'standard'}
-      className={`site-header${sticky ? ' site-header-sticky' : ''}`}
+    <HeaderSurface
+      variant={variant}
+      sticky={sticky}
+      topBackground={topBackground}
+      scrolledBackground={scrolledBackground}
     >
       <SiteBrand siteConfig={siteConfig} />
       <nav aria-label="Main navigation" className="header-navigation">
@@ -50,6 +57,6 @@ export function SiteHeader({
           storageKey={themeStorageKey}
         />
       ) : null}
-    </header>
+    </HeaderSurface>
   )
 }
