@@ -73,7 +73,7 @@ test('builds the site and app variable sets', () => {
   })
   assert.equal(site.SITE_URL, 'https://www.example.com')
   assert.equal('PREVIEW_SECRET' in site, false)
-  assert.equal('SUPABASE_S3_BUCKET' in site, false)
+  assert.equal('CMS_MEDIA_BUCKET' in site, false)
 
   const landing = siteVariables({
     database: 'postgresql://secret',
