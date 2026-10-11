@@ -12,77 +12,26 @@ authenticated application.
 - `packages/api-client` — framework-neutral client for the versioned application API.
 - `packages/core` — pure example-domain rules with no framework dependencies.
 - `packages/auth` — provider-neutral identity and authorization interfaces.
-- `packages/data` — typed Supabase repositories and generated database types.
+- `packages/data` — typed Neon repositories and generated database types.
 - `packages/brand` — private starter identity and image assets.
 - `packages/design-tokens` — framework-neutral visual tokens and fonts.
 - `packages/publishing-core` — reusable publishing behavior for Payload-backed sites.
 - `packages/publishing-ui` — shared public views, CSS, font loading, icons and Payload admin controls.
 - `packages/config` — shared TypeScript settings and boundary enforcement.
-- `supabase` — product database migrations, RLS policies, and seeds.
+- `database` — portable product/identity migrations and actor/realm policies.
 
 Reusable Payload link fields and page blocks are owned by `publishing-core` through
 `createPublishingFields` and `createPublishingBlocks`. Shared icon options come from the publishing packages; the site supplies Payload
 admin component references, access policies and migration history. Import these factories from the `payloadFields` and
 `payloadBlocks` package subpaths.
 
-## Requirements
+## Requirements and local development
 
-- Node.js 22+
-- pnpm 11
-- Supabase CLI
-- Vercel CLI, for guided hosted setup and deployment
-- Docker, only for the full local Supabase development and test workflow
+Use Node.js 22+, pnpm 11, Docker for disposable local services, and the authenticated Neon/Vercel CLIs for hosted setup. Copy `.env.example`, `apps/app/.env.example` and `apps/site/.env.example` to private local environment files. Start `docker compose up -d`, install packages, then run `pnpm database:migrate`, `pnpm payload:migrate` and `pnpm storage:init` with the site environment loaded. Local PostgreSQL uses port 55432 and S3 uses 59000. Browser clients receive only `EXPO_PUBLIC_SITE_URL`; server credentials stay private.
 
-## Choose a setup path
+`pnpm dev:site` starts Next.js and Payload at `http://localhost:3000`; `pnpm dev:app:web` starts Expo web at `http://localhost:8081`. Run `pnpm generate` after Payload configuration changes and `pnpm check` before delivery. Integration tests require separate disposable local databases; never point tests at hosted data.
 
-For the shortest path to a hosted environment, install dependencies,
-authenticate the provider CLIs, and run the guided setup:
-
-```sh
-pnpm install
-supabase login
-vercel login
-pnpm setup:hosted
-```
-
-This path does not require Docker. The wizard supports a landing site, a
-single-environment app, or separate hosted development and production
-environments. It selects or creates Supabase and Vercel resources, applies
-migrations, and configures environment variables. See
-[Hosted environments and deployment](#hosted-environments-and-deployment) for
-its safety boundaries and manual checkpoints.
-
-Use the local path when developing database changes or running the complete
-test suite. It provides an isolated Supabase/Postgres instance for Payload
-integration tests, RLS tests, schema linting, generated-type verification, and
-Playwright without touching hosted data.
-
-## Local development
-
-```sh
-cp .env.example .env
-cp apps/app/.env.example apps/app/.env
-cp apps/site/.env.example apps/site/.env
-pnpm install
-supabase start
-pnpm payload:migrate
-pnpm generate
-pnpm dev
-```
-
-Do not point the local development or CI test configuration at production.
-Several integration and end-to-end tests intentionally create, update, and
-delete database records. A disposable local stack keeps those tests repeatable
-and prevents concurrent runs from affecting shared data.
-
-The public site runs on `http://localhost:3000`, Payload Admin on
-`http://localhost:3000/admin`, and Supabase Studio on `http://localhost:54323`.
-`pnpm dev` starts the site and the Expo development server. To run the app in a
-browser, use `pnpm dev:app:web` instead of the app's Expo Go
-server; it serves the app at `http://localhost:8081`. To run the site alongside
-Expo web, start `pnpm dev:site` in another terminal.
-
-### Common commands
+## Common commands
 
 | Command                              | Purpose                                                           |
 | ------------------------------------ | ----------------------------------------------------------------- |
@@ -94,9 +43,9 @@ Expo web, start `pnpm dev:site` in another terminal.
 | `pnpm payload:migrate:status`        | Show applied and pending Payload migrations.                      |
 | `pnpm payload:migrate:create <name>` | Generate a Payload migration after changing its schema.           |
 | `pnpm generate:payload`              | Regenerate Payload types and the admin import map.                |
-| `pnpm setup:hosted`                  | Configure Supabase and Vercel environments interactively.         |
+| `pnpm setup:hosted`                  | Configure Neon and Vercel environments interactively.             |
 | `pnpm setup:production`              | Run the backward-compatible single-app production setup.          |
-| `pnpm check`                         | Run all checks and builds; requires the local Supabase stack.     |
+| `pnpm check`                         | Run all checks and builds; requires the local Neon stack.         |
 | `pnpm changeset`                     | Record a releasable shared-package change.                        |
 
 ### Versioned application API
@@ -105,13 +54,13 @@ The public site and universal app use the Hono BFF mounted at `/api/v1` for
 content, forms, runtime configuration, and product data. Its OpenAPI document
 is available at `/api/v1/openapi.json` and interactive Swagger documentation
 at `/api/v1/docs`. Public reads return published content. Product routes such
-as `/api/v1/me/profile` require the Supabase access token as a Bearer token and
-continue to rely on Supabase RLS.
+as `/api/v1/me/profile` require the Neon access token as a Bearer token and
+continue to rely on PostgreSQL actor/realm policies.
 
-Supabase Auth remains a direct protocol integration for OAuth, refresh, and
+Better Auth remains a direct protocol integration for OAuth, refresh, and
 sign-out. Payload Admin similarly retains its authenticated native API because
 that is the admin application's transport. Application presentation code does
-not query Payload or Supabase product tables directly: Next.js invokes the
+not query Payload or Neon product tables directly: Next.js invokes the
 same Hono handlers in process, while Expo uses `@starter/api-client` over HTTP.
 The older site-config, contact, newsletter, and preview URLs remain as
 compatibility shims for deployed clients.
@@ -167,117 +116,17 @@ Google Tag Manager is optional. Set one container ID such as `GTM-ABC123` in
 Admin, and the Expo container only runs in the browser—not in native iOS or
 Android apps. Configure consent and SPA page-view behavior in Tag Manager.
 
-The website is public. App sign-in uses Supabase Auth, while Payload Admin has
+The website is public. App sign-in uses Better Auth, while Payload Admin has
 separate CMS user accounts. Creating a Payload user at `/admin` does not create
 an app account, and app accounts do not grant CMS access.
 
-The app's sign-in screen uses Google OAuth. Local Supabase does not enable this
-provider until you configure it. Create a Google OAuth client and add
-`http://127.0.0.1:54321/auth/v1/callback` as an authorized redirect URI in
-Google. Add the following to `supabase/config.toml`:
-
-```toml
-[auth.external.google]
-enabled = true
-client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
-secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
-```
-
-Put the corresponding client ID and secret in a root `.env` file, which the
-Supabase CLI reads for local config substitution and which must not be
-committed:
-
-```sh
-SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID=<your-google-client-id>
-SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET=<your-google-client-secret>
-```
-
-Restart the local stack after changing the config with `supabase stop` followed
-by `supabase start`. The app callback URL is already allowed in the local
-Supabase config. See [Supabase's local Google OAuth setup](https://supabase.com/docs/guides/auth/social-login/auth-google#local-development)
-for details.
+Configure customer and editorial Google/Facebook, verified email and SMS providers through the server environment described in [authentication](docs/authentication.md). Provider secrets never reach Expo clients. Register callbacks at the explicitly configured site origin.
 
 ## Environment variables and secrets
 
-Copy the relevant `.env.example` files shown in [Local development](#local-development).
-Keep real values in ignored `.env` files locally and in the hosting provider's
-secret store in production. Never commit secrets. The **Handling** column
-identifies secrets explicitly. Variables beginning with `EXPO_PUBLIC_` are
-embedded in client builds: only put public configuration there, never a
-password, private key, or service-role credential. See
-[Next.js environment variables](https://nextjs.org/docs/app/guides/environment-variables),
-[Expo environment variables](https://docs.expo.dev/guides/environment-variables/),
-and [Supabase API keys](https://supabase.com/docs/guides/getting-started/api-keys).
+Runtime `DATABASE_URL` is a pooled restricted Neon login; `DATABASE_MIGRATION_URL` is a privileged direct connection used only by migration/release jobs. Keep `PAYLOAD_SECRET`, `AUTH_SECRET`, provider credentials, and standard `AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY` server-only. `AWS_ENDPOINT_URL_S3/AWS_REGION` select the matching environment’s private storage. `SITE_URL` and `AUTH_TRUSTED_ORIGINS` are explicit configuration. Expo receives only `EXPO_PUBLIC_SITE_URL`.
 
-### Website and Payload (`apps/site/.env`)
-
-| Variable                               | Handling      | Purpose                                                                                                                                                  |
-| -------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`                         | **Secret**    | Required server-only Payload Postgres connection string. For hosted setup, use the Supabase Session pooler URI from the same project.                    |
-| `PAYLOAD_SECRET`                       | **Secret**    | Required Payload signing/encryption secret. Draft-preview authorization is derived from this value, so no separate preview secret is needed.             |
-| `RESEND_API_KEY`                       | **Secret**    | Optional Resend API key used by Payload and the contact endpoint.                                                                                        |
-| `EMAIL_FROM_ADDRESS`                   | Config        | Sender address for Payload and contact email. The site title is used as the display name.                                                                |
-| `CONTACT_TO_ADDRESS`                   | **Secret**    | Optional contact recipient. When omitted, `EMAIL_FROM_ADDRESS` is used.                                                                                  |
-| `TURNSTILE_SECRET_KEY`                 | **Secret**    | Server-only Cloudflare Turnstile verification secret.                                                                                                    |
-| `MAILERLITE_API_KEY`                   | **Secret**    | Optional server-only MailerLite API key used by the global newsletter signup. The target group ID is configured in Footer Navigation.                    |
-| `AWS_ACCESS_KEY_ID`                    | **Secret**    | Supabase Storage S3 access key for Payload media uploads.                                                                                                |
-| `AWS_SECRET_ACCESS_KEY`                | **Secret**    | Secret half of the S3 credential pair.                                                                                                                   |
-| `AWS_ENDPOINT_URL_S3`                  | Config        | Supabase Storage S3 endpoint.                                                                                                                            |
-| `AWS_REGION`                           | Config        | S3 signing region; the local default is `local`.                                                                                                         |
-| `SITE_URL`                             | Config        | Required canonical URL outside Vercel; Vercel uses its configured production URL. Set `SITE_URL=http://localhost:3000` explicitly for local development. |
-| `EXPO_PUBLIC_SUPABASE_URL`             | Public config | Supabase project URL used by authenticated BFF product routes.                                                                                           |
-| `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public key    | Supabase publishable key used with the caller's Bearer token; never use a service-role key here.                                                         |
-
-Payload always uses the migration-created `cms-media` bucket, so there is no
-bucket-name override (`CMS_MEDIA_BUCKET`). See [Supabase Storage S3 authentication](https://supabase.com/docs/guides/storage/s3/authentication) for credentials and connection details.
-
-Public runtime configuration belongs in **Site settings → Integrations**:
-
-- **Google Tag Manager ID** is shared by the website and Expo web.
-- **Turnstile site key** is exposed to the public contact form; its secret key
-  remains server-only.
-
-Configure the optional global conversion sections in **Footer navigation**.
-Enable **Newsletter CTA** after adding `MAILERLITE_API_KEY`, a MailerLite group
-ID, and Turnstile keys. Enable **Contact form** after configuring Resend and
-Turnstile. Both sections default off so an unconfigured deployment never
-exposes a disabled form.
-
-If a secret is accidentally exposed, rotate it with its provider, update every
-environment that uses it, then redeploy. Do not paste database URLs or other
-credentials into issues, chat, or logs.
-
-### Universal app (`apps/app/.env`)
-
-| Variable                               | Handling      | Purpose                                                                                                                        |
-| -------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `EXPO_PUBLIC_SUPABASE_URL`             | Public config | Public Supabase project URL; local default is `http://127.0.0.1:54321`.                                                        |
-| `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public key    | Supabase publishable key, designed for client use; protect data with RLS. Never substitute a Supabase secret/service-role key. |
-| `EXPO_PUBLIC_SITE_URL`                 | Public config | Public website URL used by the app; local default is `http://localhost:3000`.                                                  |
-
-These public values are safe to bundle only because access is governed by
-Supabase Auth and RLS. Do not put server credentials in Expo's public
-environment variables.
-
-### Google OAuth (`.env` at repository root)
-
-| Variable                                  | Handling      | Purpose                                                                      |
-| ----------------------------------------- | ------------- | ---------------------------------------------------------------------------- |
-| `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID` | Public config | Google OAuth client ID referenced by `supabase/config.toml`; not a password. |
-| `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET`    | **Secret**    | Google OAuth client secret; keep private and use only for Supabase Auth.     |
-
-These root variables are read by the Supabase CLI for `env(...)` substitutions
-in `supabase/config.toml`. Set the matching Google OAuth client and callback as
-described in [Supabase's Google provider setup](https://supabase.com/docs/guides/auth/social-login/auth-google#local-development).
-
-### Vercel deployment
-
-Set the Website + CMS variables in the Vercel Website project, and the Expo
-variables in the separate Universal app project. Use Vercel's Production,
-Preview, and Development scopes as appropriate. Configure public integration
-values in Payload Site Settings. Add email and S3 credentials only when using
-those features. Vercel applies environment changes to new deployments,
-so redeploy after changing a value. See [Vercel environment variables](https://vercel.com/docs/environment-variables).
+Optional contact/newsletter services use `RESEND_API_KEY`, `EMAIL_FROM_ADDRESS`, `CONTACT_TO_ADDRESS`, `MAILERLITE_API_KEY`, and `TURNSTILE_SECRET_KEY`. Preserve existing configured values; never commit them. Customer/editorial identity provider configuration is documented in [authentication](docs/authentication.md).
 
 ## Theme system and design workflow
 
@@ -604,7 +453,7 @@ sizes. Report any missing content, assets, or unsupported design details.
 ### Payload schema and content migrations
 
 Payload owns the `public.cms_*` and `public.payload_*` tables. Never alter those
-tables in a Supabase migration, and do not hand-author SQL from a mockup before
+tables in a Neon migration, and do not hand-author SQL from a mockup before
 changing the Payload configuration.
 
 For a design that changes the content model:
@@ -651,164 +500,11 @@ between environments.
 
 ## Hosted environments and deployment
 
-The starter recognizes three environment roles:
+Create separate Neon development and production projects. Use pooled `DATABASE_URL` with a restricted runtime login, direct privileged `DATABASE_MIGRATION_URL` for migrations, and standard `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION` values. All three buckets declared in `neon.ts` remain private. The starter owns its own customer/editorial Better Auth realms and independently administered Payload content.
 
-| Environment | Supabase                     | Vercel                                                  | Purpose                                           |
-| ----------- | ---------------------------- | ------------------------------------------------------- | ------------------------------------------------- |
-| Local       | CLI/Docker stack             | Local Next.js and Expo servers                          | Database development and the complete test suite  |
-| Development | Persistent Supabase branch   | Preview variables scoped to a selected Git branch       | Long-lived hosted integration work before release |
-| Production  | Main hosted Supabase project | Production variables and the selected production branch | Public site and released app                      |
+Configure one environment with `pnpm setup:hosted --environment development --vercel-project-id <id> --vercel-org-id <scope> --env-file <private-env> --site-url <https-origin> --auth-trusted-origins <origins>`. Use `production` for the corresponding production project. `--dry-run` prints redacted configuration; existing values are preserved unless `--replace-existing` is explicit. Setup does not migrate or deploy.
 
-Supabase Branching requires a Pro-plan project. Free-tier projects can use the
-Landing or Single-environment app profiles with local development. The staged
-profile uses a persistent branch without production data and requires separate
-branch credentials, Payload content, users, and media.
-
-The guided wizard offers these profiles:
-
-| Profile                | Production                   | Hosted development                                                                            |
-| ---------------------- | ---------------------------- | --------------------------------------------------------------------------------------------- |
-| Landing site           | Website + Payload            | None                                                                                          |
-| Single-environment app | Website + Payload + Expo web | None                                                                                          |
-| Staged app             | Website + Payload            | Website + Payload + Expo web on a persistent Supabase branch and branch-scoped Vercel Preview |
-
-Deploy two Vercel projects from the same repository:
-
-| Vercel project | Root directory | Build output             |
-| -------------- | -------------- | ------------------------ |
-| Website + CMS  | `apps/site`    | Next.js (automatic)      |
-| Universal app  | `apps/app`     | `dist` (Expo web export) |
-
-The Landing profile creates only the Website + CMS project. The other profiles
-use both projects; in the Staged profile, the app project receives no
-production credentials or custom production domain until a later release.
-
-### Guided setup
-
-Install the
-[Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started)
-and [Vercel CLI](https://vercel.com/docs/cli), then authenticate both:
-
-```sh
-# macOS; use the linked installation guides for other platforms
-brew install supabase/tap/supabase
-pnpm add --global vercel
-
-supabase login
-vercel login
-```
-
-Run the hosted setup wizard from the repository root:
-
-```sh
-pnpm setup:hosted
-```
-
-You can also select a profile non-interactively while retaining the wizard's
-resource and confirmation prompts:
-
-```sh
-pnpm run setup -- --profile landing
-pnpm run setup -- --profile single-app
-pnpm run setup -- --profile staged
-```
-
-`pnpm setup:production` remains an alias for the `single-app` profile. The
-wizard can select or create the production Supabase project and required Vercel
-projects. For staged deployments it also creates or selects a persistent
-Supabase branch associated with user-selected development and production Git
-branches. Vercel development variables use Preview scope restricted to the
-development branch, which works without a Vercel custom environment.
-
-The wizard links the repository, previews and applies Supabase product
-migrations, applies Payload CMS migrations to the same database, configures
-environment-scoped Vercel variables, and offers optional Google OAuth, email,
-Turnstile, and GTM setup. It shows a redacted summary and asks again before
-migrations, hosted Auth changes, replacing existing secrets, billable branch
-creation, or production deployment.
-
-Supabase currently requires one dashboard step for Payload media storage. When
-the wizard pauses, open **Storage → S3**, enable the S3 protocol, generate an
-access-key pair, and paste both values into the hidden prompts. When enabling
-Google sign-in, register the callback URL printed by the wizard in Google Cloud
-before continuing. Secret values are piped directly to their destination and
-are not written to the repository.
-
-Other Vercel Preview deployments are intentionally not given production or
-long-lived development credentials. Per-pull-request Supabase branches are a
-future enhancement. Inspect the complete plan without making remote changes
-using:
-
-```sh
-pnpm setup:hosted -- --dry-run
-```
-
-The command is safe to rerun and can upgrade a Landing deployment by selecting
-a broader profile. It preserves existing sensitive Vercel variables unless you
-explicitly approve their replacement. Vercel environment changes only affect
-new deployments, so accept the final production deployment prompt or trigger a
-new deployment afterward. For staged setup, push the selected development
-branch to create its Preview deployments.
-
-Promotion is intentionally a reviewed Git workflow: merge the development
-branch into the selected production branch, apply pending Supabase migrations,
-apply Payload migrations with the production `DATABASE_URL`, deploy changed
-functions, and deploy the Vercel projects. This promotes code, schema,
-configuration, and functions. It does not copy development users, Payload
-content or drafts, storage objects, or media into production.
-
-### Manual project linking
-
-For an existing Vercel monorepo, link each application directory to its
-corresponding project:
-
-```sh
-vercel link --cwd apps/site --project <website-project> --team <team-slug>
-vercel link --cwd apps/app --project <app-project> --team <team-slug>
-```
-
-The generated `.vercel/` directories are ignored. Verify each association and
-its configured root directory with:
-
-```sh
-vercel project inspect --cwd apps/site
-vercel project inspect --cwd apps/app
-```
-
-The Website + CMS project must use `apps/site` with the Next.js preset. The
-Universal app project must use `apps/app`, `pnpm build`, and output directory
-`dist`. Projects created by the wizard are also connected to the current
-`origin` Git remote. See [Vercel's monorepo guide](https://vercel.com/docs/monorepos).
-
-For manual database delivery, link the production project, preview the product
-migrations, and then apply both migration owners in order:
-
-```sh
-supabase link --project-ref <project-ref>
-supabase db push --dry-run
-supabase db push
-DATABASE_URL='<session-pooler-connection-string>' pnpm payload:migrate
-```
-
-Never use `--include-seed` against production. Supabase migrations own product
-tables, RLS, and storage buckets; Payload migrations own the CMS tables.
-Payload schema push remains disabled, and Vercel builds do not apply either
-migration set automatically.
-
-### Production troubleshooting
-
-Check runtime logs when a production page is blank or returns a server error.
-With the Vercel CLI, use
-`vercel logs <deployment-url> --since 30m --status-code 5xx --expand`, or open
-the project's **Logs** view in Vercel. See the [`vercel logs` reference](https://vercel.com/docs/cli/logs).
-
-| Log message                                                                       | Likely cause and next step                                                                                                                                                                                              |
-| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getaddrinfo ENOTFOUND` for a Supabase database host                              | The hostname in `DATABASE_URL` does not resolve. Copy the Session pooler URI from the correct Supabase project's **Connect** panel; do not type or infer the hostname.                                                  |
-| `relation "cms_posts" does not exist` (or another `cms_*` / `payload_*` relation) | Payload migrations have not been applied to the database the deployment uses, or they ran against a different database. Run `payload migrate` with the matching `DATABASE_URL`, then check `payload migrate:status`.    |
-| The old error persists after changing a Vercel variable                           | Verify the variable is assigned to the correct Vercel project and environment, then create a new deployment. Existing deployments retain their previous environment values.                                             |
-| `No email adapter provided`                                                       | Payload email is not configured. This is expected if Payload email is unused; otherwise set the site's Resend key and sender variables.                                                                                 |
-| Upload storage adapter warning for `media`                                        | Supabase S3 settings/credentials are missing or disabled. Configure the site's `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, and `AWS_REGION` values before relying on production media uploads. |
+Configure matching GitHub environments with deployment and direct migration credentials plus the AWS secrets/variables described in [the release runbook](docs/release-runbook.md). Promote feature MR -> develop -> main, requiring CI and hosted development acceptance before production. Production receives code and pending schema migrations; its records, users, files and secrets remain independent of development.
 
 ## Fork checklist
 
@@ -822,7 +518,7 @@ the project's **Logs** view in Vercel. See the [`vercel logs` reference](https:/
 - Set a unique Expo `slug`, `scheme`, iOS bundle identifier, and Android
   package in `apps/app/app.config.js`. These platform-specific identifiers are
   separate from the shared brand settings.
-- Create a Supabase project, apply migrations, expose the `app` schema, and set
+- Create separate Neon dev/prod projects, apply owned migrations through releases, and set
   OAuth callback URLs for the Vercel app domain and native scheme.
 - Create the Website Vercel project and, when the app is included, the App
   project; set their root directories and environment variables, then assign
@@ -841,7 +537,7 @@ removing its contract and rule from `contracts` and `core`, its repository from
 
 ## Planned enhancements
 
-- Isolated Supabase branches matched to individual pull-request previews.
+- Isolated Neon branches matched to individual pull-request previews.
 - Selective Payload content and media promotion between hosted environments.
 - A generic, source-configurable WordPress content importer. This will not
   restore the removed site-specific homepage importer.
@@ -946,20 +642,9 @@ newsletter forms share submission, retry and captcha state in publishing-ui.
 
 Hosted app consumers can import `publishing-ui/FunnelControls`, `FunnelControls.css`, and `PortableFonts.css`. These portable themed controls do not include authentication or tenant policy. `publishing-core/formDelivery` exports server-side `verifyTurnstile`.
 
-## Authentication migration
+## Native authentication
 
-`@danielmarkland/auth-runtime` supplies the shared Better Auth backend and React/Expo integration. It isolates platform/editor and customer identities in PostgreSQL realms and supports Google, Facebook, SMS and revocable developer OAuth. Existing starter login remains on Supabase Auth until users, application access and CMS roles are reconciled and the deployment is explicitly switched. See [the runtime contract](packages/auth-runtime/README.md); installing the package alone does not migrate an application.
-
-## Better Auth migration
-
-The starter includes an independent Better Auth backend, customer browser/Expo
-client, and a separate editorial identity bridge. PostgreSQL and private file
-storage remain supported. Follow [authentication setup](docs/authentication.md)
-for provider callbacks, migrations, staff reconciliation and the coordinated
-backend/app switch; current deployments stay on their existing login until those
-checks pass. Groovepost-hosted custom apps use its SDK authentication bridge.
-
-CMS logout also revokes the Better Auth editorial session after native activation.
+Better Auth is the sole provider for customer and editorial identity. The starter owns its backend and explicitly linked CMS roles; GroovePost-hosted apps use the platform SDK session bridge. Follow [authentication](docs/authentication.md) for explicit provider configuration, editorial reconciliation and real delivery acceptance. CMS logout revokes the editorial native session.
 
 ## Release workflow
 

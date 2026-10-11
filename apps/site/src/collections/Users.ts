@@ -1,6 +1,5 @@
 import { logoutEditorIdentity } from '@/lib/identity/cmsLogout'
 import { editorIdentityStrategy } from '@/lib/identity/editorStrategy'
-import { betterAuthEnabled } from '@/lib/identity/server'
 import type { CollectionConfig } from 'payload'
 
 export const Users: CollectionConfig = {
@@ -10,7 +9,7 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   auth: {
-    ...(betterAuthEnabled() ? { disableLocalStrategy: true } : {}),
+    disableLocalStrategy: true,
     strategies: [editorIdentityStrategy],
   },
   access: {
@@ -40,6 +39,7 @@ export const Users: CollectionConfig = {
     ],
   },
   fields: [
+    { name: 'email', type: 'email', required: true, unique: true },
     {
       name: 'authIdentityId',
       type: 'text',

@@ -48,9 +48,18 @@ jobs:
       SITE_URL: http://localhost:3000
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
       EXPO_PUBLIC_SITE_URL: http://localhost:3000
-      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: local-ci-key
-      EXPO_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
       PAYLOAD_SECRET: local-ci-payload-secret-at-least-32-characters
+      AUTH_SECRET: local-ci-auth-secret-at-least-32-characters
+      DATABASE_MIGRATION_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      MIGRATION_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/migration_test
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: [54322:5432]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -60,9 +69,6 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - uses: supabase/setup-cli@v1
-        with:
-          version: 2.109.1
       - name: Install packages
         run: |
           npm config set //npm.pkg.github.com/:_authToken "$NODE_AUTH_TOKEN" --location=user
@@ -72,11 +78,11 @@ jobs:
       - name: Build shared publishing packages
         run: pnpm --filter '@starter/site^...' build
       - run: node scripts/release/packages.mjs
-      - run: supabase start
       - name: Create isolated auth integration database
         run: >-
           pnpm --filter @danielmarkland/auth-runtime exec node --input-type=module -e
-          "import { Pool } from 'pg'; const p=new Pool({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'}); await p.query('CREATE DATABASE better_auth_migration_test'); await p.query('CREATE DATABASE starter_product_identity_test'); await p.query('CREATE DATABASE publishing_site_transfer_tests'); await p.query('CREATE DATABASE publishing_site_transfer_repair_tests'); await p.end();"
+          "import { Pool } from 'pg'; const p=new Pool({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'}); await p.query('CREATE DATABASE migration_test'); await p.query('CREATE DATABASE better_auth_migration_test'); await p.query('CREATE DATABASE starter_product_identity_test'); await p.query('CREATE DATABASE publishing_site_transfer_tests'); await p.query('CREATE DATABASE publishing_site_transfer_repair_tests'); await p.end();"
+      - run: pnpm database:migrate
       - run: pnpm payload:migrate
       - run: pnpm format:check
       - run: pnpm lint
@@ -86,15 +92,6 @@ jobs:
       - run: pnpm build
       - name: Validate Expo configuration
         run: pnpm --filter @starter/app exec expo config --type public
-      - name: Lint database schema
-        run: supabase db lint --level error
-      - name: Test database ownership and RLS
-        run: supabase test db
-      - name: Check generated Supabase types
-        run: |
-          supabase gen types typescript --local --schema app > /tmp/database.generated.ts
-          pnpm exec prettier --config .prettierrc.json --write /tmp/database.generated.ts
-          diff -u packages/data/src/database.ts /tmp/database.generated.ts
 
   e2e:
     needs: policy
@@ -102,8 +99,22 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_URL: http://localhost:3000
-      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/starter_e2e_test
       PAYLOAD_SECRET: local-ci-payload-secret-at-least-32-characters
+      AUTH_SECRET: local-ci-auth-secret-at-least-32-characters
+      # Verified test accounts sign in; these fixtures never send email.
+      EDITOR_AUTH_EMAIL_API_KEY: test-only-unused-email-key
+      EDITOR_AUTH_EMAIL_FROM: no-reply@example.test
+      DATABASE_MIGRATION_URL: postgresql://postgres:postgres@127.0.0.1:54322/starter_e2e_test
+      MIGRATION_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/migration_test
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: [54322:5432]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -113,9 +124,6 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - uses: supabase/setup-cli@v1
-        with:
-          version: 2.109.1
       - name: Install packages
         run: |
           npm config set //npm.pkg.github.com/:_authToken "$NODE_AUTH_TOKEN" --location=user
@@ -124,11 +132,22 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
       - name: Build shared publishing packages
         run: pnpm --filter '@starter/site^...' build
-      - run: supabase start
+      - name: Create isolated editorial browser database
+        run: >-
+          pnpm --filter @danielmarkland/auth-runtime exec node --input-type=module -e
+          "import { Pool } from 'pg'; const p=new Pool({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'}); await p.query('CREATE DATABASE starter_e2e_test'); await p.end();"
+      - run: pnpm database:migrate
       - run: pnpm payload:migrate
       - run: pnpm --filter @starter/site exec playwright install --with-deps chromium
       - run: pnpm --filter @danielmarkland/publishing-ui test:layout
       - run: pnpm --filter @starter/site test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure-${{ github.sha }}
+          path: |
+            apps/site/test-results
+            apps/site/playwright-report
 
   ci:
     if: always()

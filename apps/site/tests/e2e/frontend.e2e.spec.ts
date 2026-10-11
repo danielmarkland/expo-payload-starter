@@ -1,3 +1,4 @@
+const serverURL = process.env.SITE_URL || 'http://localhost:3000'
 import { test, expect } from '@playwright/test'
 import { getPayload } from 'payload'
 
@@ -38,7 +39,7 @@ test.describe('Frontend', () => {
   })
 
   test('renders a published CMS page by its slug', async ({ page }) => {
-    await page.goto(`http://localhost:3000/${slug}`)
+    await page.goto(`${serverURL}/${slug}`)
 
     await expect(page).toHaveTitle(/CMS page fixture/)
     await expect(

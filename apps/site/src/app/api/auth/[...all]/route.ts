@@ -1,8 +1,7 @@
-import { identityServer, betterAuthEnabled } from '@/lib/identity/server'
+import { identityServer } from '@/lib/identity/server'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 async function handle(request: Request) {
-  if (!betterAuthEnabled()) return new Response(null, { status: 404 })
   try {
     return await (await identityServer('customer')).handler(request)
   } catch {

@@ -61,14 +61,14 @@ describe('server configuration', () => {
     expect(
       getStorageConfig({
         AWS_ACCESS_KEY_ID: 'access',
-        AWS_ENDPOINT_URL_S3: 'https://project.storage.supabase.co/storage/v1/s3',
+        AWS_ENDPOINT_URL_S3: 'https://branch.storage.example.test',
         AWS_REGION: 'us-west-2',
         AWS_SECRET_ACCESS_KEY: 'secret',
       }),
     ).toEqual({
       accessKeyId: 'access',
       bucket: 'cms-media',
-      endpoint: 'https://project.storage.supabase.co/storage/v1/s3',
+      endpoint: 'https://branch.storage.example.test',
       region: 'us-west-2',
       secretAccessKey: 'secret',
     })
@@ -78,22 +78,5 @@ describe('server configuration', () => {
     expect(() => getStorageConfig({ VERCEL: '1' })).toThrow(
       'Payload media storage is missing required Vercel configuration',
     )
-  })
-})
-
-it('preserves the independent starter hosted storage configuration', () => {
-  expect(
-    getStorageConfig({
-      VERCEL: '1',
-      SUPABASE_S3_ACCESS_KEY_ID: 'access',
-      SUPABASE_S3_SECRET_ACCESS_KEY: 'secret',
-      SUPABASE_S3_ENDPOINT: 'https://storage.example.test',
-      SUPABASE_S3_REGION: 'us-east-1',
-    }),
-  ).toMatchObject({
-    accessKeyId: 'access',
-    secretAccessKey: 'secret',
-    endpoint: 'https://storage.example.test',
-    region: 'us-east-1',
   })
 })

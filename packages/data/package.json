@@ -9,10 +9,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    },
-    "./database": {
-      "types": "./dist/database.d.ts",
-      "default": "./dist/database.js"
     }
   },
   "scripts": {
@@ -22,8 +18,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@danielmarkland/contracts": "workspace:*",
-    "@supabase/supabase-js": "^2.117.2"
+    "@danielmarkland/contracts": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.9.2",
