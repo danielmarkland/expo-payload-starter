@@ -80,3 +80,20 @@ describe('server configuration', () => {
     )
   })
 })
+
+it('preserves the independent starter hosted storage configuration', () => {
+  expect(
+    getStorageConfig({
+      VERCEL: '1',
+      SUPABASE_S3_ACCESS_KEY_ID: 'access',
+      SUPABASE_S3_SECRET_ACCESS_KEY: 'secret',
+      SUPABASE_S3_ENDPOINT: 'https://storage.example.test',
+      SUPABASE_S3_REGION: 'us-east-1',
+    }),
+  ).toMatchObject({
+    accessKeyId: 'access',
+    secretAccessKey: 'secret',
+    endpoint: 'https://storage.example.test',
+    region: 'us-east-1',
+  })
+})
