@@ -22,7 +22,12 @@ export async function login({
 
   await page.locator('input[name="email"]').fill(user.email)
   await page.locator('input[name="password"]').fill(user.password)
+  const signedIn = page.waitForResponse(
+    (response) => response.url().endsWith('/api/editor-auth/sign-in/email'),
+    { timeout: 60_000 },
+  )
   await page.getByRole('button', { name: 'Sign in', exact: true }).click()
+  expect((await signedIn).status()).toBe(200)
 
   await page.waitForURL(`${serverURL}/admin`)
 

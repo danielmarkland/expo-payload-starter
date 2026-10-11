@@ -102,6 +102,9 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
       PAYLOAD_SECRET: local-ci-payload-secret-at-least-32-characters
       AUTH_SECRET: local-ci-auth-secret-at-least-32-characters
+      # Verified test accounts sign in; these fixtures never send email.
+      EDITOR_AUTH_EMAIL_API_KEY: test-only-unused-email-key
+      EDITOR_AUTH_EMAIL_FROM: no-reply@example.test
       DATABASE_MIGRATION_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
       MIGRATION_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/migration_test
     services:
