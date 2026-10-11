@@ -54,19 +54,19 @@ export function getNewsletterConfig(environment: Environment = process.env) {
 
 export function getStorageConfig(environment: Environment = process.env) {
   const config = {
-    accessKeyId: environment.SUPABASE_S3_ACCESS_KEY_ID || '',
-    bucket: 'cms-media',
-    endpoint: environment.SUPABASE_S3_ENDPOINT,
-    region: environment.SUPABASE_S3_REGION || 'local',
-    secretAccessKey: environment.SUPABASE_S3_SECRET_ACCESS_KEY || '',
+    accessKeyId: environment.AWS_ACCESS_KEY_ID || '',
+    bucket: environment.CMS_MEDIA_BUCKET || 'cms-media',
+    endpoint: environment.AWS_ENDPOINT_URL_S3,
+    region: environment.AWS_REGION || 'local',
+    secretAccessKey: environment.AWS_SECRET_ACCESS_KEY || '',
   }
 
   if (environment.VERCEL === '1') {
     const missing = [
-      ['SUPABASE_S3_ACCESS_KEY_ID', config.accessKeyId],
-      ['SUPABASE_S3_SECRET_ACCESS_KEY', config.secretAccessKey],
-      ['SUPABASE_S3_ENDPOINT', config.endpoint],
-      ['SUPABASE_S3_REGION', environment.SUPABASE_S3_REGION],
+      ['AWS_ACCESS_KEY_ID', config.accessKeyId],
+      ['AWS_SECRET_ACCESS_KEY', config.secretAccessKey],
+      ['AWS_ENDPOINT_URL_S3', config.endpoint],
+      ['AWS_REGION', environment.AWS_REGION],
     ].filter(([, value]) => !value)
 
     if (missing.length) {

@@ -380,10 +380,10 @@ describe('configured media transport', () => {
     expect(getPayloadStorageOptions(getStorageConfig({})).enabled).toBe(false)
     const options = getPayloadStorageOptions(
       getStorageConfig({
-        SUPABASE_S3_ACCESS_KEY_ID: 'key',
-        SUPABASE_S3_SECRET_ACCESS_KEY: 'secret',
-        SUPABASE_S3_ENDPOINT: 'http://local-storage',
-        SUPABASE_S3_REGION: 'local',
+        AWS_ACCESS_KEY_ID: 'key',
+        AWS_SECRET_ACCESS_KEY: 'secret',
+        AWS_ENDPOINT_URL_S3: 'http://local-storage',
+        AWS_REGION: 'local',
       }),
     )
     expect(options.enabled).toBe(true)
