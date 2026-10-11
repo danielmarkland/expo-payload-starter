@@ -1,8 +1,7 @@
 import type { CollectionAfterLogoutHook } from 'payload'
-import { betterAuthEnabled, identityServer } from './server'
+import { identityServer } from './server'
 
 export const logoutEditorIdentity: CollectionAfterLogoutHook = async ({ req }) => {
-  if (!betterAuthEnabled()) return
   const auth = await identityServer('editor')
   if (req.searchParams?.get('allSessions') === 'true')
     await auth.api.revokeSessions({ headers: req.headers })

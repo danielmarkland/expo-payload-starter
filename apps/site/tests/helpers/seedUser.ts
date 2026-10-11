@@ -1,9 +1,10 @@
 import { getPayload } from 'payload'
 import config from '../../src/payload.config.js'
+import { identityServer, identityDatabase } from '../../src/lib/identity/server.js'
 
 export const testUser = {
   email: 'dev@payloadcms.com',
-  password: 'test',
+  password: 'test-password-32-characters',
   role: 'admin' as const,
 }
 
@@ -23,10 +24,26 @@ export async function seedTestUser(): Promise<void> {
     },
   })
 
-  // Create fresh test user
+  await identityDatabase().query(
+    "delete from identity.records where realm='platform' and model='user' and data->>'email'=$1",
+    [testUser.email],
+  )
+  const auth = await identityServer('editor')
+  const context = await auth.$context
+  const user = await context.internalAdapter.createUser(
+    { name: 'Test editor', email: testUser.email, emailVerified: true },
+    { method: 'admin' },
+  )
+  await context.internalAdapter.createAccount({
+    userId: user.id,
+    providerId: 'credential',
+    accountId: user.id,
+    password: await context.password.hash(testUser.password),
+  })
+  // Create fresh linked CMS user.
   await payload.create({
     collection: 'users',
-    data: testUser,
+    data: { email: testUser.email, role: testUser.role, authIdentityId: user.id },
     draft: false,
   })
 }
@@ -35,6 +52,10 @@ export async function seedTestUser(): Promise<void> {
  * Cleans up test user after tests
  */
 export async function cleanupTestUser(): Promise<void> {
+  await identityDatabase().query(
+    "delete from identity.records where realm='platform' and model='user' and data->>'email'=$1",
+    [testUser.email],
+  )
   const payload = await getPayload({ config })
 
   await payload.delete({

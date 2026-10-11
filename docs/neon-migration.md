@@ -1,0 +1,13 @@
+# Neon migration execution record
+
+The beta starter uses its own native Better Auth customer/editorial realms, PostgreSQL actor policies and independently administered Payload content. Portable product migrations and Payload migrations remain separate. Supabase SDKs, legacy authentication paths, generated Data API types, local services and release CLI dependencies are removed. Hosted setup now uses explicit environment configuration and preserves existing settings by default.
+
+Two free PostgreSQL 17 projects in Daniel Markland’s Neon organization were created: `expo-payload-starter-dev` (`long-truth-63642346`) and `expo-payload-starter-prod` (`winter-thunder-55165611`), AWS us-east-1, fixed 0.25 CU, default scale-to-zero. Each has an isolated `neon-migration` rehearsal branch and three private buckets on rehearsal/main: `cms-media`, `app-uploads`, `site-transfer-archives`. No paid primitives, managed auth, Data API or Functions were provisioned. Parent/Postgres/object-storage skills and the HTTP Neon MCP configuration were installed without changing the existing Git Delivery skill; execution uses the authenticated CLI.
+
+Promotion is feature MR -> develop -> main in this repository, with protected CI, development acceptance, then production activation. Schema changes promote; development records, users, files and secrets never overwrite production data.
+
+The full `pnpm check` passes, including formatting, lint, type checking, integration tests and builds. Product/Payload migrations and signed-write/read/anonymous-denial storage probes pass on all four main/rehearsal branches. Both main branches have a restricted `starter_runtime` login with identity, actor-profile and CMS role membership, without superuser, role/database creation, replication or RLS bypass; unscoped identity reads return no records. Credentials remain in protected temporary files pending environment installation.
+
+Source local data is backed up in a protected temporary directory and remains intact. The authenticated Supabase CLI lists `groovepost-dev` and `groovepost-prod`; their preserved exports do not contain the starter’s hosted development image, so the hosted source requires clarification before copying or discarding data. One-time Vercel release credential access is also pending; hosted bindings have not been changed. No source project has been deleted. Provider callbacks and live SMS/email require separate configured acceptance; no outbound messages were sent.
+
+See the feature/release PRs and controlled-release artifacts for exact commit/deployment evidence. Do not equate provisioning, tests or a build with hosted acceptance.

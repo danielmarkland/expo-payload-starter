@@ -8,21 +8,21 @@ workflows. Expo owns the authenticated web, iOS, and Android experience.
 
 ## Trust boundaries
 
-- Supabase Auth is the only product-user identity provider.
-- Payload auth is only for editors and CMS administrators.
+- Better Auth owns separate customer and editorial realms.
+- Payload authorizes explicitly linked editors and CMS administrators.
 - Expo route guards are navigation behavior, not authorization.
-- Supabase RLS authorizes product rows and Storage objects.
+- Restricted PostgreSQL actor/realm policies authorize product rows; host policy authorizes private Neon files.
 - Payload access functions authorize CMS documents.
 - Server credentials never use an `EXPO_PUBLIC_` prefix.
 
 ## Data flow
 
-1. Expo clients authenticate directly with Supabase Auth, then send the access
+1. Expo clients authenticate with the starter’s Better Auth backend, then send the session
    token to the versioned BFF for product-data requests.
 2. The Next.js frontend invokes the same Hono BFF handlers in process; browser
    forms and Expo call `/api/v1` over HTTP.
-3. BFF adapters use Payload's Local API for CMS reads and request-scoped
-   Supabase clients for RLS-protected product data.
+3. BFF adapters use Payload's Local API for CMS reads and actor-scoped
+   PostgreSQL repositories for product data.
 4. Payload Admin uses Payload's authenticated native API as an explicit
    protocol exception. Presentation code does not consume that API.
 5. OpenAPI is generated from route schemas at `/api/v1/openapi.json`, with
@@ -50,7 +50,7 @@ apps/api-client -> publishing-contracts
 - `api-client` owns provider-neutral HTTP transport for those contracts.
 - `core` owns pure, framework-independent product rules.
 - `auth` owns product identity and authorization interfaces, not provider SDKs.
-- `data` owns typed Supabase repositories and generated database types.
+- `data` owns typed, actor-scoped PostgreSQL repositories.
 - `brand` owns this starter's identity and image assets.
 - `design-tokens` owns framework-neutral visual values and fonts.
 - `publishing-core` owns reusable Payload and site presentation behavior.
@@ -60,7 +60,7 @@ apps/api-client -> publishing-contracts
 - `config` owns shared tool configuration and dependency checks.
 
 Expo and Payload adapters stay in their applications. Packages never import
-from `apps`, and `core` never imports React, Expo, Next.js, Payload, or Supabase.
+from `apps`, and `core` never imports React, Expo, Next.js, Payload, or a database provider.
 
 Publishing packages expose named entry points rather than wildcard build files.
 Editorial and navigation field factories live in `publishing-core`; shared factories own collection/global configuration; hosts inject
@@ -83,11 +83,6 @@ formats errors, verifies preview headers and controls caching. This keeps tenant
 security visible without duplicating the endpoint definitions or requiring a
 generic service/plugin framework.
 
-### Identity migration
+### Identity and infrastructure
 
-Better Auth replaces the product provider through a coordinated switch. Customer
-and editorial identities occupy separate PostgreSQL realms; the BFF scopes data
-to verified actors, and Payload independently authorizes explicitly linked staff.
-See [authentication setup](authentication.md). Supabase remains a PostgreSQL and
-storage provider. Hosted Groovepost frontend packages consume its session bridge
-and never host provider secrets or an independent backend.
+The starter owns its native Better Auth backend, editorial policy and separate Neon projects. GroovePost-hosted frontend packages instead consume the platform SDK session bridge. See [authentication](authentication.md) and [database ownership](database-ownership.md).

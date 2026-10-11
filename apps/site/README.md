@@ -14,4 +14,4 @@ pnpm dev:site
 - Payload Admin: `http://localhost:3000/admin`
 
 Payload migrations own only `cms_*`, `_cms_*`, and `payload_*` tables. Product
-schema changes belong in `supabase/migrations`.
+schema changes belong in `database/migrations`.

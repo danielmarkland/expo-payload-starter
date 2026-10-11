@@ -78,7 +78,7 @@ export async function executeRelease(driver, context) {
 function migrationDigest() {
   const hash = createHash('sha256')
   for (const root of [
-    'supabase/migrations',
+    'database/migrations',
     process.env.RELEASE_PROFILE === 'starter'
       ? 'apps/site/src/migrations'
       : 'apps/web/src/migrations',
@@ -246,13 +246,7 @@ export function createDriver(env = process.env) {
       return 'cloud build passed; traffic unchanged'
     },
     async migrate() {
-      command('supabase', [
-        'db',
-        'push',
-        '--db-url',
-        env.DATABASE_MIGRATION_URL,
-        '--yes',
-      ])
+      command('node', ['scripts/database/migrate.mjs'])
       const overrides = {
         DATABASE_URL: env.DATABASE_MIGRATION_URL,
         PAYLOAD_MIGRATING: 'true',
@@ -266,9 +260,12 @@ export function createDriver(env = process.env) {
           ['--filter', '@groovepost/web', 'release:prepare'],
           overrides,
         )
-      else command('pnpm', ['payload:migrate'], overrides)
+      else {
+        command('pnpm', ['payload:migrate'], overrides)
+        command('node', ['scripts/database/verify-storage.mjs'])
+      }
       return {
-        supabase: readdirSync('supabase/migrations')
+        postgres: readdirSync('database/migrations')
           .filter((x) => x.endsWith('.sql'))
           .sort(),
         payload: readdirSync(

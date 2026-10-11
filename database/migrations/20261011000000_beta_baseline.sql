@@ -1,3 +1,9 @@
+create schema app;
+revoke all on schema app from public;
+create table app.profiles(id uuid primary key,display_name text,avatar_url text,created_at timestamptz not null default now(),updated_at timestamptz not null default now());
+alter table app.profiles enable row level security;
+create function app.set_updated_at() returns trigger language plpgsql set search_path=pg_catalog as $$ begin new.updated_at=now(); return new; end; $$;
+create trigger profiles_set_updated_at before update on app.profiles for each row execute function app.set_updated_at();
 
 create schema if not exists identity;
 do $roles$ begin
@@ -55,26 +61,10 @@ create policy identity_runtime_realm on identity.records to identity_runtime
  with check(realm=current_setting('groovepost.identity_realm',true));
 
 create table app.identity_context(singleton boolean primary key default true check(singleton),tenant_id uuid not null unique default gen_random_uuid());
-insert into app.identity_context(singleton)values(true);
-revoke all on app.identity_context from public,anon,authenticated;
-alter table app.identity_context enable row level security;
--- Stable product UUIDs keep profiles and private object paths associated with their owners.
-insert into identity.records(realm,model,id,data)
-select 'customer:'||c.tenant_id::text,'user',u.id::text,jsonb_build_object(
- 'id',u.id::text,'email',coalesce(lower(u.email),'legacy-'||u.id::text||'@identity.invalid'),
- 'emailVerified',u.email_confirmed_at is not null,'isAnonymous',false,
- 'banned',coalesce((to_jsonb(u)->>'banned_until')::timestamptz>now(),false),
- 'banExpires',(to_jsonb(u)->>'banned_until')::timestamptz,
- 'name',coalesce(u.raw_user_meta_data->>'full_name',u.raw_user_meta_data->>'name',u.email,u.id::text),
- 'createdAt',u.created_at,'updatedAt',coalesce(u.updated_at,u.created_at))
-from auth.users u cross join app.identity_context c on conflict do nothing;
-insert into identity.records(realm,model,id,data)
-select 'customer:'||c.tenant_id::text,'account',i.id::text,jsonb_build_object(
- 'id',i.id::text,'userId',i.user_id::text,'providerId',i.provider,'accountId',i.provider_id,
- 'createdAt',i.created_at,'updatedAt',coalesce(i.updated_at,i.created_at))
-from auth.identities i cross join app.identity_context c where i.provider in('google','facebook') on conflict do nothing;
+insert into app.identity_context(singleton) values(true);
+revoke all on app.identity_context from public;
 -- Requests are verified by the host, then scoped again with a non-bypass database role.
-alter table app.profiles drop constraint profiles_id_fkey;
+
 do $$ begin
  if not exists(select 1 from pg_roles where rolname='starter_product_runtime') then create role starter_product_runtime nologin nobypassrls;end if;
  if exists(select 1 from pg_roles where rolname='starter_product_runtime' and (rolsuper or rolbypassrls or rolcanlogin))then raise exception 'Unsafe product runtime role';end if;
@@ -84,6 +74,14 @@ grant usage on schema app to starter_product_runtime;
 grant select,insert,update on app.profiles to starter_product_runtime;
 create policy server_profile_actor on app.profiles to starter_product_runtime
  using(id::text=current_setting('starter.actor',true)) with check(id::text=current_setting('starter.actor',true));
-revoke all on app.profiles from anon,authenticated;
-revoke all on identity.records from anon,authenticated;
--- Legacy sign-in still creates profiles while the coordinated cutover is being prepared.
+
+
+
+do $$ begin if not exists(select 1 from pg_roles where rolname='starter_payload') then create role starter_payload nologin nobypassrls;end if; end $$;
+grant usage on schema app to starter_payload;
+grant select on app.identity_context to starter_payload;
+do $$ begin execute format('grant starter_payload to %I',current_user);end $$;
+grant usage,create on schema public to starter_payload;
+alter default privileges in schema public grant all on tables to starter_payload;
+alter default privileges in schema public grant usage,select,update on sequences to starter_payload;
+revoke create on schema public from public;

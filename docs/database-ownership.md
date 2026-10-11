@@ -1,26 +1,7 @@
 # Database ownership
 
-Payload and Supabase share a Postgres database, but never share table ownership.
-Product tables live in the `app` schema; private identities live in `identity`. Payload remains in `public`,
-so this does not depend on Payload's experimental custom-schema support.
+Each deployment environment has its own Neon project. Product profiles and their fixed identity context live in `app`; native Better Auth records live in private `identity`; Payload owns `public.cms_*` and `public.payload_*`. This starter hosts and administers its own content independently of GroovePost.
 
-| Owner    | Tables                                | Migration tool     | Client access                         |
-| -------- | ------------------------------------- | ------------------ | ------------------------------------- |
-| Supabase | `app`, `identity`, Storage policies   | Supabase CLI       | Scoped server roles / private storage |
-| Payload  | `public.cms_*` and `public.payload_*` | Payload migrations | Payload APIs only                     |
+Product migrations in `database/migrations` use `pnpm database:migrate` with a direct privileged `DATABASE_MIGRATION_URL`. Payload uses its checked-in migrations and `push: false`. Runtime uses a separate pooled login with membership in `starter_payload`, `starter_product_runtime` and `identity_runtime`; product and identity transactions switch roles and set verified actor/realm context. Browsers receive no database or storage credentials. There are no cross-owner foreign keys.
 
-Rules:
-
-1. A migration may alter only tables owned by its tool.
-2. Payload collection `dbName` values use the `cms_` prefix.
-3. Payload's Postgres adapter must keep `push: false`; automatic schema push can
-   remove tables it does not recognize.
-4. Revoke `anon` and `authenticated` grants on Payload-owned tables.
-5. Product migrations grant only the operations required by their RLS policies;
-   do not rely on Supabase's default public-schema ACLs.
-6. Avoid foreign keys across ownership boundaries. Store stable UUID references.
-7. Use separate runtime and migration credentials in hosted environments.
-8. Test RLS with anonymous, owning, non-owning, and service-role sessions.
-
-The included SQL migration establishes the product profile table and defensive
-grants. Payload generates and applies its own migrations separately.
+Code and schema changes follow feature MR -> develop -> main. Development and production databases, identities, files and secrets remain separate; promotion never replaces production data with development data. Rehearse migrations on isolated Neon branches before applying them during controlled releases. Buckets (`cms-media`, `app-uploads`, `site-transfer-archives`) remain private, with host authorization or expiring signed URLs.
