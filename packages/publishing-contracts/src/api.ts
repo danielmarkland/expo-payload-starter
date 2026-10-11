@@ -173,7 +173,14 @@ export const pageBlockSchema = z.discriminatedUnion('blockType', [
     heading: richTextSchema,
     variant: z.enum(['split', 'text', 'background']).nullable().optional(),
     alignment: z.enum(['left', 'center']).nullable().optional(),
-    height: z.enum(['compact', 'standard', 'tall']).nullable().optional(),
+    height: z
+      .enum(['compact', 'standard', 'tall', 'viewport'])
+      .nullable()
+      .optional(),
+    verticalAlignment: z
+      .enum(['top', 'middle', 'bottom'])
+      .nullable()
+      .optional(),
     focalX: z.number().min(0).max(100).nullable().optional(),
     focalY: z.number().min(0).max(100).nullable().optional(),
     overlay: z.number().min(0).max(100).nullable().optional(),

@@ -719,3 +719,30 @@ body:has(main[data-header-variant='minimal'])
 .page-block.padding-top-xl {
   --section-padding-top: var(--space-5xl);
 }
+
+/* Keep split artwork centered while positioning the complete copy group. */
+.hero-vertical-top .page-hero-copy {
+  align-self: start;
+}
+.hero-vertical-middle .page-hero-copy {
+  align-self: center;
+}
+.hero-vertical-bottom .page-hero-copy {
+  align-self: end;
+}
+.page-hero.hero-height-viewport {
+  min-height: max(
+    0px,
+    calc(
+      100vh - var(--publishing-header-height, 0px) -
+        var(--publishing-hero-spacing, 0px)
+    )
+  );
+  min-height: max(
+    0px,
+    calc(
+      100dvh - var(--publishing-header-height, 0px) -
+        var(--publishing-hero-spacing, 0px)
+    )
+  );
+}

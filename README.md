@@ -979,3 +979,8 @@ backgrounds (Fill by default, or Transparent). Transparent top headers overlay
 leading background heroes; artwork covers the full section while copy retains
 configured gutters. Sticky headers stay visible; the scrolled state starts
 after 8px.
+
+Hero sections offer **Fill screen** height and **Top**, **Middle**, or **Bottom**
+vertical content alignment, independently of horizontal alignment. Fill screen
+accounts for the responsive site header and authored section spacing; long content
+can grow beyond the screen. Existing heroes retain their height and middle alignment.

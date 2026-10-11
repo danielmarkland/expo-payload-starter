@@ -279,7 +279,27 @@ export function createPublishingBlocks({
       },
       choice('variant', ['split', 'text', 'background']),
       choice('alignment', ['left', 'center']),
-      choice('height', ['compact', 'standard', 'tall']),
+      {
+        name: 'height',
+        type: 'select',
+        options: [
+          { label: 'Compact', value: 'compact' },
+          { label: 'Standard', value: 'standard' },
+          { label: 'Tall', value: 'tall' },
+          { label: 'Fill screen', value: 'viewport' },
+        ],
+      },
+      {
+        name: 'verticalAlignment',
+        label: 'Vertical alignment',
+        type: 'select',
+        defaultValue: 'middle',
+        options: [
+          { label: 'Top', value: 'top' },
+          { label: 'Middle', value: 'middle' },
+          { label: 'Bottom', value: 'bottom' },
+        ],
+      },
       { name: 'focalX', type: 'number', min: 0, max: 100, defaultValue: 50 },
       { name: 'focalY', type: 'number', min: 0, max: 100, defaultValue: 50 },
       {

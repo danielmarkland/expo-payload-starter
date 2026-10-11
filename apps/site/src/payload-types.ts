@@ -314,7 +314,8 @@ export interface Page {
         };
         variant?: ('split' | 'text' | 'background') | null;
         alignment?: ('left' | 'center') | null;
-        height?: ('compact' | 'standard' | 'tall') | null;
+        height?: ('compact' | 'standard' | 'tall' | 'viewport') | null;
+        verticalAlignment?: ('top' | 'middle' | 'bottom') | null;
         focalX?: number | null;
         focalY?: number | null;
         overlay?: number | null;
@@ -2194,6 +2195,7 @@ export interface PagesSelect<T extends boolean = true> {
               variant?: T;
               alignment?: T;
               height?: T;
+              verticalAlignment?: T;
               focalX?: T;
               focalY?: T;
               overlay?: T;

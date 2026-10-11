@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { HeroSurface } from './HeroSurface.js'
 import {
   RichText,
   type JSXConvertersFunction,
@@ -132,8 +133,9 @@ export function createPageRenderer({
           ? getNavigationHref(block.secondaryButton)
           : null
         return (
-          <section
-            className={`page-hero hero-variant-${block.variant || 'split'} hero-alignment-${block.alignment || 'left'} hero-height-${block.height || 'standard'}${!image?.url || block.variant === 'text' || block.variant === 'background' ? ' page-hero-without-image' : ''}`}
+          <HeroSurface
+            viewport={block.height === 'viewport'}
+            className={`page-hero hero-variant-${block.variant || 'split'} hero-alignment-${block.alignment || 'left'} hero-height-${block.height || 'standard'} hero-vertical-${block.verticalAlignment || 'middle'}${!image?.url || block.variant === 'text' || block.variant === 'background' ? ' page-hero-without-image' : ''}`}
           >
             <div className="page-hero-copy">
               {block.eyebrow ? (
@@ -172,7 +174,7 @@ export function createPageRenderer({
                 width={image.width || 1200}
               />
             ) : null}
-          </section>
+          </HeroSurface>
         )
       }
       case 'richText':
