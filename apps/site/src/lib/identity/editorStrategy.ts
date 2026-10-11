@@ -1,10 +1,9 @@
 import type { AuthStrategy } from 'payload'
-import { authenticatedIdentity, betterAuthEnabled } from './server'
+import { authenticatedIdentity } from './server'
 import { UnauthorizedError } from '@danielmarkland/publishing-core/serviceErrors'
 export const editorIdentityStrategy: AuthStrategy = {
   name: 'editor-identity',
   async authenticate({ headers, payload }) {
-    if (!betterAuthEnabled()) return { user: null }
     let session
     try {
       session = await authenticatedIdentity(headers, 'editor')

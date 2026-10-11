@@ -2,19 +2,16 @@
 import { beforeEach, expect, it, vi } from 'vitest'
 import type { PayloadRequest, SanitizedCollectionConfig } from 'payload'
 const state = vi.hoisted(() => ({
-  enabled: false,
   signOut: vi.fn(),
   revokeSessions: vi.fn(),
   identityServer: vi.fn(),
 }))
 vi.mock('@/lib/identity/server', () => ({
-  betterAuthEnabled: () => state.enabled,
   identityServer: state.identityServer,
 }))
 import { Users } from '@/collections/Users'
 beforeEach(() => {
   vi.clearAllMocks()
-  state.enabled = true
   state.identityServer.mockResolvedValue({
     api: { signOut: state.signOut, revokeSessions: state.revokeSessions },
   })
@@ -52,10 +49,4 @@ it('revokes all editorial sessions when requested without involving product iden
   expect(state.revokeSessions.mock.invocationCallOrder[0]).toBeLessThan(
     state.signOut.mock.invocationCallOrder[0],
   )
-})
-it('retains the legacy CMS logout flow until native activation', async () => {
-  state.enabled = false
-  const req = await invoke(true)
-  expect(state.identityServer).not.toHaveBeenCalled()
-  expect(req.responseHeaders).toBeUndefined()
 })

@@ -33,10 +33,7 @@ const allowedDependencies = {
   ]),
   '@starter/auth': new Set(['@starter/core']),
   '@starter/core': new Set(['@danielmarkland/contracts']),
-  '@starter/data': new Set([
-    '@danielmarkland/contracts',
-    '@supabase/supabase-js',
-  ]),
+  '@starter/data': new Set(['@danielmarkland/contracts']),
   '@danielmarkland/publishing-core': new Set([
     '@danielmarkland/design-tokens',
     '@danielmarkland/publishing-contracts',

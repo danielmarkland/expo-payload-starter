@@ -28,6 +28,8 @@ import * as migration_20261008_editor_identity from './20261008_editor_identity'
 import * as migration_20261010_220137_publishing_width from './20261010_220137_publishing_width'
 import * as migration_20261011_010628_header_backgrounds from './20261011_010628_header_backgrounds'
 import * as migration_20261011_043937_hero_viewport from './20261011_043937_hero_viewport'
+import * as migration_20261011_205342_native_editor_identity from './20261011_205342_native_editor_identity'
+import * as migration_20261011_205534_stable_storage_fields from './20261011_205534_stable_storage_fields'
 
 export const migrations = [
   {
@@ -179,5 +181,15 @@ export const migrations = [
     up: migration_20261011_043937_hero_viewport.up,
     down: migration_20261011_043937_hero_viewport.down,
     name: '20261011_043937_hero_viewport',
+  },
+  {
+    up: migration_20261011_205342_native_editor_identity.up,
+    down: migration_20261011_205342_native_editor_identity.down,
+    name: '20261011_205342_native_editor_identity',
+  },
+  {
+    up: migration_20261011_205534_stable_storage_fields.up,
+    down: migration_20261011_205534_stable_storage_fields.down,
+    name: '20261011_205534_stable_storage_fields',
   },
 ]

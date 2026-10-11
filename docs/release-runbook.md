@@ -61,7 +61,7 @@ or bypass a failure. Run `git diff --check` and the repository checks locally.
    Once enabled, main PR policy requires successful dev deployment for its exact
    head. Open develop → main and merge only after `ci` passes.
 
-Actions validate → cloud build without moving live domains → apply pending Supabase SQL migrations → apply pending
+Actions validate → cloud build without moving live domains → apply pending portable PostgreSQL migrations → apply pending
 Payload migrations → verify/publish packages on main → activate the cloud-built deployment →
 promote → smoke. Build commands never migrate. Development validates package
 candidates without publishing them. Production checks immutable packed contents,
@@ -98,3 +98,5 @@ process-only secret; its database connection is the dedicated migration credenti
 
 Only deployment jobs take the per-environment release lock. Exact-commit validation
 can run concurrently; deployment and publication stay serialized and are never cancelled.
+
+Neon projects and private buckets are independent for development and production. Configure `AWS_ACCESS_KEY_ID/SECRET_ACCESS_KEY` secrets and `AWS_ENDPOINT_URL_S3/AWS_REGION` variables per GitHub release environment. Schema runners require a direct connection; hosted traffic uses a restricted pooled runtime login. Feature MRs deploy on dev previews, squash into develop for hosted development acceptance, then promote through a same-repository develop -> main release PR. Never copy development data into production.

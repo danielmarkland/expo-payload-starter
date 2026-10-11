@@ -26,6 +26,10 @@ jobs:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_ENDPOINT_URL_S3: ${{ vars.AWS_ENDPOINT_URL_S3 }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
       DATABASE_MIGRATION_URL: ${{ secrets.DATABASE_MIGRATION_URL }}
       RELEASE_SMOKE_TARGETS: ${{ vars.RELEASE_SMOKE_TARGETS }}
       SITE_URL: ${{ vars.SITE_URL }}
@@ -41,9 +45,6 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - uses: supabase/setup-cli@v1
-        with:
-          version: 2.109.1
       - name: Install dependencies and deployment CLI
         run: |
           npm config set //npm.pkg.github.com/:_authToken "$INSTALL_TOKEN" --location=user

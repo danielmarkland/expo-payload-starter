@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 
 import { layout, typography } from '@danielmarkland/design-tokens'
-import { betterAuthEnabled } from '@/src/lib/identity'
 import { publicEnv } from '@/src/config/env'
 import { useAuth } from '@/src/context/AuthContext'
 import { useSiteConfig } from '@/src/context/SiteConfigContext'
@@ -18,7 +17,7 @@ import { useTheme } from '@/src/context/ThemeContext'
 export default function SignInScreen() {
   const auth = useAuth()
   const [providers, setProviders] = useState({
-    google: !betterAuthEnabled,
+    google: false,
     facebook: false,
     sms: false,
     email: false,
@@ -39,15 +38,14 @@ export default function SignInScreen() {
   const [pending, setPending] = useState(false)
 
   useEffect(() => {
-    if (betterAuthEnabled)
-      void fetch(
-        new URL('/api/identity/providers', publicEnv.EXPO_PUBLIC_SITE_URL),
-      )
-        .then(async (response) => {
-          if (!response.ok) throw Error('Login configuration unavailable')
-          setProviders(await response.json())
-        })
-        .catch(() => setError('Login configuration unavailable'))
+    void fetch(
+      new URL('/api/identity/providers', publicEnv.EXPO_PUBLIC_SITE_URL),
+    )
+      .then(async (response) => {
+        if (!response.ok) throw Error('Login configuration unavailable')
+        setProviders(await response.json())
+      })
+      .catch(() => setError('Login configuration unavailable'))
   }, [])
 
   async function perform(action: () => Promise<void>) {

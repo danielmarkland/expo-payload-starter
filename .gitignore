@@ -20,3 +20,7 @@ supabase/.temp/
 
 # Release jobs contain private build output; only sanitized summaries are artifacts.
 release-output/
+
+.neon
+
+.vercel/

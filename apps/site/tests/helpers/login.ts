@@ -15,14 +15,19 @@ export interface LoginOptions {
  */
 export async function login({
   page,
-  serverURL = 'http://localhost:3000',
+  serverURL = process.env.SITE_URL || 'http://localhost:3000',
   user,
 }: LoginOptions): Promise<void> {
   await page.goto(`${serverURL}/admin/login`)
 
-  await page.fill('#field-email', user.email)
-  await page.fill('#field-password', user.password)
-  await page.click('button[type="submit"]')
+  await page.locator('input[name="email"]').fill(user.email)
+  await page.locator('input[name="password"]').fill(user.password)
+  const signedIn = page.waitForResponse(
+    (response) => response.url().endsWith('/api/editor-auth/sign-in/email'),
+    { timeout: 60_000 },
+  )
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click()
+  expect((await signedIn).status()).toBe(200)
 
   await page.waitForURL(`${serverURL}/admin`)
 

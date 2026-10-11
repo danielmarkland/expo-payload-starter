@@ -1,4 +1,3 @@
-import { betterAuthEnabled } from '@/lib/identity/server'
 import { publishingDocumentPath } from '@danielmarkland/publishing-core/preview'
 import { createPublishingRedirectAccess } from '@danielmarkland/publishing-core/payloadCollections'
 import {
@@ -49,13 +48,7 @@ const storage = getStorageConfig()
 export default buildConfig({
   admin: {
     user: Users.slug,
-    ...(betterAuthEnabled()
-      ? {
-          components: {
-            views: { login: { Component: '/components/admin/EditorLogin#EditorLogin' } },
-          },
-        }
-      : {}),
+    components: { views: { login: { Component: '/components/admin/EditorLogin#EditorLogin' } } },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -84,7 +77,7 @@ export default buildConfig({
       : undefined,
   sharp,
   plugins: [
-    s3Storage(getPayloadStorageOptions(storage)),
+    s3Storage({ ...getPayloadStorageOptions(storage), alwaysInsertFields: true }),
     seoPlugin({
       collections: ['pages', 'posts'],
       globals: ['siteSettings'],

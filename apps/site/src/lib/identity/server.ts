@@ -19,7 +19,6 @@ import {
 } from '@danielmarkland/publishing-core/serviceErrors'
 let pool: Pool | undefined
 export const identityDatabase = () => (pool ??= new Pool(getDatabasePoolConfig()))
-export const betterAuthEnabled = () => process.env.AUTH_PROVIDER === 'better-auth'
 export async function productRealm(): Promise<IdentityRealm> {
   const result = await identityDatabase().query<{ tenant_id: string }>(
     'select tenant_id from app.identity_context where singleton=true',
@@ -59,7 +58,6 @@ function providers(prefix: string): IdentityProviders {
   }
 }
 export async function identityServer(kind: 'customer' | 'editor' = 'customer') {
-  if (!betterAuthEnabled()) throw new ServiceUnavailableError('Better Auth has not been activated')
   const secret = process.env.AUTH_SECRET
   if (!secret || secret.length < 32)
     throw new ServiceUnavailableError('Auth secret is not configured')
