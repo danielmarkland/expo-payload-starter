@@ -548,3 +548,42 @@ it('keeps the legacy FAQ and CTA markup when variants are omitted', () => {
   expect(html).toContain('class="page-cta"')
   expect(html).not.toContain('page-cta-inner')
 })
+
+describe('background hero coverage', () => {
+  const hero: Page['layout'][number] = {
+    blockType: 'hero',
+    heading: createHeroHeadline('Hero'),
+    variant: 'background',
+    image: media,
+    focalX: 25,
+    focalY: 75,
+    overlay: 40,
+  }
+  it('owns artwork on the outer section and marks only leading artwork for overlap', () => {
+    const markup = renderPage([hero])
+    const doc = new DOMParser().parseFromString(markup, 'text/html')
+    const outer = doc.querySelector(
+      '.page-block-background-hero',
+    ) as HTMLElement
+    expect(outer.style.backgroundImage).toContain('example.jpg')
+    expect(outer.style.backgroundPosition).toBe('25% 75%')
+    expect(outer.querySelector('section')!.getAttribute('style')).toBeNull()
+    expect(
+      doc.querySelector('main')!.getAttribute('data-leading-background-hero'),
+    ).toBe('true')
+    expect(
+      renderPage([{ blockType: 'image', image: media }, hero]),
+    ).not.toContain('data-leading-background-hero="true"')
+    expect(renderPage([{ ...hero, image: null }])).not.toContain(
+      'data-leading-background-hero="true"',
+    )
+  })
+  it('preserves split and text layouts without background coverage', () => {
+    for (const variant of ['split', 'text'] as const) {
+      const markup = renderPage([{ ...hero, variant }])
+      expect(markup).not.toContain('page-block-background-hero')
+      expect(markup).not.toContain('data-leading-background-hero="true"')
+      expect(markup).toContain(`hero-variant-${variant}`)
+    }
+  })
+})

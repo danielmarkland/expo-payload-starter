@@ -2992,6 +2992,14 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface HeaderNavigation {
   id: number;
   variant?: ('standard' | 'minimal') | null;
+  /**
+   * Background at the top of the page. Transparent overlays a leading background hero.
+   */
+  topBackground?: ('fill' | 'transparent') | null;
+  /**
+   * Background after scrolling more than 8px. Enable Sticky header to keep it visible.
+   */
+  scrolledBackground?: ('fill' | 'transparent') | null;
   helpLink?: {
     treatment?: ('default' | 'accent') | null;
     label?: string | null;
@@ -3803,6 +3811,8 @@ export interface SiteSetting {
  */
 export interface HeaderNavigationSelect<T extends boolean = true> {
   variant?: T;
+  topBackground?: T;
+  scrolledBackground?: T;
   helpLink?:
     | T
     | {

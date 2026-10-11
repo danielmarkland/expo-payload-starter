@@ -1,5 +1,16 @@
 # @danielmarkland/publishing-core
 
+## 0.10.0
+
+### Minor Changes
+
+- 3a007d7: Cover background hero sections including gutters and padding, and support independent filled or transparent top and scrolled header surfaces with measured leading-hero overlap.
+
+### Patch Changes
+
+- Updated dependencies [3a007d7]
+  - @danielmarkland/publishing-contracts@0.8.0
+
 ## 0.9.0
 
 ### Minor Changes

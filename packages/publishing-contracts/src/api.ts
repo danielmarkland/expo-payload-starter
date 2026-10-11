@@ -388,6 +388,8 @@ export const headerNavigationSchema = z.looseObject({
   id: documentIDSchema.optional(),
   items: z.array(navigationItemSchema).nullable().optional(),
   sticky: optionalBoolean,
+  topBackground: z.enum(['fill', 'transparent']).nullable().optional(),
+  scrolledBackground: z.enum(['fill', 'transparent']).nullable().optional(),
   showSearch: z.boolean(),
   searchIcon: optionalText,
 })

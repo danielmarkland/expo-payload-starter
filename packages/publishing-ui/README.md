@@ -6,6 +6,11 @@ Public components consume publishing contracts and never fetch application data.
 Applications load content and pass it to `PostList` and `LatestPostsSection`.
 `SiteBrand` receives explicit identity values. `SiteHeader` receives rendered
 navigation/search content, sticky state, and the application theme storage key.
+Header top and scrolled backgrounds independently select Fill (default) or
+Transparent. The scrolled state starts above 8px; transparent surfaces have no
+blur. A transparent top header overlays a leading background hero, with measured
+header height reserving room for its copy. Background hero artwork covers the
+entire outer section, including configured gutters and padding.
 Google Tag Manager and Turnstile components accept public integration identifiers;
 verification and delivery protocols live in publishing-core; hosts supply credentials
 and integration adapters. `ThemeToggle` requires the
@@ -49,3 +54,7 @@ markup/styles belong here. Consumers own flow logic and use tenant context for
 branding, public footer text and contact links; no WBUR theme is embedded.
 Native choices support keyboard/form validation. Upload cards handle choosing,
 dropping and replacing a file; persistence and server validation remain adapters.
+
+Run `pnpm --filter @danielmarkland/publishing-ui test:layout` with Playwright
+Chromium installed to verify responsive section widths, hero coverage, and all
+header surface/sticky combinations. CI runs these browser checks before site E2E.
