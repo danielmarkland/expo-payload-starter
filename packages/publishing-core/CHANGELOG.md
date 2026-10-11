@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.12.0
+
+### Minor Changes
+
+- Use standard AWS S3 environment variables and allow configuring the CMS media bucket. Consumers must replace SUPABASE_S3_* storage settings with AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ENDPOINT_URL_S3, and AWS_REGION.
+
 ## 0.11.0
 
 ### Minor Changes

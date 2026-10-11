@@ -6,8 +6,8 @@ export const sensitiveVariableNames = new Set([
   'MAILERLITE_API_KEY',
   'PAYLOAD_SECRET',
   'RESEND_API_KEY',
-  'SUPABASE_S3_ACCESS_KEY_ID',
-  'SUPABASE_S3_SECRET_ACCESS_KEY',
+  'AWS_ACCESS_KEY_ID',
+  'AWS_SECRET_ACCESS_KEY',
   'TURNSTILE_SECRET_KEY',
 ])
 
@@ -135,10 +135,10 @@ export function siteVariables({
     DATABASE_URL: database,
     PAYLOAD_SECRET: payloadSecret,
     ...(siteURL ? { SITE_URL: siteURL } : {}),
-    SUPABASE_S3_ACCESS_KEY_ID: s3.accessKeyID,
-    SUPABASE_S3_ENDPOINT: s3.endpoint,
-    SUPABASE_S3_REGION: s3.region,
-    SUPABASE_S3_SECRET_ACCESS_KEY: s3.secretAccessKey,
+    AWS_ACCESS_KEY_ID: s3.accessKeyID,
+    AWS_ENDPOINT_URL_S3: s3.endpoint,
+    AWS_REGION: s3.region,
+    AWS_SECRET_ACCESS_KEY: s3.secretAccessKey,
     ...Object.fromEntries(
       Object.entries(optional).filter(([, value]) => Boolean(value)),
     ),

@@ -220,16 +220,16 @@ and [Supabase API keys](https://supabase.com/docs/guides/getting-started/api-key
 | `CONTACT_TO_ADDRESS`                   | **Secret**    | Optional contact recipient. When omitted, `EMAIL_FROM_ADDRESS` is used.                                                                                  |
 | `TURNSTILE_SECRET_KEY`                 | **Secret**    | Server-only Cloudflare Turnstile verification secret.                                                                                                    |
 | `MAILERLITE_API_KEY`                   | **Secret**    | Optional server-only MailerLite API key used by the global newsletter signup. The target group ID is configured in Footer Navigation.                    |
-| `SUPABASE_S3_ACCESS_KEY_ID`            | **Secret**    | Supabase Storage S3 access key for Payload media uploads.                                                                                                |
-| `SUPABASE_S3_SECRET_ACCESS_KEY`        | **Secret**    | Secret half of the S3 credential pair.                                                                                                                   |
-| `SUPABASE_S3_ENDPOINT`                 | Config        | Supabase Storage S3 endpoint.                                                                                                                            |
-| `SUPABASE_S3_REGION`                   | Config        | S3 signing region; the local default is `local`.                                                                                                         |
+| `AWS_ACCESS_KEY_ID`                    | **Secret**    | Supabase Storage S3 access key for Payload media uploads.                                                                                                |
+| `AWS_SECRET_ACCESS_KEY`                | **Secret**    | Secret half of the S3 credential pair.                                                                                                                   |
+| `AWS_ENDPOINT_URL_S3`                  | Config        | Supabase Storage S3 endpoint.                                                                                                                            |
+| `AWS_REGION`                           | Config        | S3 signing region; the local default is `local`.                                                                                                         |
 | `SITE_URL`                             | Config        | Required canonical URL outside Vercel; Vercel uses its configured production URL. Set `SITE_URL=http://localhost:3000` explicitly for local development. |
 | `EXPO_PUBLIC_SUPABASE_URL`             | Public config | Supabase project URL used by authenticated BFF product routes.                                                                                           |
 | `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public key    | Supabase publishable key used with the caller's Bearer token; never use a service-role key here.                                                         |
 
 Payload always uses the migration-created `cms-media` bucket, so there is no
-bucket-name variable. See [Supabase Storage S3 authentication](https://supabase.com/docs/guides/storage/s3/authentication) for credentials and connection details.
+bucket-name override (`CMS_MEDIA_BUCKET`). See [Supabase Storage S3 authentication](https://supabase.com/docs/guides/storage/s3/authentication) for credentials and connection details.
 
 Public runtime configuration belongs in **Site settings → Integrations**:
 
@@ -802,13 +802,13 @@ With the Vercel CLI, use
 `vercel logs <deployment-url> --since 30m --status-code 5xx --expand`, or open
 the project's **Logs** view in Vercel. See the [`vercel logs` reference](https://vercel.com/docs/cli/logs).
 
-| Log message                                                                       | Likely cause and next step                                                                                                                                                                                           |
-| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getaddrinfo ENOTFOUND` for a Supabase database host                              | The hostname in `DATABASE_URL` does not resolve. Copy the Session pooler URI from the correct Supabase project's **Connect** panel; do not type or infer the hostname.                                               |
-| `relation "cms_posts" does not exist` (or another `cms_*` / `payload_*` relation) | Payload migrations have not been applied to the database the deployment uses, or they ran against a different database. Run `payload migrate` with the matching `DATABASE_URL`, then check `payload migrate:status`. |
-| The old error persists after changing a Vercel variable                           | Verify the variable is assigned to the correct Vercel project and environment, then create a new deployment. Existing deployments retain their previous environment values.                                          |
-| `No email adapter provided`                                                       | Payload email is not configured. This is expected if Payload email is unused; otherwise set the site's Resend key and sender variables.                                                                              |
-| Upload storage adapter warning for `media`                                        | Supabase S3 settings/credentials are missing or disabled. Configure the site's `SUPABASE_S3_*` values before relying on production media uploads.                                                                    |
+| Log message                                                                       | Likely cause and next step                                                                                                                                                                                              |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getaddrinfo ENOTFOUND` for a Supabase database host                              | The hostname in `DATABASE_URL` does not resolve. Copy the Session pooler URI from the correct Supabase project's **Connect** panel; do not type or infer the hostname.                                                  |
+| `relation "cms_posts" does not exist` (or another `cms_*` / `payload_*` relation) | Payload migrations have not been applied to the database the deployment uses, or they ran against a different database. Run `payload migrate` with the matching `DATABASE_URL`, then check `payload migrate:status`.    |
+| The old error persists after changing a Vercel variable                           | Verify the variable is assigned to the correct Vercel project and environment, then create a new deployment. Existing deployments retain their previous environment values.                                             |
+| `No email adapter provided`                                                       | Payload email is not configured. This is expected if Payload email is unused; otherwise set the site's Resend key and sender variables.                                                                                 |
+| Upload storage adapter warning for `media`                                        | Supabase S3 settings/credentials are missing or disabled. Configure the site's `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, and `AWS_REGION` values before relying on production media uploads. |
 
 ## Fork checklist
 
@@ -984,3 +984,8 @@ Hero sections offer **Fill screen** height and **Top**, **Middle**, or **Bottom*
 vertical content alignment, independently of horizontal alignment. Fill screen
 accounts for the responsive site header and authored section spacing; long content
 can grow beyond the screen. Existing heroes retain their height and middle alignment.
+
+Shared publishing storage uses standard S3 configuration: `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, and `AWS_REGION`.
+`CMS_MEDIA_BUCKET` selects the media bucket (default `cms-media`).
+S3 credentials stay server-side; the endpoint supports any path-style S3 provider.

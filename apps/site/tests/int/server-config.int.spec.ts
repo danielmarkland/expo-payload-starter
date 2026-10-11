@@ -60,10 +60,10 @@ describe('server configuration', () => {
   it('fixes the Payload media bucket while retaining provider-required S3 values', () => {
     expect(
       getStorageConfig({
-        SUPABASE_S3_ACCESS_KEY_ID: 'access',
-        SUPABASE_S3_ENDPOINT: 'https://project.storage.supabase.co/storage/v1/s3',
-        SUPABASE_S3_REGION: 'us-west-2',
-        SUPABASE_S3_SECRET_ACCESS_KEY: 'secret',
+        AWS_ACCESS_KEY_ID: 'access',
+        AWS_ENDPOINT_URL_S3: 'https://project.storage.supabase.co/storage/v1/s3',
+        AWS_REGION: 'us-west-2',
+        AWS_SECRET_ACCESS_KEY: 'secret',
       }),
     ).toEqual({
       accessKeyId: 'access',
