@@ -99,13 +99,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SITE_URL: http://localhost:3000
-      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/starter_e2e_test
       PAYLOAD_SECRET: local-ci-payload-secret-at-least-32-characters
       AUTH_SECRET: local-ci-auth-secret-at-least-32-characters
       # Verified test accounts sign in; these fixtures never send email.
       EDITOR_AUTH_EMAIL_API_KEY: test-only-unused-email-key
       EDITOR_AUTH_EMAIL_FROM: no-reply@example.test
-      DATABASE_MIGRATION_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      DATABASE_MIGRATION_URL: postgresql://postgres:postgres@127.0.0.1:54322/starter_e2e_test
       MIGRATION_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/migration_test
     services:
       postgres:
@@ -132,11 +132,22 @@ jobs:
           NODE_AUTH_TOKEN: ${{ github.token }}
       - name: Build shared publishing packages
         run: pnpm --filter '@starter/site^...' build
+      - name: Create isolated editorial browser database
+        run: >-
+          pnpm --filter @danielmarkland/auth-runtime exec node --input-type=module -e
+          "import { Pool } from 'pg'; const p=new Pool({connectionString:'postgresql://postgres:postgres@127.0.0.1:54322/postgres'}); await p.query('CREATE DATABASE starter_e2e_test'); await p.end();"
       - run: pnpm database:migrate
       - run: pnpm payload:migrate
       - run: pnpm --filter @starter/site exec playwright install --with-deps chromium
       - run: pnpm --filter @danielmarkland/publishing-ui test:layout
       - run: pnpm --filter @starter/site test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure-${{ github.sha }}
+          path: |
+            apps/site/test-results
+            apps/site/playwright-report
 
   ci:
     if: always()

@@ -12,6 +12,12 @@ export const testUser = {
  * Seeds a test user for e2e admin tests.
  */
 export async function seedTestUser(): Promise<void> {
+  const database = new URL(process.env.DATABASE_URL || '')
+  if (
+    !['localhost', '127.0.0.1'].includes(database.hostname) ||
+    !database.pathname.endsWith('_test')
+  )
+    throw Error('Editorial browser fixtures require a dedicated local test database')
   const payload = await getPayload({ config })
 
   // Delete existing test user if any

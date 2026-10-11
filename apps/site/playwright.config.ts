@@ -6,6 +6,11 @@ import { defineConfig, devices } from '@playwright/test'
  */
 import 'dotenv/config'
 
+const serverURL = process.env.SITE_URL || 'http://localhost:3000'
+const localURL = new URL(serverURL)
+if (localURL.protocol !== 'http:' || !['localhost', '127.0.0.1'].includes(localURL.hostname))
+  throw Error('Browser tests require an explicit local SITE_URL')
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -34,9 +39,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'cross-env NODE_OPTIONS=--no-deprecation next dev',
-    reuseExistingServer: true,
+    command: `cross-env NODE_OPTIONS=--no-deprecation next dev --port ${localURL.port || '3000'}`,
+    reuseExistingServer: false,
     // The homepage is CMS-managed and intentionally returns 404 until a `home` Page is published.
-    url: 'http://localhost:3000/search',
+    url: `${serverURL}/search`,
   },
 })
