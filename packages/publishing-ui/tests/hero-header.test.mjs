@@ -1,5 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import assert from 'node:assert/strict'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { chromium } from '@playwright/test'
 
 const css = (
@@ -102,7 +104,7 @@ try {
             })
             await page.waitForFunction(() => window.scrollY === 0)
             await page.screenshot({
-              path: `/private/tmp/hero-header-${viewport}.png`,
+              path: join(tmpdir(), `hero-header-${viewport}.png`),
             })
           }
         }
