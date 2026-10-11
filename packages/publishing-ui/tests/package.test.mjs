@@ -14,6 +14,7 @@ const publicFiles = [
   'postHeadings',
 ]
 const clientFiles = [
+  'HeaderSurface',
   'FunnelControls',
   'ThemeToggle',
   'SiteConfigProvider',
@@ -62,9 +63,12 @@ test('exports enumerate supported entry points and exclude test artifacts', asyn
   assert.equal(manifest.exports['./*'], undefined)
   for (const name of [
     ...publicFiles,
-    ...clientFiles.filter((name) => name !== 'admin/index'),
+    ...clientFiles.filter(
+      (name) => !['admin/index', 'HeaderSurface'].includes(name),
+    ),
   ]) {
     assert.ok(manifest.exports[`./${name}`], name)
   }
+  assert.equal(manifest.exports['./HeaderSurface'], undefined)
   assert.equal(manifest.exports['./PublishingComponents.test'], undefined)
 })

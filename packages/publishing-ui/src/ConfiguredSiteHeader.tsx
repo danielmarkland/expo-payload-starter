@@ -50,6 +50,8 @@ export function ConfiguredSiteHeader({
         ) : null
       })}
       sticky={navigation.sticky}
+      topBackground={navigation.topBackground}
+      scrolledBackground={navigation.scrolledBackground}
       themeStorageKey={themeStorageKey}
       navigation={navigation.items?.map((item) => {
         const href = getNavigationHref(item)

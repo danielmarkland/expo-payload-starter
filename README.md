@@ -973,3 +973,9 @@ Publishing section widths inherit from site → page → block. Site defaults to
 Padded; pages default to Site and blocks to Page. Full and Padded overrides align
 with the shared header/footer container, while paragraph reading width stays
 independent. See [the layout guide](docs/practical-layouts.md#section-width-inheritance).
+
+Header navigation offers independent **Header top** and **Header scrolled**
+backgrounds (Fill by default, or Transparent). Transparent top headers overlay
+leading background heroes; artwork covers the full section while copy retains
+configured gutters. Sticky headers stay visible; the scrolled state starts
+after 8px.
