@@ -22,7 +22,7 @@ export async function login({
 
   await page.locator('input[name="email"]').fill(user.email)
   await page.locator('input[name="password"]').fill(user.password)
-  await page.click('button[type="submit"]')
+  await page.getByRole('button', { name: 'Sign in', exact: true }).click()
 
   await page.waitForURL(`${serverURL}/admin`)
 
