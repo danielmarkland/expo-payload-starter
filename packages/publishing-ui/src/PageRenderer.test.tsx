@@ -587,3 +587,29 @@ describe('background hero coverage', () => {
     }
   })
 })
+
+describe('hero vertical alignment', () => {
+  for (const variant of ['text', 'background', 'split'] as const)
+    for (const verticalAlignment of ['top', 'middle', 'bottom'] as const)
+      it(`renders ${variant} with ${verticalAlignment} alignment`, () => {
+        const html = renderPage([
+          {
+            blockType: 'hero',
+            variant,
+            heading: createHeroHeadline('Hero'),
+            height: 'viewport',
+            verticalAlignment,
+            image: media,
+          },
+        ])
+        expect(html).toContain('hero-height-viewport')
+        expect(html).toContain(`hero-vertical-${verticalAlignment}`)
+      })
+  it('preserves legacy standard height and middle alignment', () => {
+    const html = renderPage([
+      { blockType: 'hero', heading: createHeroHeadline('Hero') },
+    ])
+    expect(html).toContain('hero-height-standard')
+    expect(html).toContain('hero-vertical-middle')
+  })
+})

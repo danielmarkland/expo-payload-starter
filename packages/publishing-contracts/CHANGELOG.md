@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-contracts
 
+## 0.9.0
+
+### Minor Changes
+
+- 1c9ce6c: Add Fill screen hero height and independent top, middle, and bottom copy alignment, accounting for responsive headers and section spacing.
+
 ## 0.8.0
 
 ### Minor Changes

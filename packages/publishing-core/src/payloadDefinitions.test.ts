@@ -100,6 +100,21 @@ describe('Payload publishing definitions', () => {
     expect(blocks.HeroBlock.fields).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
+          name: 'height',
+          options: expect.arrayContaining([
+            { label: 'Fill screen', value: 'viewport' },
+          ]),
+        }),
+        expect.objectContaining({
+          name: 'verticalAlignment',
+          defaultValue: 'middle',
+          options: [
+            { label: 'Top', value: 'top' },
+            { label: 'Middle', value: 'middle' },
+            { label: 'Bottom', value: 'bottom' },
+          ],
+        }),
+        expect.objectContaining({
           name: 'heading',
           required: true,
           type: 'richText',

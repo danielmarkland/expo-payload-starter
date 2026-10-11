@@ -27,6 +27,7 @@ import * as migration_20261006_155757_landing_design_controls from './20261006_1
 import * as migration_20261008_editor_identity from './20261008_editor_identity'
 import * as migration_20261010_220137_publishing_width from './20261010_220137_publishing_width'
 import * as migration_20261011_010628_header_backgrounds from './20261011_010628_header_backgrounds'
+import * as migration_20261011_043937_hero_viewport from './20261011_043937_hero_viewport'
 
 export const migrations = [
   {
@@ -173,5 +174,10 @@ export const migrations = [
     up: migration_20261011_010628_header_backgrounds.up,
     down: migration_20261011_010628_header_backgrounds.down,
     name: '20261011_010628_header_backgrounds',
+  },
+  {
+    up: migration_20261011_043937_hero_viewport.up,
+    down: migration_20261011_043937_hero_viewport.down,
+    name: '20261011_043937_hero_viewport',
   },
 ]
