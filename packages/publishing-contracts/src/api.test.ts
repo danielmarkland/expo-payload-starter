@@ -7,6 +7,7 @@ import {
   authorSchema,
   navigationSchema,
   pageSchema,
+  pageBlockSchema,
   postSchema,
   redirectsSchema,
   richTextSchema,
@@ -235,4 +236,35 @@ it('documents recursive rich-text cards without expanding the tree indefinitely'
   expect(JSON.stringify(document)).toContain(
     '#/components/schemas/PublishingRichTextNode',
   )
+})
+
+describe('hero layout controls', () => {
+  for (const verticalAlignment of ['top', 'middle', 'bottom']) {
+    it(`preserves viewport height and ${verticalAlignment} alignment`, () => {
+      const hero = {
+        blockType: 'hero',
+        heading: richText,
+        height: 'viewport',
+        verticalAlignment,
+      }
+      expect(pageBlockSchema.parse(hero)).toMatchObject(hero)
+    })
+  }
+  it('accepts legacy heroes and rejects unsupported layout values', () => {
+    expect(
+      pageBlockSchema.safeParse({ blockType: 'hero', heading: richText })
+        .success,
+    ).toBe(true)
+    for (const controls of [
+      { height: 'full' },
+      { verticalAlignment: 'center' },
+    ])
+      expect(
+        pageBlockSchema.safeParse({
+          blockType: 'hero',
+          heading: richText,
+          ...controls,
+        }).success,
+      ).toBe(false)
+  })
 })

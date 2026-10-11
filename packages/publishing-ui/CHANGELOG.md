@@ -1,5 +1,17 @@
 # @danielmarkland/publishing-ui
 
+## 0.7.0
+
+### Minor Changes
+
+- 1c9ce6c: Add Fill screen hero height and independent top, middle, and bottom copy alignment, accounting for responsive headers and section spacing.
+
+### Patch Changes
+
+- Updated dependencies [1c9ce6c]
+  - @danielmarkland/publishing-contracts@0.9.0
+  - @danielmarkland/publishing-core@0.11.0
+
 ## 0.6.0
 
 ### Minor Changes
