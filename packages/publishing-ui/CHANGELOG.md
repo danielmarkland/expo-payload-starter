@@ -1,5 +1,14 @@
 # @danielmarkland/publishing-ui
 
+## 0.7.2
+
+### Patch Changes
+
+- Render published heroes with null headings safely and reject missing hero headings in CMS validation.
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.9.1
+  - @danielmarkland/publishing-core@0.12.1
+
 ## 0.7.1
 
 ### Patch Changes

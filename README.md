@@ -665,6 +665,9 @@ leading background heroes; artwork covers the full section while copy retains
 configured gutters. Sticky headers stay visible; the scrolled state starts
 after 8px.
 
+Hero headings are required when saving content. Already-published heroes with a
+blank heading render their remaining content without crashing the public page.
+
 Hero sections offer **Fill screen** height and **Top**, **Middle**, or **Bottom**
 vertical content alignment, independently of horizontal alignment. Fill screen
 accounts for the responsive site header and authored section spacing; long content
