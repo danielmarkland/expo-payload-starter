@@ -62,6 +62,14 @@ function renderPage(layout: Page['layout'], customCSS?: string) {
   return renderToStaticMarkup(<PageRenderer page={pageSchema.parse(page)} />)
 }
 
+it('renders published hero content with a null heading without crashing', () => {
+  const html = renderPage([
+    { blockType: 'hero', heading: null, body: 'Published body' },
+  ])
+  expect(html).toContain('Published body')
+  expect(html).not.toContain('page-hero-heading')
+})
+
 function sectionMeta(name: string) {
   return { anchor: `section-${name}`, eyebrow: `${name} eyebrow` }
 }

@@ -170,7 +170,7 @@ const formFields = {
 export const pageBlockSchema = z.discriminatedUnion('blockType', [
   blockBase.extend({
     blockType: z.literal('hero'),
-    heading: richTextSchema,
+    heading: richTextSchema.nullable(),
     variant: z.enum(['split', 'text', 'background']).nullable().optional(),
     alignment: z.enum(['left', 'center']).nullable().optional(),
     height: z

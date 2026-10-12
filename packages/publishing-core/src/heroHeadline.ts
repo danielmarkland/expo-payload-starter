@@ -22,10 +22,19 @@ export const heroHeadlineEditor: ReturnType<typeof lexicalEditor> =
   })
 
 export function validateHeroHeadline(value: unknown) {
-  if (!value || typeof value !== 'object') return true
+  if (!value || typeof value !== 'object') return 'Enter a hero heading.'
   const root = (value as { root?: { children?: Array<{ type?: string }> } })
     .root
-  if (!root?.children) return true
+  if (!Array.isArray(root?.children)) return 'Enter a hero heading.'
+  const hasText = (node: unknown): boolean => {
+    if (!node || typeof node !== 'object') return false
+    const entry = node as { text?: unknown; children?: unknown[] }
+    return (
+      (typeof entry.text === 'string' && Boolean(entry.text.trim())) ||
+      (Array.isArray(entry.children) && entry.children.some(hasText))
+    )
+  }
+  if (!root.children.some(hasText)) return 'Enter a hero heading.'
   return root.children.length === 1 && root.children[0]?.type === 'paragraph'
     ? true
     : 'Use a single paragraph. Press Shift+Enter to add a line break.'

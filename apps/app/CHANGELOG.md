@@ -1,5 +1,13 @@
 # @starter/app
 
+## 0.1.12
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.9.1
+  - @starter/api-client@0.1.11
+
 ## 0.1.11
 
 ### Patch Changes

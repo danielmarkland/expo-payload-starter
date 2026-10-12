@@ -87,7 +87,7 @@ export function createPageRenderer({
     data,
     primary,
   }: {
-    data: HeroBlock['heading']
+    data: NonNullable<HeroBlock['heading']>
     primary: boolean
   }) {
     const Heading = primary ? 'h1' : 'h2'
@@ -141,7 +141,9 @@ export function createPageRenderer({
               {block.eyebrow ? (
                 <p className="eyebrow">{block.eyebrow}</p>
               ) : null}
-              <HeroHeadline data={block.heading} primary={primaryHero} />
+              {block.heading ? (
+                <HeroHeadline data={block.heading} primary={primaryHero} />
+              ) : null}
               {block.secondaryHeading ? (
                 <p className="page-hero-secondary-heading">
                   {block.secondaryHeading}
