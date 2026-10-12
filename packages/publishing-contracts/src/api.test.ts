@@ -239,6 +239,14 @@ it('documents recursive rich-text cards without expanding the tree indefinitely'
 })
 
 describe('hero layout controls', () => {
+  it('accepts an already-published empty hero heading', () => {
+    expect(
+      pageBlockSchema.parse({ blockType: 'hero', heading: null }),
+    ).toMatchObject({
+      blockType: 'hero',
+      heading: null,
+    })
+  })
   for (const verticalAlignment of ['top', 'middle', 'bottom']) {
     it(`preserves viewport height and ${verticalAlignment} alignment`, () => {
       const hero = {

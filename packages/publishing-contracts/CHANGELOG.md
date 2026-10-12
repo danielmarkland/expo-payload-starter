@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-contracts
 
+## 0.9.1
+
+### Patch Changes
+
+- Render published heroes with null headings safely and reject missing hero headings in CMS validation.
+
 ## 0.9.0
 
 ### Minor Changes
