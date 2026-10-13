@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Preserve palette contrast validation on the client through shared field metadata.
+
 - Reject conflicting legacy pooler ports and invalid PostgreSQL URL schemes without exposing credentials.
 
 ## 0.12.2

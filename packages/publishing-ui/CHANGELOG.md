@@ -4,6 +4,8 @@
 
 ### Patch Changes
 
+- Preserve palette contrast validation on the client through shared field metadata.
+
 - Updated dependencies
   - @danielmarkland/publishing-core@0.12.3
 

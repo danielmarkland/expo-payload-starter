@@ -134,9 +134,10 @@ describe('Payload color picker field', () => {
       )
       for (const color of row.fields) {
         if (color.type !== 'text' || color.hasMany) throw new Error('Color field is invalid')
-        expect(color.admin?.components?.Field).toBe(
-          '@/components/admin/ColorPickerField#ColorPickerField',
-        )
+        expect(color.admin?.components?.Field).toEqual({
+          path: '@/components/admin/ColorPickerField#ColorPickerField',
+          clientProps: { paletteColor: color.name },
+        })
         expect(color.admin?.description).toBeUndefined()
         expect(color.admin?.width).toBe('25%')
         expect(color.validate?.('#abcdef', {} as never)).toBe(true)

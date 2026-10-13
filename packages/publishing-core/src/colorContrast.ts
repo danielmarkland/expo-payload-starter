@@ -57,6 +57,10 @@ export function colorContrastRatio(first: string, second: string) {
   return (luminances[0]! + 0.05) / (luminances[1]! + 0.05)
 }
 
+export function isPaletteColorName(value: unknown): value is PaletteColorName {
+  return typeof value === 'string' && Object.hasOwn(labels, value)
+}
+
 export function validatePaletteColor(
   name: PaletteColorName,
 ): TextFieldValidation {
