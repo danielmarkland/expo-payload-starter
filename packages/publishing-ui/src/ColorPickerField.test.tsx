@@ -65,7 +65,7 @@ describe('Payload color picker field', () => {
     expect(fieldState.setValue).toHaveBeenCalledWith('#aabbcc')
   })
 
-  it('registers the supplied palette validator with Payload form state', () => {
+  it('registers the supplied palette validator with Payload form state', async () => {
     const validate = vi.fn(
       () => 'Primary and Text on primary need at least 4.5:1 contrast.',
     )
@@ -78,8 +78,35 @@ describe('Payload color picker field', () => {
     )
     const options = useFieldOptions.mock.calls.at(-1)?.[0]
     expect(
-      options.validate('#121212', { siblingData: { primaryInk: '#121212' } }),
+      await options.validate('#121212', {
+        siblingData: { primaryInk: '#121212' },
+      }),
     ).toContain('4.5:1 contrast')
+    expect(validate).toHaveBeenCalledOnce()
+  })
+
+  it('retains portable palette errors when generic client text validation succeeds', async () => {
+    const validate = vi.fn(() => true)
+    render(
+      <ColorPickerField
+        field={field}
+        paletteColor="primary"
+        path="theme.light.primary"
+        validate={validate}
+      />,
+    )
+    const options = useFieldOptions.mock.calls.at(-1)?.[0]
+    expect(
+      await options.validate('#121212', {
+        siblingData: { primaryInk: '#121212' },
+      }),
+    ).toContain('4.5:1 contrast')
+    expect(validate).not.toHaveBeenCalled()
+    expect(
+      await options.validate('#ffffff', {
+        siblingData: { primaryInk: '#121212' },
+      }),
+    ).toBe(true)
     expect(validate).toHaveBeenCalledOnce()
   })
 

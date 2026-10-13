@@ -58,3 +58,5 @@ dropping and replacing a file; persistence and server validation remain adapters
 Run `pnpm --filter @danielmarkland/publishing-ui test:layout` with Playwright
 Chromium installed to verify responsive section widths, hero coverage, and all
 header surface/sticky combinations. CI runs these browser checks before site E2E.
+
+Shared palette fields carry portable validation metadata. The color picker applies the shared contrast rule on the client as well as the server, so generic text validation cannot clear a rejected palette’s field errors.

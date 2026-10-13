@@ -57,3 +57,5 @@ upload and again after relationship resolution, before committing. Storage hooks
 that change original bytes fail replacement rather than silently corrupting the
 archive. Destination image transformations must preserve the imported original;
 derivatives can be rebuilt independently.
+
+Database URLs must use PostgreSQL schemes. The deprecated `DATABASE_POOLER_PORT` is accepted during migration when the URL omits its port or specifies the same port; conflicting explicit ports fail without reporting connection credentials. Encode the final pooler port in `DATABASE_URL`.

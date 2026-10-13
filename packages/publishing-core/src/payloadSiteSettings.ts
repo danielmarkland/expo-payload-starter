@@ -26,7 +26,10 @@ export function createSiteSettingsFields({
       type: 'text',
       admin: {
         components: {
-          Field: colorPickerFieldComponent,
+          Field: {
+            path: colorPickerFieldComponent,
+            clientProps: { paletteColor: name },
+          },
         },
         width: '25%',
       },

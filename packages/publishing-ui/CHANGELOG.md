@@ -1,5 +1,14 @@
 # @danielmarkland/publishing-ui
 
+## 0.7.5
+
+### Patch Changes
+
+- Preserve palette contrast validation on the client through shared field metadata.
+
+- Updated dependencies
+  - @danielmarkland/publishing-core@0.12.3
+
 ## 0.7.4
 
 ### Patch Changes
