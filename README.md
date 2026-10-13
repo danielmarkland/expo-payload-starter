@@ -677,3 +677,5 @@ Shared publishing storage uses standard S3 configuration: `AWS_ACCESS_KEY_ID`,
 `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, and `AWS_REGION`.
 `CMS_MEDIA_BUCKET` selects the media bucket (default `cms-media`).
 S3 credentials stay server-side; the endpoint supports any path-style S3 provider.
+
+Database pools default to two connections with 10,000 ms idle and connection timeouts. Optional pool environment settings override these bounds.

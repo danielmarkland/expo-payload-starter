@@ -109,15 +109,15 @@ export function getDatabasePoolConfig(environment: Environment = process.env) {
   }
   return {
     connectionString,
-    max: positiveIntegerSetting('DATABASE_POOL_MAX', environment),
-    idleTimeoutMillis: positiveIntegerSetting(
-      'DATABASE_POOL_IDLE_TIMEOUT_MS',
-      environment,
-    ),
-    connectionTimeoutMillis: positiveIntegerSetting(
-      'DATABASE_POOL_CONNECTION_TIMEOUT_MS',
-      environment,
-    ),
+    max: positiveIntegerSetting('DATABASE_POOL_MAX', environment) ?? 2,
+    idleTimeoutMillis:
+      positiveIntegerSetting('DATABASE_POOL_IDLE_TIMEOUT_MS', environment) ??
+      10000,
+    connectionTimeoutMillis:
+      positiveIntegerSetting(
+        'DATABASE_POOL_CONNECTION_TIMEOUT_MS',
+        environment,
+      ) ?? 10000,
     ...(ca ? { ssl: { ca, rejectUnauthorized: true } } : {}),
   }
 }
