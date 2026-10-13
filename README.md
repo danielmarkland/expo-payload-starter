@@ -76,7 +76,7 @@ unpublished content. Configure editor-managed header and footer links
 in **Header navigation** and **Footer navigation** Globals. **Site settings**
 holds the site/app titles, short name, light/dark logos, favicon, fallback SEO
 description, social preview metadata, runtime theme, Google Tag Manager ID, and
-Turnstile site key. Header navigation owns
+Turnstile site key. Shared color controls register their configured Payload validators so palette validation participates in the form lifecycle. Header navigation owns
 only the header links. Header links use the shared searchable icon picker, which
 combines recognizable social-media brand marks with a curated set of general
 interface icons; icon-only links retain their configured label for assistive
