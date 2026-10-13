@@ -679,3 +679,5 @@ Shared publishing storage uses standard S3 configuration: `AWS_ACCESS_KEY_ID`,
 S3 credentials stay server-side; the endpoint supports any path-style S3 provider.
 
 Database pools default to two connections with 10,000 ms idle and connection timeouts. Optional pool environment settings override these bounds.
+
+Database URLs must use PostgreSQL schemes. The deprecated `DATABASE_POOLER_PORT` is accepted during migration when the URL omits its port or specifies the same port; conflicting explicit ports fail without reporting connection credentials. Encode the final pooler port in `DATABASE_URL`.
