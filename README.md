@@ -76,7 +76,7 @@ unpublished content. Configure editor-managed header and footer links
 in **Header navigation** and **Footer navigation** Globals. **Site settings**
 holds the site/app titles, short name, light/dark logos, favicon, fallback SEO
 description, social preview metadata, runtime theme, Google Tag Manager ID, and
-Turnstile site key. Header navigation owns
+Turnstile site key. Shared color controls register their configured Payload validators so palette validation participates in the form lifecycle. Header navigation owns
 only the header links. Header links use the shared searchable icon picker, which
 combines recognizable social-media brand marks with a curated set of general
 interface icons; icon-only links retain their configured label for assistive
@@ -677,3 +677,9 @@ Shared publishing storage uses standard S3 configuration: `AWS_ACCESS_KEY_ID`,
 `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, and `AWS_REGION`.
 `CMS_MEDIA_BUCKET` selects the media bucket (default `cms-media`).
 S3 credentials stay server-side; the endpoint supports any path-style S3 provider.
+
+Database pools default to two connections with 10,000 ms idle and connection timeouts. Optional pool environment settings override these bounds.
+
+Database URLs must use PostgreSQL schemes. The deprecated `DATABASE_POOLER_PORT` is accepted during migration when the URL omits its port or specifies the same port; conflicting explicit ports fail without reporting connection credentials. Encode the final pooler port in `DATABASE_URL`.
+
+Shared palette fields carry portable validation metadata. The color picker applies the shared contrast rule on the client as well as the server, so generic text validation cannot clear a rejected palette’s field errors.

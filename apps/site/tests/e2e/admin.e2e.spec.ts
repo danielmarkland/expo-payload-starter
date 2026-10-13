@@ -87,9 +87,14 @@ test.describe('Admin Panel', () => {
 
     const primary = page.locator('input[type="color"][name="theme.light.primary"]')
     const primaryInk = page.locator('input[type="color"][name="theme.light.primaryInk"]')
-    await primary.fill(await primaryInk.inputValue())
+    const invalidColor = await primaryInk.inputValue()
+    await primary.fill(invalidColor)
+    // Observe Payload's rendered form state, not just the native input event.
+    await expect(primary.locator('..').locator('output')).toHaveText(invalidColor)
     await primary.blur()
-    await page.getByRole('button', { name: 'Save' }).click()
+    const save = page.getByRole('button', { name: 'Save', exact: true })
+    await expect(save).toBeEnabled()
+    await save.click()
     await expect(page.getByText(/need at least 4\.5:1 contrast/).first()).toBeVisible({
       timeout: 30_000,
     })

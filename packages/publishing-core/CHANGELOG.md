@@ -1,5 +1,19 @@
 # @danielmarkland/publishing-core
 
+## 0.12.3
+
+### Patch Changes
+
+- Preserve palette contrast validation on the client through shared field metadata.
+
+- Reject conflicting legacy pooler ports and invalid PostgreSQL URL schemes without exposing credentials.
+
+## 0.12.2
+
+### Patch Changes
+
+- 835f083: Default database pools to two connections and ten-second idle/connection timeouts, preserving explicit overrides and certificate verification.
+
 ## 0.12.1
 
 ### Patch Changes

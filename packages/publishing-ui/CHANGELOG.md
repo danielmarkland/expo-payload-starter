@@ -1,5 +1,27 @@
 # @danielmarkland/publishing-ui
 
+## 0.7.5
+
+### Patch Changes
+
+- Preserve palette contrast validation on the client through shared field metadata.
+
+- Updated dependencies
+  - @danielmarkland/publishing-core@0.12.3
+
+## 0.7.4
+
+### Patch Changes
+
+- Register the supplied Payload validator for color fields so invalid palette contrast blocks saving consistently.
+
+## 0.7.3
+
+### Patch Changes
+
+- Updated dependencies [835f083]
+  - @danielmarkland/publishing-core@0.12.2
+
 ## 0.7.2
 
 ### Patch Changes

@@ -97,8 +97,19 @@ export function getDatabasePoolConfig(environment: Environment = process.env) {
   const port = positiveIntegerSetting('DATABASE_POOLER_PORT', environment)
   if (port && port > 65535)
     throw new Error('DATABASE_POOLER_PORT must be a valid TCP port.')
-  if (ca || port) {
-    const url = new URL(connectionString)
+  if (connectionString || ca || port) {
+    let url: URL
+    try {
+      url = new URL(connectionString)
+    } catch {
+      throw new Error('DATABASE_URL must be a valid PostgreSQL URL.')
+    }
+    if (!['postgres:', 'postgresql:'].includes(url.protocol) || !url.hostname)
+      throw new Error('DATABASE_URL must be a valid PostgreSQL URL.')
+    if (port && url.port && Number(url.port) !== port)
+      throw new Error(
+        'DATABASE_POOLER_PORT conflicts with the port in DATABASE_URL.',
+      )
     if (port) url.port = String(port)
     // pg's URL SSL parameters replace the SSL object, including its trusted CA.
     if (ca) {
@@ -109,15 +120,15 @@ export function getDatabasePoolConfig(environment: Environment = process.env) {
   }
   return {
     connectionString,
-    max: positiveIntegerSetting('DATABASE_POOL_MAX', environment),
-    idleTimeoutMillis: positiveIntegerSetting(
-      'DATABASE_POOL_IDLE_TIMEOUT_MS',
-      environment,
-    ),
-    connectionTimeoutMillis: positiveIntegerSetting(
-      'DATABASE_POOL_CONNECTION_TIMEOUT_MS',
-      environment,
-    ),
+    max: positiveIntegerSetting('DATABASE_POOL_MAX', environment) ?? 2,
+    idleTimeoutMillis:
+      positiveIntegerSetting('DATABASE_POOL_IDLE_TIMEOUT_MS', environment) ??
+      10000,
+    connectionTimeoutMillis:
+      positiveIntegerSetting(
+        'DATABASE_POOL_CONNECTION_TIMEOUT_MS',
+        environment,
+      ) ?? 10000,
     ...(ca ? { ssl: { ca, rejectUnauthorized: true } } : {}),
   }
 }

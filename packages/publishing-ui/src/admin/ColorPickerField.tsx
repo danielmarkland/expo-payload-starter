@@ -1,6 +1,10 @@
 'use client'
 
-import type { TextFieldClientComponent } from 'payload'
+import type { TextFieldClientProps, Validate } from 'payload'
+import {
+  isPaletteColorName,
+  validatePaletteColor,
+} from '@danielmarkland/publishing-core/colorContrast'
 import {
   FieldDescription,
   FieldError,
@@ -8,20 +12,56 @@ import {
   useField,
 } from '@payloadcms/ui'
 import { mergeFieldStyles } from '@payloadcms/ui/shared'
-import { useId } from 'react'
+import { useCallback, useId } from 'react'
 
 import './ColorPickerField.css'
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/
 const FALLBACK_COLOR = '#000000'
 
-export const ColorPickerField: TextFieldClientComponent = ({
+export const ColorPickerField = ({
   field,
   path,
   readOnly,
-}) => {
+  validate,
+  paletteColor,
+}: TextFieldClientProps & { paletteColor?: unknown }) => {
   const inputId = `color-picker-${useId().replaceAll(':', '')}`
-  const { disabled, setValue, showError, value } = useField<string>({ path })
+  const validateColor = useCallback<Validate>(
+    async (value, options) => {
+      const fieldOptions = {
+        ...options,
+        type: 'text' as const,
+        name: field.name,
+        required: field.required,
+        minLength: field.minLength,
+        maxLength: field.maxLength,
+      }
+      // Payload can supply only its generic text validator on the client.
+      // Reuse the portable palette rule so it cannot clear server contrast errors.
+      if (isPaletteColorName(paletteColor)) {
+        const contrast = await validatePaletteColor(paletteColor)(
+          value,
+          fieldOptions,
+        )
+        if (contrast !== true) return contrast
+      }
+      return validate?.(value, fieldOptions) ?? true
+    },
+    [
+      validate,
+      paletteColor,
+      field.name,
+      field.required,
+      field.minLength,
+      field.maxLength,
+    ],
+  )
+  const { disabled, setValue, showError, value } = useField<string>({
+    path,
+    validate:
+      validate || isPaletteColorName(paletteColor) ? validateColor : undefined,
+  })
   const currentValue = typeof value === 'string' ? value : ''
   const pickerValue = HEX_COLOR.test(currentValue)
     ? currentValue
