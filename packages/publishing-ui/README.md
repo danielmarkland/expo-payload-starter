@@ -21,7 +21,7 @@ Import public components through their named subpaths. `admin` is a separate
 client entry point for `ColorPickerField`, `LinkRowLabel`, and
 `createIconPickerField`. Create the icon field once in an application's client
 adapter, supplying its icon definitions. Keep that adapter as the Payload import
-map target. CSS for the admin controls ships in the package and loads with them.
+map target. ColorPickerField registers the supplied Payload validator so palette contrast errors participate in client form validation before saving. CSS for the admin controls ships in the package and loads with them.
 
 React and Next.js are peers. Payload and its UI are optional peers needed only
 when using the admin entry point. Existing public-site CSS classes are preserved;

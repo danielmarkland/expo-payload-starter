@@ -1,6 +1,6 @@
 'use client'
 
-import type { TextFieldClientComponent } from 'payload'
+import type { TextFieldClientComponent, Validate } from 'payload'
 import {
   FieldDescription,
   FieldError,
@@ -8,7 +8,7 @@ import {
   useField,
 } from '@payloadcms/ui'
 import { mergeFieldStyles } from '@payloadcms/ui/shared'
-import { useId } from 'react'
+import { useCallback, useId } from 'react'
 
 import './ColorPickerField.css'
 
@@ -19,9 +19,25 @@ export const ColorPickerField: TextFieldClientComponent = ({
   field,
   path,
   readOnly,
+  validate,
 }) => {
   const inputId = `color-picker-${useId().replaceAll(':', '')}`
-  const { disabled, setValue, showError, value } = useField<string>({ path })
+  const validateColor = useCallback<Validate>(
+    (value, options) =>
+      validate?.(value, {
+        ...options,
+        type: 'text',
+        name: field.name,
+        required: field.required,
+        minLength: field.minLength,
+        maxLength: field.maxLength,
+      }) ?? true,
+    [validate, field.name, field.required, field.minLength, field.maxLength],
+  )
+  const { disabled, setValue, showError, value } = useField<string>({
+    path,
+    validate: validate ? validateColor : undefined,
+  })
   const currentValue = typeof value === 'string' ? value : ''
   const pickerValue = HEX_COLOR.test(currentValue)
     ? currentValue
