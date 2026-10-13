@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.7.4
+
+### Patch Changes
+
+- Register the supplied Payload validator for color fields so invalid palette contrast blocks saving consistently.
+
 ## 0.7.3
 
 ### Patch Changes

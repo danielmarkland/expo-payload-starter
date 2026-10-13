@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type { TextFieldClientProps } from 'payload'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+const useFieldOptions = vi.hoisted(() => vi.fn())
 const fieldState = vi.hoisted(() => ({
   disabled: false,
   setValue: vi.fn(),
@@ -17,7 +18,10 @@ vi.mock('@payloadcms/ui', () => ({
   FieldLabel: ({ htmlFor, label }: { htmlFor?: string; label?: string }) => (
     <label htmlFor={htmlFor}>{label}</label>
   ),
-  useField: () => fieldState,
+  useField: (options: unknown) => {
+    useFieldOptions(options)
+    return fieldState
+  },
 }))
 
 vi.mock('@payloadcms/ui/shared', () => ({
@@ -39,6 +43,7 @@ const field = {
 describe('Payload color picker field', () => {
   afterEach(() => {
     cleanup()
+    useFieldOptions.mockClear()
     fieldState.disabled = false
     fieldState.setValue.mockReset()
     fieldState.showError = false
@@ -58,6 +63,24 @@ describe('Payload color picker field', () => {
 
     fireEvent.change(picker, { target: { value: '#AABBCC' } })
     expect(fieldState.setValue).toHaveBeenCalledWith('#aabbcc')
+  })
+
+  it('registers the supplied palette validator with Payload form state', () => {
+    const validate = vi.fn(
+      () => 'Primary and Text on primary need at least 4.5:1 contrast.',
+    )
+    render(
+      <ColorPickerField
+        field={field}
+        path="theme.light.primary"
+        validate={validate}
+      />,
+    )
+    const options = useFieldOptions.mock.calls.at(-1)?.[0]
+    expect(
+      options.validate('#121212', { siblingData: { primaryInk: '#121212' } }),
+    ).toContain('4.5:1 contrast')
+    expect(validate).toHaveBeenCalledOnce()
   })
 
   it('honors disabled and read-only states', () => {
