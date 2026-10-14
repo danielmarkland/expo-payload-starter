@@ -21,6 +21,8 @@ export default function SignInScreen() {
     facebook: false,
     sms: false,
     email: false,
+    emailDelivery: false,
+    passwordSignup: false,
   })
   const [email, setEmail] = useState(''),
     [password, setPassword] = useState(''),
@@ -145,30 +147,34 @@ export default function SignInScreen() {
             >
               <Text style={{ color: colors.primary }}>Sign in with email</Text>
             </Pressable>
-            <Pressable
-              disabled={pending}
-              onPress={() =>
-                void perform(async () => {
-                  await auth.signUpWithEmail(email, password, email)
-                  setMessage('Check your email to verify your account.')
-                })
-              }
-            >
-              <Text style={{ color: colors.primary }}>Create account</Text>
-            </Pressable>
-            <Pressable
-              disabled={pending}
-              onPress={() =>
-                void perform(async () => {
-                  await auth.requestPasswordReset(email)
-                  setMessage(
-                    'If this account exists, check your email for a recovery link.',
-                  )
-                })
-              }
-            >
-              <Text style={{ color: colors.primary }}>Forgot password?</Text>
-            </Pressable>
+            {providers.passwordSignup ? (
+              <Pressable
+                disabled={pending}
+                onPress={() =>
+                  void perform(async () => {
+                    await auth.signUpWithEmail(email, password, email)
+                    setMessage('Check your email to verify your account.')
+                  })
+                }
+              >
+                <Text style={{ color: colors.primary }}>Create account</Text>
+              </Pressable>
+            ) : null}
+            {providers.emailDelivery ? (
+              <Pressable
+                disabled={pending}
+                onPress={() =>
+                  void perform(async () => {
+                    await auth.requestPasswordReset(email)
+                    setMessage(
+                      'If this account exists, check your email for a recovery link.',
+                    )
+                  })
+                }
+              >
+                <Text style={{ color: colors.primary }}>Forgot password?</Text>
+              </Pressable>
+            ) : null}
           </>
         ) : null}
         {providers.sms ? (

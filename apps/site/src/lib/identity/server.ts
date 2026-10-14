@@ -76,6 +76,9 @@ export async function identityServer(kind: 'customer' | 'editor' = 'customer') {
     secret: createHmac('sha256', secret).update(key).digest('hex'),
     trustedOrigins,
     plugins: kind === 'customer' ? [bearer(), expo()] : [],
+    ...(kind === 'editor' || !config.email
+      ? { passwordSignIn: { disableSignUp: true as const } }
+      : {}),
     socialProviders: {
       ...(config.google ? { google: config.google } : {}),
       ...(config.facebook ? { facebook: config.facebook } : {}),
@@ -116,6 +119,8 @@ export function configuredIdentityProviders(kind: 'customer' | 'editor' = 'custo
     google: Boolean(config.google),
     facebook: Boolean(config.facebook),
     sms: Boolean(config.twilio),
-    email: Boolean(config.email),
+    email: true,
+    emailDelivery: Boolean(config.email),
+    passwordSignup: kind === 'customer' && Boolean(config.email),
   }
 }

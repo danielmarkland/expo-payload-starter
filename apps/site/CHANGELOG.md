@@ -1,5 +1,12 @@
 # @starter/site
 
+## 1.0.24
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/auth-runtime@0.2.0
+
 ## 1.0.23
 
 ### Patch Changes

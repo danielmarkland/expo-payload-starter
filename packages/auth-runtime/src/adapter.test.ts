@@ -69,6 +69,68 @@ describe.skipIf(!databaseURL)('PostgreSQL authentication isolation', () => {
   afterAll(async () => {
     await pool.end()
   })
+  it('allows verified operator password sign-in without mail and rejects signup and unverified accounts', async () => {
+    const auth = createRealmAuth({
+      pool,
+      realm: { kind: 'platform' },
+      baseURL: 'http://localhost:3000',
+      secret: 's'.repeat(32),
+      passwordSignIn: { disableSignUp: true },
+    })
+    const context = await auth.$context
+    const identity = await context.internalAdapter.createUser(
+      { name: 'Operator', email: 'operator@example.test', emailVerified: true },
+      { method: 'admin' },
+    )
+    await context.internalAdapter.createAccount({
+      userId: identity.id,
+      accountId: identity.id,
+      providerId: 'credential',
+      password: await context.password.hash('operator-password-123!'),
+    })
+    const login = await auth.api.signInEmail({
+      body: {
+        email: 'operator@example.test',
+        password: 'operator-password-123!',
+      },
+      returnHeaders: true,
+    })
+    expect(login.headers.get('set-cookie')).toContain('gp_')
+    await expect(
+      auth.api.signUpEmail({
+        body: {
+          email: 'intruder@example.test',
+          name: 'Intruder',
+          password: 'operator-password-123!',
+        },
+      }),
+    ).rejects.toThrow()
+    await context.internalAdapter.updateUser(identity.id, {
+      emailVerified: false,
+    })
+    await expect(
+      auth.api.signInEmail({
+        body: {
+          email: 'operator@example.test',
+          password: 'operator-password-123!',
+        },
+      }),
+    ).rejects.toThrow()
+    const customer = createRealmAuth({
+      pool,
+      realm: tenantA,
+      baseURL: 'http://localhost:3000',
+      secret: 's'.repeat(32),
+    })
+    await expect(
+      customer.api.signInEmail({
+        body: {
+          email: 'operator@example.test',
+          password: 'operator-password-123!',
+        },
+      }),
+    ).rejects.toThrow()
+  })
   it('enforces realm isolation in PostgreSQL even without an application filter and clears pooled context', async () => {
     await a.create({ forceAllowId: true, model: 'user', data: user() })
     await b.create({ forceAllowId: true, model: 'user', data: user() })
