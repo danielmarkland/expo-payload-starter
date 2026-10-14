@@ -136,7 +136,12 @@
     "./IdentityLogin": {
       "types": "./dist/IdentityLogin.d.ts",
       "default": "./dist/IdentityLogin.js"
-    }
+    },
+    "./CustomerCommerce": {
+      "types": "./dist/CustomerCommerce.d.ts",
+      "default": "./dist/CustomerCommerce.js"
+    },
+    "./CustomerCommerce.css": "./dist/CustomerCommerce.css"
   },
   "files": [
     "dist"

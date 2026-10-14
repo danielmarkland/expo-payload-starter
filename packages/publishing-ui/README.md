@@ -60,3 +60,8 @@ Chromium installed to verify responsive section widths, hero coverage, and all
 header surface/sticky combinations. CI runs these browser checks before site E2E.
 
 Shared palette fields carry portable validation metadata. The color picker applies the shared contrast rule on the client as well as the server, so generic text validation cannot clear a rejected palette’s field errors.
+
+`CustomerCommerce` provides a reusable customer account and product listing view.
+Hosts supply authenticated session, provider navigation, Shopify linking, order and
+catalog operations; the view receives no provider credentials. Import its CSS
+through `@danielmarkland/publishing-ui/CustomerCommerce.css`.

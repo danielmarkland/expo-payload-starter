@@ -4,3 +4,8 @@ export { SiteBrand } from './SiteBrand.js'
 export { SiteHeader, type SiteHeaderProps } from './SiteHeader.js'
 export { GoogleTagManager } from './GoogleTagManager.js'
 export { PostArchive } from './PostArchive.js'
+
+export {
+  CustomerCommerce,
+  type CustomerCommerceActions,
+} from './CustomerCommerce.js'
