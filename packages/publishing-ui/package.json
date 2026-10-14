@@ -136,6 +136,10 @@
     "./IdentityLogin": {
       "types": "./dist/IdentityLogin.d.ts",
       "default": "./dist/IdentityLogin.js"
+    },
+    "./ProductWidget": {
+      "types": "./dist/ProductWidget.d.ts",
+      "default": "./dist/ProductWidget.js"
     }
   },
   "files": [
