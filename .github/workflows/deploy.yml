@@ -18,7 +18,7 @@ jobs:
     if: vars.RELEASE_AUTOMATION_ENABLED == 'true' && (github.ref_name == 'develop' || github.ref_name == 'main')
     runs-on: ubuntu-latest
     concurrency:
-      group: release-${{ github.repository }}-${{ github.ref_name }}
+      group: release-${{ github.repository }}
       cancel-in-progress: false
     environment: ${{ github.ref_name == 'main' && 'production' || 'development' }}
     env:
