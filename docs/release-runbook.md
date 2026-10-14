@@ -48,15 +48,19 @@ or bypass a failure. Run `git diff --check` and the repository checks locally.
 3. Leave `RELEASE_AUTOMATION_ENABLED` unset until secrets and projects are verified.
    This rollout state retains the existing tracked Git deployments and package
    workflow. It is not evidence that controlled deployment is operating.
-4. Enable the repository variable for a controlled dev run; set the matching
-   Vercel project's production environment `RELEASE_AUTOMATION_ENABLED=true` so
-   its ignored-build command skips tracked Git deployments. Configure the prod
-   project similarly before the first controlled main release. Changes take
-   effect with the checked-in ignore command; verify that command is active first.
-   Existing manual/package workflows are disabled by the same repository switch.
-5. Platform: dev project Preview `RELEASE_CANONICAL_PREVIEW=true`; production
-   project Preview `RELEASE_CANONICAL_PREVIEW=false`. Feature previews live only
-   on the dev project. These settings do not cancel an already active deployment.
+4. Use one Vercel project with Production tracking `main` and a custom `dev`
+   environment whose branch matcher equals `develop`. Both GitHub release
+   environments reference this project. Keep database, signing and storage
+   credentials separate. Set `RELEASE_AUTOMATION_ENABLED=true` in Production,
+   custom dev and Preview; set `RELEASE_CANONICAL_PREVIEW=true` in Preview.
+   The ignored-build command skips ordinary tracked pushes; feature branches
+   remain Preview deployments with development resources.
+5. Development builds a Preview candidate from the exact SHA without moving
+   domains. After migrations and package validation, it rebuilds that SHA in
+   custom dev. Production builds with `--prod --skip-domain` and promotes only
+   after migrations and publication. Dev recovery restores only domains still
+   assigned to custom dev; it cannot promote or roll back Production. Releases
+   across both environments share one lock. Never reverse migrations automatically.
 6. Merge into develop, inspect the Controlled release summary and hosted smoke.
    Once enabled, main PR policy requires successful dev deployment for its exact
    head. Open develop → main and merge only after `ci` passes.
@@ -89,8 +93,9 @@ or successful local build. Exercise a failed migration in a disposable database,
 retry publication, and confirm simultaneous runs queue. Verify direct pushes are
 rejected after protections are enabled, without risking main with test changes.
 
-Vercel retains sensitive runtime settings. CI uses `vercel deploy --prod --skip-domain`
-to build the exact checkout, then promotes only after migrations/publication pass.
+Vercel retains sensitive runtime settings. Production uses `vercel deploy --prod --skip-domain` to build the exact checkout,
+then promotes only after migrations/publication pass. Custom dev uses exact-SHA
+Preview validation followed by a custom-dev build after those gates.
 CI compiles workspace packages locally for migration imports and immutable registry
 checks, while Vercel builds the hosted frontend. CI does not download or duplicate
 runtime secrets. Payload migration uses a temporary

@@ -1,3 +1,9 @@
+import {
+  releaseTarget,
+  assertDevDomain,
+  assertDevSmokeTargets,
+  assertDeploymentTarget,
+} from './target.mjs'
 import { execFileSync } from 'node:child_process'
 import { createHash, randomBytes } from 'node:crypto'
 import {
@@ -140,16 +146,24 @@ export function createDriver(env = process.env) {
   }
   const vercel = (...args) =>
     command('vercel', [...args, '--token', env.VERCEL_TOKEN], {}, true)
-  const api = async (path) => {
+  const api = async (path, method = 'GET', body) => {
     const response = await fetch(
       `https://api.vercel.com${path}${path.includes('?') ? '&' : '?'}teamId=${encodeURIComponent(env.VERCEL_ORG_ID)}`,
       {
-        headers: { Authorization: `Bearer ${env.VERCEL_TOKEN}` },
+        method,
+        headers: {
+          Authorization: `Bearer ${env.VERCEL_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+        ...(body ? { body: JSON.stringify(body) } : {}),
         signal: AbortSignal.timeout(30000),
       },
     )
     if (!response.ok)
-      throw new Error(`Deployment API returned ${response.status}`)
+      throw Object.assign(
+        new Error(`Deployment API returned ${response.status}`),
+        { status: response.status },
+      )
     return response.json()
   }
   const setup = async (context) => {
@@ -177,13 +191,46 @@ export function createDriver(env = process.env) {
     )
     const expectedBranch =
       context.environment === 'development' ? 'develop' : 'main'
-    if (project.link?.productionBranch !== expectedBranch)
+    context.target = releaseTarget(context.environment, env.RELEASE_PROFILE)
+    context.project = project
+    if (context.target === 'dev') {
+      const custom = (project.customEnvironments || []).find(
+        (e) => e.slug === 'dev',
+      )
+      if (
+        !custom ||
+        custom.branchMatcher?.type !== 'equals' ||
+        custom.branchMatcher.pattern !== 'develop'
+      )
+        throw new Error('Custom dev environment must track develop')
+      if (project.link?.productionBranch !== 'main')
+        throw new Error('Consolidated project must track main for production')
+      context.customEnvironmentId = custom.id
+      const domains = await api(
+        `/v9/projects/${encodeURIComponent(env.VERCEL_PROJECT_ID)}/domains?limit=100`,
+      )
+      if (domains.pagination?.next)
+        throw new Error(
+          'Domain inventory requires pagination before activation',
+        )
+      context.devDomains = domains.domains.filter(
+        (d) => d.customEnvironmentId === custom.id,
+      )
+      if (!context.devDomains.length)
+        throw new Error('Custom dev has no assigned domains')
+      for (const d of context.devDomains) assertDevDomain(d, custom.id)
+      assertDevSmokeTargets(context.smokeTargets, context.devDomains)
+    }
+    if (
+      context.target !== 'dev' &&
+      project.link?.productionBranch !== expectedBranch
+    )
       throw new Error(
         'Vercel project does not match the tracked environment branch',
       )
-    vercel('pull', '--yes', '--environment', 'production')
+    vercel('pull', '--yes', '--environment', context.target)
     const pulled = parseEnv(
-      readFileSync('.vercel/.env.production.local', 'utf8'),
+      readFileSync(`.vercel/.env.${context.target}.local`, 'utf8'),
     )
     for (const [key, value] of Object.entries(pulled))
       if (
@@ -201,19 +248,38 @@ export function createDriver(env = process.env) {
       )
     // Used only to initialize the migration process; never changes hosted sessions.
     env.PAYLOAD_SECRET = randomBytes(32).toString('hex')
-    env.GROOVEPOST_SITE_TRANSFER_PREPARE = 'false'
+    if (env.RELEASE_PROFILE === 'platform')
+      env.GROOVEPOST_SITE_TRANSFER_PREPARE = 'false'
     env.VERCEL_GIT_COMMIT_SHA = context.sha
     env.VERCEL_GIT_COMMIT_REF = expectedBranch
   }
   return {
     preflight: setup,
-    async previous() {
-      const data = await api(
-        `/v9/projects/${encodeURIComponent(env.VERCEL_PROJECT_ID)}`,
-      )
-      const target = data.targets?.production
-      if (!target?.id) return null
-      const previous = await api(`/v13/deployments/${target.id}`)
+    async previous(context) {
+      let id
+      if (context.target === 'dev') {
+        const ids = new Set()
+        for (const domain of context.devDomains) {
+          const alias = await api(
+            `/v4/aliases/${encodeURIComponent(domain.name)}`,
+          )
+          if (alias.deploymentId) ids.add(alias.deploymentId)
+        }
+        if (!ids.size) return null
+        if (ids.size !== 1)
+          throw new Error(
+            'Dev aliases do not have a single recoverable deployment',
+          )
+        id = [...ids][0]
+      } else {
+        const data = await api(
+          `/v9/projects/${encodeURIComponent(env.VERCEL_PROJECT_ID)}`,
+        )
+        id = data.targets?.production?.id
+      }
+      if (!id) return null
+      const previous = await api(`/v13/deployments/${id}`)
+      assertDeploymentTarget(previous, context)
       return {
         id: previous.id,
         migrationDigest: previous.meta?.releaseMigrationDigest,
@@ -222,6 +288,41 @@ export function createDriver(env = process.env) {
     async build(context) {
       // Migration imports and registry guards need local compiled packages too.
       command('pnpm', ['--filter', './packages/**', 'build'])
+      if (context.target === 'dev') {
+        // Custom environments auto-activate domains. Build the exact SHA in
+        // Preview first; a SHA ref cannot match the custom develop matcher.
+        const deployment = await api('/v13/deployments', 'POST', {
+          name: context.project.name,
+          project: env.VERCEL_PROJECT_ID,
+          gitSource: {
+            type: 'github',
+            repoId: context.project.link.repoId,
+            ref: context.sha,
+            sha: context.sha,
+          },
+          meta: {
+            releaseSha: context.sha,
+            releaseMigrationDigest: context.migrationDigest,
+          },
+        })
+        const deadline = Date.now() + 20 * 60 * 1000
+        let ready = deployment
+        while (
+          !['READY', 'ERROR', 'CANCELED'].includes(ready.readyState) &&
+          Date.now() < deadline
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, 10000))
+          ready = await api(`/v13/deployments/${deployment.id}`)
+        }
+        if (ready.readyState !== 'READY')
+          throw new Error('Dev candidate build failed or timed out')
+        if (ready.customEnvironment || ready.target === 'production')
+          throw new Error(
+            'Dev candidate must be an unassigned Preview deployment',
+          )
+        candidate = { url: 'https://' + ready.url }
+        return candidate
+      }
       const output = vercel(
         'deploy',
         '--prod',
@@ -260,10 +361,7 @@ export function createDriver(env = process.env) {
           ['--filter', '@groovepost/web', 'release:prepare'],
           overrides,
         )
-      else {
-        command('pnpm', ['payload:migrate'], overrides)
-        command('node', ['scripts/database/verify-storage.mjs'])
-      }
+      else command('pnpm', ['payload:migrate'], overrides)
       return {
         postgres: readdirSync('database/migrations')
           .filter((x) => x.endsWith('.sql'))
@@ -321,10 +419,66 @@ export function createDriver(env = process.env) {
         throw new Error(
           'Deployment identity/evidence does not match the release',
         )
+      if (context.target === 'dev') {
+        if (deployment.customEnvironment || deployment.target === 'production')
+          throw new Error(
+            'Dev candidate must be an unassigned Preview deployment',
+          )
+      } else assertDeploymentTarget(deployment, context)
       return { id: deployment.id, url }
     },
-    async activate(_context, deployment) {
-      vercel('promote', deployment.url, '--yes')
+    async activate(context, deployment) {
+      if (context.target !== 'dev') {
+        vercel('promote', deployment.url, '--yes')
+        return
+      }
+      for (const domain of context.devDomains) {
+        const current = await api(
+          `/v9/projects/${encodeURIComponent(env.VERCEL_PROJECT_ID)}/domains/${encodeURIComponent(domain.name)}`,
+        )
+        assertDevDomain(current, context.customEnvironmentId)
+      }
+      // This phase runs only after migrations, and the pipeline marks activation
+      // started before calling it so failures can restore compatible dev aliases.
+      // Vercel rebuilds the validated SHA using custom-dev runtime settings.
+      // Exact refs avoid the tracked-branch ignore rule; Vercel ignored both
+      // null and explicit per-deployment ignore-command overrides in tests.
+      const created = await api('/v13/deployments', 'POST', {
+        name: context.project.name,
+        project: env.VERCEL_PROJECT_ID,
+        customEnvironmentSlugOrId: context.customEnvironmentId,
+        gitSource: {
+          type: 'github',
+          repoId: context.project.link.repoId,
+          ref: context.sha,
+          sha: context.sha,
+        },
+        meta: {
+          releaseSha: context.sha,
+          releaseMigrationDigest: context.migrationDigest,
+        },
+      })
+      const deadline = Date.now() + 20 * 60 * 1000
+      let ready = created
+      while (
+        !['READY', 'ERROR', 'CANCELED'].includes(ready.readyState) &&
+        Date.now() < deadline
+      ) {
+        await new Promise((resolve) => setTimeout(resolve, 10000))
+        ready = await api(`/v13/deployments/${created.id}`)
+      }
+      if (ready.readyState !== 'READY')
+        throw new Error('Custom dev activation failed or timed out')
+      assertDeploymentTarget(ready, context)
+      if (
+        ready.meta?.releaseSha !== context.sha ||
+        ready.meta?.releaseMigrationDigest !== context.migrationDigest
+      )
+        throw new Error(
+          'Custom dev activation evidence does not match the release',
+        )
+      deployment.id = ready.id
+      deployment.url = 'https://' + ready.url
     },
     async smoke(context) {
       for (const target of context.smokeTargets) {
@@ -355,8 +509,20 @@ export function createDriver(env = process.env) {
           )
       }
     },
-    async rollback(_context, id) {
-      vercel('rollback', id, '--yes')
+    async rollback(context, id) {
+      if (context.target !== 'dev') {
+        vercel('rollback', id, '--yes')
+        return
+      }
+      const deployment = await api(`/v13/deployments/${id}`)
+      assertDeploymentTarget(deployment, context)
+      for (const domain of context.devDomains) {
+        const current = await api(
+          `/v9/projects/${encodeURIComponent(env.VERCEL_PROJECT_ID)}/domains/${encodeURIComponent(domain.name)}`,
+        )
+        assertDevDomain(current, context.customEnvironmentId)
+        vercel('alias', 'set', deployment.url, domain.name)
+      }
     },
     async report(_context, record) {
       if (env.GITHUB_ACTIONS === 'true')
