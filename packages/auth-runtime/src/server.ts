@@ -36,6 +36,8 @@ export type RealmAuthConfiguration = {
   sendResetPassword?: NonNullable<
     BetterAuthOptions['emailAndPassword']
   >['sendResetPassword']
+  /** Operator-provisioned, verified accounts only; public password signup stays disabled. */
+  passwordSignIn?: { disableSignUp: true }
   plugins?: BetterAuthOptions['plugins']
 }
 export function createRealmAuth(config: RealmAuthConfiguration): Auth {
@@ -110,9 +112,11 @@ function realmOptions(config: RealmAuthConfiguration): BetterAuthOptions {
       : undefined,
     emailAndPassword: {
       enabled: Boolean(
-        config.sendVerificationEmail && config.sendResetPassword,
+        config.passwordSignIn ||
+        (config.sendVerificationEmail && config.sendResetPassword),
       ),
       requireEmailVerification: true,
+      disableSignUp: config.passwordSignIn?.disableSignUp,
       revokeSessionsOnPasswordReset: true,
       sendResetPassword: config.sendResetPassword,
     },
