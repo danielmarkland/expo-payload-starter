@@ -25,6 +25,7 @@ test('cloud build keeps domains untouched and activates only its verified candid
       return Response.json({
         id: 'dpl_fixture',
         readyState: 'READY',
+        target: 'production',
         meta: {
           releaseSha: altered ? 'b'.repeat(40) : context.sha,
           releaseMigrationDigest: context.migrationDigest,
@@ -72,7 +73,7 @@ test('cloud build keeps domains untouched and activates only its verified candid
   }
 })
 
-test('production settings pull omits branch selector and does not import sensitive placeholders', async () => {
+test('custom dev settings pull omits branch selector and does not import sensitive placeholders', async () => {
   const folder = mkdtempSync(join(tmpdir(), 'release-preflight-'))
   const oldCwd = process.cwd()
   const oldFetch = globalThis.fetch
@@ -80,14 +81,27 @@ test('production settings pull omits branch selector and does not import sensiti
     process.chdir(folder)
     writeFileSync(
       join(folder, 'vercel'),
-      `#!/bin/sh\nprintf '%s\\n' "$*" >> commands\nprintf '%s\\n' 'GROOVEPOST_ENVIRONMENT=development' 'DATABASE_URL="[SENSITIVE]"' 'PAYLOAD_SECRET="[SENSITIVE]"' > .vercel/.env.production.local\n`,
+      `#!/bin/sh\nprintf '%s\\n' "$*" >> commands\nprintf '%s\\n' 'GROOVEPOST_ENVIRONMENT=development' 'DATABASE_URL="[SENSITIVE]"' 'PAYLOAD_SECRET="[SENSITIVE]"' > .vercel/.env.dev.local\n`,
       { mode: 0o700 },
     )
-    globalThis.fetch = async () =>
-      Response.json({ link: { productionBranch: 'develop' } })
+    globalThis.fetch = async (url) =>
+      String(url).includes('/domains?')
+        ? Response.json({
+            domains: [{ name: 'unit.example', customEnvironmentId: 'env_dev' }],
+          })
+        : Response.json({
+            link: { productionBranch: 'main' },
+            customEnvironments: [
+              {
+                slug: 'dev',
+                id: 'env_dev',
+                branchMatcher: { type: 'equals', pattern: 'develop' },
+              },
+            ],
+          })
     const env = {
       PATH: folder,
-      RELEASE_PROFILE: 'platform',
+      RELEASE_PROFILE: 'starter',
       VERCEL_TOKEN: 'test-token',
       VERCEL_ORG_ID: 'test-org',
       VERCEL_PROJECT_ID: 'test-project',
@@ -102,13 +116,98 @@ test('production settings pull omits branch selector and does not import sensiti
       sha: 'a'.repeat(40),
     })
     const commands = readFileSync(join(folder, 'commands'), 'utf8')
-    assert.match(commands, /--environment production/)
+    assert.match(commands, /--environment dev/)
     assert.doesNotMatch(commands, /--git-branch/)
     assert.equal(env.DATABASE_URL, undefined)
     assert.match(env.PAYLOAD_SECRET, /^[0-9a-f]{64}$/)
     assert.equal(env.SITE_URL, 'https://unit.example')
   } finally {
     process.chdir(oldCwd)
+    globalThis.fetch = oldFetch
+    rmSync(folder, { recursive: true, force: true })
+  }
+})
+
+test('dev validates a Preview SHA before custom activation and never uses production promotion or rollback', async () => {
+  const folder = mkdtempSync(join(tmpdir(), 'release-dev-'))
+  const oldFetch = globalThis.fetch
+  const context = {
+    target: 'dev',
+    customEnvironmentId: 'env_dev',
+    project: { name: 'fixture', link: { repoId: 123 } },
+    devDomains: [{ name: 'dev.example', customEnvironmentId: 'env_dev' }],
+    sha: 'a'.repeat(40),
+    migrationDigest: 'schema',
+  }
+  let created
+  let postCount = 0
+  let wrongDomain = false
+  const deployment = {
+    id: 'dpl_dev',
+    url: 'dev-unit.vercel.app',
+    readyState: 'READY',
+    customEnvironment: { id: 'env_dev' },
+    meta: { releaseSha: context.sha, releaseMigrationDigest: 'schema' },
+  }
+  try {
+    for (const name of ['pnpm', 'vercel'])
+      writeFileSync(
+        join(folder, name),
+        `#!/bin/sh\nprintf '%s\\n' '${name} '"$*" >> '${folder}/commands'\n`,
+        { mode: 0o700 },
+      )
+    globalThis.fetch = async (url, options) => {
+      if (options.method === 'POST') {
+        created = JSON.parse(options.body)
+        postCount++
+        return Response.json(
+          postCount === 1
+            ? { ...deployment, customEnvironment: undefined }
+            : deployment,
+        )
+      }
+      if (String(url).includes('/domains/'))
+        return Response.json({
+          name: 'dev.example',
+          customEnvironmentId: wrongDomain ? 'env_prod' : 'env_dev',
+        })
+      return Response.json(
+        postCount === 1
+          ? { ...deployment, customEnvironment: undefined }
+          : deployment,
+      )
+    }
+    const driver = createDriver({
+      PATH: folder,
+      VERCEL_TOKEN: 'fixture-token',
+      VERCEL_ORG_ID: 'org',
+      VERCEL_PROJECT_ID: 'project',
+    })
+    await driver.build(context)
+    assert.equal(created.customEnvironmentSlugOrId, undefined)
+    assert.equal(created.gitSource.ref, context.sha)
+    assert.equal(created.gitSource.sha, context.sha)
+    const result = await driver.deploy(context)
+    await driver.activate(context, result)
+    assert.equal(created.customEnvironmentSlugOrId, 'env_dev')
+    assert.equal(created.gitSource.ref, context.sha)
+    assert.equal(created.gitSource.sha, context.sha)
+    assert.equal(created.projectSettings, undefined)
+    assert.equal(result.id, 'dpl_dev')
+    await driver.rollback(context, 'dpl_dev')
+    let commands = readFileSync(join(folder, 'commands'), 'utf8')
+    assert.match(
+      commands,
+      /alias set (https:\/\/)?dev-unit.vercel.app dev.example/,
+    )
+    assert.doesNotMatch(commands, /promote|rollback|--prod/)
+    wrongDomain = true
+    await assert.rejects(
+      driver.activate(context, result),
+      /different environment/,
+    )
+    assert.equal(readFileSync(join(folder, 'commands'), 'utf8'), commands)
+  } finally {
     globalThis.fetch = oldFetch
     rmSync(folder, { recursive: true, force: true })
   }

@@ -515,7 +515,7 @@ Create separate Neon development and production projects. Use pooled `DATABASE_U
 
 For existing installations, configure one environment with `pnpm setup:production --environment development --vercel-project-id <id> --vercel-org-id <scope> --env-file <private-env> --site-url <https-origin> --auth-trusted-origins <origins>`. Use `production` for the corresponding production project. `--dry-run` prints redacted configuration; existing values are preserved unless `--replace-existing` is explicit. Setup does not migrate or deploy.
 
-Configure matching GitHub environments with deployment and direct migration credentials plus the AWS secrets/variables described in [the release runbook](docs/release-runbook.md). Promote feature MR -> develop -> main, requiring CI and hosted development acceptance before production. Production receives code and pending schema migrations; its records, users, files and secrets remain independent of development.
+For controlled releases, use one Vercel project: Production tracks `main`, custom `dev` tracks `develop`, and feature branches use Preview with development resources. Both GitHub release environments reference that project while retaining separate database, signing and storage credentials. Configure matching GitHub environments with deployment and direct migration credentials plus the AWS secrets/variables described in [the release runbook](docs/release-runbook.md). Promote feature MR -> develop -> main, requiring CI and hosted development acceptance before production. Production receives code and pending schema migrations; its records, users, files and secrets remain independent of development.
 
 ## Fork checklist
 
