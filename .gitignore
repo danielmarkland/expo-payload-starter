@@ -24,3 +24,6 @@ release-output/
 .neon
 
 .vercel/
+
+# Generated setup state, credentials and recovery journal.
+.starter/

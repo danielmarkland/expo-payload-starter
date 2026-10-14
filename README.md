@@ -27,26 +27,39 @@ admin component references, access policies and migration history. Import these 
 
 ## Requirements and local development
 
-Use Node.js 22+, pnpm 11, Docker for disposable local services, and the authenticated Neon/Vercel CLIs for hosted setup. Copy `.env.example`, `apps/app/.env.example` and `apps/site/.env.example` to private local environment files. Start `docker compose up -d`, install packages, then run `pnpm database:migrate`, `pnpm payload:migrate` and `pnpm storage:init` with the site environment loaded. Local PostgreSQL uses port 55432 and S3 uses 59000. Browser clients receive only `EXPO_PUBLIC_SITE_URL`; server credentials stay private.
+Use Node.js 22+, pnpm 11, and Docker for local services. From a fresh checkout run:
 
-`pnpm dev:site` starts Next.js and Payload at `http://localhost:3000`; `pnpm dev:app:web` starts Expo web at `http://localhost:8081`. Run `pnpm generate` after Payload configuration changes and `pnpm check` before delivery. Integration tests require separate disposable local databases; never point tests at hosted data.
+```sh
+pnpm run setup
+```
+
+Local setup asks only three questions: **local or hosted**, **project name**, and **administrator email**. Hosted setup uses your signed-in account email and asks which hosting organization to use only when you belong to several. Both paths have at most three interactive choices. Local setup installs the locked dependencies, generates independent signing secrets and storage credentials, selects available ports, starts isolated PostgreSQL/S3 containers, applies both migration sets, verifies private storage, and creates a verified CMS administrator and an editable homepage. An independent customer account is also provisioned for the Expo app, with its own password in the same private login file; it inherits no CMS permissions. Run `pnpm dev` to start the website/CMS and Expo web together. Read your generated administrator password from `.starter/administrator.json`; it is private and never printed. No email or social provider is required for the initial accounts; public editorial signup remains disabled.
+
+Hosted setup requires signed-in `neon` and `vercel` CLIs (`neon login`, `vercel login`). It creates a **new, independent** Neon project and Vercel website, provisions private buckets and storage-only credentials, uses a restricted pooled runtime login, migrates through a separate privileged connection, bootstraps the administrator, installs runtime configuration, and deploys the website. The Vercel URL is detected automatically. Expo receives only that public backend URL. Native Expo clients can use it directly; local Expo web uses local setup, and hosted Expo web needs its own deployment and a trusted origin on the same site for browser sessions. Publishing a native app or deploying Expo web is separate from website setup. Optional email, social login, SMS, newsletter and anti-bot integrations are configured afterward.
+
+For noninteractive use: `pnpm run setup --mode local --name my-product --email you@example.com`. Hosted supports `--site-url https://your-domain` (DNS verification required), `--region aws-us-east-2`, `--neon-org <id>` for noninteractive accounts with multiple organizations, and `--environment production`; production needs a **separate checkout and project name**, not shared development resources. `--configure-only` stops before migrations/bootstrap/deployment. `pnpm setup:production` retains the advanced legacy configurator for existing installations. Cloud projects consume your account's resources; account authentication is a prerequisite, not a secret to paste into setup.
+
+Generated configuration lives in ignored, mode-600 files: root `.env` for local containers, `apps/site/.env.local` for website runtime, `apps/app/.env.local` containing only `EXPO_PUBLIC_SITE_URL`, and `.starter/release.env` for the privileged migration connection. `.starter/state.json` is a private recovery journal: reruns preserve keys/passwords and resume initialization. A failed provider operation with an unknown outcome stops for reconciliation rather than creating duplicate infrastructure. Existing unmanaged environment files are never replaced. Back up the private state; deleting it is not a reset command. No GroovePost tenant, domain-management, peer-transfer, worker or Dagster settings are required.
+
+Change the generated account passwords after initial login. Without an email provider, password recovery requires operator intervention; adding verified email enables normal recovery. Run `pnpm generate` after Payload configuration changes and `pnpm check` before delivery. Integration tests require separate disposable local databases; never point tests at hosted data.
 
 ## Common commands
 
-| Command                              | Purpose                                                           |
-| ------------------------------------ | ----------------------------------------------------------------- |
-| `pnpm dev`                           | Start the Payload/Next site and Expo development server together. |
-| `pnpm dev:site`                      | Start only the Payload/Next site.                                 |
-| `pnpm dev:app`                       | Start only the Expo development server.                           |
-| `pnpm dev:app:web`                   | Start the Expo app in a web browser.                              |
-| `pnpm payload:migrate`               | Apply pending Payload database migrations.                        |
-| `pnpm payload:migrate:status`        | Show applied and pending Payload migrations.                      |
-| `pnpm payload:migrate:create <name>` | Generate a Payload migration after changing its schema.           |
-| `pnpm generate:payload`              | Regenerate Payload types and the admin import map.                |
-| `pnpm setup:hosted`                  | Configure Neon and Vercel environments interactively.             |
-| `pnpm setup:production`              | Run the backward-compatible single-app production setup.          |
-| `pnpm check`                         | Run all checks and builds; requires the local Neon stack.         |
-| `pnpm changeset`                     | Record a releasable shared-package change.                        |
+| Command                              | Purpose                                                                |
+| ------------------------------------ | ---------------------------------------------------------------------- |
+| `pnpm dev`                           | Start the Payload/Next site and Expo development server together.      |
+| `pnpm dev:site`                      | Start only the Payload/Next site.                                      |
+| `pnpm dev:app`                       | Start only the Expo development server.                                |
+| `pnpm dev:app:web`                   | Start the Expo app in a web browser.                                   |
+| `pnpm payload:migrate`               | Apply pending Payload database migrations.                             |
+| `pnpm payload:migrate:status`        | Show applied and pending Payload migrations.                           |
+| `pnpm payload:migrate:create <name>` | Generate a Payload migration after changing its schema.                |
+| `pnpm generate:payload`              | Regenerate Payload types and the admin import map.                     |
+| `pnpm run setup`                     | Set up local or hosted website, CMS and Expo backend in three choices. |
+| `pnpm setup:hosted`                  | Run the hosted path of the three-choice setup.                         |
+| `pnpm setup:production`              | Run the backward-compatible single-app production setup.               |
+| `pnpm check`                         | Run all checks and builds; requires the local Neon stack.              |
+| `pnpm changeset`                     | Record a releasable shared-package change.                             |
 
 ### Versioned application API
 
@@ -65,9 +78,7 @@ same Hono handlers in process, while Expo uses `@starter/api-client` over HTTP.
 The older site-config, contact, newsletter, and preview URLs remain as
 compatibility shims for deployed clients.
 
-The public homepage is a Payload Page with the slug `home`. After the first
-Payload migration, open `/admin`, create a Page with that slug, compose its
-sections using the available blocks, and publish it. Additional Pages render
+The public homepage is a Payload Page with the slug `home`. Setup creates a minimal published homepage only when none exists. Open `/admin` to edit its sections using the available blocks. Additional Pages render
 at `/<slug>`. Add a **Latest posts** block wherever you want published Posts
 to appear. The Page editor groups title and slug under **General**, sections
 and custom CSS under **Layout**, and search/social metadata under **SEO**.
@@ -502,7 +513,7 @@ between environments.
 
 Create separate Neon development and production projects. Use pooled `DATABASE_URL` with a restricted runtime login, direct privileged `DATABASE_MIGRATION_URL` for migrations, and standard `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION` values. All three buckets declared in `neon.ts` remain private. The starter owns its own customer/editorial Better Auth realms and independently administered Payload content.
 
-Configure one environment with `pnpm setup:hosted --environment development --vercel-project-id <id> --vercel-org-id <scope> --env-file <private-env> --site-url <https-origin> --auth-trusted-origins <origins>`. Use `production` for the corresponding production project. `--dry-run` prints redacted configuration; existing values are preserved unless `--replace-existing` is explicit. Setup does not migrate or deploy.
+For existing installations, configure one environment with `pnpm setup:production --environment development --vercel-project-id <id> --vercel-org-id <scope> --env-file <private-env> --site-url <https-origin> --auth-trusted-origins <origins>`. Use `production` for the corresponding production project. `--dry-run` prints redacted configuration; existing values are preserved unless `--replace-existing` is explicit. Setup does not migrate or deploy.
 
 Configure matching GitHub environments with deployment and direct migration credentials plus the AWS secrets/variables described in [the release runbook](docs/release-runbook.md). Promote feature MR -> develop -> main, requiring CI and hosted development acceptance before production. Production receives code and pending schema migrations; its records, users, files and secrets remain independent of development.
 
