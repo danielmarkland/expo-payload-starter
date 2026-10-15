@@ -7,6 +7,10 @@ for (const name of [
   'PortableFonts',
 ])
   await copyFile(`src/${name}.css`, `dist/${name}.css`)
-for (const name of ['ColorPickerField', 'IconPickerField']) {
+for (const name of [
+  'ColorPickerField',
+  'IconPickerField',
+  'IdentifierDisplay',
+]) {
   await copyFile(`src/admin/${name}.css`, `dist/admin/${name}.css`)
 }

@@ -1,5 +1,13 @@
 # @danielmarkland/publishing-ui
 
+## 0.7.6
+
+### Patch Changes
+
+- a6c223d: Prefer readable CMS titles and default columns, and provide shared compact identifier presentation that preserves full values for navigation and API calls.
+- Updated dependencies [a6c223d]
+  - @danielmarkland/publishing-core@0.12.4
+
 ## 0.7.5
 
 ### Patch Changes

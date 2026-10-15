@@ -694,3 +694,7 @@ Database pools default to two connections with 10,000 ms idle and connection tim
 Database URLs must use PostgreSQL schemes. The deprecated `DATABASE_POOLER_PORT` is accepted during migration when the URL omits its port or specifies the same port; conflicting explicit ports fail without reporting connection credentials. Encode the final pooler port in `DATABASE_URL`.
 
 Shared palette fields carry portable validation metadata. The color picker applies the shared contrast rule on the client as well as the server, so generic text validation cannot clear a rejected palette’s field errors.
+
+### Identifier display
+
+Use names, titles or emails as primary labels. Secondary identifiers display as the first eight and last four characters (`26f5d41a…25d6`); short references remain unchanged. `publishing-ui/Identifier` retains the full value in its tooltip and accessible label, and `publishing-ui/admin/IdentifierDisplay.css` compacts Payload's built-in ID labels. Database values, links, SDK calls, queries and editable fields always keep full IDs. This convention applies to consumers such as GroovePost, Diggers Union and WBUR.
