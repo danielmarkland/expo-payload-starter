@@ -7,6 +7,8 @@ export const Users: CollectionConfig = {
   dbName: 'cms_users',
   admin: {
     useAsTitle: 'email',
+    defaultColumns: ['email', 'role', 'updatedAt'],
+    listSearchableFields: ['email'],
   },
   auth: {
     disableLocalStrategy: true,

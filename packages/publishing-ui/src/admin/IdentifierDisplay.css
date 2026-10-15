@@ -1,0 +1,18 @@
+/* Keep identifiers compact without changing their text, links, or copyable value. */
+.cell-id .code-cell > span,
+.id-label {
+  display: inline-block;
+  max-inline-size: 16ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+/* Reveal the full value for keyboard navigation and deliberate inspection. */
+.cell-id:focus-within .code-cell > span,
+.cell-id:hover .code-cell > span,
+.id-label:hover,
+.id-label:focus-within {
+  max-inline-size: none;
+}

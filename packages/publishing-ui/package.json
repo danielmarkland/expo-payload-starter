@@ -136,7 +136,16 @@
     "./IdentityLogin": {
       "types": "./dist/IdentityLogin.d.ts",
       "default": "./dist/IdentityLogin.js"
-    }
+    },
+    "./Identifier": {
+      "types": "./dist/Identifier.d.ts",
+      "default": "./dist/Identifier.js"
+    },
+    "./identifiers": {
+      "types": "./dist/identifiers.d.ts",
+      "default": "./dist/identifiers.js"
+    },
+    "./admin/IdentifierDisplay.css": "./dist/admin/IdentifierDisplay.css"
   },
   "files": [
     "dist"
