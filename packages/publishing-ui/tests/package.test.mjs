@@ -12,11 +12,14 @@ const publicFiles = [
   'LinkAction',
   'SiteFooter',
   'postHeadings',
+  'Identifier',
+  'identifiers',
 ]
 const clientFiles = [
   'HeaderSurface',
   'HeroSurface',
   'FunnelControls',
+  'ProductWidget',
   'ThemeToggle',
   'SiteConfigProvider',
   'TurnstileField',
@@ -73,4 +76,13 @@ test('exports enumerate supported entry points and exclude test artifacts', asyn
   assert.equal(manifest.exports['./HeaderSurface'], undefined)
   assert.equal(manifest.exports['./HeroSurface'], undefined)
   assert.equal(manifest.exports['./PublishingComponents.test'], undefined)
+})
+
+test('compact admin identifier styles are exported and packaged', async () => {
+  const manifest = JSON.parse(await readFile('package.json', 'utf8'))
+  assert.equal(
+    manifest.exports['./admin/IdentifierDisplay.css'],
+    './dist/admin/IdentifierDisplay.css',
+  )
+  await access('dist/admin/IdentifierDisplay.css')
 })

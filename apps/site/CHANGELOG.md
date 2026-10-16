@@ -1,5 +1,13 @@
 # @starter/site
 
+## 1.0.25
+
+### Patch Changes
+
+- Updated dependencies [a6c223d]
+  - @danielmarkland/publishing-ui@0.7.6
+  - @danielmarkland/publishing-core@0.12.4
+
 ## 1.0.24
 
 ### Patch Changes

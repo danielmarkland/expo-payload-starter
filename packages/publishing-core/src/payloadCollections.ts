@@ -62,7 +62,11 @@ function taxonomy(
     slug,
     dbName: `cms_${slug}`,
     ...collectionIndexes(options.indexes),
-    admin: { useAsTitle, defaultColumns: [...columns] },
+    admin: {
+      useAsTitle,
+      defaultColumns: [...columns],
+      listSearchableFields: [useAsTitle, 'slug'],
+    },
     access: { ...options.access },
     fields,
   }
@@ -89,7 +93,12 @@ export function createPostsCollection(
     slug: 'posts',
     dbName: 'cms_posts',
     ...collectionIndexes(options.indexes),
-    admin: { useAsTitle: 'title', preview: options.preview },
+    admin: {
+      useAsTitle: 'title',
+      defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
+      listSearchableFields: ['title', 'slug'],
+      preview: options.preview,
+    },
     access: { ...options.access },
     versions: { drafts: true },
     fields: createPostsFields(options),
@@ -121,6 +130,11 @@ export function createMediaCollection({
 }): CollectionConfig {
   return {
     slug: 'media',
+    admin: {
+      useAsTitle: 'alt',
+      defaultColumns: ['alt', 'filename', 'updatedAt'],
+      listSearchableFields: ['alt', 'filename'],
+    },
     dbName: 'cms_media',
     access: { ...access },
     fields: [{ name: 'alt', type: 'text', required: true }],
@@ -160,7 +174,7 @@ export function createHeaderNavigationCollection({
     slug: 'header-navigation',
     labels: { singular: 'Header navigation', plural: 'Header navigation' },
     dbName: 'cms_header_navigation',
-    admin: { useAsTitle: 'id' },
+    admin: { useAsTitle: 'variant', defaultColumns: ['variant', 'updatedAt'] },
     access: { ...access },
     fields: createHeaderNavigationFields(options),
   }
@@ -175,7 +189,11 @@ export function createFooterNavigationCollection({
     slug: 'footer-navigation',
     labels: { singular: 'Footer navigation', plural: 'Footer navigation' },
     dbName: 'cms_footer_navigation',
-    admin: { useAsTitle: 'id' },
+    admin: {
+      useAsTitle: 'copyrightOwner',
+      defaultColumns: ['copyrightOwner', 'tagline', 'updatedAt'],
+      listSearchableFields: ['copyrightOwner', 'tagline'],
+    },
     access: { ...access },
     fields: createFooterNavigationFields(options),
   }

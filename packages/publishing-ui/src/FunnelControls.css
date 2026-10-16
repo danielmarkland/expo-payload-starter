@@ -82,3 +82,20 @@
   min-height: 44px;
   font: inherit;
 }
+
+/* Product cards inherit the active tenant's fonts, colors and button theme. */
+.gp-product-widget {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.gp-product-widget > img {
+  width: 100%;
+  max-height: 24rem;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+.gp-product-widget > h3,
+.gp-product-widget > p {
+  margin: 0;
+}
