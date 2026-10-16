@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.7.7
+
+### Patch Changes
+
+- Add a themed product card with host-owned navigation/cart actions and pending states.
+
 ## 0.7.6
 
 ### Patch Changes

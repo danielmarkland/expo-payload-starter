@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-ui",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -145,7 +145,11 @@
       "types": "./dist/identifiers.d.ts",
       "default": "./dist/identifiers.js"
     },
-    "./admin/IdentifierDisplay.css": "./dist/admin/IdentifierDisplay.css"
+    "./admin/IdentifierDisplay.css": "./dist/admin/IdentifierDisplay.css",
+    "./ProductWidget": {
+      "types": "./dist/ProductWidget.d.ts",
+      "default": "./dist/ProductWidget.js"
+    }
   },
   "files": [
     "dist"
