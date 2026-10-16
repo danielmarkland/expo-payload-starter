@@ -60,3 +60,10 @@ Chromium installed to verify responsive section widths, hero coverage, and all
 header surface/sticky combinations. CI runs these browser checks before site E2E.
 
 Shared palette fields carry portable validation metadata. The color picker applies the shared contrast rule on the client as well as the server, so generic text validation cannot clear a rejected palette’s field errors.
+
+`ProductWidget` is a reusable product card exported from
+`@danielmarkland/publishing-ui/ProductWidget`. It shows optional artwork and price,
+accepts editorial children, and delegates product navigation and cart actions to
+the host. Set `busy` while a cart update is pending; unavailable products cannot be
+added. Its themed styles ship in `FunnelControls.css`. Actions use non-submit
+buttons, including when the card appears inside a form.

@@ -19,6 +19,7 @@ const clientFiles = [
   'HeaderSurface',
   'HeroSurface',
   'FunnelControls',
+  'ProductWidget',
   'ThemeToggle',
   'SiteConfigProvider',
   'TurnstileField',
