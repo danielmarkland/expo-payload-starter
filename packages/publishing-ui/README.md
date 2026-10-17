@@ -67,3 +67,8 @@ accepts editorial children, and delegates product navigation and cart actions to
 the host. Set `busy` while a cart update is pending; unavailable products cannot be
 added. Its themed styles ship in `FunnelControls.css`. Actions use non-submit
 buttons, including when the card appears inside a form.
+
+`CustomerCommerce` supplies provider-neutral customer connection and paginated order
+views. The host passes authenticated state, sign-in behavior and authorized actions;
+provider credentials and redirects remain host-owned. Import `CustomerCommerce.css`
+and `FunnelControls.css`. Catalog presentation continues through `ProductWidget`.

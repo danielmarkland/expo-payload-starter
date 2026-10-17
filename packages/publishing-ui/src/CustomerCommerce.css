@@ -1,0 +1,13 @@
+.customer-commerce {
+  display: grid;
+  gap: var(--space-md);
+  min-width: 0;
+}
+.customer-commerce ul {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.customer-commerce li {
+  overflow-wrap: anywhere;
+  margin-block: var(--space-sm);
+}
