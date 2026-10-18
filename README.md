@@ -698,3 +698,5 @@ Shared palette fields carry portable validation metadata. The color picker appli
 ### Identifier display
 
 Use names, titles or emails as primary labels. Secondary identifiers display as the first eight and last four characters (`26f5d41a…25d6`); short references remain unchanged. `publishing-ui/Identifier` retains the full value in its tooltip and accessible label, and `publishing-ui/admin/IdentifierDisplay.css` compacts Payload's built-in ID labels. Database values, links, SDK calls, queries and editable fields always keep full IDs. This convention applies to consumers such as GroovePost, Diggers Union and WBUR.
+
+Shared web loading presentation is available from `@danielmarkland/publishing-ui/LoadingRegion` with `LoadingRegion.css`. `LoadingRegion` announces loading without replacing its children; compose decorative `Skeleton` geometry for the screen being loaded. Hosts own asset loading and apps own data loading.
