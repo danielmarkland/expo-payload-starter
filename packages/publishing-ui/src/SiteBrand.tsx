@@ -5,7 +5,9 @@ import type { SiteConfig } from '@danielmarkland/publishing-contracts'
 
 export function SiteBrand({
   siteConfig,
+  mode,
 }: {
+  mode?: 'dark' | 'light'
   siteConfig: {
     identity: Pick<
       SiteConfig['identity'],
@@ -16,7 +18,7 @@ export function SiteBrand({
   return (
     <Link
       aria-label={siteConfig.identity.siteTitle}
-      className="site-brand"
+      className={`site-brand${mode ? ` site-brand-on-${mode}` : ''}`}
       href="/"
     >
       {siteConfig.identity.darkLogoUrl ? (

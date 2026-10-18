@@ -115,6 +115,39 @@ describe('contact form', () => {
     expect(body).not.toHaveProperty('name')
   })
 
+  it('supports hosted transport with public configuration and no site provider', async () => {
+    const deliver = vi.fn().mockResolvedValue({ ok: true })
+    const fetchMock = vi.spyOn(globalThis, 'fetch')
+    render(
+      <ContactForm
+        siteKey="public-site-key"
+        deliver={deliver}
+        submitLabel="Send"
+        successMessage="Delivered"
+      />,
+    )
+    fireEvent.change(screen.getByLabelText('Name'), {
+      target: { value: 'Development test' },
+    })
+    fireEvent.change(screen.getByLabelText('Email'), {
+      target: { value: 'test@example.test' },
+    })
+    fireEvent.change(screen.getByLabelText('Message'), {
+      target: { value: 'A clearly labeled contact test.' },
+    })
+    fireEvent.submit(
+      screen.getByRole('button', { name: 'Send' }).closest('form')!,
+    )
+    await waitFor(() => expect(screen.getByText('Delivered')).toBeTruthy())
+    expect(deliver).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Development test',
+        email: 'test@example.test',
+      }),
+    )
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
   it('disables submission when Turnstile is not configured', () => {
     renderForm(undefined, null)
 

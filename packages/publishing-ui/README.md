@@ -72,3 +72,5 @@ buttons, including when the card appears inside a form.
 views. The host passes authenticated state, sign-in behavior and authorized actions;
 provider credentials and redirects remain host-owned. Import `CustomerCommerce.css`
 and `FunnelControls.css`. Catalog presentation continues through `ProductWidget`.
+
+Footer navigation selects a page or dark background independently of the page theme. Dark footers use the tenant's dark-section colors and dark logo. FunnelLayout accepts tenant logo URLs, website and contact destinations, and an internal help navigation callback. Its content expands to keep the footer at the viewport bottom. Contact form factories accept an explicit public site key and delivery callback for hosted consumers; website forms use SiteConfigProvider and the standard endpoint.

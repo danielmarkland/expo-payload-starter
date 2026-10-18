@@ -6,7 +6,9 @@ export function usePublishingFormSubmission({
   endpoint,
   siteKey,
   fields,
+  deliver,
 }: {
+  deliver?: (submission: Record<string, unknown>) => Promise<unknown>
   endpoint: string
   siteKey: string | null
   fields: (data: FormData) => Record<string, unknown>
@@ -22,16 +24,20 @@ export function usePublishingFormSubmission({
     setStatus('sending')
     try {
       const data = new FormData(form)
-      const response = await fetch(endpoint, {
-        body: JSON.stringify({
-          ...fields(data),
-          turnstileToken: data.get('cf-turnstile-response'),
-          website: data.get('website'),
-        }),
-        headers: { 'content-type': 'application/json' },
-        method: 'POST',
-      })
-      if (!response.ok) throw new Error('Form submission failed')
+      const submission = {
+        ...fields(data),
+        turnstileToken: data.get('cf-turnstile-response'),
+        website: data.get('website'),
+      }
+      if (deliver) await deliver(submission)
+      else {
+        const response = await fetch(endpoint, {
+          body: JSON.stringify(submission),
+          headers: { 'content-type': 'application/json' },
+          method: 'POST',
+        })
+        if (!response.ok) throw new Error('Form submission failed')
+      }
       form.reset()
       setStatus('success')
     } catch {

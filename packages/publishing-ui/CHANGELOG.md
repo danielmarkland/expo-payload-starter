@@ -1,5 +1,17 @@
 # @danielmarkland/publishing-ui
 
+## 0.9.0
+
+### Minor Changes
+
+- ec76ea2: Add tenant footer background selection, branded app navigation, and shared contact forms with a hosted delivery transport. Keep short app screens full height with the footer at the bottom.
+
+### Patch Changes
+
+- Updated dependencies [ec76ea2]
+  - @danielmarkland/publishing-contracts@0.10.0
+  - @danielmarkland/publishing-core@0.13.0
+
 ## 0.8.1
 
 ### Patch Changes

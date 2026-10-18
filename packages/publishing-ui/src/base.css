@@ -1257,3 +1257,24 @@ h1 {
     order: initial;
   }
 }
+
+/* Footer appearance is independent of the page theme. */
+.footer-background-dark {
+  --color-ink: var(--color-dark-ink);
+  --color-ink-body: var(--color-dark-ink);
+  --color-ink-muted: var(--color-dark-ink-muted);
+  background: var(--color-dark-surface);
+  border-color: var(--color-dark-surface);
+}
+.site-brand.site-brand-on-dark
+  :is(.site-brand-logo-light, .site-brand-title-light),
+.site-brand.site-brand-on-light
+  :is(.site-brand-logo-dark, .site-brand-title-dark) {
+  display: none;
+}
+.site-brand.site-brand-on-dark
+  :is(.site-brand-logo-dark, .site-brand-title-dark),
+.site-brand.site-brand-on-light
+  :is(.site-brand-logo-light, .site-brand-title-light) {
+  display: block;
+}
