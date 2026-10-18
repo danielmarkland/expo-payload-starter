@@ -55,6 +55,38 @@ describe('shared funnel presentation', () => {
         .parentElement?.getAttribute('aria-current'),
     ).toBe('step')
   })
+  it('renders tenant logos, website destinations and direct help navigation', () => {
+    const help = vi.fn()
+    const view = render(
+      <FunnelLayout
+        brand="WBUR"
+        onHelp={help}
+        presentation={{
+          brandHref: 'https://site.example.test',
+          helpHref: '/contact',
+          branding: {
+            darkLogoUrl: 'https://site.example.test/dark.svg',
+            lightLogoUrl: 'https://site.example.test/light.svg',
+          },
+          footer: { background: 'dark' },
+        }}
+      >
+        Content
+      </FunnelLayout>,
+    )
+    expect(view.container.querySelector('header a')?.getAttribute('href')).toBe(
+      'https://site.example.test',
+    )
+    expect(
+      view.container.querySelector('footer img')?.getAttribute('src'),
+    ).toBe('https://site.example.test/dark.svg')
+    fireEvent.click(screen.getByRole('link', { name: 'Need help?' }))
+    expect(help).toHaveBeenCalledOnce()
+    expect(
+      screen.getByRole('link', { name: 'Contact Us' }).getAttribute('href'),
+    ).toBe('/contact')
+  })
+
   it('provides labeled native radio and checkbox choices', () => {
     const select = vi.fn(),
       toggle = vi.fn()

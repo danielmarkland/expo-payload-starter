@@ -17,8 +17,12 @@ export function SiteConfigProvider({
   )
 }
 
+export function useOptionalSiteConfig() {
+  return useContext(SiteConfigContext)
+}
+
 export function useSiteConfig() {
-  const config = useContext(SiteConfigContext)
+  const config = useOptionalSiteConfig()
   if (!config)
     throw new Error('useSiteConfig must be used within SiteConfigProvider')
   return config

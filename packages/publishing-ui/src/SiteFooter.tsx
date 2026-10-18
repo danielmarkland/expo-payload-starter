@@ -42,6 +42,7 @@ export function createSiteFooter({
     navigation: ApiFooterNavigation
     posts: { docs: PostCard[] }
   }) {
+    const dark = navigation.background === 'dark'
     const socialLinks =
       navigation.socialLinks?.flatMap((item) => {
         const href = getSafeExternalHref(item.url)
@@ -80,7 +81,7 @@ export function createSiteFooter({
     )
     return (
       <footer
-        className={`site-footer footer-layout-${navigation.layoutPreset || 'default'} footer-details-${navigation.detailsAlignment || 'end'}`}
+        className={`site-footer footer-background-${dark ? 'dark' : 'page'} footer-layout-${navigation.layoutPreset || 'default'} footer-details-${navigation.detailsAlignment || 'end'}`}
       >
         {newsletter?.show ? (
           <section
@@ -151,7 +152,10 @@ export function createSiteFooter({
           className={`site-footer-main${showPosts ? '' : ' site-footer-main-single'}`}
         >
           <div className="site-footer-brand">
-            <SiteBrand siteConfig={siteConfig} />
+            <SiteBrand
+              siteConfig={siteConfig}
+              mode={dark ? 'dark' : undefined}
+            />
             <p className="site-footer-tagline">
               {navigation.tagline || siteConfig.identity.description}
             </p>

@@ -3308,6 +3308,7 @@ export interface HeaderNavigation {
 export interface FooterNavigation {
   id: number;
   layoutPreset?: ('default' | 'brand-details' | 'stacked') | null;
+  background?: ('page' | 'dark') | null;
   detailsAlignment?: ('start' | 'end') | null;
   socialPlacement?: ('brand' | 'details') | null;
   details?: string | null;
@@ -3839,6 +3840,7 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
  */
 export interface FooterNavigationSelect<T extends boolean = true> {
   layoutPreset?: T;
+  background?: T;
   detailsAlignment?: T;
   socialPlacement?: T;
   details?: T;

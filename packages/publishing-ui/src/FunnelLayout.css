@@ -3,6 +3,7 @@
   background: var(--color-surface-page, var(--color-surface));
   font-family: var(--font-family-runtime, sans-serif);
   min-height: 100svh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -36,7 +37,7 @@ button.funnel-layout-brand {
   gap: 20px;
 }
 .funnel-layout-links button,
-.funnel-layout-help summary {
+.funnel-layout-help {
   font: 12px/1.4 var(--font-family-label, monospace);
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -45,25 +46,6 @@ button.funnel-layout-brand {
   background: none;
   color: inherit;
   cursor: pointer;
-  white-space: nowrap;
-}
-.funnel-layout-help {
-  position: relative;
-}
-.funnel-layout-help summary {
-  list-style: none;
-}
-.funnel-layout-help summary::-webkit-details-marker {
-  display: none;
-}
-.funnel-layout-help[open] a {
-  position: absolute;
-  right: 0;
-  top: 28px;
-  z-index: 1;
-  padding: 16px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-raised);
   white-space: nowrap;
 }
 .funnel-layout-content {
@@ -321,4 +303,46 @@ button.funnel-layout-brand {
   .funnel-layout-footer-details {
     text-align: left;
   }
+}
+
+.funnel-layout-header,
+.funnel-layout-footer {
+  flex-shrink: 0;
+}
+a.funnel-layout-brand,
+.funnel-layout-help {
+  text-decoration: none;
+}
+.funnel-layout-brand img {
+  display: block;
+  width: auto;
+  max-width: 180px;
+  max-height: 48px;
+}
+.funnel-brand-light {
+  display: none;
+}
+:root[data-theme='light'] .funnel-brand-light {
+  display: block;
+}
+:root[data-theme='light'] .funnel-brand-dark {
+  display: none;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .funnel-brand-light {
+    display: block;
+  }
+  :root:not([data-theme]) .funnel-brand-dark {
+    display: none;
+  }
+}
+.funnel-layout .funnel-brand-dark.funnel-brand-fixed-dark {
+  display: block;
+}
+.funnel-layout .funnel-brand-light.funnel-brand-fixed-dark {
+  display: none;
+}
+.funnel-footer-page {
+  background: var(--color-surface-footer);
+  color: var(--color-ink);
 }

@@ -402,6 +402,7 @@ export const headerNavigationSchema = z.looseObject({
 })
 const footerFormSchema = blockBase.extend({ ...formFields, show: z.boolean() })
 export const footerNavigationSchema = z.looseObject({
+  background: z.enum(['page', 'dark']).nullable().optional(),
   layoutPreset: z
     .enum(['default', 'brand-details', 'stacked'])
     .nullable()

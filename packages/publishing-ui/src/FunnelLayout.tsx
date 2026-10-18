@@ -5,8 +5,12 @@ import { getSafeExternalHref } from '@danielmarkland/publishing-core/navigation'
 import { Button } from './FunnelControls.js'
 
 export type FunnelPresentation = {
+  brandHref?: string | null
+  branding?: { darkLogoUrl?: string | null; lightLogoUrl?: string | null }
+  turnstileSiteKey?: string | null
   helpHref?: string | null
   footer?: {
+    background?: 'page' | 'dark' | null
     tagline?: string | null
     details?: string | null
     copyrightOwner?: string | null
@@ -18,45 +22,108 @@ export function FunnelLayout({
   presentation,
   onHome,
   navigation,
+  onHelp,
   children,
 }: {
   brand: string
   presentation?: FunnelPresentation
   onHome?: () => void
+  onHelp?: () => void
   navigation?: ReactNode
   children: ReactNode
 }) {
   const footer = presentation?.footer
   const helpHref = getSafeExternalHref(presentation?.helpHref)
+  const brandHref = getSafeExternalHref(presentation?.brandHref)
+  const Brand = ({ dark = false }: { dark?: boolean }) => (
+    <>
+      {(['dark', 'light'] as const).map((mode) => {
+        const src = getSafeExternalHref(
+          mode === 'dark'
+            ? presentation?.branding?.darkLogoUrl
+            : presentation?.branding?.lightLogoUrl,
+        )
+        return (
+          <span
+            key={mode}
+            className={`funnel-brand-${mode}${dark ? ' funnel-brand-fixed-dark' : ''}`}
+          >
+            {src && /^https?:/.test(src) ? (
+              <img src={src} alt={brand} />
+            ) : (
+              brand
+            )}
+          </span>
+        )
+      })}
+    </>
+  )
   return (
     <div className="funnel-layout">
       <header className="funnel-layout-header">
-        <button className="funnel-layout-brand" type="button" onClick={onHome}>
-          {brand}
-        </button>
+        {brandHref ? (
+          <a
+            className="funnel-layout-brand"
+            aria-label={brand}
+            href={brandHref}
+          >
+            <Brand />
+          </a>
+        ) : (
+          <button
+            className="funnel-layout-brand"
+            type="button"
+            onClick={onHome}
+          >
+            <Brand />
+          </button>
+        )}
         <div className="funnel-layout-links">
           {navigation}
           {helpHref ? (
-            <details className="funnel-layout-help">
-              <summary>Need help?</summary>
-              <a href={helpHref}>{footer?.tagline || 'Contact us'}</a>
-            </details>
+            <a
+              className="funnel-layout-help"
+              href={helpHref}
+              onClick={
+                onHelp
+                  ? (event) => {
+                      event.preventDefault()
+                      onHelp()
+                    }
+                  : undefined
+              }
+            >
+              Need help?
+            </a>
           ) : null}
         </div>
       </header>
       <main className="funnel-layout-content">{children}</main>
-      <footer className="funnel-layout-footer">
+      <footer
+        className={`funnel-layout-footer funnel-footer-${footer?.background || 'dark'}`}
+      >
         <div>
-          <strong className="funnel-layout-brand">{brand}</strong>
-          {footer?.tagline ? (
+          <a className="funnel-layout-brand" href={brandHref || undefined}>
+            <Brand dark={footer?.background !== 'page'} />
+          </a>
+          {helpHref ? (
             <p>
-              {helpHref ? (
-                <a href={helpHref}>{footer.tagline}</a>
-              ) : (
-                footer.tagline
-              )}
+              <a
+                href={helpHref}
+                onClick={
+                  onHelp
+                    ? (event) => {
+                        event.preventDefault()
+                        onHelp()
+                      }
+                    : undefined
+                }
+              >
+                Contact Us
+              </a>
             </p>
           ) : null}
+          {footer?.tagline ? <p>{footer.tagline}</p> : null}
           {footer?.socialLinks?.length ? (
             <nav aria-label="Social media">
               {footer.socialLinks.map((link) => {
