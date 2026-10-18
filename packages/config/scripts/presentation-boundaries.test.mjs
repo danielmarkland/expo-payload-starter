@@ -8,6 +8,16 @@ import { checkPresentationBoundaries } from '../../publishing-core/src/presentat
 
 for (const [name, content, rejected] of [
   [
+    'app/(frontend)/loading.tsx',
+    "import {LoadingRegion,Skeleton} from '@danielmarkland/publishing-ui/LoadingRegion';export default () => <LoadingRegion loading><Skeleton /></LoadingRegion>",
+    false,
+  ],
+  [
+    'app/(frontend)/loading.tsx',
+    'export default () => <div className="copied-skeleton" />',
+    true,
+  ],
+  [
     'collections/Pages.ts',
     "import {createPagesCollection as factory} from '@danielmarkland/publishing-core/payloadCollections';export const Pages=factory({access,pageBlocks,preview})",
     false,

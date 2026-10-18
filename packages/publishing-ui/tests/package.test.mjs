@@ -2,6 +2,7 @@ import { readFile, access } from 'node:fs/promises'
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 const publicFiles = [
+  'LoadingRegion',
   'PostList',
   'PostArchive',
   'LatestPostsSection',
