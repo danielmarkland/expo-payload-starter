@@ -1,6 +1,7 @@
 import { copyFile } from 'node:fs/promises'
 for (const name of [
   'base',
+  'LoadingRegion',
   'CustomerCommerce',
   'layout',
   'FunnelControls',

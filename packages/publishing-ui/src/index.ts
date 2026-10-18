@@ -10,3 +10,5 @@ export {
   type CustomerCommerceActions,
   type CommerceOrder,
 } from './CustomerCommerce.js'
+
+export { LoadingRegion, Skeleton } from './LoadingRegion.js'

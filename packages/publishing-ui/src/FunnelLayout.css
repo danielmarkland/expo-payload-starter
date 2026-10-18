@@ -2,7 +2,9 @@
   color: var(--color-ink);
   background: var(--color-surface-page, var(--color-surface));
   font-family: var(--font-family-runtime, sans-serif);
-  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
 }
 .funnel-layout-header {
   width: min(880px, calc(100% - 48px));
@@ -65,6 +67,8 @@ button.funnel-layout-brand {
   white-space: nowrap;
 }
 .funnel-layout-content {
+  flex: 1;
+  box-sizing: border-box;
   max-width: 720px;
   width: calc(100% - 48px);
   margin: 0 auto;
@@ -296,6 +300,8 @@ button.funnel-layout-brand {
     justify-content: space-between;
   }
   .funnel-layout-content {
+    flex: 1;
+    box-sizing: border-box;
     padding-top: 40px;
   }
   .funnel-layout-grid {

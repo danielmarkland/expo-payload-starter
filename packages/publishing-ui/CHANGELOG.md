@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.8.0
+
+### Minor Changes
+
+- Add accessible loading regions and static skeletons, and keep short funnel footers at the viewport bottom.
+
 ## 0.7.8
 
 ### Patch Changes
