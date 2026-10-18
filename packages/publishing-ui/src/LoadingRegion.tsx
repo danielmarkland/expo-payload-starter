@@ -13,7 +13,7 @@ export function LoadingRegion({
   className?: string
 }) {
   return (
-    <div className={className} aria-busy={loading}>
+    <div className={className}>
       <span
         className="publishing-loading-status"
         role="status"
@@ -21,7 +21,7 @@ export function LoadingRegion({
       >
         {loading ? label : ''}
       </span>
-      {children}
+      <div aria-busy={loading}>{children}</div>
     </div>
   )
 }
