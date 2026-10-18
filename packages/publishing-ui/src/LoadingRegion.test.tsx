@@ -11,6 +11,7 @@ it('keeps the same content mounted while announcing the loading lifetime', () =>
     </LoadingRegion>,
   )
   const content = screen.getByText('Content')
+  expect(content.parentElement?.className).toBe('publishing-loading-content')
   expect(content.parentElement?.getAttribute('aria-busy')).toBe('true')
   expect(screen.getByRole('status').textContent).toBe('Loading screen')
   expect(screen.getByRole('status').closest('[aria-busy]')).toBeNull()

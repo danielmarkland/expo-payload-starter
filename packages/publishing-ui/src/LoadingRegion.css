@@ -14,6 +14,22 @@
   background: var(--color-border);
   border-radius: var(--radius-sm, 2px);
 }
+.publishing-loading-content[aria-busy='false'] {
+  animation: publishing-content-reveal 160ms ease-out;
+}
+@keyframes publishing-content-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .publishing-loading-content[aria-busy='false'] {
+    animation: none;
+  }
+}
 /* Reserve the screen through metadata, asset loading, and the first mount. */
 .publishing-runtime-region {
   min-height: 100svh;

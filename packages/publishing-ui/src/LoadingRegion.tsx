@@ -21,7 +21,9 @@ export function LoadingRegion({
       >
         {loading ? label : ''}
       </span>
-      <div aria-busy={loading}>{children}</div>
+      <div className="publishing-loading-content" aria-busy={loading}>
+        {children}
+      </div>
     </div>
   )
 }
