@@ -129,6 +129,7 @@ export function createFooterNavigationFields({
 }: FooterFieldOptions): Field[] {
   return [
     choice('layoutPreset', ['default', 'brand-details', 'stacked']),
+    choice('background', ['page', 'dark']),
     choice('detailsAlignment', ['start', 'end']),
     choice('socialPlacement', ['brand', 'details']),
     { name: 'details', type: 'textarea' },

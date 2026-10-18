@@ -55,6 +55,7 @@ const fieldsByResource: Record<string, string[]> = {
     'searchIcon',
   ],
   'footer-navigation': [
+    'background',
     'layoutPreset',
     'detailsAlignment',
     'socialPlacement',

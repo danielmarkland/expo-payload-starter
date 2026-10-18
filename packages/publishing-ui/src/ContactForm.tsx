@@ -8,7 +8,7 @@ import {
 } from '@danielmarkland/publishing-core/buttonVariants'
 import type { ComponentType, ComponentProps } from 'react'
 import type { createLinkComponents } from './LinkAction.js'
-import { useSiteConfig } from './SiteConfigProvider.js'
+import { useOptionalSiteConfig } from './SiteConfigProvider.js'
 import { TurnstileField } from './TurnstileField.js'
 
 export function createContactForm({
@@ -19,6 +19,8 @@ export function createContactForm({
   >
 }) {
   return function ContactForm({
+    siteKey: suppliedSiteKey,
+    deliver,
     nameMode,
     showCompany,
     submitButtonVariant,
@@ -27,6 +29,8 @@ export function createContactForm({
     submitLabel,
     successMessage,
   }: {
+    siteKey?: string | null
+    deliver?: (submission: Record<string, unknown>) => Promise<unknown>
     nameMode?: 'combined' | 'separate' | null
     showCompany?: boolean | null
     submitButtonVariant?: ButtonVariant | null
@@ -35,9 +39,12 @@ export function createContactForm({
     submitLabel: string
     successMessage: string
   }) {
-    const siteKey = useSiteConfig().integrations.turnstileSiteKey
+    const config = useOptionalSiteConfig()
+    const siteKey =
+      suppliedSiteKey ?? config?.integrations.turnstileSiteKey ?? null
     const { status, turnstileKey, submit } = usePublishingFormSubmission({
       endpoint: '/api/v1/contact',
+      deliver,
       siteKey,
       fields: (data) => ({
         email: data.get('email'),
