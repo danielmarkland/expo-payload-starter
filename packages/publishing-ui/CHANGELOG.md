@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.8.1
+
+### Patch Changes
+
+- Give shared loading regions a brief ready-content reveal that respects reduced-motion preferences.
+
 ## 0.8.0
 
 ### Minor Changes
