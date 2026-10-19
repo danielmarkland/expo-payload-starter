@@ -127,6 +127,10 @@
     "./sectionWidth": {
       "types": "./dist/sectionWidth.d.ts",
       "default": "./dist/sectionWidth.js"
+    },
+    "./newsletterFields": {
+      "types": "./dist/newsletterFields.d.ts",
+      "default": "./dist/newsletterFields.js"
     }
   },
   "files": [

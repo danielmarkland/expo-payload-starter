@@ -1,3 +1,4 @@
+import { newsletterDestinationField } from '@danielmarkland/publishing-core/newsletterFields'
 import { createPublishingBlocks } from '@danielmarkland/publishing-core/payloadBlocks'
 import * as fields from '@/fields/linkFields'
 
@@ -19,4 +20,7 @@ export const {
   FAQBlock,
   LatestPostsBlock,
   pageBlocks,
-} = createPublishingBlocks(fields)
+} = createPublishingBlocks({
+  ...fields,
+  newsletterDestinationField: newsletterDestinationField('/api/v1/newsletter/destinations'),
+})

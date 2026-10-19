@@ -159,7 +159,11 @@
       "types": "./dist/LoadingRegion.d.ts",
       "default": "./dist/LoadingRegion.js"
     },
-    "./LoadingRegion.css": "./dist/LoadingRegion.css"
+    "./LoadingRegion.css": "./dist/LoadingRegion.css",
+    "./admin/NewsletterDestinationField": {
+      "types": "./dist/admin/NewsletterDestinationField.d.ts",
+      "default": "./dist/admin/NewsletterDestinationField.js"
+    }
   },
   "files": [
     "dist"

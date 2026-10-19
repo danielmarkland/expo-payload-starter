@@ -1,3 +1,4 @@
+import * as newsletterCTA from './20261018_210000_newsletter_cta'
 import * as footerBackground from './20261018_190000_footer_background'
 import * as migration_20260926_033310_initial_cms from './20260926_033310_initial_cms'
 import * as migration_20260926_205749_add_pages from './20260926_205749_add_pages'
@@ -198,4 +199,5 @@ export const migrations = [
     down: footerBackground.down,
     name: '20261018_190000_footer_background',
   },
+  { up: newsletterCTA.up, down: newsletterCTA.down, name: '20261018_210000_newsletter_cta' },
 ]

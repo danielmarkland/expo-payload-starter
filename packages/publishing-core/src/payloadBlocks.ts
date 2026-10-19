@@ -10,7 +10,8 @@ export function createPublishingBlocks({
   linkArrayPresentation,
   linkFields,
   submitButtonFields,
-}: Pick<
+  newsletterDestinationField = { name: 'destinationId', type: 'text' } as Field,
+}: { newsletterDestinationField?: Field } & Pick<
   ReturnType<typeof createPublishingFields>,
   | 'actionFields'
   | 'destinationFields'
@@ -469,11 +470,31 @@ export function createPublishingBlocks({
       choice('buttonSurface', ['default', 'light']),
       { name: 'heading', type: 'text', required: true },
       { name: 'body', type: 'textarea' },
+      choice('ctaType', ['link', 'newsletter'], 'link'),
       {
         name: 'action',
         type: 'group',
-        fields: actionFields('primary-filled', { required: true }),
-        required: true,
+        admin: {
+          condition: (_data, sibling) => sibling?.ctaType !== 'newsletter',
+        },
+        fields: actionFields('primary-filled'),
+      },
+      {
+        name: 'newsletter',
+        type: 'group',
+        admin: {
+          condition: (_data, sibling) => sibling?.ctaType === 'newsletter',
+        },
+        fields: [
+          newsletterDestinationField,
+          { name: 'consentText', type: 'textarea' },
+          { name: 'submitLabel', type: 'text', defaultValue: 'Subscribe' },
+          {
+            name: 'successMessage',
+            type: 'text',
+            defaultValue: 'Thanks for subscribing.',
+          },
+        ],
       },
     ]),
   }

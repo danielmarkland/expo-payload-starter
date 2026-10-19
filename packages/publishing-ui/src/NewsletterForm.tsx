@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { usePublishingFormSubmission } from './usePublishingFormSubmission.js'
 
 import {
@@ -13,12 +14,19 @@ import { TurnstileField } from './TurnstileField.js'
 
 export function createNewsletterForm({
   LinkLabel,
+  getDestinations,
+  subscribe,
 }: {
+  getDestinations: () => Promise<{
+    destinations: { id: string; isDefault: boolean }[]
+  }>
+  subscribe: (submission: Record<string, unknown>) => Promise<unknown>
   LinkLabel: ComponentType<
     ComponentProps<ReturnType<typeof createLinkComponents>['LinkLabel']>
   >
 }) {
   return function NewsletterForm({
+    destinationId,
     buttonVariant,
     consentText,
     submitLabel,
@@ -26,6 +34,7 @@ export function createNewsletterForm({
     submitIconPosition,
     successMessage,
   }: {
+    destinationId?: string | null
     buttonVariant?: ButtonVariant | null
     consentText?: null | string
     submitLabel: string
@@ -34,10 +43,35 @@ export function createNewsletterForm({
     successMessage: string
   }) {
     const siteKey = useSiteConfig().integrations.turnstileSiteKey
+    const [available, setAvailable] = useState(false)
+    const [loaded, setLoaded] = useState(false)
+    useEffect(() => {
+      let active = true
+      setLoaded(false)
+      setAvailable(false)
+      void getDestinations()
+        .then(({ destinations }) => {
+          if (active)
+            setAvailable(
+              destinations.some((d) =>
+                destinationId ? d.id === destinationId : d.isDefault,
+              ),
+            )
+        })
+        .catch(() => {})
+        .finally(() => {
+          if (active) setLoaded(true)
+        })
+      return () => {
+        active = false
+      }
+    }, [destinationId])
     const { status, turnstileKey, submit } = usePublishingFormSubmission({
       endpoint: '/api/v1/newsletter',
+      deliver: subscribe,
       siteKey,
       fields: (data) => ({
+        ...(destinationId ? { destinationId } : {}),
         email: data.get('email'),
         firstName: data.get('firstName'),
         lastName: data.get('lastName'),
@@ -45,7 +79,18 @@ export function createNewsletterForm({
     })
 
     return (
-      <form className="newsletter-form" onSubmit={submit}>
+      <form
+        className="newsletter-form"
+        onSubmit={(event) => {
+          if (available) void submit(event)
+          else event.preventDefault()
+        }}
+      >
+        {loaded && !available ? (
+          <p className="form-message error" role="alert">
+            Newsletter signup is temporarily unavailable.
+          </p>
+        ) : null}
         <div className="newsletter-fields">
           <label>
             First name
@@ -96,7 +141,7 @@ export function createNewsletterForm({
         ) : null}
         <button
           className={buttonClassName(buttonVariant)}
-          disabled={status === 'sending' || !siteKey}
+          disabled={status === 'sending' || !siteKey || !available}
           type="submit"
         >
           {status === 'sending' ? (

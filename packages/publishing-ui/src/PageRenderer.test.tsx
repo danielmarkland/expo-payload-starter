@@ -17,6 +17,9 @@ const { ActionLink, ContentLink } = createLinkComponents((icon) =>
   icon === 'arrow-right' ? ArrowRight : undefined,
 )
 const PageRenderer = createPageRenderer({
+  NewsletterForm: ({ destinationId }) => (
+    <form data-newsletter-destination={destinationId || 'default'} />
+  ),
   ActionLink,
   ContentLink,
   LatestPostsSection: ({ eyebrow, heading }) => (
@@ -620,4 +623,26 @@ describe('hero vertical alignment', () => {
     expect(html).toContain('hero-height-standard')
     expect(html).toContain('hero-vertical-middle')
   })
+})
+
+it('renders the shared newsletter form inside an existing CTA', () => {
+  const page = pageSchema.parse({
+    id: 1,
+    title: 'Newsletter',
+    slug: 'newsletter',
+    layout: [
+      {
+        blockType: 'callToAction',
+        heading: 'Join us',
+        ctaType: 'newsletter',
+        newsletter: {
+          destinationId: 'campaign',
+          submitLabel: 'Join',
+          successMessage: 'Thanks',
+        },
+      },
+    ],
+  })
+  const html = renderToStaticMarkup(<PageRenderer page={page} />)
+  expect(html).toContain('data-newsletter-destination="campaign"')
 })

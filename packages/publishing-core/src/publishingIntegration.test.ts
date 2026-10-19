@@ -31,6 +31,7 @@ import {
 import {
   createContactDelivery,
   createNewsletterDelivery,
+  createMailerLiteNewsletter,
 } from './formDelivery.js'
 import {
   ServiceUnavailableError,
@@ -313,11 +314,10 @@ describe('shared publishing integration', () => {
       .mockResolvedValueOnce(new Response(null, { status: 503 }))
     vi.stubGlobal('fetch', fetch)
     const subscribe = createNewsletterDelivery({
-      getNewsletterConfig: () => ({
-        apiKey: 'server-key',
+      getDestination: async () => ({
         turnstileSecret: 'captcha-secret',
+        subscribe: createMailerLiteNewsletter('server-key', 'tenant-group'),
       }),
-      getNewsletterGroup: async () => 'tenant-group',
     })
     await expect(
       subscribe(

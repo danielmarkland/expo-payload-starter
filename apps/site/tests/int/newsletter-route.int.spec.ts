@@ -26,7 +26,10 @@ describe('newsletter route', () => {
   beforeEach(() => {
     vi.stubEnv('MAILERLITE_API_KEY', 'mailer-token')
     vi.stubEnv('TURNSTILE_SECRET_KEY', 'turnstile-secret')
-    findGlobal.mockResolvedValue({ newsletter: { groupId: 'group-123', show: true } })
+    vi.stubEnv(
+      'NEWSLETTER_DESTINATIONS',
+      JSON.stringify([{ id: 'readers', name: 'Readers', groupId: '123', isDefault: true }]),
+    )
     vi.spyOn(console, 'error').mockImplementation(() => undefined)
   })
 
@@ -49,9 +52,8 @@ describe('newsletter route', () => {
       expect.objectContaining({
         body: JSON.stringify({
           email: 'ada@example.com',
-          fields: { last_name: 'Lovelace', name: 'Ada' },
-          groups: ['group-123'],
-          status: 'active',
+          fields: { name: 'Ada', last_name: 'Lovelace' },
+          groups: ['123'],
         }),
       }),
     )
@@ -66,8 +68,12 @@ describe('newsletter route', () => {
   })
 
   it('rejects disabled, unconfigured, and wrongly verified submissions', async () => {
-    findGlobal.mockResolvedValueOnce({ newsletter: { groupId: 'group-123', show: false } })
+    vi.stubEnv('NEWSLETTER_DESTINATIONS', '[]')
     expect((await POST(request(validSubmission))).status).toBe(503)
+    vi.stubEnv(
+      'NEWSLETTER_DESTINATIONS',
+      JSON.stringify([{ id: 'readers', name: 'Readers', groupId: '123', isDefault: true }]),
+    )
 
     vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
       new Response(JSON.stringify({ action: 'contact', success: true }), { status: 200 }),

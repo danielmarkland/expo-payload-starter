@@ -1291,9 +1291,10 @@ export interface Page {
         buttonSurface?: ('default' | 'light') | null;
         heading: string;
         body?: string | null;
-        action: {
-          label: string;
-          type: 'page' | 'post' | 'url';
+        ctaType?: ('link' | 'newsletter') | null;
+        action?: {
+          label?: string | null;
+          type?: ('page' | 'post' | 'url') | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -1372,6 +1373,15 @@ export interface Page {
           newTab?: boolean | null;
           iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+        };
+        newsletter?: {
+          /**
+           * Use the site default or select an enabled newsletter destination.
+           */
+          destinationId?: string | null;
+          consentText?: string | null;
+          submitLabel?: string | null;
+          successMessage?: string | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -2552,6 +2562,7 @@ export interface PagesSelect<T extends boolean = true> {
               buttonSurface?: T;
               heading?: T;
               body?: T;
+              ctaType?: T;
               action?:
                 | T
                 | {
@@ -2564,6 +2575,14 @@ export interface PagesSelect<T extends boolean = true> {
                     newTab?: T;
                     iconPosition?: T;
                     variant?: T;
+                  };
+              newsletter?:
+                | T
+                | {
+                    destinationId?: T;
+                    consentText?: T;
+                    submitLabel?: T;
+                    successMessage?: T;
                   };
               appearance?:
                 | T
@@ -3318,9 +3337,9 @@ export interface FooterNavigation {
     heading: string;
     body?: string | null;
     /**
-     * MailerLite group ID. The API key remains server-side.
+     * Use the site default or select an enabled newsletter destination.
      */
-    groupId?: string | null;
+    destinationId?: string | null;
     submitLabel: string;
     /**
      * Optional icon displayed with the link label.
@@ -3851,7 +3870,7 @@ export interface FooterNavigationSelect<T extends boolean = true> {
         eyebrow?: T;
         heading?: T;
         body?: T;
-        groupId?: T;
+        destinationId?: T;
         submitLabel?: T;
         icon?: T;
         iconPosition?: T;

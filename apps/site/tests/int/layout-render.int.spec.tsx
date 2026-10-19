@@ -50,6 +50,7 @@ const media = {
 }
 const action = { type: 'url', url: '/more', label: 'Find out more' }
 const Renderer = createPageRenderer({
+  NewsletterForm,
   ContactForm,
   ActionLink,
   ContentLink,

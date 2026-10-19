@@ -6,6 +6,7 @@ import {
 } from '@payloadcms/richtext-lexical/react'
 
 import type { ComponentType, ComponentProps } from 'react'
+import type { createNewsletterForm } from './NewsletterForm.js'
 import type { createContactForm } from './ContactForm.js'
 import type { LatestPostsSection as SharedLatestPostsSection } from './LatestPostsSection.js'
 import type { createLinkComponents } from './LinkAction.js'
@@ -19,12 +20,16 @@ import type {
 
 export function createPageRenderer({
   ContactForm,
+  NewsletterForm,
   LatestPostsSection,
   ActionLink,
   ContentLink,
 }: {
   ContactForm: ComponentType<
     ComponentProps<ReturnType<typeof createContactForm>>
+  >
+  NewsletterForm: ComponentType<
+    ComponentProps<ReturnType<typeof createNewsletterForm>>
   >
   LatestPostsSection: ComponentType<
     Omit<ComponentProps<typeof SharedLatestPostsSection>, 'posts'> & {
@@ -357,10 +362,25 @@ export function createPageRenderer({
           </section>
         )
       case 'callToAction': {
-        const buttonHref = getNavigationHref(block.action)
+        const buttonHref = block.action
+          ? getNavigationHref(block.action)
+          : undefined
+        const action =
+          block.ctaType === 'newsletter' ? (
+            <NewsletterForm
+              destinationId={block.newsletter?.destinationId}
+              consentText={block.newsletter?.consentText}
+              submitLabel={block.newsletter?.submitLabel || 'Subscribe'}
+              successMessage={
+                block.newsletter?.successMessage || 'Thanks for subscribing.'
+              }
+            />
+          ) : buttonHref && block.action ? (
+            <ActionLink action={block.action} />
+          ) : null
         return (
           <section
-            className={`page-cta${block.variant === 'band' ? ' page-cta-band' : ''}${block.buttonSurface === 'light' ? ' cta-button-light' : ''}`}
+            className={`page-cta${block.ctaType === 'newsletter' ? ' page-cta-newsletter' : ''}${block.variant === 'band' ? ' page-cta-band' : ''}${block.buttonSurface === 'light' ? ' cta-button-light' : ''}`}
           >
             {block.variant === 'band' ? (
               <div className="page-cta-inner">
@@ -371,7 +391,7 @@ export function createPageRenderer({
                   <h2>{block.heading}</h2>
                   {block.body ? <p>{block.body}</p> : null}
                 </div>
-                {buttonHref ? <ActionLink action={block.action} /> : null}
+                {action}
               </div>
             ) : (
               <>
@@ -382,7 +402,7 @@ export function createPageRenderer({
                   <h2>{block.heading}</h2>
                   {block.body ? <p>{block.body}</p> : null}
                 </div>
-                {buttonHref ? <ActionLink action={block.action} /> : null}
+                {action}
               </>
             )}
           </section>
