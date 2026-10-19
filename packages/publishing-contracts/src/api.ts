@@ -269,7 +269,17 @@ export const pageBlockSchema = z.discriminatedUnion('blockType', [
     buttonSurface: z.enum(['default', 'light']).nullable().optional(),
     heading: z.string(),
     body: optionalText,
-    action: linkSchema,
+    action: linkSchema.nullable().optional(),
+    ctaType: z.enum(['link', 'newsletter']).nullable().optional(),
+    newsletter: z
+      .object({
+        destinationId: optionalText,
+        consentText: optionalText,
+        submitLabel: optionalText,
+        successMessage: optionalText,
+      })
+      .nullable()
+      .optional(),
   }),
   blockBase.extend({
     blockType: z.literal('testimonials'),
@@ -415,7 +425,7 @@ export const footerNavigationSchema = z.looseObject({
   copyrightOwner: optionalText,
   items: z.array(navigationItemSchema).nullable().optional(),
   newsletter: footerFormSchema
-    .extend({ groupId: optionalText, consentText: optionalText })
+    .extend({ destinationId: optionalText, consentText: optionalText })
     .nullable()
     .optional(),
   contactForm: footerFormSchema.nullable().optional(),

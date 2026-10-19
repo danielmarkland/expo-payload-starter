@@ -700,3 +700,21 @@ Shared palette fields carry portable validation metadata. The color picker appli
 Use names, titles or emails as primary labels. Secondary identifiers display as the first eight and last four characters (`26f5d41a…25d6`); short references remain unchanged. `publishing-ui/Identifier` retains the full value in its tooltip and accessible label, and `publishing-ui/admin/IdentifierDisplay.css` compacts Payload's built-in ID labels. Database values, links, SDK calls, queries and editable fields always keep full IDs. This convention applies to consumers such as GroovePost, Diggers Union and WBUR.
 
 Shared web loading presentation is available from `@danielmarkland/publishing-ui/LoadingRegion` with `LoadingRegion.css`. Load that CSS with the host's initial page styles so announcements stay visually hidden before app assets arrive. `LoadingRegion` announces loading without replacing its children and gently reveals ready content over 160ms, respecting reduced-motion preferences; compose decorative `Skeleton` geometry for the screen being loaded. Hosts own asset loading and apps own data loading.
+
+Newsletter CTA and footer forms share the same destination selector and signup
+component. This starter remains independent of GroovePost: configure
+`MAILERLITE_API_KEY`, `TURNSTILE_SECRET_KEY`, the public Turnstile site key in CMS,
+and `NEWSLETTER_DESTINATIONS` as a JSON array, for example
+`[{"id":"readers","name":"Readers","groupId":"123","isDefault":true}]`.
+The footer or any CTA can select a named destination; blank uses the explicit
+default. Missing or unavailable destinations disable signup and fail closed on
+submission. Choose the CTA's Newsletter type to render the shared form.
+The provider adapter verifies the `newsletter` Turnstile action and does not force
+existing MailerLite subscribers back to active. The starter owns these settings;
+no platform service credentials or database are required.
+
+Before upgrading an existing newsletter site, record its current footer group ID
+and configure the corresponding destination in `NEWSLETTER_DESTINATIONS`. Apply
+Payload migration `20261018_210000_newsletter_cta`; the old group column is retained
+as configuration history but is no longer a runtime delivery path. Verify an
+operator-controlled signup in the intended MailerLite group after deployment.

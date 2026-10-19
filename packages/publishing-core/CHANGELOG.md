@@ -1,5 +1,16 @@
 # @danielmarkland/publishing-core
 
+## 0.14.0
+
+### Minor Changes
+
+- 0cb96ec: Add provider-neutral newsletter destinations, reusable CTA signup, editor destination selection, and an injected newsletter transport. Separate MailerLite delivery from verification and preserve subscriber status.
+
+### Patch Changes
+
+- Updated dependencies [0cb96ec]
+  - @danielmarkland/publishing-contracts@0.11.0
+
 ## 0.13.0
 
 ### Minor Changes

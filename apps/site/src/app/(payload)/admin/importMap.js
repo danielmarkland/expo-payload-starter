@@ -30,6 +30,7 @@ import { TextStateFeatureClient as TextStateFeatureClient_e70f5e05f09f93e00b997e
 import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { IconPickerField as IconPickerField_3b23affeacfd37494d6d7d4ee53ad142 } from '@/components/admin/IconPickerField'
 import { LinkRowLabel as LinkRowLabel_562bc7a7ae276070353b1d1093b3185e } from '@/components/admin/LinkRowLabel'
+import { NewsletterDestinationField as NewsletterDestinationField_85879bbcaec6cb4be31f471d324f5b1d } from '@danielmarkland/publishing-ui/admin/NewsletterDestinationField'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ColorPickerField as ColorPickerField_d572ded1c017fe858839e8cdc754e090 } from '@/components/admin/ColorPickerField'
@@ -71,6 +72,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/components/admin/IconPickerField#IconPickerField": IconPickerField_3b23affeacfd37494d6d7d4ee53ad142,
   "@/components/admin/LinkRowLabel#LinkRowLabel": LinkRowLabel_562bc7a7ae276070353b1d1093b3185e,
+  "@danielmarkland/publishing-ui/admin/NewsletterDestinationField#NewsletterDestinationField": NewsletterDestinationField_85879bbcaec6cb4be31f471d324f5b1d,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "@/components/admin/ColorPickerField#ColorPickerField": ColorPickerField_d572ded1c017fe858839e8cdc754e090,

@@ -30,8 +30,19 @@ afterEach(() => {
 
 describe('newsletter form', () => {
   it('submits all required fields and announces success', async () => {
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}'))
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockImplementation(async (_url, init) =>
+        init?.method === 'POST'
+          ? new Response('{}')
+          : Response.json({ destinations: [{ id: 'readers', isDefault: true }] }),
+      )
     renderForm()
+    await waitFor(() =>
+      expect(
+        (screen.getByRole('button', { name: 'Subscribe' }) as HTMLButtonElement).disabled,
+      ).toBe(false),
+    )
     fireEvent.change(screen.getByLabelText('First name'), { target: { value: 'Ada' } })
     fireEvent.change(screen.getByLabelText('Last name'), { target: { value: 'Lovelace' } })
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'ada@example.com' } })

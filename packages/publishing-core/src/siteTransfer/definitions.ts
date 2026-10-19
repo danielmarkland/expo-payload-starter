@@ -122,12 +122,7 @@ export function publishingTransferResources(
         fields: selectTransferFields(config.fields, names),
         drafts: Boolean(config.versions && config.versions.drafts),
         media: key === 'media',
-        excludedPaths:
-          key === 'footer-navigation'
-            ? ['newsletter.groupId']
-            : key === 'site-settings'
-              ? ['integrations']
-              : undefined,
+        excludedPaths: key === 'site-settings' ? ['integrations'] : undefined,
       }
     })
 }

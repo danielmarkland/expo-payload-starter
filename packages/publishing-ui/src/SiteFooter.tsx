@@ -107,6 +107,7 @@ export function createSiteFooter({
               <NewsletterForm
                 buttonVariant={newsletter.submitButtonVariant}
                 consentText={newsletter.consentText}
+                destinationId={newsletter.destinationId}
                 submitLabel={newsletter.submitLabel}
                 submitIcon={newsletter.icon}
                 submitIconPosition={newsletter.iconPosition}

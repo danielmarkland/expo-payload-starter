@@ -18,13 +18,13 @@ await payload.updateGlobal({
   },
 })
 
-if (process.env.SETUP_MAILERLITE_GROUP_ID) {
+if (process.env.SETUP_NEWSLETTER_DESTINATION_ID) {
   await payload.updateGlobal({
     slug: 'footerNavigation',
     data: {
       newsletter: {
         ...currentFooter.newsletter,
-        groupId: process.env.SETUP_MAILERLITE_GROUP_ID,
+        destinationId: process.env.SETUP_NEWSLETTER_DESTINATION_ID,
       },
     },
   })

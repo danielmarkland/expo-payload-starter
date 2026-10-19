@@ -59,3 +59,9 @@ archive. Destination image transformations must preserve the imported original;
 derivatives can be rebuilt independently.
 
 Database URLs must use PostgreSQL schemes. The deprecated `DATABASE_POOLER_PORT` is accepted during migration when the URL omits its port or specifies the same port; conflicting explicit ports fail without reporting connection credentials. Encode the final pooler port in `DATABASE_URL`.
+
+Newsletter delivery resolves a named destination through the host-injected
+`getDestination` callback, verifies Turnstile, then calls its subscription adapter.
+`createMailerLiteNewsletter` supplies the trusted server MailerLite adapter without
+forcing subscriber status. `newsletterFields` exports the shared editor selector
+configuration; blocks and navigation accept it as `newsletterDestinationField`.

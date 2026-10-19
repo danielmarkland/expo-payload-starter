@@ -13,6 +13,7 @@ interface HeaderFieldOptions extends NavigationFieldOptions {
   headerNavigationIconOptions: SelectField['options']
 }
 interface FooterFieldOptions extends NavigationFieldOptions {
+  newsletterDestinationField?: Field
   appearanceField: () => Field
   linkArrayPresentation: Pick<ArrayField, 'admin' | 'labels'>
   socialLinkFields: () => Field[]
@@ -126,6 +127,7 @@ export function createFooterNavigationFields({
   linkArrayPresentation,
   socialLinkFields,
   submitButtonFields,
+  newsletterDestinationField = { name: 'destinationId', type: 'text' } as Field,
 }: FooterFieldOptions): Field[] {
   return [
     choice('layoutPreset', ['default', 'brand-details', 'stacked']),
@@ -166,23 +168,7 @@ export function createFooterNavigationFields({
               type: 'textarea',
               defaultValue: 'Get occasional updates delivered to your inbox.',
             },
-            {
-              name: 'groupId',
-              type: 'text',
-              admin: {
-                condition: (_data, siblingData) => siblingData?.show === true,
-                description:
-                  'MailerLite group ID. The API key remains server-side.',
-              },
-              validate: (
-                value: null | string | undefined,
-                { siblingData }: { siblingData: { show?: boolean } },
-              ) =>
-                siblingData?.show !== true ||
-                (typeof value === 'string' && value.trim())
-                  ? true
-                  : 'A MailerLite group ID is required when newsletter signup is enabled.',
-            },
+            newsletterDestinationField,
             {
               name: 'submitLabel',
               type: 'text',
