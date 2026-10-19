@@ -1,5 +1,12 @@
 # @starter/api-client
 
+## 0.1.13
+
+### Patch Changes
+
+- Updated dependencies [0cb96ec]
+  - @danielmarkland/publishing-contracts@0.11.0
+
 ## 0.1.12
 
 ### Patch Changes

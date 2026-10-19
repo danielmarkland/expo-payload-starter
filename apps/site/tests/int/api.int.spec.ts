@@ -13,6 +13,35 @@ describe('API', () => {
     payload = await getPayload({ config: payloadConfig })
   })
 
+  it('persists the newsletter CTA fields after the checked-in schema migration', async () => {
+    const page = await payload.create({
+      collection: 'pages',
+      draft: true,
+      data: {
+        title: 'Newsletter CTA',
+        slug: `newsletter-cta-${Date.now()}`,
+        layout: [
+          {
+            blockType: 'callToAction',
+            heading: 'Join our newsletter',
+            ctaType: 'newsletter',
+            newsletter: { destinationId: 'readers', submitLabel: 'Join', successMessage: 'Thanks' },
+          },
+        ],
+      },
+    })
+    const saved = await payload.findByID({
+      collection: 'pages',
+      id: page.id,
+      draft: true,
+      depth: 0,
+    })
+    expect(saved.layout?.[0]).toMatchObject({
+      ctaType: 'newsletter',
+      newsletter: { destinationId: 'readers' },
+    })
+    await payload.delete({ collection: 'pages', id: page.id })
+  })
   it('fetches users', async () => {
     const users = await payload.find({
       collection: 'users',

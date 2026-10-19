@@ -7,10 +7,7 @@ import {
   UpstreamError,
   ValidationError,
 } from './serviceErrors.js'
-import type {
-  getContactEmailConfig,
-  getNewsletterConfig as newsletterConfig,
-} from './serverEnvironment.js'
+import type { getContactEmailConfig } from './serverEnvironment.js'
 export type PublishingEmail = {
   html: string
   replyTo: string
@@ -73,58 +70,99 @@ export function createContactDelivery({
 
   return deliverContact
 }
+export type NewsletterDestination = {
+  turnstileSecret: string
+  subscribe: (submission: NewsletterSubmission) => Promise<void>
+}
+
 export function createNewsletterDelivery({
-  getNewsletterConfig,
-  getNewsletterGroup,
+  getDestination,
 }: {
-  getNewsletterConfig: () => ReturnType<typeof newsletterConfig>
-  getNewsletterGroup: () => Promise<string | null>
+  getDestination: (id?: string) => Promise<NewsletterDestination | null>
 }) {
-  async function subscribeToNewsletter(
-    submission: NewsletterSubmission,
-    request: Request,
-  ) {
+  return async (submission: NewsletterSubmission, request: Request) => {
     if (submission.website) return
-    const newsletter = getNewsletterConfig()
-    const groupId = await getNewsletterGroup()
-    if (!groupId || !newsletter.apiKey || !newsletter.turnstileSecret) {
+    const destination = await getDestination(submission.destinationId)
+    if (!destination?.turnstileSecret)
       throw new ServiceUnavailableError(
         'Newsletter signup is temporarily unavailable.',
       )
-    }
     await verifyTurnstile(
       submission.turnstileToken,
       'newsletter',
       request,
-      newsletter.turnstileSecret,
+      destination.turnstileSecret,
     )
-    const response = await fetch(
-      'https://connect.mailerlite.com/api/subscribers',
-      {
-        body: JSON.stringify({
-          email: submission.email,
-          fields: {
-            last_name: submission.lastName,
-            name: submission.firstName,
+    await destination.subscribe(submission)
+  }
+}
+
+// Server-only provider adapter. Never force an existing subscriber back to active.
+export function createMailerLiteNewsletter(apiKey: string, groupId: string) {
+  return async (submission: NewsletterSubmission) => {
+    try {
+      const response = await fetch(
+        'https://connect.mailerlite.com/api/subscribers',
+        {
+          method: 'POST',
+          redirect: 'error',
+          signal: AbortSignal.timeout(10_000),
+          headers: {
+            accept: 'application/json',
+            authorization: `Bearer ${apiKey}`,
+            'content-type': 'application/json',
           },
-          groups: [groupId],
-          status: 'active',
-        }),
-        headers: {
-          accept: 'application/json',
-          authorization: `Bearer ${newsletter.apiKey}`,
-          'content-type': 'application/json',
+          body: JSON.stringify({
+            email: submission.email,
+            fields: {
+              name: submission.firstName,
+              last_name: submission.lastName,
+            },
+            groups: [groupId],
+          }),
         },
-        method: 'POST',
+      )
+      if (!response.ok) throw new Error('Provider rejected subscription')
+    } catch {
+      throw new UpstreamError('Subscription failed. Please try again shortly.')
+    }
+  }
+}
+/** Read-only connection probe and safe destination choices; credentials stay server-side. */
+export async function listMailerLiteGroups(apiKey: string) {
+  try {
+    const response = await fetch(
+      'https://connect.mailerlite.com/api/groups?limit=1000',
+      {
+        headers: {
+          authorization: `Bearer ${apiKey}`,
+          accept: 'application/json',
+        },
+        redirect: 'error',
+        cache: 'no-store',
         signal: AbortSignal.timeout(10_000),
       },
     )
-    if (!response.ok)
-      throw new UpstreamError('Subscription failed. Please try again shortly.')
+    if (!response.ok) throw new Error('Provider rejected request')
+    const body = (await response.json()) as {
+      data: { id: string; name: string }[]
+    }
+    if (
+      !Array.isArray(body.data) ||
+      !body.data.every(
+        (group) =>
+          typeof group.id === 'string' && typeof group.name === 'string',
+      )
+    )
+      throw new Error('Invalid groups')
+    return { groups: body.data.map(({ id, name }) => ({ id, name })) }
+  } catch {
+    throw new UpstreamError(
+      'MailerLite connection could not be verified. Check its API key.',
+    )
   }
-
-  return subscribeToNewsletter
 }
+
 export async function verifyTurnstile(
   token: string,
   action: string,

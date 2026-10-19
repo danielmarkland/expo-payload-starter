@@ -14,7 +14,21 @@ import { createLinkComponents } from './LinkAction.js'
 const { LinkLabel } = createLinkComponents((icon) =>
   icon === 'arrow-right' ? ArrowRight : undefined,
 )
-const NewsletterForm = createNewsletterForm({ LinkLabel })
+const getDestinations = vi.fn(async () => ({
+  destinations: [{ id: 'readers', isDefault: true }],
+}))
+const subscribe = vi.fn(async (submission: Record<string, unknown>) => {
+  const response = await fetch('/api/v1/newsletter', {
+    method: 'POST',
+    body: JSON.stringify(submission),
+  })
+  if (!response.ok) throw new Error('Failed')
+})
+const NewsletterForm = createNewsletterForm({
+  LinkLabel,
+  getDestinations,
+  subscribe,
+})
 import { SiteConfigProvider } from './SiteConfigProvider.js'
 
 vi.mock('next/script', () => ({ default: () => null }))
@@ -40,6 +54,9 @@ function renderForm(siteKey: null | string = 'site-key') {
 afterEach(() => {
   cleanup()
   vi.restoreAllMocks()
+  getDestinations.mockResolvedValue({
+    destinations: [{ id: 'readers', isDefault: true }],
+  })
 })
 
 describe('newsletter form', () => {
@@ -48,6 +65,12 @@ describe('newsletter form', () => {
       .spyOn(globalThis, 'fetch')
       .mockResolvedValue(new Response('{}'))
     renderForm()
+    await waitFor(() =>
+      expect(
+        (screen.getByRole('button', { name: 'Subscribe' }) as HTMLButtonElement)
+          .disabled,
+      ).toBe(false),
+    )
     fireEvent.change(screen.getByLabelText('First name'), {
       target: { value: 'Ada' },
     })
@@ -80,5 +103,49 @@ describe('newsletter form', () => {
         .disabled,
     ).toBe(true)
     expect(screen.getByRole('alert').textContent).toContain('not configured')
+  })
+  it('keeps an unavailable destination disabled and prevents direct form submission', async () => {
+    getDestinations.mockResolvedValueOnce({ destinations: [] })
+    subscribe.mockClear()
+    renderForm()
+    await waitFor(() =>
+      expect(
+        screen.getByText('Newsletter signup is temporarily unavailable.'),
+      ).toBeTruthy(),
+    )
+    fireEvent.submit(
+      screen.getByRole('button', { name: 'Subscribe' }).closest('form')!,
+    )
+    expect(subscribe).not.toHaveBeenCalled()
+  })
+  it('passes an explicit destination to the injected SDK operation', async () => {
+    render(
+      <SiteConfigProvider
+        config={
+          { integrations: { turnstileSiteKey: 'site-key' } } as SiteConfig
+        }
+      >
+        <NewsletterForm
+          destinationId="readers"
+          submitLabel="Join"
+          successMessage="Joined"
+        />
+      </SiteConfigProvider>,
+    )
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}'))
+    await waitFor(() =>
+      expect(
+        (screen.getByRole('button', { name: 'Join' }) as HTMLButtonElement)
+          .disabled,
+      ).toBe(false),
+    )
+    fireEvent.submit(
+      screen.getByRole('button', { name: 'Join' }).closest('form')!,
+    )
+    await waitFor(() =>
+      expect(subscribe).toHaveBeenCalledWith(
+        expect.objectContaining({ destinationId: 'readers' }),
+      ),
+    )
   })
 })

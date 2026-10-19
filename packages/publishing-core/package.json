@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -127,6 +127,10 @@
     "./sectionWidth": {
       "types": "./dist/sectionWidth.d.ts",
       "default": "./dist/sectionWidth.js"
+    },
+    "./newsletterFields": {
+      "types": "./dist/newsletterFields.d.ts",
+      "default": "./dist/newsletterFields.js"
     }
   },
   "files": [

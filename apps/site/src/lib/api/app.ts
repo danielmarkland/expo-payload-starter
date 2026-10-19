@@ -28,7 +28,11 @@ import { cors } from 'hono/cors'
 
 import { profileSchema } from '@danielmarkland/contracts'
 import { getPreviewSecret } from '@/lib/serverConfig'
-import { deliverContact, subscribeToNewsletter } from '@/lib/publishing/forms'
+import {
+  deliverContact,
+  subscribeToNewsletter,
+  availableNewsletterDestinations,
+} from '@/lib/publishing/forms'
 import {
   findPage,
   findPost,
@@ -59,7 +63,9 @@ apiApp.use(
 )
 apiApp.use('*', async (context, next) => {
   await next()
-  const cache = publishingCacheControl(context.req.raw, context.res.status)
+  const cache = publishingCacheControl(context.req.raw, context.res.status, (path) =>
+    path.includes('/newsletter'),
+  )
   if (cache) context.header('cache-control', cache)
 })
 
@@ -124,6 +130,29 @@ apiApp.openapi(createRoute(contactRoute), async (context) => {
   await deliverContact(context.req.valid('json'), context.req.raw)
   return context.json({ ok: true as const }, 200)
 })
+
+apiApp.openapi(
+  createRoute({
+    method: 'get',
+    path: '/newsletter/destinations',
+    tags: ['Newsletter'],
+    responses: {
+      200: jsonContent(
+        z.object({
+          destinations: z.array(
+            z.object({ id: z.string(), name: z.string(), isDefault: z.boolean() }),
+          ),
+        }),
+        'Configured newsletter destinations',
+      ),
+      ...errors,
+    },
+  }),
+  async (c) => {
+    c.header('cache-control', 'no-store')
+    return c.json(await availableNewsletterDestinations(), 200)
+  },
+)
 
 apiApp.openapi(createRoute(newsletterRoute), async (context) => {
   await subscribeToNewsletter(context.req.valid('json'), context.req.raw)

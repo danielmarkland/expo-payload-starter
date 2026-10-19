@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-ui",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -159,7 +159,11 @@
       "types": "./dist/LoadingRegion.d.ts",
       "default": "./dist/LoadingRegion.js"
     },
-    "./LoadingRegion.css": "./dist/LoadingRegion.css"
+    "./LoadingRegion.css": "./dist/LoadingRegion.css",
+    "./admin/NewsletterDestinationField": {
+      "types": "./dist/admin/NewsletterDestinationField.d.ts",
+      "default": "./dist/admin/NewsletterDestinationField.js"
+    }
   },
   "files": [
     "dist"

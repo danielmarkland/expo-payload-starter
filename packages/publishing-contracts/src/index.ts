@@ -24,6 +24,11 @@ export const contactSubmissionSchema = z
 export type ContactSubmission = z.infer<typeof contactSubmissionSchema>
 
 export const newsletterSubmissionSchema = z.object({
+  destinationId: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9][a-z0-9-]{0,79}$/)
+    .optional(),
   email: z.email().max(254),
   firstName: z.string().trim().min(1).max(100),
   lastName: z.string().trim().min(1).max(100),

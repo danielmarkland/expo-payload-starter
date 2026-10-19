@@ -340,6 +340,11 @@ h3 {
   gap: var(--space-xl);
   flex-wrap: wrap;
 }
+.page-cta-newsletter .newsletter-form {
+  flex: 1 1 24rem;
+  min-width: 0;
+  max-width: var(--layout-copy);
+}
 .page-cta-inner > div {
   flex: 1 1 280px;
 }
