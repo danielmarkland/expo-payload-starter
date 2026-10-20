@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.12.4
+
+### Patch Changes
+
+- Keep default footer area spacing stable when blank CMS fields persist as null; retain explicit no-padding overrides.
+
 ## 0.12.3
 
 ### Patch Changes

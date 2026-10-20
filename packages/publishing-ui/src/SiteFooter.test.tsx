@@ -44,6 +44,38 @@ const siteConfig = resolvePublishingSiteConfig(
   'https://example.com',
 )
 describe('composable footer', () => {
+  it('keeps blank spacing defaults stable when persisted fields become null', () => {
+    function render(appearance?: {
+      paddingTop?: null | string
+      paddingBottom?: null | string
+    }) {
+      return renderToStaticMarkup(
+        <Footer
+          siteConfig={siteConfig}
+          posts={{ docs: [] }}
+          navigation={{
+            contentAreas: [
+              {
+                id: 'area',
+                appearance,
+                columns: [
+                  {
+                    id: 'column',
+                    blocks: [{ id: 'copy', blockType: 'copyright' }],
+                  },
+                ],
+              },
+            ],
+          }}
+        />,
+      )
+    }
+    expect(render({ paddingTop: null, paddingBottom: null })).toBe(render())
+    expect(render()).toContain('padding-top-md padding-bottom-md')
+    const explicit = render({ paddingTop: 'none', paddingBottom: 'lg' })
+    expect(explicit).toContain('padding-top-none padding-bottom-lg')
+    expect(explicit).not.toContain('padding-top-md')
+  })
   it('renders each component anywhere without reserved form sections', () => {
     const html = renderToStaticMarkup(
       <Footer
