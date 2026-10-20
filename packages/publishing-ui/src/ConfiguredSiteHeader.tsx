@@ -62,7 +62,9 @@ export function ConfiguredSiteHeader({
             className={
               [
                 iconOnly ? 'header-navigation-icon-only' : '',
-                item.treatment === 'accent' ? 'header-navigation-accent' : '',
+                item.treatment === 'accent'
+                  ? 'header-navigation-accent button button-primary-filled'
+                  : '',
               ]
                 .filter(Boolean)
                 .join(' ') || undefined

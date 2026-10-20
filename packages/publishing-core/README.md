@@ -65,3 +65,5 @@ Newsletter delivery resolves a named destination through the host-injected
 `createMailerLiteNewsletter` supplies the trusted server MailerLite adapter without
 forcing subscriber status. `newsletterFields` exports the shared editor selector
 configuration; blocks and navigation accept it as `newsletterDestinationField`.
+
+Site branding supports optional `logoMaxWidth` / `logoMaxHeight` pixel bounds, defaulting to 240×56px. Logo rendering preserves proportions and available width. Website action buttons use 192px width and 50px minimum height, including accented header navigation.

@@ -117,6 +117,8 @@ export type PublishingSiteSettings = {
   siteDescription: string
   darkLogo?: MediaValue
   lightLogo?: MediaValue
+  logoMaxWidth?: number | null
+  logoMaxHeight?: number | null
   favicon?: MediaValue
   archive?: Record<string, unknown> | null
   integrations?: {
@@ -168,6 +170,8 @@ export function resolvePublishingSiteConfig(
       faviconUrl: mediaURL(settings.favicon, siteURL),
       lightLogoUrl,
       logoUrl: darkLogoUrl,
+      logoMaxWidth: settings.logoMaxWidth ?? 240,
+      logoMaxHeight: settings.logoMaxHeight ?? 56,
       shortName: settings.shortName,
       siteTitle: settings.siteTitle,
     },

@@ -1,6 +1,6 @@
 {
   "name": "@starter/site",
-  "version": "1.0.30",
+  "version": "1.0.31",
   "private": true,
   "description": "A blank template to get started with Payload 3.0",
   "license": "MIT",

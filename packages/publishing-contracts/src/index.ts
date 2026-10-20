@@ -126,6 +126,8 @@ export const siteConfigSchema = z.object({
     faviconUrl: z.url().nullable(),
     lightLogoUrl: z.url().nullable().default(null),
     logoUrl: z.url().nullable(),
+    logoMaxWidth: z.number().int().positive().optional(),
+    logoMaxHeight: z.number().int().positive().optional(),
     shortName: z.string().min(1).max(12),
     siteTitle: z.string().min(1).max(100),
   }),

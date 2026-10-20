@@ -1,3 +1,4 @@
+import * as logoDimensions from './20261020_180000_logo_dimensions'
 import * as newsletterCTA from './20261018_210000_newsletter_cta'
 import * as footerBackground from './20261018_190000_footer_background'
 import * as migration_20260926_033310_initial_cms from './20260926_033310_initial_cms'
@@ -200,4 +201,5 @@ export const migrations = [
     name: '20261018_190000_footer_background',
   },
   { up: newsletterCTA.up, down: newsletterCTA.down, name: '20261018_210000_newsletter_cta' },
+  { up: logoDimensions.up, down: logoDimensions.down, name: '20261020_180000_logo_dimensions' },
 ]

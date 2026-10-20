@@ -108,11 +108,10 @@ Neon projects and private buckets are independent for development and production
 
 ## Publishing a UI fix without a site deployment
 
-After the UI change passes required CI and merges into develop, dispatch the
-Controlled release workflow on develop with `publish_ui_only: true` when the user
+After the shared publishing changes passes required CI and merges into develop, dispatch the
+Controlled release workflow on develop with `publish_publishing_only: true` when the user
 has authorized package-only publication. Validation still runs for the exact
 commit. The deployment job is excluded; the development-scoped publication job
-builds and verifies the shared packages, publishes only publishing-ui if its
-version is new, then verifies immutable registry contents and a clean install.
+builds and verifies the shared packages, publishes new versions of only publishing-contracts, publishing-core, and publishing-ui in dependency order, then verifies immutable registry contents and a clean install.
 The publication job has no site deployment credentials and cannot run on main.
 Consume the published version through the downstream development PR afterward.

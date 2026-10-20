@@ -3719,6 +3719,8 @@ export interface SiteSetting {
    * Logo shown in dark mode. The site title is used when this is empty.
    */
   darkLogo?: (number | null) | Media;
+  logoMaxWidth?: number | null;
+  logoMaxHeight?: number | null;
   /**
    * Website favicon and web-app manifest icon. Use a square PNG or SVG.
    */
@@ -3992,6 +3994,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   shortName?: T;
   lightLogo?: T;
   darkLogo?: T;
+  logoMaxWidth?: T;
+  logoMaxHeight?: T;
   favicon?: T;
   theme?:
     | T

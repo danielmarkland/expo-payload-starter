@@ -1,5 +1,16 @@
 # @danielmarkland/publishing-core
 
+## 0.15.0
+
+### Minor Changes
+
+- Add configurable logo bounds and consistent website action button dimensions.
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.12.0
+
 ## 0.14.0
 
 ### Minor Changes
