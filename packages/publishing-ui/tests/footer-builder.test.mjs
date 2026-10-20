@@ -80,6 +80,31 @@ try {
       for (const button of result.buttons)
         assert.ok(button.width <= Math.min(192, button.colWidth) + 1)
     }
+  // A surface must not change the area's site-aligned horizontal gutters.
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    for (const surface of ['default', 'raised', 'accent', 'dark', 'light']) {
+      for (const sectionWidth of ['full', 'padded']) {
+        await page.setContent(
+          `<style>:root{--layout-content:1120px;--space-lg:24px;--space-xl:40px}${css}</style><footer class="site-footer footer-builder"><section class="footer-content-area section-width-${sectionWidth} background-${surface}"><div id="content">Content</div></section></footer>`,
+        )
+        const actual = await page
+          .locator('#content')
+          .evaluate((element) => element.getBoundingClientRect().left)
+        const expected =
+          sectionWidth === 'full'
+            ? 0
+            : Math.max(
+                Math.min(24, Math.max(16, width * 0.03)),
+                (width - 1120) / 2,
+              )
+        assert.ok(
+          Math.abs(actual - expected) < 1,
+          `${width}px / ${surface} / ${sectionWidth}: gutter ${actual}, expected ${expected}`,
+        )
+      }
+    }
+  }
   // Exercise all four spacing sides and surfaces on both appearance owners.
   for (const owner of ['footer-content-area', 'footer-content-block']) {
     for (const width of [320, 390, 1440]) {

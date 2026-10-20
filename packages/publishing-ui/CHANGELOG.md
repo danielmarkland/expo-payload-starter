@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.12.3
+
+### Patch Changes
+
+- Preserve footer area gutters and compact block defaults when applying background surfaces.
+
 ## 0.12.2
 
 ### Patch Changes

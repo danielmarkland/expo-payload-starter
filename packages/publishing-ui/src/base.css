@@ -595,9 +595,9 @@ h1 {
 :is(.page-block, .footer-content-area, .footer-content-block).margin-bottom-xl {
   margin-bottom: var(--space-5xl);
 }
-:is(.page-block, .footer-content-area, .footer-content-block).background-raised,
-:is(.page-block, .footer-content-area, .footer-content-block).background-accent,
-:is(.page-block, .footer-content-area, .footer-content-block).background-dark {
+.page-block.background-raised,
+.page-block.background-accent,
+.page-block.background-dark {
   padding-left: var(--space-xl);
   padding-right: var(--space-xl);
 }

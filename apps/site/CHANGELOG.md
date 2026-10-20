@@ -1,5 +1,11 @@
 # @starter/site
 
+## 1.0.35
+
+### Patch Changes
+
+- Keep footer backgrounds aligned with configured full-width or padded content areas.
+
 ## 1.0.34
 
 ### Patch Changes
