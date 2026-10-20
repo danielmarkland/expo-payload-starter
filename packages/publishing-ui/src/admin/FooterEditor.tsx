@@ -18,7 +18,14 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { RenderFields, useForm, useFormFields, useField } from '@payloadcms/ui'
+import {
+  ConfirmationModal,
+  RenderFields,
+  useModal,
+  useForm,
+  useFormFields,
+  useField,
+} from '@payloadcms/ui'
 import type {
   ArrayFieldClient,
   BlocksFieldClient,
@@ -130,6 +137,16 @@ export function FooterEditor({
 }) {
   const form = useForm()
   const dragContextId = useId()
+  const removalSlug = `footer-removal-${dragContextId}`
+  const { openModal } = useModal()
+  const [removal, setRemoval] = useState<{
+    message: string
+    run: () => void | Promise<void>
+  } | null>(null)
+  function confirmRemoval(message: string, run: () => void | Promise<void>) {
+    setRemoval({ message, run })
+    openModal(removalSlug)
+  }
   useFormFields(([fields]) => fields)
   const { disabled: fieldDisabled } = useField({ path, hasRows: true })
   const areas = form.getDataByPath<FooterContentArea[]>(path) ?? []
@@ -156,6 +173,7 @@ export function FooterEditor({
   async function update(next: FooterContentArea[]) {
     if (disabled) return
     setBusy(true)
+    form.setProcessing(true)
     setError('')
     try {
       await form.reset({ ...form.getData(), [path]: next })
@@ -165,13 +183,14 @@ export function FooterEditor({
         'The layout could not be updated. Your existing content is still available; try again.',
       )
     } finally {
+      form.setProcessing(false)
       setBusy(false)
     }
   }
   function change(fn: (next: FooterContentArea[]) => void) {
     const next = structuredClone(areas)
     fn(next)
-    void update(next)
+    return update(next)
   }
   function reorder<T>(items: T[], index: number, offset: number) {
     const target = index + offset
@@ -375,16 +394,18 @@ export function FooterEditor({
                     type="button"
                     disabled={disabled}
                     onClick={() => {
-                      if (
-                        !area.columns.some((c) => c.blocks?.length) ||
-                        window.confirm(
-                          'Remove this content area and all of its blocks?',
-                        )
-                      )
-                        change((next) => {
+                      const remove = () => {
+                        if (selection?.id === area.id) setSelection(null)
+                        return change((next) => {
                           next.splice(ai, 1)
                         })
-                      if (selection?.id === area.id) setSelection(null)
+                      }
+                      if (area.columns.some((c) => c.blocks?.length))
+                        confirmRemoval(
+                          'Remove this content area and all of its blocks?',
+                          remove,
+                        )
+                      else void remove()
                     }}
                   >
                     Remove area
@@ -434,15 +455,16 @@ export function FooterEditor({
                           aria-label={`Remove column ${ci + 1} in area ${ai + 1}`}
                           disabled={disabled || area.columns.length === 1}
                           onClick={() => {
-                            if (
-                              !column.blocks?.length ||
-                              window.confirm(
-                                'Remove this column and all of its blocks?',
-                              )
-                            )
+                            const remove = () =>
                               change((next) => {
                                 next[ai]!.columns.splice(ci, 1)
                               })
+                            if (column.blocks?.length)
+                              confirmRemoval(
+                                'Remove this column and all of its blocks?',
+                                remove,
+                              )
+                            else void remove()
                           }}
                         >
                           ×
@@ -587,8 +609,8 @@ export function FooterEditor({
                     type="button"
                     disabled={disabled}
                     onClick={() => {
-                      if (window.confirm('Remove this block?')) {
-                        change((next) => {
+                      confirmRemoval('Remove this block?', async () => {
+                        await change((next) => {
                           for (const area of next)
                             for (const column of area.columns)
                               column.blocks = column.blocks?.filter(
@@ -596,7 +618,7 @@ export function FooterEditor({
                               )
                         })
                         setSelection(null)
-                      }
+                      })
                     }}
                   >
                     Remove block
@@ -620,6 +642,18 @@ export function FooterEditor({
           )}
         </aside>
       </div>
+      <ConfirmationModal
+        modalSlug={removalSlug}
+        heading="Remove footer content?"
+        body={removal?.message}
+        confirmLabel="Remove"
+        cancelLabel="Cancel"
+        onCancel={() => setRemoval(null)}
+        onConfirm={async () => {
+          await removal?.run()
+          setRemoval(null)
+        }}
+      />
     </section>
   )
 }

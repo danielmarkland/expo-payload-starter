@@ -47,6 +47,15 @@ test.describe('Visual footer builder', () => {
     await login({ page, user: testUser })
     await page.goto(`${serverURL}/admin/globals/footerNavigation`)
     const editor = page.getByRole('region', { name: 'Footer layout editor' })
+    async function removal(action: () => Promise<void>, accept: boolean, message: string) {
+      await action()
+      const modal = page.locator('.confirmation-modal')
+      await expect(modal).toBeVisible()
+      await expect(modal.getByText(message, { exact: true })).toBeVisible()
+      await modal.getByRole('button', { name: accept ? 'Remove' : 'Cancel', exact: true }).click()
+      await expect(modal).not.toBeVisible()
+    }
+
     await expect(editor).toBeVisible()
     await editor.getByRole('button', { name: 'Copyright', exact: true }).click()
     await editor.getByRole('textbox', { name: 'Owner', exact: true }).fill('Edited owner')
@@ -114,16 +123,69 @@ test.describe('Visual footer builder', () => {
       await editor.getByRole('button', { name: 'Add content area', exact: true }).click()
       await expect(editor.locator('.footer-editor__area')).toHaveCount(i + 3)
     }
-    page.once('dialog', (dialog) => dialog.dismiss())
-    await editor.getByRole('button', { name: 'Remove area', exact: true }).first().click()
+    await removal(
+      () => editor.getByRole('button', { name: 'Remove area', exact: true }).first().click(),
+      false,
+      'Remove this content area and all of its blocks?',
+    )
     await expect(editor.locator('.footer-editor__area')).toHaveCount(6)
+    const lastArea = editor.locator('.footer-editor__area').last()
+    await lastArea.getByRole('button', { name: 'Add column', exact: true }).click()
+    await expect(lastArea.locator('.footer-editor__column')).toHaveCount(2)
+    const secondColumnId = await lastArea
+      .locator('[data-footer-column]')
+      .nth(1)
+      .getAttribute('data-footer-column')
+    await editor.getByRole('button', { name: 'Move column 2 left in area 6' }).click()
+    await expect(lastArea.locator('[data-footer-column]').first()).toHaveAttribute(
+      'data-footer-column',
+      secondColumnId!,
+    )
+    await editor
+      .getByRole('combobox', { name: 'Add block to area 6 column 1' })
+      .selectOption('logo')
+    await expect(
+      lastArea
+        .locator('.footer-editor__column')
+        .first()
+        .getByRole('button', { name: 'Logo', exact: true }),
+    ).toBeVisible()
+    await removal(
+      () => editor.getByRole('button', { name: 'Remove column 1 in area 6' }).click(),
+      true,
+      'Remove this column and all of its blocks?',
+    )
+    await expect(lastArea.locator('.footer-editor__column')).toHaveCount(1)
+    await editor
+      .getByRole('combobox', { name: 'Add block to area 6 column 1' })
+      .selectOption('logo')
+    await expect(
+      lastArea
+        .locator('.footer-editor__column')
+        .first()
+        .getByRole('button', { name: 'Logo', exact: true }),
+    ).toBeVisible()
+    await removal(
+      () => lastArea.getByRole('button', { name: 'Remove area', exact: true }).click(),
+      true,
+      'Remove this content area and all of its blocks?',
+    )
+    await expect(editor.locator('.footer-editor__area')).toHaveCount(5)
+    await editor.getByRole('button', { name: 'Add content area', exact: true }).click()
+    await expect(editor.locator('.footer-editor__area')).toHaveCount(6)
+    await expect(
+      editor.getByRole('button', { name: 'Add content area', exact: true }),
+    ).toBeEnabled()
     const saved = page.waitForResponse(
       (response) =>
         response.request().method() === 'POST' &&
         response.url().includes('/api/globals/footerNavigation'),
     )
     await page.getByRole('button', { name: 'Save', exact: true }).click()
-    expect((await saved).status()).toBe(200)
+    const response = await saved
+    expect(response.status()).toBe(200)
+    const result = (await response.json()) as { message: string }
+    await expect(page.getByText(result.message, { exact: true })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Save', exact: true })).toBeDisabled()
     await page.reload()
     await expect(editor.locator('.footer-editor__area')).toHaveCount(6, { timeout: 30_000 })
