@@ -3,6 +3,11 @@ on:
   push:
     branches: [develop, main]
   workflow_dispatch:
+    inputs:
+      publish_ui_only:
+        description: Publish only publishing-ui from develop without deploying a site
+        type: boolean
+        default: false
 permissions:
   contents: read
   packages: write
@@ -15,7 +20,7 @@ jobs:
     secrets: inherit
   deploy:
     needs: validate
-    if: vars.RELEASE_AUTOMATION_ENABLED == 'true' && (github.ref_name == 'develop' || github.ref_name == 'main')
+    if: vars.RELEASE_AUTOMATION_ENABLED == 'true' && !inputs.publish_ui_only && (github.ref_name == 'develop' || github.ref_name == 'main')
     runs-on: ubuntu-latest
     concurrency:
       group: release-${{ github.repository }}
@@ -59,6 +64,59 @@ jobs:
         with:
           name: release-result-${{ github.sha }}-${{ github.run_attempt }}
           path: release-output/result.json
+          if-no-files-found: ignore
+  publish-ui:
+    needs: validate
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_ui_only && github.ref_name == 'develop'
+    runs-on: ubuntu-latest
+    environment: development
+    concurrency:
+      group: release-${{ github.repository }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@danielmarkland'
+      - run: pnpm install --frozen-lockfile
+      - name: Build and verify immutable package candidates
+        run: |
+          pnpm --filter '@danielmarkland/*' build
+          node scripts/release/packages.mjs
+      - id: candidate
+        name: Check whether publishing-ui is already published
+        run: |
+          node --input-type=module <<'NODE'
+          import { appendFileSync, readFileSync } from 'node:fs';
+          const packages = JSON.parse(readFileSync('release-output/packages.json', 'utf8'));
+          const candidate = packages.find(entry => entry.name === '@danielmarkland/publishing-ui');
+          if (!candidate) throw new Error('publishing-ui candidate is missing');
+          appendFileSync(process.env.GITHUB_OUTPUT, `publish=${!candidate.published}\n`);
+          NODE
+      - name: Publish only publishing-ui
+        if: steps.candidate.outputs.publish == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/ui-package"
+          pnpm --filter @danielmarkland/publishing-ui pack --pack-destination "$RUNNER_TEMP/ui-package"
+          npm publish "$RUNNER_TEMP"/ui-package/*.tgz --registry=https://npm.pkg.github.com --access=restricted
+      - name: Verify registry contents and clean installation
+        run: node scripts/release/packages.mjs --clean-install
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-package-publication-${{ github.sha }}-${{ github.run_attempt }}
+          path: release-output/packages.json
           if-no-files-found: ignore
   handover:
     if: vars.RELEASE_AUTOMATION_ENABLED != 'true'

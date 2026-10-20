@@ -664,6 +664,8 @@ checks, coordinated deployment/publication, handover settings and recovery.
 Controlled automation stays disabled until its environment prerequisites are
 configured and the dev handover is verified. Builds run on Vercel with live domains
 unchanged until explicit activation, keeping sensitive runtime settings out of CI.
+Approved publishing-ui fixes can use the manual package-only mode on develop;
+that mode validates and publishes the package without deploying a site.
 
 Publishing section widths inherit from site → page → block. Site defaults to
 Padded; pages default to Site and blocks to Page. Full and Padded overrides align
