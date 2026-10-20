@@ -722,3 +722,5 @@ and configure the corresponding destination in `NEWSLETTER_DESTINATIONS`. Apply
 Payload migration `20261018_210000_newsletter_cta`; the old group column is retained
 as configuration history but is no longer a runtime delivery path. Verify an
 operator-controlled signup in the intended MailerLite group after deployment.
+
+Site branding supports editable logo bounds (240×56px by default). Website action buttons share a 192px width and 50px minimum height, including accented header links. The three shared publishing packages can be published from develop without deploying a site; see the release runbook.

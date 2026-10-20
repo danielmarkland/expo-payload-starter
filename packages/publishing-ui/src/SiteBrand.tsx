@@ -12,13 +12,20 @@ export function SiteBrand({
     identity: Pick<
       SiteConfig['identity'],
       'siteTitle' | 'darkLogoUrl' | 'lightLogoUrl'
-    >
+    > &
+      Pick<SiteConfig['identity'], 'logoMaxWidth' | 'logoMaxHeight'>
   }
 }) {
   return (
     <Link
       aria-label={siteConfig.identity.siteTitle}
       className={`site-brand${mode ? ` site-brand-on-${mode}` : ''}`}
+      style={
+        {
+          '--site-logo-max-width': `${siteConfig.identity.logoMaxWidth ?? 240}px`,
+          '--site-logo-max-height': `${siteConfig.identity.logoMaxHeight ?? 56}px`,
+        } as import('react').CSSProperties
+      }
       href="/"
     >
       {siteConfig.identity.darkLogoUrl ? (

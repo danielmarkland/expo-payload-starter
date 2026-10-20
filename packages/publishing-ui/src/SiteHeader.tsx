@@ -9,7 +9,8 @@ export interface SiteHeaderProps {
     identity: Pick<
       SiteConfig['identity'],
       'siteTitle' | 'darkLogoUrl' | 'lightLogoUrl'
-    >
+    > &
+      Pick<SiteConfig['identity'], 'logoMaxWidth' | 'logoMaxHeight'>
     theme: Pick<SiteConfig['theme'], 'allowToggle' | 'defaultMode'>
   }
   variant?: 'standard' | 'minimal' | null

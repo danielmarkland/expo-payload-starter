@@ -85,3 +85,5 @@ Block pages let the first and last blocks control their own section spacing.
 The page shell adds no trailing padding, and an adjacent site footer adds no
 outside margin, so full-width final sections meet the footer without an empty
 band. Footer interior padding and spacing after other page types are preserved.
+
+Site branding supports optional `logoMaxWidth` / `logoMaxHeight` pixel bounds, defaulting to 240×56px. Logo rendering preserves proportions and available width. Website action buttons use 192px width and 50px minimum height, including accented header navigation.

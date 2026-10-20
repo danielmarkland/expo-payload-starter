@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-ui",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -185,7 +185,7 @@
     "prepack": "node --test tests/package.test.mjs",
     "test:package": "pnpm build && node --test tests/package.test.mjs",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
-    "test:layout": "node tests/width.test.mjs && node tests/hero-header.test.mjs && node tests/hero-viewport.test.mjs && node tests/footer-spacing.test.mjs"
+    "test:layout": "node tests/width.test.mjs && node tests/hero-header.test.mjs && node tests/hero-viewport.test.mjs && node tests/footer-spacing.test.mjs && node tests/branding-actions.test.mjs"
   },
   "dependencies": {
     "@danielmarkland/publishing-contracts": "workspace:*",

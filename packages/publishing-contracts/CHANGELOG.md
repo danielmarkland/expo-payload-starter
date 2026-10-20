@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-contracts
 
+## 0.12.0
+
+### Minor Changes
+
+- Add configurable logo bounds and consistent website action button dimensions.
+
 ## 0.11.0
 
 ### Minor Changes
