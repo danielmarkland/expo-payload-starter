@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.12.2
+
+### Patch Changes
+
+- Apply configured footer area and component spacing, surfaces, and borders without inheriting page-block defaults.
+
 ## 0.12.1
 
 ### Patch Changes
