@@ -1,5 +1,11 @@
 # @starter/site
 
+## 1.0.36
+
+### Patch Changes
+
+- Preserve default footer spacing after save and reload.
+
 ## 1.0.35
 
 ### Patch Changes

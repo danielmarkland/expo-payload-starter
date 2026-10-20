@@ -95,3 +95,5 @@ Contact and split-content page sections stack on phones. Contact submit actions 
 Footer area and component appearance controls apply their configured padding, margins, surfaces, and borders independently of page sections. Unconfigured components retain their compact default spacing.
 
 Footer surface colors preserve the area’s configured full-width or padded gutters; padding overrides remain independent.
+
+Blank footer area top/bottom padding uses the medium design-system default before and after persistence. Select None for an explicit zero-padding override.

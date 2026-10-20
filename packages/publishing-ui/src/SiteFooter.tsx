@@ -222,9 +222,9 @@ export function createSiteFooter({
               key={area.id || index}
               aria-label={area.title || `Footer area ${index + 1}`}
               className={sectionAppearanceClassName(['footer-content-area'], {
-                paddingTop: 'md',
-                paddingBottom: 'md',
                 ...area.appearance,
+                paddingTop: area.appearance?.paddingTop || 'md',
+                paddingBottom: area.appearance?.paddingBottom || 'md',
                 width: resolveSectionWidth({
                   site: siteConfig.width,
                   block: area.appearance?.width,
