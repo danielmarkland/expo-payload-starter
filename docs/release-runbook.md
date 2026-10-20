@@ -101,7 +101,18 @@ checks, while Vercel builds the hosted frontend. CI does not download or duplica
 runtime secrets. Payload migration uses a temporary
 process-only secret; its database connection is the dedicated migration credential.
 
-Only deployment jobs take the per-environment release lock. Exact-commit validation
+Deployment and package-only publication jobs share the release lock. Exact-commit validation
 can run concurrently; deployment and publication stay serialized and are never cancelled.
 
 Neon projects and private buckets are independent for development and production. Configure `AWS_ACCESS_KEY_ID/SECRET_ACCESS_KEY` secrets and `AWS_ENDPOINT_URL_S3/AWS_REGION` variables per GitHub release environment. Schema runners require a direct connection; hosted traffic uses a restricted pooled runtime login. Feature MRs deploy on dev previews, squash into develop for hosted development acceptance, then promote through a same-repository develop -> main release PR. Never copy development data into production.
+
+## Publishing a UI fix without a site deployment
+
+After the UI change passes required CI and merges into develop, dispatch the
+Controlled release workflow on develop with `publish_ui_only: true` when the user
+has authorized package-only publication. Validation still runs for the exact
+commit. The deployment job is excluded; the development-scoped publication job
+builds and verifies the shared packages, publishes only publishing-ui if its
+version is new, then verifies immutable registry contents and a clean install.
+The publication job has no site deployment credentials and cannot run on main.
+Consume the published version through the downstream development PR afterward.
