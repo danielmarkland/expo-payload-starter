@@ -80,3 +80,8 @@ hosts can use their ordinary SDK. `createPageRenderer` requires a NewsletterForm
 adapter and renders it for CTA blocks with `ctaType: newsletter`. Footer signup
 uses the same component. The shared admin NewsletterDestinationField loads safe
 choices from a host-supplied endpoint; missing destinations disable submission.
+
+Block pages let the first and last blocks control their own section spacing.
+The page shell adds no trailing padding, and an adjacent site footer adds no
+outside margin, so full-width final sections meet the footer without an empty
+band. Footer interior padding and spacing after other page types are preserved.

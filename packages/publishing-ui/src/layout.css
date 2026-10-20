@@ -599,6 +599,11 @@ body:has(main[data-header-variant='minimal'])
   );
   max-width: none;
   padding-inline: 0;
+  padding-bottom: 0;
+}
+/* Page blocks own their vertical spacing, including the final section. */
+.page-shell + .site-footer {
+  margin-top: 0;
 }
 .page-width-full {
   --page-section-gutter: 0px;

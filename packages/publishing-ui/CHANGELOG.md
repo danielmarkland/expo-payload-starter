@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.10.1
+
+### Patch Changes
+
+- Let block pages meet the footer without redundant page-bottom padding and footer margins. Preserve each section's configured padding and the footer's interior spacing.
+
 ## 0.10.0
 
 ### Minor Changes
