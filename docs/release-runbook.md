@@ -115,3 +115,7 @@ commit. The deployment job is excluded; the development-scoped publication job
 builds and verifies the shared packages, publishes new versions of only publishing-contracts, publishing-core, and publishing-ui in dependency order, then verifies immutable registry contents and a clean install.
 The publication job has no site deployment credentials and cannot run on main.
 Consume the published version through the downstream development PR afterward.
+
+## Composable footer migration
+
+The content-area migration creates the new native Payload tables, converts each saved footer and its relationship/form settings, and then removes retired fields. Apply it through the controlled release after testing a populated fixture. It deliberately refuses a destructive down migration because arbitrary content areas cannot be reduced to the old fixed layout; reversal requires a pre-migration database backup. The public renderer has one content-area implementation.

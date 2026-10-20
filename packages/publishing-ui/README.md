@@ -87,3 +87,5 @@ outside margin, so full-width final sections meet the footer without an empty
 band. Footer interior padding and spacing after other page types are preserved.
 
 Site branding supports optional `logoMaxWidth` / `logoMaxHeight` pixel bounds, defaulting to 240×56px. Logo rendering preserves proportions and available width. Website action buttons use 192px width and 50px minimum height, including accented header navigation.
+
+`SiteFooter` renders the ordered `contentAreas` contract. Each area supports 1–4 equal-width columns; at 900px and below columns stack in order. Blocks include logo, rich text, links, social links, CTA, latest posts, copyright, newsletter and contact forms. Empty areas and disabled blocks do not render blank sections. Forms retain independent state and share the existing host delivery adapters.

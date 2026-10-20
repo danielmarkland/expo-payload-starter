@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -131,6 +131,14 @@
     "./newsletterFields": {
       "types": "./dist/newsletterFields.d.ts",
       "default": "./dist/newsletterFields.js"
+    },
+    "./footerLayout": {
+      "types": "./dist/footerLayout.d.ts",
+      "default": "./dist/footerLayout.js"
+    },
+    "./footerMigration": {
+      "types": "./dist/footerMigration.d.ts",
+      "default": "./dist/footerMigration.js"
     }
   },
   "files": [

@@ -29,6 +29,7 @@ const clientFiles = [
   'admin/index',
   'admin/ColorPickerField',
   'admin/IconPickerField',
+  'admin/FooterEditor',
   'admin/LinkRowLabel',
 ]
 

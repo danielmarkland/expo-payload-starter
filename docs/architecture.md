@@ -86,3 +86,5 @@ generic service/plugin framework.
 ### Identity and infrastructure
 
 The starter owns its native Better Auth backend, editorial policy and separate Neon projects. GroovePost-hosted frontend packages instead consume the platform SDK session bridge. See [authentication](authentication.md) and [database ownership](database-ownership.md).
+
+The composable footer uses publishing-core field factories and layout/migration operations, publishing-contracts schemas, and the publishing-ui admin editor/public renderer. The editor reuses native Payload fields and permissions; CMS authentication and tenant access remain host-owned.

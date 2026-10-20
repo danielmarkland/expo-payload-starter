@@ -19,13 +19,30 @@ await payload.updateGlobal({
 })
 
 if (process.env.SETUP_NEWSLETTER_DESTINATION_ID) {
+  if (
+    !currentFooter.contentAreas?.some((area) =>
+      area.columns.some((column) =>
+        column.blocks?.some((block) => block.blockType === 'newsletter'),
+      ),
+    )
+  )
+    throw new Error(
+      'Add a newsletter component to the footer before setting SETUP_NEWSLETTER_DESTINATION_ID.',
+    )
   await payload.updateGlobal({
     slug: 'footerNavigation',
     data: {
-      newsletter: {
-        ...currentFooter.newsletter,
-        destinationId: process.env.SETUP_NEWSLETTER_DESTINATION_ID,
-      },
+      contentAreas: currentFooter.contentAreas?.map((area) => ({
+        ...area,
+        columns: area.columns.map((column) => ({
+          ...column,
+          blocks: column.blocks?.map((block) =>
+            block.blockType === 'newsletter'
+              ? { ...block, destinationId: process.env.SETUP_NEWSLETTER_DESTINATION_ID }
+              : block,
+          ),
+        })),
+      })),
     },
   })
 }

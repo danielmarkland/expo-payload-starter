@@ -1,3 +1,4 @@
+import * as footerContentAreas from './20261020_190000_footer_content_areas'
 import * as logoDimensions from './20261020_180000_logo_dimensions'
 import * as newsletterCTA from './20261018_210000_newsletter_cta'
 import * as footerBackground from './20261018_190000_footer_background'
@@ -202,4 +203,9 @@ export const migrations = [
   },
   { up: newsletterCTA.up, down: newsletterCTA.down, name: '20261018_210000_newsletter_cta' },
   { up: logoDimensions.up, down: logoDimensions.down, name: '20261020_180000_logo_dimensions' },
+  {
+    up: footerContentAreas.up,
+    down: footerContentAreas.down,
+    name: '20261020_190000_footer_content_areas',
+  },
 ]

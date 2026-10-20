@@ -20,6 +20,7 @@ describe('public CAPTCHA widget', () => {
     expect(api.render).toHaveBeenCalledWith(expect.any(HTMLElement), {
       sitekey: 'public-key',
       action: 'contact',
+      size: 'compact',
     })
     fireEvent.click(screen.getByRole('button', { name: 'Load CAPTCHA' }))
     expect(api.render).toHaveBeenCalledTimes(1)
@@ -28,6 +29,7 @@ describe('public CAPTCHA widget', () => {
     expect(api.render).toHaveBeenLastCalledWith(expect.any(HTMLElement), {
       sitekey: 'another-key',
       action: 'newsletter',
+      size: 'compact',
     })
     unmount()
     expect(api.remove).toHaveBeenCalledTimes(2)

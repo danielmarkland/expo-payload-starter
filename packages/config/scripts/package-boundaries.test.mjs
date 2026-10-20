@@ -48,3 +48,42 @@ test('checks relative, alias, re-export, dynamic and undeclared runtime imports'
     await rm(root, { recursive: true, force: true })
   }
 })
+
+test('drag editor imports require explicit presentation dependencies and stay forbidden in pure packages', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'editor-boundary-'))
+  try {
+    await mkdir(join(root, 'src'))
+    await writeFile(
+      join(root, 'package.json'),
+      JSON.stringify({
+        name: '@example/presentation',
+        dependencies: { react: '*', '@dnd-kit/core': '*' },
+      }),
+    )
+    await writeFile(
+      join(root, 'src/editor.tsx'),
+      "import {useState} from 'react'; import {DndContext} from '@dnd-kit/core';",
+    )
+    assert.deepEqual(
+      await checkPackage(root, {
+        allowed: new Set(['react', '@dnd-kit/core']),
+        published: true,
+      }),
+      [],
+    )
+    const errors = await checkPackage(root, {
+      allowed: new Set(['zod']),
+      published: true,
+    })
+    assert.ok(
+      errors.some((error) => error.includes('forbidden dependency react')),
+    )
+    assert.ok(
+      errors.some((error) =>
+        error.includes('forbidden dependency @dnd-kit/core'),
+      ),
+    )
+  } finally {
+    await rm(root, { recursive: true, force: true })
+  }
+})
