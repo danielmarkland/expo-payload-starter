@@ -43,8 +43,37 @@ try {
         0.1,
     )
   }
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.setContent(
+      `<style>:root{--space-lg:24px;--space-md:16px;--space-2xl:48px;--font-size-body:16px}${css}</style><main style="padding:24px"><section class="contact-section"><div class="section-heading">Contact us</div><form class="contact-form"><label>Name<input></label><label>Email<input type="email"></label><label>Message<textarea></textarea></label><button class="button">Send message</button></form></section><section class="split-content"><div class="split-content-copy">Our approach</div><div class="split-content-image">Illustration</div></section></main>`,
+    )
+    const result = await page.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth > innerWidth,
+      button: {
+        width: document.querySelector('button').getBoundingClientRect().width,
+        height: document.querySelector('button').getBoundingClientRect().height,
+      },
+      contact: [...document.querySelector('.contact-section').children].map(
+        (e) => e.getBoundingClientRect().toJSON(),
+      ),
+      split: [...document.querySelector('.split-content').children].map((e) =>
+        e.getBoundingClientRect().toJSON(),
+      ),
+    }))
+    assert.equal(
+      result.overflow,
+      false,
+      `Page contact and split sections at ${width}px`,
+    )
+    assert.deepEqual(result.button, { width: 192, height: 50 })
+    if (width <= 520) {
+      assert.ok(result.contact[1].top >= result.contact[0].bottom)
+      assert.ok(result.split[1].top >= result.split[0].bottom)
+    }
+  }
   console.log(
-    'Passed responsive logo bounds and consistent header, CTA, and form button sizing.',
+    'Passed responsive logo bounds and consistent header, CTA, and contact button sizing; mobile contact/split stacking.',
   )
 } finally {
   await browser.close()

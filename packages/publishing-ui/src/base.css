@@ -1054,8 +1054,9 @@ h1 {
   outline-offset: 2px;
 }
 .contact-form .button {
-  justify-self: stretch;
-  width: 100%;
+  justify-self: start;
+  width: 192px;
+  max-width: 100%;
 }
 .contact-honeypot {
   left: -10000px;
@@ -1158,8 +1159,6 @@ h1 {
   line-height: 1.6;
   margin: 0;
 }
-@media (max-width: 800px) {
-}
 @media (max-width: 520px) {
   .site-header {
     flex-wrap: wrap;
@@ -1191,6 +1190,10 @@ h1 {
   }
   .page-cta {
     padding: var(--space-lg);
+  }
+  .contact-section,
+  .split-content {
+    grid-template-columns: minmax(0, 1fr);
   }
   .newsletter-fields {
     grid-template-columns: minmax(0, 1fr);
