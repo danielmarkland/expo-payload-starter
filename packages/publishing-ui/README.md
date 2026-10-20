@@ -91,3 +91,5 @@ Site branding supports optional `logoMaxWidth` / `logoMaxHeight` pixel bounds, d
 `SiteFooter` renders the ordered `contentAreas` contract. Each area supports 1–4 equal-width columns; at 900px and below columns stack in order. Blocks include logo, rich text, links, social links, CTA, latest posts, copyright, newsletter and contact forms. Empty areas and disabled blocks do not render blank sections. Forms retain independent state and share the existing host delivery adapters.
 
 Contact and split-content page sections stack on phones. Contact submit actions follow the same 192px width and 50px minimum height as other website actions.
+
+Footer area and component appearance controls apply their configured padding, margins, surfaces, and borders independently of page sections. Unconfigured components retain their compact default spacing.

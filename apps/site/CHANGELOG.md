@@ -1,5 +1,11 @@
 # @starter/site
 
+## 1.0.34
+
+### Patch Changes
+
+- Adopt the shared footer appearance correction for configured area and component spacing, surfaces, and borders.
+
 ## 1.0.33
 
 ### Patch Changes
