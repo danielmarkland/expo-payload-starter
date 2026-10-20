@@ -1,4 +1,5 @@
 import { createSiteFooter } from '@danielmarkland/publishing-ui/SiteFooter'
+import { footerLatestPostsLimit } from '@danielmarkland/publishing-core/footerLayout'
 import type { SiteConfig } from '@danielmarkland/publishing-contracts'
 import { ContactForm } from '@/components/ContactForm'
 import { NewsletterForm } from '@/components/NewsletterForm'
@@ -13,6 +14,7 @@ const Footer = createSiteFooter({
 })
 export async function SiteFooter({ siteConfig }: { siteConfig: SiteConfig }) {
   const navigation = await getNavigationDocuments()
-  const posts = await getPublishedPosts(`?limit=${navigation.footer.latestPosts?.limit || 2}`)
+  const limit = footerLatestPostsLimit(navigation.footer.contentAreas)
+  const posts = limit ? await getPublishedPosts(`?limit=${limit}`) : { docs: [] }
   return <Footer siteConfig={siteConfig} navigation={navigation.footer} posts={posts} />
 }

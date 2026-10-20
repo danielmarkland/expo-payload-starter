@@ -67,3 +67,5 @@ forcing subscriber status. `newsletterFields` exports the shared editor selector
 configuration; blocks and navigation accept it as `newsletterDestinationField`.
 
 Site branding supports optional `logoMaxWidth` / `logoMaxHeight` pixel bounds, defaulting to 240×56px. Logo rendering preserves proportions and available width. Website action buttons use 192px width and 50px minimum height, including accented header navigation.
+
+`payloadNavigation` defines native footer content areas, columns, and blocks. `publishing-ui/admin/FooterEditor` renders the shared visual editor with native Payload field settings, cross-column drag, keyboard move controls, and mobile layout preview. `footerMigration` is a one-time conversion for the retired SQL/footer shape, not a public rendering fallback. `footerLayout` supplies movement and latest-post query helpers.

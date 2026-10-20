@@ -13,7 +13,7 @@ import {
   sha256,
   type SiteArchive,
 } from './archive.js'
-import { object, projectState, setPath } from './fields.js'
+import { object, prepareWriteData, projectState, setPath } from './fields.js'
 
 export interface TransferResource {
   key: string
@@ -418,7 +418,10 @@ export async function replaceSite(
         )) {
           // Create unpublished shells first so cyclic optional references can resolve.
           const data: Record<string, unknown> = {
-            ...materialize(record.current, identities, true),
+            ...prepareWriteData(
+              materialize(record.current, identities, true),
+              resource.fields,
+            ),
             ...resource.scope,
           }
           const original = preserved.get(resource.key)
@@ -473,7 +476,10 @@ export async function replaceSite(
         )) {
           const apply = async (state: SiteTransferState, draft: boolean) => {
             const data = {
-              ...materialize(state, identities),
+              ...prepareWriteData(
+                materialize(state, identities),
+                resource.fields,
+              ),
               ...resource.scope,
             }
             const original = preserved.get(resource.key)

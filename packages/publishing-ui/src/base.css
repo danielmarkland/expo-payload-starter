@@ -76,25 +76,6 @@ a {
     max(var(--space-lg), calc((100% - var(--layout-content)) / 2))
     var(--space-xl);
 }
-.site-footer-main {
-  display: grid;
-  gap: var(--space-3xl);
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 1fr);
-}
-.footer-conversion-section {
-  margin-bottom: var(--space-3xl);
-}
-.footer-conversion-content {
-  display: grid;
-  gap: var(--space-2xl);
-}
-.footer-newsletter-section .footer-conversion-content {
-  align-items: start;
-  grid-template-columns: minmax(0, 0.8fr) minmax(320px, 1.2fr);
-}
-.footer-conversion-content .section-heading {
-  margin: 0;
-}
 .newsletter-form,
 .newsletter-fields {
   display: grid;
@@ -135,19 +116,6 @@ a {
   font-size: var(--font-size-small);
   margin: 0;
 }
-.site-footer-main-single {
-  grid-template-columns: minmax(0, var(--layout-copy));
-}
-.site-footer-brand {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-}
-.site-footer-tagline {
-  line-height: var(--line-height-body);
-  margin: var(--space-md) 0 0;
-  max-width: 36rem;
-}
 .footer-social-navigation {
   display: flex;
   flex-wrap: wrap;
@@ -183,11 +151,6 @@ a {
   justify-content: flex-start;
   margin-top: var(--space-xl);
 }
-.site-footer-posts h2 {
-  color: var(--color-ink);
-  font-size: var(--font-size-section);
-  margin: 0;
-}
 .site-footer-post-list {
   display: grid;
   gap: var(--space-lg);
@@ -211,12 +174,6 @@ a {
   display: block;
   font-size: var(--font-size-small);
   margin-top: var(--space-xs);
-}
-.site-footer-copyright {
-  display: block;
-  font-size: var(--font-size-small);
-  margin-top: var(--space-4xl);
-  text-align: center;
 }
 .sr-only {
   clip: rect(0, 0, 0, 0);
@@ -1202,9 +1159,6 @@ h1 {
   margin: 0;
 }
 @media (max-width: 800px) {
-  .site-footer-main {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 @media (max-width: 520px) {
   .site-header {
@@ -1224,14 +1178,6 @@ h1 {
     padding-bottom: var(--space-xl);
     padding-top: var(--space-2xl);
   }
-  .site-footer-main {
-    gap: var(--space-2xl);
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .site-footer-copyright {
-    margin-top: var(--space-2xl);
-    text-align: left;
-  }
   .page-shell {
     padding-top: var(--space-lg);
   }
@@ -1245,11 +1191,6 @@ h1 {
   }
   .page-cta {
     padding: var(--space-lg);
-  }
-  .contact-section,
-  .footer-newsletter-section .footer-conversion-content,
-  .split-content {
-    grid-template-columns: minmax(0, 1fr);
   }
   .newsletter-fields {
     grid-template-columns: minmax(0, 1fr);

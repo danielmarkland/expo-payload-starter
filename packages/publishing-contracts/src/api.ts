@@ -410,43 +410,76 @@ export const headerNavigationSchema = z.looseObject({
   showSearch: z.boolean(),
   searchIcon: optionalText,
 })
-const footerFormSchema = blockBase.extend({ ...formFields, show: z.boolean() })
-export const footerNavigationSchema = z.looseObject({
-  background: z.enum(['page', 'dark']).nullable().optional(),
-  layoutPreset: z
-    .enum(['default', 'brand-details', 'stacked'])
-    .nullable()
-    .optional(),
-  detailsAlignment: z.enum(['start', 'end']).nullable().optional(),
-  socialPlacement: z.enum(['brand', 'details']).nullable().optional(),
-  details: optionalText,
-  id: documentIDSchema.optional(),
-  tagline: optionalText,
-  copyrightOwner: optionalText,
-  items: z.array(navigationItemSchema).nullable().optional(),
-  newsletter: footerFormSchema
-    .extend({ destinationId: optionalText, consentText: optionalText })
-    .nullable()
-    .optional(),
-  contactForm: footerFormSchema.nullable().optional(),
-  latestPosts: z
-    .looseObject({
-      show: z.boolean(),
-      heading: optionalText,
-      limit: z.number().int().min(1).max(12).nullable().optional(),
-    })
-    .nullable()
-    .optional(),
-  socialLinks: z
+const footerBlockBase = blockBase.extend({ enabled: optionalBoolean })
+export const footerContentBlockSchema = z.discriminatedUnion('blockType', [
+  footerBlockBase.extend({ blockType: z.literal('logo') }),
+  footerBlockBase.extend({
+    blockType: z.literal('text'),
+    content: richTextSchema.nullable().optional(),
+  }),
+  footerBlockBase.extend({
+    blockType: z.literal('links'),
+    items: z.array(navigationItemSchema).nullable().optional(),
+  }),
+  footerBlockBase.extend({
+    blockType: z.literal('socialLinks'),
+    items: z
+      .array(
+        linkSchema.extend({
+          label: z.string(),
+          url: z.string(),
+          icon: z.string(),
+        }),
+      )
+      .nullable()
+      .optional(),
+  }),
+  footerBlockBase.extend({
+    blockType: z.literal('callToAction'),
+    body: optionalText,
+    action,
+  }),
+  footerBlockBase.extend({
+    blockType: z.literal('latestPosts'),
+    limit: z.number().int().min(1).max(12).nullable().optional(),
+  }),
+  footerBlockBase.extend({
+    blockType: z.literal('copyright'),
+    owner: optionalText,
+  }),
+  footerBlockBase.extend({
+    blockType: z.literal('newsletter'),
+    ...formFields,
+    destinationId: optionalText,
+    consentText: optionalText,
+  }),
+  footerBlockBase.extend({
+    blockType: z.literal('contactForm'),
+    ...formFields,
+  }),
+])
+export const footerContentAreaSchema = z.looseObject({
+  id: optionalText,
+  title: optionalText,
+  appearance: sectionAppearanceSchema.nullable().optional(),
+  columns: z
     .array(
-      linkSchema.extend({
-        label: z.string(),
-        icon: z.string(),
-        url: z.string(),
+      z.looseObject({
+        id: optionalText,
+        alignment: z.enum(['start', 'center', 'end']).nullable().optional(),
+        blocks: z.array(footerContentBlockSchema).nullable().optional(),
       }),
     )
-    .nullable()
-    .optional(),
+    .min(1)
+    .max(4),
+})
+export type FooterContentBlock = z.infer<typeof footerContentBlockSchema>
+export type FooterContentArea = z.infer<typeof footerContentAreaSchema>
+export const footerNavigationSchema = z.looseObject({
+  id: documentIDSchema.optional(),
+  title: optionalText,
+  background: z.enum(['page', 'dark']).nullable().optional(),
+  contentAreas: z.array(footerContentAreaSchema).nullable().optional(),
 })
 export const navigationSchema = z.object({
   footer: footerNavigationSchema,

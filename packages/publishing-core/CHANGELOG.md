@@ -1,5 +1,16 @@
 # @danielmarkland/publishing-core
 
+## 0.16.0
+
+### Minor Changes
+
+- Replace fixed footer sections with native content areas, equal-width columns, reusable components, and a visual drag-and-drop editor. Preserve existing footer content and form configuration through a one-time migration.
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.13.0
+
 ## 0.15.0
 
 ### Minor Changes
