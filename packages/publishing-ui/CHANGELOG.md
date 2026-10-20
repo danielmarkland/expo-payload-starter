@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-ui
 
+## 0.12.1
+
+### Patch Changes
+
+- Restore mobile contact and split-content stacking alongside the new footer, and keep contact submit buttons at the shared standard action size.
+
 ## 0.12.0
 
 ### Minor Changes
