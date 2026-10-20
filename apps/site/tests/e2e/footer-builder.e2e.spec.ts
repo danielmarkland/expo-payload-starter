@@ -6,10 +6,13 @@ import { seedTestUser, cleanupTestUser, testUser } from '../helpers/seedUser.js'
 
 const serverURL = process.env.SITE_URL || 'http://localhost:3000'
 test.describe('Visual footer builder', () => {
+  let previousFooter:
+    Awaited<ReturnType<Awaited<ReturnType<typeof getPayload>>['findGlobal']>> | undefined
   test.beforeAll(async () => {
     test.setTimeout(90_000)
     await seedTestUser()
     const payload = await getPayload({ config })
+    previousFooter = await payload.findGlobal({ slug: 'footerNavigation' })
     await payload.updateGlobal({
       slug: 'footerNavigation',
       data: {
@@ -31,7 +34,13 @@ test.describe('Visual footer builder', () => {
       },
     })
   })
-  test.afterAll(cleanupTestUser)
+  test.afterAll(async () => {
+    if (previousFooter) {
+      const payload = await getPayload({ config })
+      await payload.updateGlobal({ slug: 'footerNavigation', data: previousFooter })
+    }
+    await cleanupTestUser()
+  })
   test('edits, moves, reorders, previews, and persists native footer content', async ({ page }) => {
     test.setTimeout(180_000)
     await page.setViewportSize({ width: 1440, height: 1000 })
