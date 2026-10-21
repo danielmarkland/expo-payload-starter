@@ -725,3 +725,8 @@ operator-controlled signup in the intended MailerLite group after deployment.
 Site branding supports editable logo bounds (240×56px by default). Website action buttons share a 192px width and 50px minimum height, including accented header links. The three shared publishing packages can be published from develop without deploying a site; see the release runbook.
 
 The shared footer builder replaces fixed CTA/newsletter/footer presets with any number of content areas. Each area has 1–4 equal-width columns and reusable logo, formatted text, navigation, social, CTA, latest-post, copyright, newsletter, and contact components. Editors can move components between columns, edit native Payload fields in a settings panel, and preview mobile stacking. Site imports/exports preserve nested content and references. Area and component appearance settings control their own spacing, surfaces, and borders.
+
+## Changelog
+
+Record noteworthy implemented changes in [CHANGELOG.md](CHANGELOG.md). Follow
+the [release runbook](docs/release-runbook.md) for release preparation and approval.

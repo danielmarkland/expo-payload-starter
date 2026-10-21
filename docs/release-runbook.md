@@ -119,3 +119,26 @@ Consume the published version through the downstream development PR afterward.
 ## Composable footer migration
 
 The content-area migration creates the new native Payload tables, converts each saved footer and its relationship/form settings, and then removes retired fields. Apply it through the controlled release after testing a populated fixture. It deliberately refuses a destructive down migration because arbitrary content areas cannot be reduced to the old fixed layout; reversal requires a pre-migration database backup. The public renderer has one content-area implementation.
+
+## Changelog and release milestones
+
+Maintain a root `CHANGELOG.md`. Record noteworthy implemented changes under
+`Unreleased` in the same feature PR, using Added, Changed, Fixed, and Removed
+categories where useful. Ideas belong in issues. Maintenance-only PRs may omit an
+entry when the PR explains why. This is a review requirement, not a CI gate.
+
+For an authorized release, move the entries into a dated version section and leave
+an empty `Unreleased` heading. Squash feature PRs into develop; release through a
+same-repository develop → main PR with a merge commit. Production remains separately
+authorized. Keep release bookkeeping synchronized back to develop through a PR;
+do not reset branches or rewrite shared history.
+
+Prepare GitHub Release notes from the changelog. After release acceptance, create
+an annotated tag against the exact verified main commit and publish the matching
+GitHub Release. A GitHub Release alone does not deploy an app. Record deployment
+and service acceptance separately. Repository milestone tags do not reset app or
+independently published package versions.
+
+Intended repository launch milestone: `v0.1.0` (not yet released). Preserve existing
+app/package versions. Production prerequisites and coordinated release evidence:
+[platform launch checklist](https://github.com/groovepost/platform/blob/develop/docs/production-launch.md) (requires platform access).
