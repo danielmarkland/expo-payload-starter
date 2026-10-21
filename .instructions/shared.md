@@ -122,3 +122,10 @@ references; this file captures the agent-facing guardrails.
 - `docs/database-ownership.md` — ownership and migration guidance for data.
 - `README.md` — local development, deployment, shared brand guide, and fork
   checklist.
+
+## Changelog maintenance
+
+Update root `CHANGELOG.md` under `Unreleased` for noteworthy implemented changes
+in the same PR. Keep ideas in issues. For maintenance-only changes, explain in
+the PR why no entry is needed. Follow `docs/release-runbook.md`; tags, package
+publication and production deployments require explicit release authorization.
