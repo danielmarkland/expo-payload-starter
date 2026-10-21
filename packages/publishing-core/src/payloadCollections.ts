@@ -190,9 +190,9 @@ export function createFooterNavigationCollection({
     labels: { singular: 'Footer navigation', plural: 'Footer navigation' },
     dbName: 'cms_footer_navigation',
     admin: {
-      useAsTitle: 'copyrightOwner',
-      defaultColumns: ['copyrightOwner', 'tagline', 'updatedAt'],
-      listSearchableFields: ['copyrightOwner', 'tagline'],
+      useAsTitle: 'title',
+      defaultColumns: ['title', 'updatedAt'],
+      listSearchableFields: ['title'],
     },
     access: { ...access },
     fields: createFooterNavigationFields(options),

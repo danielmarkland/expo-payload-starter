@@ -1,8 +1,14 @@
 import Link from 'next/link'
-
-import type { ComponentType, ComponentProps, SVGProps } from 'react'
+import { RichText } from '@payloadcms/richtext-lexical/react'
+import type {
+  ComponentType,
+  ComponentProps,
+  CSSProperties,
+  SVGProps,
+} from 'react'
 import type {
   ApiFooterNavigation,
+  FooterContentBlock,
   PostCard,
   SiteConfig,
 } from '@danielmarkland/publishing-contracts'
@@ -15,6 +21,8 @@ import {
   getSafeExternalHref,
 } from '@danielmarkland/publishing-core/navigation'
 import { sectionAppearanceClassName } from '@danielmarkland/publishing-core/sectionAppearance'
+import { resolveSectionWidth } from '@danielmarkland/publishing-core/sectionWidth'
+import { buttonClassName } from '@danielmarkland/publishing-core/buttonVariants'
 
 export function createSiteFooter({
   ContactForm,
@@ -42,157 +50,98 @@ export function createSiteFooter({
     navigation: ApiFooterNavigation
     posts: { docs: PostCard[] }
   }) {
-    const dark = navigation.background === 'dark'
-    const socialLinks =
-      navigation.socialLinks?.flatMap((item) => {
-        const href = getSafeExternalHref(item.url)
-        const Icon = getHeaderNavigationIcon(item.icon)
-        return href && Icon ? [{ ...item, href, Icon }] : []
-      }) ?? []
-    const legalLinks =
-      navigation.items?.flatMap((item) => {
-        const href = getNavigationHref(item)
-        return href ? [{ ...item, href }] : []
-      }) ?? []
-    const showPosts =
-      navigation.latestPosts?.show !== false && posts.docs.length > 0
-    const newsletter = navigation.newsletter
-    const contactForm = navigation.contactForm
-
-    const socialNavigation = (
-      <>
-        {socialLinks.length ? (
-          <nav aria-label="Social media" className="footer-social-navigation">
-            {socialLinks.map(({ Icon, href, ...item }) => (
-              <a
-                aria-label={item.label}
-                className="footer-social-link"
-                href={href}
-                key={item.id || `${item.icon}-${href}`}
-                rel={item.newTab ? 'noreferrer' : undefined}
-                target={item.newTab ? '_blank' : undefined}
+    function renderBlock(block: FooterContentBlock, mode?: 'dark' | 'light') {
+      const heading = block.heading ? (
+        <h2 className="footer-content-heading">{block.heading}</h2>
+      ) : null
+      switch (block.blockType) {
+        case 'logo':
+          return <SiteBrand siteConfig={siteConfig} mode={mode} />
+        case 'text':
+          return (
+            <>
+              {heading}
+              {block.content ? (
+                <div className="footer-content-text">
+                  <RichText data={block.content} />
+                </div>
+              ) : null}
+            </>
+          )
+        case 'links':
+          return (
+            <>
+              {heading}
+              <nav
+                aria-label={block.heading || 'Footer links'}
+                className="footer-content-links"
               >
-                <Icon aria-hidden="true" />
-              </a>
-            ))}
-          </nav>
-        ) : null}
-      </>
-    )
-    return (
-      <footer
-        className={`site-footer footer-background-${dark ? 'dark' : 'page'} footer-layout-${navigation.layoutPreset || 'default'} footer-details-${navigation.detailsAlignment || 'end'}`}
-      >
-        {newsletter?.show ? (
-          <section
-            className={sectionAppearanceClassName(
-              [
-                'page-block',
-                'footer-conversion-section',
-                'footer-newsletter-section',
-              ],
-              newsletter.appearance,
-            )}
-          >
-            <div className="footer-conversion-content">
-              <header className="section-heading">
-                {newsletter.eyebrow ? (
-                  <p className="eyebrow">{newsletter.eyebrow}</p>
-                ) : null}
-                <h2>{newsletter.heading}</h2>
-                {newsletter.body ? (
-                  <p className="lede">{newsletter.body}</p>
-                ) : null}
-              </header>
-              <NewsletterForm
-                buttonVariant={newsletter.submitButtonVariant}
-                consentText={newsletter.consentText}
-                destinationId={newsletter.destinationId}
-                submitLabel={newsletter.submitLabel}
-                submitIcon={newsletter.icon}
-                submitIconPosition={newsletter.iconPosition}
-                successMessage={newsletter.successMessage}
-              />
-            </div>
-          </section>
-        ) : null}
-        {contactForm?.show ? (
-          <section
-            className={sectionAppearanceClassName(
-              [
-                'page-block',
-                'footer-conversion-section',
-                'footer-contact-section',
-              ],
-              contactForm.appearance,
-            )}
-          >
-            <div className="footer-conversion-content contact-section">
-              <header className="section-heading">
-                {contactForm.eyebrow ? (
-                  <p className="eyebrow">{contactForm.eyebrow}</p>
-                ) : null}
-                <h2>{contactForm.heading}</h2>
-                {contactForm.body ? (
-                  <p className="lede">{contactForm.body}</p>
-                ) : null}
-              </header>
-              <ContactForm
-                nameMode={contactForm.nameMode}
-                showCompany={contactForm.showCompany}
-                submitButtonVariant={contactForm.submitButtonVariant}
-                submitLabel={contactForm.submitLabel}
-                submitIcon={contactForm.icon}
-                submitIconPosition={contactForm.iconPosition}
-                successMessage={contactForm.successMessage}
-              />
-            </div>
-          </section>
-        ) : null}
-        <div
-          className={`site-footer-main${showPosts ? '' : ' site-footer-main-single'}`}
-        >
-          <div className="site-footer-brand">
-            <SiteBrand
-              siteConfig={siteConfig}
-              mode={dark ? 'dark' : undefined}
-            />
-            <p className="site-footer-tagline">
-              {navigation.tagline || siteConfig.identity.description}
-            </p>
-            {navigation.socialPlacement !== 'details' ? socialNavigation : null}
-            {legalLinks.length ? (
-              <nav aria-label="Legal and utility" className="footer-navigation">
-                {legalLinks.map((item) => (
-                  <ContentLink key={item.id || item.label} link={item} />
-                ))}
+                {block.items
+                  ?.filter((item) => getNavigationHref(item))
+                  .map((item) => (
+                    <ContentLink key={item.id || item.label} link={item} />
+                  ))}
               </nav>
-            ) : null}
-          </div>
-          {(navigation.layoutPreset && navigation.layoutPreset !== 'default') ||
-          navigation.details ||
-          navigation.socialPlacement === 'details' ? (
-            <div className="site-footer-details">
-              {navigation.details ? <p>{navigation.details}</p> : null}
-              {navigation.socialPlacement === 'details'
-                ? socialNavigation
-                : null}
-              <small>
-                © {new Date().getFullYear()}{' '}
-                {navigation.copyrightOwner || siteConfig.identity.siteTitle}
-              </small>
-            </div>
-          ) : null}
-          {showPosts ? (
-            <section
-              aria-labelledby="footer-posts-heading"
-              className="site-footer-posts"
-            >
-              <h2 id="footer-posts-heading">
-                {navigation.latestPosts?.heading || 'Latest posts'}
-              </h2>
+            </>
+          )
+        case 'socialLinks':
+          return (
+            <>
+              {heading}
+              <nav
+                aria-label={block.heading || 'Social media'}
+                className="footer-social-navigation"
+              >
+                {block.items?.map((item) => {
+                  const href = getSafeExternalHref(item.url)
+                  const Icon = getHeaderNavigationIcon(item.icon)
+                  return href ? (
+                    <a
+                      href={href}
+                      aria-label={item.label}
+                      key={item.id || item.url}
+                      target={item.newTab ? '_blank' : undefined}
+                      rel={item.newTab ? 'noreferrer' : undefined}
+                      className="footer-social-link"
+                    >
+                      {Icon ? <Icon aria-hidden="true" /> : item.label}
+                    </a>
+                  ) : null
+                })}
+              </nav>
+            </>
+          )
+        case 'copyright':
+          return (
+            <small>
+              © {new Date().getFullYear()}{' '}
+              {block.owner || siteConfig.identity.siteTitle}
+            </small>
+          )
+        case 'callToAction':
+          return (
+            <>
+              {heading}
+              {block.body ? <p>{block.body}</p> : null}
+              {block.action && getNavigationHref(block.action) ? (
+                <ContentLink
+                  link={block.action}
+                  className={buttonClassName(
+                    block.action.variant,
+                    'primary-filled',
+                  )}
+                />
+              ) : null}
+            </>
+          )
+        case 'latestPosts':
+          return posts.docs.length ? (
+            <section aria-label={block.heading || 'Latest posts'}>
+              {heading || (
+                <h2 className="footer-content-heading">Latest posts</h2>
+              )}
               <div className="site-footer-post-list">
-                {posts.docs.map((post) => (
+                {posts.docs.slice(0, block.limit ?? 2).map((post) => (
                   <article key={post.id}>
                     <h3>
                       <Link href={`/posts/${encodeURIComponent(post.slug)}`}>
@@ -203,11 +152,7 @@ export function createSiteFooter({
                       <time dateTime={post.publishedAt}>
                         {new Date(post.publishedAt).toLocaleDateString(
                           undefined,
-                          {
-                            day: 'numeric',
-                            month: 'long',
-                            year: 'numeric',
-                          },
+                          { day: 'numeric', month: 'long', year: 'numeric' },
                         )}
                       </time>
                     ) : null}
@@ -215,14 +160,116 @@ export function createSiteFooter({
                 ))}
               </div>
             </section>
-          ) : null}
-        </div>
-        <small
-          className={`site-footer-copyright${(navigation.layoutPreset && navigation.layoutPreset !== 'default') || navigation.details || navigation.socialPlacement === 'details' ? ' footer-copyright-in-details' : ''}`}
-        >
-          © {new Date().getFullYear()}{' '}
-          {navigation.copyrightOwner || siteConfig.identity.siteTitle}
-        </small>
+          ) : null
+        case 'newsletter':
+          return (
+            <>
+              {block.eyebrow ? (
+                <p className="eyebrow">{block.eyebrow}</p>
+              ) : null}
+              {heading}
+              {block.body ? <p>{block.body}</p> : null}
+              <NewsletterForm
+                destinationId={block.destinationId}
+                buttonVariant={block.submitButtonVariant}
+                consentText={block.consentText}
+                submitLabel={block.submitLabel}
+                submitIcon={block.icon}
+                submitIconPosition={block.iconPosition}
+                successMessage={block.successMessage}
+              />
+            </>
+          )
+        case 'contactForm':
+          return (
+            <>
+              {block.eyebrow ? (
+                <p className="eyebrow">{block.eyebrow}</p>
+              ) : null}
+              {heading}
+              {block.body ? <p>{block.body}</p> : null}
+              <ContactForm
+                nameMode={block.nameMode}
+                showCompany={block.showCompany}
+                submitButtonVariant={block.submitButtonVariant}
+                submitLabel={block.submitLabel}
+                submitIcon={block.icon}
+                submitIconPosition={block.iconPosition}
+                successMessage={block.successMessage}
+              />
+            </>
+          )
+      }
+    }
+    return (
+      <footer
+        className={`site-footer footer-builder footer-background-${navigation.background === 'dark' ? 'dark' : 'page'}`}
+      >
+        {navigation.contentAreas?.map((area, index) => {
+          if (
+            !area.columns.some((column) =>
+              column.blocks?.some((block) => block.enabled !== false),
+            )
+          )
+            return null
+          const background = area.appearance?.background
+          const dark =
+            background === 'dark' ||
+            ((!background || background === 'default') &&
+              navigation.background === 'dark')
+          return (
+            <section
+              key={area.id || index}
+              aria-label={area.title || `Footer area ${index + 1}`}
+              className={sectionAppearanceClassName(['footer-content-area'], {
+                ...area.appearance,
+                paddingTop: area.appearance?.paddingTop || 'md',
+                paddingBottom: area.appearance?.paddingBottom || 'md',
+                width: resolveSectionWidth({
+                  site: siteConfig.width,
+                  block: area.appearance?.width,
+                }),
+              })}
+            >
+              <div
+                className="footer-content-columns"
+                style={
+                  {
+                    '--footer-column-count': area.columns.length,
+                  } as CSSProperties
+                }
+              >
+                {area.columns.map((column, ci) => (
+                  <div
+                    key={column.id || ci}
+                    className={`footer-content-column footer-content-align-${column.alignment || 'start'}`}
+                  >
+                    {column.blocks
+                      ?.filter((block) => block.enabled !== false)
+                      .map((block, bi) => (
+                        <div
+                          key={block.id || bi}
+                          className={sectionAppearanceClassName(
+                            ['footer-content-block'],
+                            block.appearance,
+                          )}
+                        >
+                          {renderBlock(
+                            block,
+                            dark
+                              ? 'dark'
+                              : background === 'light'
+                                ? 'light'
+                                : undefined,
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        })}
       </footer>
     )
   }

@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { buildConfig, getPayload, type Payload, type CollectionSlug } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import sharp from 'sharp'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import {
@@ -59,6 +60,7 @@ describe.skipIf(!url)('cloud-storage site transfer', () => {
       config: await buildConfig({
         secret: 'disposable-cloud-transfer-test',
         typescript: { autoGenerate: false },
+        editor: lexicalEditor(),
         sharp,
         db: postgresAdapter({ pool: { connectionString: url }, push: true }),
         collections: [
@@ -187,7 +189,7 @@ describe.skipIf(!url)('cloud-storage site transfer', () => {
     }
   }, 60000)
   it.each([null, undefined])(
-    'imports disabled footer groups represented as %s',
+    'imports empty footer content areas represented as %s',
     async (value) => {
       const archive = decodeSiteArchive(await exportSite(options))
       archive.manifest.records.push({
@@ -195,7 +197,7 @@ describe.skipIf(!url)('cloud-storage site transfer', () => {
         resource: 'footer-navigation',
         draft: false,
         current: {
-          data: value === null ? { newsletter: null, contactForm: null } : {},
+          data: value === null ? { contentAreas: null } : {},
           references: [],
         },
       })
@@ -203,9 +205,8 @@ describe.skipIf(!url)('cloud-storage site transfer', () => {
       const preview = await previewSiteReplacement(bytes, options)
       await replaceSite(bytes, preview, options)
       const footer = (await payload.find({ collection: 'footer-navigation' as CollectionSlug }))
-        .docs[0] as unknown as { newsletter?: { show?: boolean }; contactForm?: { show?: boolean } }
-      expect(footer.newsletter?.show).toBe(false)
-      expect(footer.contactForm?.show).toBe(false)
+        .docs[0] as unknown as { contentAreas?: unknown[] | null }
+      expect(footer.contentAreas ?? []).toEqual([])
       await payload.delete({ collection: 'footer-navigation' as CollectionSlug, where: {} })
     },
     60000,

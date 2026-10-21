@@ -101,7 +101,44 @@ checks, while Vercel builds the hosted frontend. CI does not download or duplica
 runtime secrets. Payload migration uses a temporary
 process-only secret; its database connection is the dedicated migration credential.
 
-Only deployment jobs take the per-environment release lock. Exact-commit validation
+Deployment and package-only publication jobs share the release lock. Exact-commit validation
 can run concurrently; deployment and publication stay serialized and are never cancelled.
 
 Neon projects and private buckets are independent for development and production. Configure `AWS_ACCESS_KEY_ID/SECRET_ACCESS_KEY` secrets and `AWS_ENDPOINT_URL_S3/AWS_REGION` variables per GitHub release environment. Schema runners require a direct connection; hosted traffic uses a restricted pooled runtime login. Feature MRs deploy on dev previews, squash into develop for hosted development acceptance, then promote through a same-repository develop -> main release PR. Never copy development data into production.
+
+## Publishing a UI fix without a site deployment
+
+After the shared publishing changes passes required CI and merges into develop, dispatch the
+Controlled release workflow on develop with `publish_publishing_only: true` when the user
+has authorized package-only publication. Validation still runs for the exact
+commit. The deployment job is excluded; the development-scoped publication job
+builds and verifies the shared packages, publishes new versions of only publishing-contracts, publishing-core, and publishing-ui in dependency order, then verifies immutable registry contents and a clean install.
+The publication job has no site deployment credentials and cannot run on main.
+Consume the published version through the downstream development PR afterward.
+
+## Composable footer migration
+
+The content-area migration creates the new native Payload tables, converts each saved footer and its relationship/form settings, and then removes retired fields. Apply it through the controlled release after testing a populated fixture. It deliberately refuses a destructive down migration because arbitrary content areas cannot be reduced to the old fixed layout; reversal requires a pre-migration database backup. The public renderer has one content-area implementation.
+
+## Changelog and release milestones
+
+Maintain a root `CHANGELOG.md`. Record noteworthy implemented changes under
+`Unreleased` in the same feature PR, using Added, Changed, Fixed, and Removed
+categories where useful. Ideas belong in issues. Maintenance-only PRs may omit an
+entry when the PR explains why. This is a review requirement, not a CI gate.
+
+For an authorized release, move the entries into a dated version section and leave
+an empty `Unreleased` heading. Squash feature PRs into develop; release through a
+same-repository develop → main PR with a merge commit. Production remains separately
+authorized. Keep release bookkeeping synchronized back to develop through a PR;
+do not reset branches or rewrite shared history.
+
+Prepare GitHub Release notes from the changelog. After release acceptance, create
+an annotated tag against the exact verified main commit and publish the matching
+GitHub Release. A GitHub Release alone does not deploy an app. Record deployment
+and service acceptance separately. Repository milestone tags do not reset app or
+independently published package versions.
+
+Intended repository launch milestone: `v0.1.0` (not yet released). Preserve existing
+app/package versions. Production prerequisites and coordinated release evidence:
+[platform launch checklist](https://github.com/groovepost/platform/blob/develop/docs/production-launch.md) (requires platform access).

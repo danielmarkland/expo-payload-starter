@@ -1,5 +1,57 @@
 # @starter/site
 
+## 1.0.36
+
+### Patch Changes
+
+- Preserve default footer spacing after save and reload.
+
+## 1.0.35
+
+### Patch Changes
+
+- Keep footer backgrounds aligned with configured full-width or padded content areas.
+
+## 1.0.34
+
+### Patch Changes
+
+- Adopt the shared footer appearance correction for configured area and component spacing, surfaces, and borders.
+
+## 1.0.33
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-ui@0.12.1
+
+## 1.0.32
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.13.0
+  - @danielmarkland/publishing-core@0.16.0
+  - @danielmarkland/publishing-ui@0.12.0
+  - @starter/api-client@0.1.15
+
+## 1.0.31
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.12.0
+  - @danielmarkland/publishing-core@0.15.0
+  - @danielmarkland/publishing-ui@0.11.0
+  - @starter/api-client@0.1.14
+
+## 1.0.30
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-ui@0.10.1
+
 ## 1.0.29
 
 ### Patch Changes

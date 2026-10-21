@@ -80,3 +80,20 @@ hosts can use their ordinary SDK. `createPageRenderer` requires a NewsletterForm
 adapter and renders it for CTA blocks with `ctaType: newsletter`. Footer signup
 uses the same component. The shared admin NewsletterDestinationField loads safe
 choices from a host-supplied endpoint; missing destinations disable submission.
+
+Block pages let the first and last blocks control their own section spacing.
+The page shell adds no trailing padding, and an adjacent site footer adds no
+outside margin, so full-width final sections meet the footer without an empty
+band. Footer interior padding and spacing after other page types are preserved.
+
+Site branding supports optional `logoMaxWidth` / `logoMaxHeight` pixel bounds, defaulting to 240×56px. Logo rendering preserves proportions and available width. Website action buttons use 192px width and 50px minimum height, including accented header navigation.
+
+`SiteFooter` renders the ordered `contentAreas` contract. Each area supports 1–4 equal-width columns; at 900px and below columns stack in order. Blocks include logo, rich text, links, social links, CTA, latest posts, copyright, newsletter and contact forms. Empty areas and disabled blocks do not render blank sections. Forms retain independent state and share the existing host delivery adapters.
+
+Contact and split-content page sections stack on phones. Contact submit actions follow the same 192px width and 50px minimum height as other website actions.
+
+Footer area and component appearance controls apply their configured padding, margins, surfaces, and borders independently of page sections. Unconfigured components retain their compact default spacing.
+
+Footer surface colors preserve the area’s configured full-width or padded gutters; padding overrides remain independent.
+
+Blank footer area top/bottom padding uses the medium design-system default before and after persistence. Select None for an explicit zero-padding override.

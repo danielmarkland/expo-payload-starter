@@ -3,6 +3,11 @@ on:
   push:
     branches: [develop, main]
   workflow_dispatch:
+    inputs:
+      publish_publishing_only:
+        description: Publish only contracts, core, and UI publishing packages from develop without deploying a site
+        type: boolean
+        default: false
 permissions:
   contents: read
   packages: write
@@ -15,7 +20,7 @@ jobs:
     secrets: inherit
   deploy:
     needs: validate
-    if: vars.RELEASE_AUTOMATION_ENABLED == 'true' && (github.ref_name == 'develop' || github.ref_name == 'main')
+    if: vars.RELEASE_AUTOMATION_ENABLED == 'true' && !inputs.publish_publishing_only && (github.ref_name == 'develop' || github.ref_name == 'main')
     runs-on: ubuntu-latest
     concurrency:
       group: release-${{ github.repository }}
@@ -59,6 +64,63 @@ jobs:
         with:
           name: release-result-${{ github.sha }}-${{ github.run_attempt }}
           path: release-output/result.json
+          if-no-files-found: ignore
+  publish-publishing:
+    needs: validate
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_publishing_only && github.ref_name == 'develop'
+    runs-on: ubuntu-latest
+    environment: development
+    concurrency:
+      group: release-${{ github.repository }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.3.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@danielmarkland'
+      - run: pnpm install --frozen-lockfile
+      - name: Build and verify immutable package candidates
+        run: |
+          pnpm --filter '@danielmarkland/*' build
+          node scripts/release/packages.mjs
+      - name: Publish only the three verified publishing packages
+        run: |
+          node --input-type=module <<'NODE'
+          import { execFileSync } from 'node:child_process';
+          import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+          import { join } from 'node:path';
+          const report = JSON.parse(readFileSync('release-output/packages.json', 'utf8'));
+          for (const name of ['publishing-contracts', 'publishing-core', 'publishing-ui']) {
+            const candidate = report.find(entry => entry.name === `@danielmarkland/${name}`);
+            if (!candidate) throw new Error(`Missing verified candidate: ${name}`);
+            if (candidate.published) continue;
+            const directory = mkdtempSync(join(process.env.RUNNER_TEMP, 'publishing-package-'));
+            try {
+              execFileSync('pnpm', ['--filter', candidate.name, 'pack', '--pack-destination', directory], { stdio: 'inherit' });
+              const archive = readdirSync(directory).find(file => file.endsWith('.tgz'));
+              if (!archive) throw new Error(`Missing package archive: ${name}`);
+              execFileSync('npm', ['publish', join(directory, archive), '--registry=https://npm.pkg.github.com', '--access=restricted'], { stdio: 'inherit' });
+            } finally { rmSync(directory, { recursive: true, force: true }); }
+          }
+          NODE
+      - name: Verify registry contents and clean installation
+        run: node scripts/release/packages.mjs --clean-install
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: publishing-package-publication-${{ github.sha }}-${{ github.run_attempt }}
+          path: release-output/packages.json
           if-no-files-found: ignore
   handover:
     if: vars.RELEASE_AUTOMATION_ENABLED != 'true'

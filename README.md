@@ -93,16 +93,15 @@ combines recognizable social-media brand marks with a curated set of general
 interface icons; icon-only links retain their configured label for assistive
 technology. The built-in Search link can be hidden or replaced with any icon
 from the same picker. Footer navigation
-controls the footer tagline, social profiles, legal and utility links, latest-posts
-section, copyright owner, and optional site-wide newsletter and contact sections.
+provides an ordered board of content areas and columns for brand copy, social
+profiles, links, posts, copyright, newsletter, and contact components.
 Header and footer navigation, styled actions, link grids, portfolio cards, and linked
 logos use the same destination controls: select a published Page or Post, or enter a
 safe relative, HTTPS, email, or telephone URL. Link and action editors share the
 curated icon picker; styled actions also support left/right icon placement, while
 navigation links may display an accessible icon without visible label text.
-When both conversion sections are enabled, the MailerLite newsletter signup appears
-before the contact form on every public page. The footer automatically lists the two
-newest published Posts when its latest-posts section is enabled.
+Newsletter and contact components can appear in any column, in the editor’s
+configured order. Each latest-posts component selects its own post limit.
 
 Every Page block includes a collapsed **Appearance** group. Editors can choose
 responsive design-system presets for top/bottom padding and margin, content
@@ -622,7 +621,7 @@ Feature grids support explicit desktop/mobile columns, joined cards, metadata,
 rich-text bodies and numbered process steps. FAQs can use disclosure or visible
 rows; CTAs can use a bordered container or full-width band with a contrasting
 light button. Headers support social links, accent links and minimal mode, with
-per-page inheritance; footer presets support brand/details or stacked layouts.
+per-page inheritance; footer content areas support 1–4 equal-width columns.
 Existing content retains its previous defaults. Apply the new Payload migration
 before using these fields. The migration removes the full-body B-tree search
 index: long pages exceed its key-size limit, and it cannot accelerate the
@@ -664,11 +663,15 @@ checks, coordinated deployment/publication, handover settings and recovery.
 Controlled automation stays disabled until its environment prerequisites are
 configured and the dev handover is verified. Builds run on Vercel with live domains
 unchanged until explicit activation, keeping sensitive runtime settings out of CI.
+Approved publishing-ui fixes can use the manual package-only mode on develop;
+that mode validates and publishes the package without deploying a site.
 
 Publishing section widths inherit from site → page → block. Site defaults to
 Padded; pages default to Site and blocks to Page. Full and Padded overrides align
 with the shared header/footer container, while paragraph reading width stays
-independent. See [the layout guide](docs/practical-layouts.md#section-width-inheritance).
+independent. The final block meets the footer without extra shell padding or an
+outside footer margin; blocks and the footer retain their own interior spacing.
+See [the layout guide](docs/practical-layouts.md#section-width-inheritance).
 
 Header navigation offers independent **Header top** and **Header scrolled**
 backgrounds (Fill by default, or Transparent). Transparent top headers overlay
@@ -718,3 +721,12 @@ and configure the corresponding destination in `NEWSLETTER_DESTINATIONS`. Apply
 Payload migration `20261018_210000_newsletter_cta`; the old group column is retained
 as configuration history but is no longer a runtime delivery path. Verify an
 operator-controlled signup in the intended MailerLite group after deployment.
+
+Site branding supports editable logo bounds (240×56px by default). Website action buttons share a 192px width and 50px minimum height, including accented header links. The three shared publishing packages can be published from develop without deploying a site; see the release runbook.
+
+The shared footer builder replaces fixed CTA/newsletter/footer presets with any number of content areas. Each area has 1–4 equal-width columns and reusable logo, formatted text, navigation, social, CTA, latest-post, copyright, newsletter, and contact components. Editors can move components between columns, edit native Payload fields in a settings panel, and preview mobile stacking. Site imports/exports preserve nested content and references. Area and component appearance settings control their own spacing, surfaces, and borders.
+
+## Changelog
+
+Record noteworthy implemented changes in [CHANGELOG.md](CHANGELOG.md). Follow
+the [release runbook](docs/release-runbook.md) for release preparation and approval.

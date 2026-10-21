@@ -3326,375 +3326,566 @@ export interface HeaderNavigation {
  */
 export interface FooterNavigation {
   id: number;
-  layoutPreset?: ('default' | 'brand-details' | 'stacked') | null;
+  title: string;
   background?: ('page' | 'dark') | null;
-  detailsAlignment?: ('start' | 'end') | null;
-  socialPlacement?: ('brand' | 'details') | null;
-  details?: string | null;
-  newsletter: {
-    show: boolean;
-    eyebrow?: string | null;
-    heading: string;
-    body?: string | null;
-    /**
-     * Use the site default or select an enabled newsletter destination.
-     */
-    destinationId?: string | null;
-    submitLabel: string;
-    /**
-     * Optional icon displayed with the link label.
-     */
-    icon?:
-      | (
-          | 'apple'
-          | 'bluesky'
-          | 'discord'
-          | 'facebook'
-          | 'github'
-          | 'google-play'
-          | 'instagram'
-          | 'linkedin'
-          | 'mastodon'
-          | 'medium'
-          | 'pinterest'
-          | 'reddit'
-          | 'slack'
-          | 'spotify'
-          | 'telegram'
-          | 'threads'
-          | 'tiktok'
-          | 'twitch'
-          | 'whatsapp'
-          | 'twitter'
-          | 'youtube'
-          | 'arrow-right'
-          | 'arrow-up-right'
-          | 'bell'
-          | 'book-open'
-          | 'calendar'
-          | 'camera'
-          | 'check'
-          | 'chevron-right'
-          | 'help'
-          | 'cloud'
-          | 'download'
-          | 'external-link'
-          | 'file-text'
-          | 'globe'
-          | 'heart'
-          | 'home'
-          | 'image'
-          | 'info'
-          | 'link'
-          | 'lock'
-          | 'log-in'
-          | 'mail'
-          | 'map-pin'
-          | 'menu'
-          | 'message'
-          | 'phone'
-          | 'play'
-          | 'podcast'
-          | 'radio'
-          | 'rss'
-          | 'search'
-          | 'send'
-          | 'settings'
-          | 'share'
-          | 'shopping-bag'
-          | 'shopping-cart'
-          | 'sparkles'
-          | 'star'
-          | 'user'
-          | 'users'
-          | 'zap'
-        )
-      | null;
-    iconPosition?: ('left' | 'right') | null;
-    submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
-    successMessage: string;
-    consentText?: string | null;
-    /**
-     * Optional layout and surface overrides. Defaults use the site design system.
-     */
-    appearance?: {
-      headingAlignment?: ('left' | 'center') | null;
-      actionAlignment?: ('left' | 'center') | null;
-      columns?: ('auto' | '2' | '3' | '4') | null;
-      mobileColumns?: ('1' | '2') | null;
-      /**
-       * Full uses the available width. Padded aligns to the shared responsive container.
-       */
-      width?: ('page' | 'full' | 'padded') | null;
-      cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
-      rounded?: boolean | null;
-      paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      borderTop?: ('default' | 'none' | 'accent') | null;
-      borderRight?: ('none' | 'default' | 'accent') | null;
-      borderBottom?: ('none' | 'default' | 'accent') | null;
-      borderLeft?: ('none' | 'default' | 'accent') | null;
-      borderWidth?: ('thin' | 'medium' | 'thick') | null;
-    };
-  };
-  contactForm: {
-    show: boolean;
-    eyebrow?: string | null;
-    heading: string;
-    body?: string | null;
-    nameMode?: ('combined' | 'separate') | null;
-    showCompany?: boolean | null;
-    submitLabel: string;
-    /**
-     * Optional icon displayed with the link label.
-     */
-    icon?:
-      | (
-          | 'apple'
-          | 'bluesky'
-          | 'discord'
-          | 'facebook'
-          | 'github'
-          | 'google-play'
-          | 'instagram'
-          | 'linkedin'
-          | 'mastodon'
-          | 'medium'
-          | 'pinterest'
-          | 'reddit'
-          | 'slack'
-          | 'spotify'
-          | 'telegram'
-          | 'threads'
-          | 'tiktok'
-          | 'twitch'
-          | 'whatsapp'
-          | 'twitter'
-          | 'youtube'
-          | 'arrow-right'
-          | 'arrow-up-right'
-          | 'bell'
-          | 'book-open'
-          | 'calendar'
-          | 'camera'
-          | 'check'
-          | 'chevron-right'
-          | 'help'
-          | 'cloud'
-          | 'download'
-          | 'external-link'
-          | 'file-text'
-          | 'globe'
-          | 'heart'
-          | 'home'
-          | 'image'
-          | 'info'
-          | 'link'
-          | 'lock'
-          | 'log-in'
-          | 'mail'
-          | 'map-pin'
-          | 'menu'
-          | 'message'
-          | 'phone'
-          | 'play'
-          | 'podcast'
-          | 'radio'
-          | 'rss'
-          | 'search'
-          | 'send'
-          | 'settings'
-          | 'share'
-          | 'shopping-bag'
-          | 'shopping-cart'
-          | 'sparkles'
-          | 'star'
-          | 'user'
-          | 'users'
-          | 'zap'
-        )
-      | null;
-    iconPosition?: ('left' | 'right') | null;
-    submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
-    successMessage: string;
-    /**
-     * Optional layout and surface overrides. Defaults use the site design system.
-     */
-    appearance?: {
-      headingAlignment?: ('left' | 'center') | null;
-      actionAlignment?: ('left' | 'center') | null;
-      columns?: ('auto' | '2' | '3' | '4') | null;
-      mobileColumns?: ('1' | '2') | null;
-      /**
-       * Full uses the available width. Padded aligns to the shared responsive container.
-       */
-      width?: ('page' | 'full' | 'padded') | null;
-      cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
-      rounded?: boolean | null;
-      paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
-      borderTop?: ('default' | 'none' | 'accent') | null;
-      borderRight?: ('none' | 'default' | 'accent') | null;
-      borderBottom?: ('none' | 'default' | 'accent') | null;
-      borderLeft?: ('none' | 'default' | 'accent') | null;
-      borderWidth?: ('thin' | 'medium' | 'thick') | null;
-    };
-  };
-  /**
-   * Short brand message. The site SEO description is used when this is empty.
-   */
-  tagline?: string | null;
-  socialLinks?:
+  contentAreas?:
     | {
-        label: string;
-        icon:
-          | 'apple'
-          | 'bluesky'
-          | 'discord'
-          | 'facebook'
-          | 'github'
-          | 'google-play'
-          | 'instagram'
-          | 'linkedin'
-          | 'mastodon'
-          | 'medium'
-          | 'pinterest'
-          | 'reddit'
-          | 'slack'
-          | 'spotify'
-          | 'telegram'
-          | 'threads'
-          | 'tiktok'
-          | 'twitch'
-          | 'whatsapp'
-          | 'twitter'
-          | 'youtube'
-          | 'globe'
-          | 'mail'
-          | 'phone'
-          | 'podcast'
-          | 'rss';
+        title?: string | null;
         /**
-         * Use an https, mailto, or tel URL.
+         * Optional layout and surface overrides. Defaults use the site design system.
          */
-        url: string;
-        newTab?: boolean | null;
+        appearance?: {
+          headingAlignment?: ('left' | 'center') | null;
+          actionAlignment?: ('left' | 'center') | null;
+          columns?: ('auto' | '2' | '3' | '4') | null;
+          mobileColumns?: ('1' | '2') | null;
+          /**
+           * Full uses the available width. Padded aligns to the shared responsive container.
+           */
+          width?: ('page' | 'full' | 'padded') | null;
+          cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
+          rounded?: boolean | null;
+          paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+          borderTop?: ('default' | 'none' | 'accent') | null;
+          borderRight?: ('none' | 'default' | 'accent') | null;
+          borderBottom?: ('none' | 'default' | 'accent') | null;
+          borderLeft?: ('none' | 'default' | 'accent') | null;
+          borderWidth?: ('thin' | 'medium' | 'thick') | null;
+        };
+        columns: {
+          alignment?: ('start' | 'center' | 'end') | null;
+          blocks?:
+            | (
+                | {
+                    enabled?: boolean | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'logo';
+                  }
+                | {
+                    enabled?: boolean | null;
+                    heading?: string | null;
+                    content?: {
+                      root: {
+                        type: string;
+                        children: {
+                          type: any;
+                          version: number;
+                          [k: string]: unknown;
+                        }[];
+                        direction: ('ltr' | 'rtl') | null;
+                        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                        indent: number;
+                        version: number;
+                      };
+                      [k: string]: unknown;
+                    } | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'text';
+                  }
+                | {
+                    enabled?: boolean | null;
+                    heading?: string | null;
+                    items?:
+                      | {
+                          treatment?: ('default' | 'accent') | null;
+                          label: string;
+                          type: 'page' | 'post' | 'url';
+                          /**
+                           * Optional icon displayed with the link label.
+                           */
+                          icon?:
+                            | (
+                                | 'apple'
+                                | 'bluesky'
+                                | 'discord'
+                                | 'facebook'
+                                | 'github'
+                                | 'google-play'
+                                | 'instagram'
+                                | 'linkedin'
+                                | 'mastodon'
+                                | 'medium'
+                                | 'pinterest'
+                                | 'reddit'
+                                | 'slack'
+                                | 'spotify'
+                                | 'telegram'
+                                | 'threads'
+                                | 'tiktok'
+                                | 'twitch'
+                                | 'whatsapp'
+                                | 'twitter'
+                                | 'youtube'
+                                | 'arrow-right'
+                                | 'arrow-up-right'
+                                | 'bell'
+                                | 'book-open'
+                                | 'calendar'
+                                | 'camera'
+                                | 'check'
+                                | 'chevron-right'
+                                | 'help'
+                                | 'cloud'
+                                | 'download'
+                                | 'external-link'
+                                | 'file-text'
+                                | 'globe'
+                                | 'heart'
+                                | 'home'
+                                | 'image'
+                                | 'info'
+                                | 'link'
+                                | 'lock'
+                                | 'log-in'
+                                | 'mail'
+                                | 'map-pin'
+                                | 'menu'
+                                | 'message'
+                                | 'phone'
+                                | 'play'
+                                | 'podcast'
+                                | 'radio'
+                                | 'rss'
+                                | 'search'
+                                | 'send'
+                                | 'settings'
+                                | 'share'
+                                | 'shopping-bag'
+                                | 'shopping-cart'
+                                | 'sparkles'
+                                | 'star'
+                                | 'user'
+                                | 'users'
+                                | 'zap'
+                              )
+                            | null;
+                          page?: (number | null) | Page;
+                          post?: (number | null) | Post;
+                          /**
+                           * Use a relative path, https, mailto, or tel URL.
+                           */
+                          url?: string | null;
+                          newTab?: boolean | null;
+                          /**
+                           * The label remains available to screen readers.
+                           */
+                          iconOnly?: boolean | null;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'links';
+                  }
+                | {
+                    enabled?: boolean | null;
+                    heading?: string | null;
+                    items?:
+                      | {
+                          label: string;
+                          icon:
+                            | 'apple'
+                            | 'bluesky'
+                            | 'discord'
+                            | 'facebook'
+                            | 'github'
+                            | 'google-play'
+                            | 'instagram'
+                            | 'linkedin'
+                            | 'mastodon'
+                            | 'medium'
+                            | 'pinterest'
+                            | 'reddit'
+                            | 'slack'
+                            | 'spotify'
+                            | 'telegram'
+                            | 'threads'
+                            | 'tiktok'
+                            | 'twitch'
+                            | 'whatsapp'
+                            | 'twitter'
+                            | 'youtube'
+                            | 'globe'
+                            | 'mail'
+                            | 'phone'
+                            | 'podcast'
+                            | 'rss';
+                          /**
+                           * Use an https, mailto, or tel URL.
+                           */
+                          url: string;
+                          newTab?: boolean | null;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'socialLinks';
+                  }
+                | {
+                    enabled?: boolean | null;
+                    heading?: string | null;
+                    body?: string | null;
+                    action?: {
+                      treatment?: ('default' | 'accent') | null;
+                      label?: string | null;
+                      type?: ('page' | 'post' | 'url') | null;
+                      /**
+                       * Optional icon displayed with the link label.
+                       */
+                      icon?:
+                        | (
+                            | 'apple'
+                            | 'bluesky'
+                            | 'discord'
+                            | 'facebook'
+                            | 'github'
+                            | 'google-play'
+                            | 'instagram'
+                            | 'linkedin'
+                            | 'mastodon'
+                            | 'medium'
+                            | 'pinterest'
+                            | 'reddit'
+                            | 'slack'
+                            | 'spotify'
+                            | 'telegram'
+                            | 'threads'
+                            | 'tiktok'
+                            | 'twitch'
+                            | 'whatsapp'
+                            | 'twitter'
+                            | 'youtube'
+                            | 'arrow-right'
+                            | 'arrow-up-right'
+                            | 'bell'
+                            | 'book-open'
+                            | 'calendar'
+                            | 'camera'
+                            | 'check'
+                            | 'chevron-right'
+                            | 'help'
+                            | 'cloud'
+                            | 'download'
+                            | 'external-link'
+                            | 'file-text'
+                            | 'globe'
+                            | 'heart'
+                            | 'home'
+                            | 'image'
+                            | 'info'
+                            | 'link'
+                            | 'lock'
+                            | 'log-in'
+                            | 'mail'
+                            | 'map-pin'
+                            | 'menu'
+                            | 'message'
+                            | 'phone'
+                            | 'play'
+                            | 'podcast'
+                            | 'radio'
+                            | 'rss'
+                            | 'search'
+                            | 'send'
+                            | 'settings'
+                            | 'share'
+                            | 'shopping-bag'
+                            | 'shopping-cart'
+                            | 'sparkles'
+                            | 'star'
+                            | 'user'
+                            | 'users'
+                            | 'zap'
+                          )
+                        | null;
+                      page?: (number | null) | Page;
+                      post?: (number | null) | Post;
+                      /**
+                       * Use a relative path, https, mailto, or tel URL.
+                       */
+                      url?: string | null;
+                      newTab?: boolean | null;
+                      /**
+                       * The label remains available to screen readers.
+                       */
+                      iconOnly?: boolean | null;
+                      variant?:
+                        ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+                    };
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'callToAction';
+                  }
+                | {
+                    enabled?: boolean | null;
+                    heading?: string | null;
+                    limit?: number | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'latestPosts';
+                  }
+                | {
+                    enabled?: boolean | null;
+                    /**
+                     * The current year and site title are used automatically.
+                     */
+                    owner?: string | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'copyright';
+                  }
+                | {
+                    enabled?: boolean | null;
+                    eyebrow?: string | null;
+                    heading: string;
+                    body?: string | null;
+                    /**
+                     * Use the site default or select an enabled newsletter destination.
+                     */
+                    destinationId?: string | null;
+                    consentText?: string | null;
+                    submitLabel: string;
+                    /**
+                     * Optional icon displayed with the link label.
+                     */
+                    icon?:
+                      | (
+                          | 'apple'
+                          | 'bluesky'
+                          | 'discord'
+                          | 'facebook'
+                          | 'github'
+                          | 'google-play'
+                          | 'instagram'
+                          | 'linkedin'
+                          | 'mastodon'
+                          | 'medium'
+                          | 'pinterest'
+                          | 'reddit'
+                          | 'slack'
+                          | 'spotify'
+                          | 'telegram'
+                          | 'threads'
+                          | 'tiktok'
+                          | 'twitch'
+                          | 'whatsapp'
+                          | 'twitter'
+                          | 'youtube'
+                          | 'arrow-right'
+                          | 'arrow-up-right'
+                          | 'bell'
+                          | 'book-open'
+                          | 'calendar'
+                          | 'camera'
+                          | 'check'
+                          | 'chevron-right'
+                          | 'help'
+                          | 'cloud'
+                          | 'download'
+                          | 'external-link'
+                          | 'file-text'
+                          | 'globe'
+                          | 'heart'
+                          | 'home'
+                          | 'image'
+                          | 'info'
+                          | 'link'
+                          | 'lock'
+                          | 'log-in'
+                          | 'mail'
+                          | 'map-pin'
+                          | 'menu'
+                          | 'message'
+                          | 'phone'
+                          | 'play'
+                          | 'podcast'
+                          | 'radio'
+                          | 'rss'
+                          | 'search'
+                          | 'send'
+                          | 'settings'
+                          | 'share'
+                          | 'shopping-bag'
+                          | 'shopping-cart'
+                          | 'sparkles'
+                          | 'star'
+                          | 'user'
+                          | 'users'
+                          | 'zap'
+                        )
+                      | null;
+                    iconPosition?: ('left' | 'right') | null;
+                    submitButtonVariant?:
+                      ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+                    successMessage: string;
+                    /**
+                     * Optional layout and surface overrides. Defaults use the site design system.
+                     */
+                    appearance?: {
+                      headingAlignment?: ('left' | 'center') | null;
+                      actionAlignment?: ('left' | 'center') | null;
+                      columns?: ('auto' | '2' | '3' | '4') | null;
+                      mobileColumns?: ('1' | '2') | null;
+                      /**
+                       * Full uses the available width. Padded aligns to the shared responsive container.
+                       */
+                      width?: ('page' | 'full' | 'padded') | null;
+                      cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
+                      rounded?: boolean | null;
+                      paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      borderTop?: ('default' | 'none' | 'accent') | null;
+                      borderRight?: ('none' | 'default' | 'accent') | null;
+                      borderBottom?: ('none' | 'default' | 'accent') | null;
+                      borderLeft?: ('none' | 'default' | 'accent') | null;
+                      borderWidth?: ('thin' | 'medium' | 'thick') | null;
+                    };
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'newsletter';
+                  }
+                | {
+                    enabled?: boolean | null;
+                    eyebrow?: string | null;
+                    heading: string;
+                    body?: string | null;
+                    nameMode?: ('combined' | 'separate') | null;
+                    showCompany?: boolean | null;
+                    submitLabel: string;
+                    /**
+                     * Optional icon displayed with the link label.
+                     */
+                    icon?:
+                      | (
+                          | 'apple'
+                          | 'bluesky'
+                          | 'discord'
+                          | 'facebook'
+                          | 'github'
+                          | 'google-play'
+                          | 'instagram'
+                          | 'linkedin'
+                          | 'mastodon'
+                          | 'medium'
+                          | 'pinterest'
+                          | 'reddit'
+                          | 'slack'
+                          | 'spotify'
+                          | 'telegram'
+                          | 'threads'
+                          | 'tiktok'
+                          | 'twitch'
+                          | 'whatsapp'
+                          | 'twitter'
+                          | 'youtube'
+                          | 'arrow-right'
+                          | 'arrow-up-right'
+                          | 'bell'
+                          | 'book-open'
+                          | 'calendar'
+                          | 'camera'
+                          | 'check'
+                          | 'chevron-right'
+                          | 'help'
+                          | 'cloud'
+                          | 'download'
+                          | 'external-link'
+                          | 'file-text'
+                          | 'globe'
+                          | 'heart'
+                          | 'home'
+                          | 'image'
+                          | 'info'
+                          | 'link'
+                          | 'lock'
+                          | 'log-in'
+                          | 'mail'
+                          | 'map-pin'
+                          | 'menu'
+                          | 'message'
+                          | 'phone'
+                          | 'play'
+                          | 'podcast'
+                          | 'radio'
+                          | 'rss'
+                          | 'search'
+                          | 'send'
+                          | 'settings'
+                          | 'share'
+                          | 'shopping-bag'
+                          | 'shopping-cart'
+                          | 'sparkles'
+                          | 'star'
+                          | 'user'
+                          | 'users'
+                          | 'zap'
+                        )
+                      | null;
+                    iconPosition?: ('left' | 'right') | null;
+                    submitButtonVariant?:
+                      ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+                    successMessage: string;
+                    /**
+                     * Optional layout and surface overrides. Defaults use the site design system.
+                     */
+                    appearance?: {
+                      headingAlignment?: ('left' | 'center') | null;
+                      actionAlignment?: ('left' | 'center') | null;
+                      columns?: ('auto' | '2' | '3' | '4') | null;
+                      mobileColumns?: ('1' | '2') | null;
+                      /**
+                       * Full uses the available width. Padded aligns to the shared responsive container.
+                       */
+                      width?: ('page' | 'full' | 'padded') | null;
+                      cardPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      headingSpacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      background?: ('default' | 'raised' | 'accent' | 'dark' | 'light') | null;
+                      rounded?: boolean | null;
+                      paddingTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      paddingRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      paddingBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      paddingLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      marginTop?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      marginRight?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      marginBottom?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      marginLeft?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+                      borderTop?: ('default' | 'none' | 'accent') | null;
+                      borderRight?: ('none' | 'default' | 'accent') | null;
+                      borderBottom?: ('none' | 'default' | 'accent') | null;
+                      borderLeft?: ('none' | 'default' | 'accent') | null;
+                      borderWidth?: ('thin' | 'medium' | 'thick') | null;
+                    };
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'contactForm';
+                  }
+              )[]
+            | null;
+          id?: string | null;
+        }[];
         id?: string | null;
       }[]
     | null;
-  items?:
-    | {
-        treatment?: ('default' | 'accent') | null;
-        label: string;
-        type: 'page' | 'post' | 'url';
-        /**
-         * Optional icon displayed with the link label.
-         */
-        icon?:
-          | (
-              | 'apple'
-              | 'bluesky'
-              | 'discord'
-              | 'facebook'
-              | 'github'
-              | 'google-play'
-              | 'instagram'
-              | 'linkedin'
-              | 'mastodon'
-              | 'medium'
-              | 'pinterest'
-              | 'reddit'
-              | 'slack'
-              | 'spotify'
-              | 'telegram'
-              | 'threads'
-              | 'tiktok'
-              | 'twitch'
-              | 'whatsapp'
-              | 'twitter'
-              | 'youtube'
-              | 'arrow-right'
-              | 'arrow-up-right'
-              | 'bell'
-              | 'book-open'
-              | 'calendar'
-              | 'camera'
-              | 'check'
-              | 'chevron-right'
-              | 'help'
-              | 'cloud'
-              | 'download'
-              | 'external-link'
-              | 'file-text'
-              | 'globe'
-              | 'heart'
-              | 'home'
-              | 'image'
-              | 'info'
-              | 'link'
-              | 'lock'
-              | 'log-in'
-              | 'mail'
-              | 'map-pin'
-              | 'menu'
-              | 'message'
-              | 'phone'
-              | 'play'
-              | 'podcast'
-              | 'radio'
-              | 'rss'
-              | 'search'
-              | 'send'
-              | 'settings'
-              | 'share'
-              | 'shopping-bag'
-              | 'shopping-cart'
-              | 'sparkles'
-              | 'star'
-              | 'user'
-              | 'users'
-              | 'zap'
-            )
-          | null;
-        page?: (number | null) | Page;
-        post?: (number | null) | Post;
-        /**
-         * Use a relative path, https, mailto, or tel URL.
-         */
-        url?: string | null;
-        newTab?: boolean | null;
-        /**
-         * The label remains available to screen readers.
-         */
-        iconOnly?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  latestPosts: {
-    limit?: number | null;
-    show: boolean;
-    heading?: string | null;
-  };
-  /**
-   * The site title is used when this is empty.
-   */
-  copyrightOwner?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3719,6 +3910,8 @@ export interface SiteSetting {
    * Logo shown in dark mode. The site title is used when this is empty.
    */
   darkLogo?: (number | null) | Media;
+  logoMaxWidth?: number | null;
+  logoMaxHeight?: number | null;
   /**
    * Website favicon and web-app manifest icon. Use a square PNG or SVG.
    */
@@ -3858,25 +4051,12 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
  * via the `definition` "footerNavigation_select".
  */
 export interface FooterNavigationSelect<T extends boolean = true> {
-  layoutPreset?: T;
+  title?: T;
   background?: T;
-  detailsAlignment?: T;
-  socialPlacement?: T;
-  details?: T;
-  newsletter?:
+  contentAreas?:
     | T
     | {
-        show?: T;
-        eyebrow?: T;
-        heading?: T;
-        body?: T;
-        destinationId?: T;
-        submitLabel?: T;
-        icon?: T;
-        iconPosition?: T;
-        submitButtonVariant?: T;
-        successMessage?: T;
-        consentText?: T;
+        title?: T;
         appearance?:
           | T
           | {
@@ -3903,80 +4083,199 @@ export interface FooterNavigationSelect<T extends boolean = true> {
               borderLeft?: T;
               borderWidth?: T;
             };
-      };
-  contactForm?:
-    | T
-    | {
-        show?: T;
-        eyebrow?: T;
-        heading?: T;
-        body?: T;
-        nameMode?: T;
-        showCompany?: T;
-        submitLabel?: T;
-        icon?: T;
-        iconPosition?: T;
-        submitButtonVariant?: T;
-        successMessage?: T;
-        appearance?:
+        columns?:
           | T
           | {
-              headingAlignment?: T;
-              actionAlignment?: T;
-              columns?: T;
-              mobileColumns?: T;
-              width?: T;
-              cardPadding?: T;
-              headingSpacing?: T;
-              background?: T;
-              rounded?: T;
-              paddingTop?: T;
-              paddingRight?: T;
-              paddingBottom?: T;
-              paddingLeft?: T;
-              marginTop?: T;
-              marginRight?: T;
-              marginBottom?: T;
-              marginLeft?: T;
-              borderTop?: T;
-              borderRight?: T;
-              borderBottom?: T;
-              borderLeft?: T;
-              borderWidth?: T;
+              alignment?: T;
+              blocks?:
+                | T
+                | {
+                    logo?:
+                      | T
+                      | {
+                          enabled?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    text?:
+                      | T
+                      | {
+                          enabled?: T;
+                          heading?: T;
+                          content?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    links?:
+                      | T
+                      | {
+                          enabled?: T;
+                          heading?: T;
+                          items?:
+                            | T
+                            | {
+                                treatment?: T;
+                                label?: T;
+                                type?: T;
+                                icon?: T;
+                                page?: T;
+                                post?: T;
+                                url?: T;
+                                newTab?: T;
+                                iconOnly?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    socialLinks?:
+                      | T
+                      | {
+                          enabled?: T;
+                          heading?: T;
+                          items?:
+                            | T
+                            | {
+                                label?: T;
+                                icon?: T;
+                                url?: T;
+                                newTab?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    callToAction?:
+                      | T
+                      | {
+                          enabled?: T;
+                          heading?: T;
+                          body?: T;
+                          action?:
+                            | T
+                            | {
+                                treatment?: T;
+                                label?: T;
+                                type?: T;
+                                icon?: T;
+                                page?: T;
+                                post?: T;
+                                url?: T;
+                                newTab?: T;
+                                iconOnly?: T;
+                                variant?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    latestPosts?:
+                      | T
+                      | {
+                          enabled?: T;
+                          heading?: T;
+                          limit?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    copyright?:
+                      | T
+                      | {
+                          enabled?: T;
+                          owner?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    newsletter?:
+                      | T
+                      | {
+                          enabled?: T;
+                          eyebrow?: T;
+                          heading?: T;
+                          body?: T;
+                          destinationId?: T;
+                          consentText?: T;
+                          submitLabel?: T;
+                          icon?: T;
+                          iconPosition?: T;
+                          submitButtonVariant?: T;
+                          successMessage?: T;
+                          appearance?:
+                            | T
+                            | {
+                                headingAlignment?: T;
+                                actionAlignment?: T;
+                                columns?: T;
+                                mobileColumns?: T;
+                                width?: T;
+                                cardPadding?: T;
+                                headingSpacing?: T;
+                                background?: T;
+                                rounded?: T;
+                                paddingTop?: T;
+                                paddingRight?: T;
+                                paddingBottom?: T;
+                                paddingLeft?: T;
+                                marginTop?: T;
+                                marginRight?: T;
+                                marginBottom?: T;
+                                marginLeft?: T;
+                                borderTop?: T;
+                                borderRight?: T;
+                                borderBottom?: T;
+                                borderLeft?: T;
+                                borderWidth?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    contactForm?:
+                      | T
+                      | {
+                          enabled?: T;
+                          eyebrow?: T;
+                          heading?: T;
+                          body?: T;
+                          nameMode?: T;
+                          showCompany?: T;
+                          submitLabel?: T;
+                          icon?: T;
+                          iconPosition?: T;
+                          submitButtonVariant?: T;
+                          successMessage?: T;
+                          appearance?:
+                            | T
+                            | {
+                                headingAlignment?: T;
+                                actionAlignment?: T;
+                                columns?: T;
+                                mobileColumns?: T;
+                                width?: T;
+                                cardPadding?: T;
+                                headingSpacing?: T;
+                                background?: T;
+                                rounded?: T;
+                                paddingTop?: T;
+                                paddingRight?: T;
+                                paddingBottom?: T;
+                                paddingLeft?: T;
+                                marginTop?: T;
+                                marginRight?: T;
+                                marginBottom?: T;
+                                marginLeft?: T;
+                                borderTop?: T;
+                                borderRight?: T;
+                                borderBottom?: T;
+                                borderLeft?: T;
+                                borderWidth?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
             };
-      };
-  tagline?: T;
-  socialLinks?:
-    | T
-    | {
-        label?: T;
-        icon?: T;
-        url?: T;
-        newTab?: T;
         id?: T;
       };
-  items?:
-    | T
-    | {
-        treatment?: T;
-        label?: T;
-        type?: T;
-        icon?: T;
-        page?: T;
-        post?: T;
-        url?: T;
-        newTab?: T;
-        iconOnly?: T;
-        id?: T;
-      };
-  latestPosts?:
-    | T
-    | {
-        limit?: T;
-        show?: T;
-        heading?: T;
-      };
-  copyrightOwner?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -3992,6 +4291,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   shortName?: T;
   lightLogo?: T;
   darkLogo?: T;
+  logoMaxWidth?: T;
+  logoMaxHeight?: T;
   favicon?: T;
   theme?:
     | T

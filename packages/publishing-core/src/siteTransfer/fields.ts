@@ -303,3 +303,47 @@ export function projectState(
   }
   return { data: walk(object(input), fields, []), references }
 }
+
+// Payload's PostgreSQL array writer accepts [] but crashes on nullable arrays.
+// Preserve archive values for validation; normalize only at the write boundary.
+export function prepareWriteData(
+  data: Record<string, unknown>,
+  fields: Field[],
+): Record<string, unknown> {
+  const result = { ...data }
+  for (const field of fields) {
+    if (field.type === 'tabs') {
+      for (const tab of field.tabs) {
+        if ('name' in tab && tab.name) {
+          if (result[tab.name] && typeof result[tab.name] === 'object')
+            result[tab.name] = prepareWriteData(
+              object(result[tab.name]),
+              tab.fields,
+            )
+        } else Object.assign(result, prepareWriteData(result, tab.fields))
+      }
+    } else if (!('name' in field)) {
+      if ('fields' in field)
+        Object.assign(result, prepareWriteData(result, field.fields))
+    } else {
+      const value = result[field.name]
+      if (field.type === 'array' || field.type === 'blocks') {
+        if (value === null) result[field.name] = []
+        else if (Array.isArray(value))
+          result[field.name] = value.map((entry) => {
+            const row = object(entry)
+            if (field.type === 'array')
+              return prepareWriteData(row, field.fields)
+            const block = field.blocks.find(
+              (item) => typeof item !== 'string' && item.slug === row.blockType,
+            )
+            return block && typeof block !== 'string'
+              ? prepareWriteData(row, block.fields)
+              : row
+          })
+      } else if (field.type === 'group' && value && typeof value === 'object')
+        result[field.name] = prepareWriteData(object(value), field.fields)
+    }
+  }
+  return result
+}

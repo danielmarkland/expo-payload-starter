@@ -114,6 +114,20 @@ export function createSiteSettingsFields({
               label: 'Dark logo',
             },
             {
+              name: 'logoMaxWidth',
+              type: 'number',
+              label: 'Logo maximum width (px)',
+              min: 1,
+              defaultValue: 240,
+            },
+            {
+              name: 'logoMaxHeight',
+              type: 'number',
+              label: 'Logo maximum height (px)',
+              min: 1,
+              defaultValue: 56,
+            },
+            {
               name: 'favicon',
               type: 'upload',
               relationTo: 'media',

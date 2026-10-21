@@ -1,5 +1,59 @@
 # @danielmarkland/publishing-ui
 
+## 0.12.4
+
+### Patch Changes
+
+- Keep default footer area spacing stable when blank CMS fields persist as null; retain explicit no-padding overrides.
+
+## 0.12.3
+
+### Patch Changes
+
+- Preserve footer area gutters and compact block defaults when applying background surfaces.
+
+## 0.12.2
+
+### Patch Changes
+
+- Apply configured footer area and component spacing, surfaces, and borders without inheriting page-block defaults.
+
+## 0.12.1
+
+### Patch Changes
+
+- Restore mobile contact and split-content stacking alongside the new footer, and keep contact submit buttons at the shared standard action size.
+
+## 0.12.0
+
+### Minor Changes
+
+- Replace fixed footer sections with native content areas, equal-width columns, reusable components, and a visual drag-and-drop editor. Preserve existing footer content and form configuration through a one-time migration.
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.13.0
+  - @danielmarkland/publishing-core@0.16.0
+
+## 0.11.0
+
+### Minor Changes
+
+- Add configurable logo bounds and consistent website action button dimensions.
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-contracts@0.12.0
+  - @danielmarkland/publishing-core@0.15.0
+
+## 0.10.1
+
+### Patch Changes
+
+- Let block pages meet the footer without redundant page-bottom padding and footer margins. Preserve each section's configured padding and the footer's interior spacing.
+
 ## 0.10.0
 
 ### Minor Changes

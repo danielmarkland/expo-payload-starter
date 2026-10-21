@@ -13,6 +13,9 @@ const allowedDependencies = {
   '@danielmarkland/design-tokens': new Set(),
   '@starter/brand': new Set(),
   '@danielmarkland/publishing-ui': new Set([
+    '@dnd-kit/core',
+    '@dnd-kit/sortable',
+    '@dnd-kit/utilities',
     '@danielmarkland/publishing-contracts',
     '@danielmarkland/publishing-core',
     '@payloadcms/richtext-lexical',

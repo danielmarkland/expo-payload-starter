@@ -1,5 +1,5 @@
 import { validateExternalURL } from './payloadFields.js'
-import type { ArrayField, Field, SelectField } from 'payload'
+import type { ArrayField, Block, Field, SelectField } from 'payload'
 import { choice, contactFields } from './presentationFields.js'
 
 interface NavigationFieldOptions {
@@ -13,6 +13,8 @@ interface HeaderFieldOptions extends NavigationFieldOptions {
   headerNavigationIconOptions: SelectField['options']
 }
 interface FooterFieldOptions extends NavigationFieldOptions {
+  footerEditorComponent?: string
+
   newsletterDestinationField?: Field
   appearanceField: () => Field
   linkArrayPresentation: Pick<ArrayField, 'admin' | 'labels'>
@@ -128,141 +130,98 @@ export function createFooterNavigationFields({
   socialLinkFields,
   submitButtonFields,
   newsletterDestinationField = { name: 'destinationId', type: 'text' } as Field,
+  footerEditorComponent = '@danielmarkland/publishing-ui/admin/FooterEditor#FooterEditor',
 }: FooterFieldOptions): Field[] {
-  return [
-    choice('layoutPreset', ['default', 'brand-details', 'stacked']),
-    choice('background', ['page', 'dark']),
-    choice('detailsAlignment', ['start', 'end']),
-    choice('socialPlacement', ['brand', 'details']),
-    { name: 'details', type: 'textarea' },
+  const heading = (): Field => ({ name: 'heading', type: 'text' })
+  const formFields = (newsletter: boolean): Field[] => [
+    { name: 'eyebrow', type: 'text' },
     {
-      type: 'collapsible',
-      label: 'Newsletter CTA',
-      admin: { initCollapsed: true },
+      name: 'heading',
+      type: 'text',
+      required: true,
+      defaultValue: newsletter ? 'Stay in the loop' : 'How can I help?',
+    },
+    { name: 'body', type: 'textarea' },
+    ...(newsletter
+      ? [
+          newsletterDestinationField,
+          { name: 'consentText', type: 'textarea' } as Field,
+        ]
+      : contactFields()),
+    {
+      name: 'submitLabel',
+      type: 'text',
+      required: true,
+      defaultValue: newsletter ? 'Subscribe' : 'Send message',
+    },
+    ...submitButtonFields('primary-filled'),
+    {
+      name: 'successMessage',
+      type: 'text',
+      required: true,
+      defaultValue: newsletter
+        ? 'Thanks for subscribing.'
+        : 'Thanks. Your message has been sent.',
+    },
+    appearanceField(),
+  ]
+  const blocks: Block[] = [
+    { slug: 'logo', labels: { singular: 'Logo', plural: 'Logos' }, fields: [] },
+    {
+      slug: 'text',
+      labels: { singular: 'Formatted text', plural: 'Formatted text' },
+      fields: [heading(), { name: 'content', type: 'richText' }],
+    },
+    {
+      slug: 'links',
+      labels: { singular: 'Navigation links', plural: 'Navigation links' },
+      fields: [heading(), navigationItemsField({ includeIcons: true })],
+    },
+    {
+      slug: 'socialLinks',
+      labels: { singular: 'Social links', plural: 'Social links' },
       fields: [
+        heading(),
         {
-          name: 'newsletter',
-          type: 'group',
-          // Payload treats null as an object when traversing group children.
-          hooks: {
-            beforeValidate: [({ value }) => (value === null ? {} : value)],
-          },
-          label: false,
-          fields: [
-            {
-              name: 'show',
-              type: 'checkbox',
-              defaultValue: false,
-              label: 'Show newsletter signup on every page',
-              required: true,
-            },
-            { name: 'eyebrow', type: 'text', defaultValue: 'Newsletter' },
-            {
-              name: 'heading',
-              type: 'text',
-              defaultValue: 'Stay in the loop',
-              required: true,
-            },
-            {
-              name: 'body',
-              type: 'textarea',
-              defaultValue: 'Get occasional updates delivered to your inbox.',
-            },
-            newsletterDestinationField,
-            {
-              name: 'submitLabel',
-              type: 'text',
-              defaultValue: 'Subscribe',
-              required: true,
-            },
-            ...submitButtonFields('primary-filled'),
-            {
-              name: 'successMessage',
-              type: 'text',
-              defaultValue: 'Thanks for subscribing.',
-              required: true,
-            },
-            {
-              name: 'consentText',
-              type: 'textarea',
-              defaultValue:
-                'By subscribing, you agree to receive email updates. Unsubscribe anytime.',
-            },
-            appearanceField(),
-          ],
+          name: 'items',
+          type: 'array',
+          ...linkArrayPresentation,
+          fields: socialLinkFields(),
         },
       ],
     },
     {
-      type: 'collapsible',
-      label: 'Contact form',
-      admin: { initCollapsed: true },
+      slug: 'callToAction',
+      labels: { singular: 'Call to action', plural: 'Calls to action' },
       fields: [
+        heading(),
+        { name: 'body', type: 'textarea' },
         {
-          name: 'contactForm',
+          name: 'action',
           type: 'group',
-          // Payload treats null as an object when traversing group children.
-          hooks: {
-            beforeValidate: [({ value }) => (value === null ? {} : value)],
-          },
-          label: false,
-          fields: [
+          fields: optionalNavigationFields(
+            (navigationItemsField({ includeIcons: true }) as ArrayField).fields,
+          ).concat([
             {
-              name: 'show',
-              type: 'checkbox',
-              defaultValue: false,
-              label: 'Show contact form on every page',
-              required: true,
+              name: 'variant',
+              type: 'select',
+              defaultValue: 'primary-filled',
+              options: [
+                'primary-filled',
+                'primary-outline',
+                'secondary-filled',
+                'secondary-outline',
+              ],
             },
-            { name: 'eyebrow', type: 'text', defaultValue: 'Contact' },
-            {
-              name: 'heading',
-              type: 'text',
-              defaultValue: 'How can I help?',
-              required: true,
-            },
-            { name: 'body', type: 'textarea' },
-            ...contactFields(),
-            {
-              name: 'submitLabel',
-              type: 'text',
-              defaultValue: 'Send message',
-              required: true,
-            },
-            ...submitButtonFields('primary-filled'),
-            {
-              name: 'successMessage',
-              type: 'text',
-              defaultValue: 'Thanks. Your message has been sent.',
-              required: true,
-            },
-            appearanceField(),
-          ],
+          ]),
         },
       ],
     },
     {
-      name: 'tagline',
-      type: 'textarea',
-      admin: {
-        description:
-          'Short brand message. The site SEO description is used when this is empty.',
-      },
-    },
-    {
-      name: 'socialLinks',
-      type: 'array',
-      ...linkArrayPresentation,
-      fields: socialLinkFields(),
-    },
-    navigationItemsField({
-      includeIcons: true,
-      label: 'Legal and utility links',
-    }),
-    {
-      name: 'latestPosts',
-      type: 'group',
+      slug: 'latestPosts',
+      labels: { singular: 'Latest posts', plural: 'Latest posts' },
       fields: [
+        heading(),
         {
           name: 'limit',
           type: 'number',
@@ -274,28 +233,78 @@ export function createFooterNavigationFields({
               ? true
               : 'Use a whole number.',
         },
+      ],
+    },
+    {
+      slug: 'copyright',
+      labels: { singular: 'Copyright', plural: 'Copyright' },
+      fields: [
         {
-          name: 'show',
-          type: 'checkbox',
-          defaultValue: true,
-          label: 'Show latest posts',
-          required: true,
-        },
-        {
-          name: 'heading',
+          name: 'owner',
           type: 'text',
           admin: {
-            condition: (_data, siblingData) => siblingData?.show !== false,
+            description:
+              'The current year and site title are used automatically.',
           },
-          defaultValue: 'Latest posts',
-          required: true,
         },
       ],
     },
     {
-      name: 'copyrightOwner',
-      type: 'text',
-      admin: { description: 'The site title is used when this is empty.' },
+      slug: 'newsletter',
+      labels: { singular: 'Newsletter signup', plural: 'Newsletter signups' },
+      fields: formFields(true),
+    },
+    {
+      slug: 'contactForm',
+      labels: { singular: 'Contact form', plural: 'Contact forms' },
+      fields: formFields(false),
+    },
+  ]
+  for (const block of blocks) {
+    block.dbName = (
+      {
+        logo: 'ft_logo',
+        text: 'ft_text',
+        links: 'ft_links',
+        socialLinks: 'ft_social',
+        callToAction: 'ft_cta',
+        latestPosts: 'ft_posts',
+        copyright: 'ft_copy',
+        newsletter: 'ft_nl',
+        contactForm: 'ft_contact',
+      } as Record<string, string>
+    )[block.slug]
+    block.fields.unshift({
+      name: 'enabled',
+      type: 'checkbox',
+      defaultValue: true,
+      label: 'Show this component',
+    })
+  }
+  return [
+    { name: 'title', type: 'text', defaultValue: 'Footer', required: true },
+    choice('background', ['page', 'dark'], 'page'),
+    {
+      name: 'contentAreas',
+      type: 'array',
+      label: 'Footer content areas',
+      admin: { components: { Field: footerEditorComponent } },
+      fields: [
+        { name: 'title', type: 'text', label: 'Area name' },
+        appearanceField(),
+        {
+          name: 'columns',
+          type: 'array',
+          minRows: 1,
+          maxRows: 4,
+          required: true,
+          defaultValue: [{ blocks: [] }],
+          fields: [
+            choice('alignment', ['start', 'center', 'end'], 'start'),
+            { name: 'blocks', type: 'blocks', blocks },
+          ],
+        },
+      ],
     },
   ]
 }
