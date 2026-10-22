@@ -102,6 +102,8 @@ export function projectState(
       'style',
       'detail',
       'text',
+      'textFormat',
+      'textStyle',
       'tag',
       'listType',
       'start',
