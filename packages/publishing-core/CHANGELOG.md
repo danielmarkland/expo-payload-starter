@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.16.1
+
+### Patch Changes
+
+- Preserve Payload paragraph textFormat and textStyle fields in portable site transfers.
+
 ## 0.16.0
 
 ### Minor Changes
