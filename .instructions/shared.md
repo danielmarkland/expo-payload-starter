@@ -75,14 +75,20 @@ references; this file captures the agent-facing guardrails.
 
 ### Git and release workflow
 
-- Never commit or push changes directly to `main`.
+- Never commit or push changes directly to `main` or `develop`, or bypass checks.
 - Start branches from current `develop`. Agents use isolated worktrees and
   `codex/<task>` branches; humans may use `<type>/<short-description>`.
-  Follow `docs/release-runbook.md` for release ownership and checks.
+  Follow `docs/release-runbook.md` for release ownership and checks. Never reset
+  another checkout.
 - Open feature pull requests into `develop` and squash-merge them.
 - Release through a pull request from `develop` into `main`. Use a merge commit
   for releases to preserve shared branch ancestry.
 - Deploy and verify releases from `main` after the release pull request is merged.
+- The designated release agent serializes authorized merges and pauses develop
+  during production finalization. Require `ci`; merges and builds do not establish
+  hosted production acceptance.
+- Keep credentials environment-scoped. Release summaries record exact evidence
+  and unmet prerequisites; never claim deferred SMS or simulated services passed.
 - Attribute commits to Daniel Markland <daniel@codeassassins.com>.
 - Do not commit Monday–Friday between 08:00 inclusive and 16:00 exclusive in
   `America/Chicago`. Editing, testing, and staging are allowed during that window.
@@ -133,3 +139,22 @@ publication and production deployments require explicit release authorization.
 ## Reviewed admin presentation
 
 For admin changes, read the pinned [Admin UI Guidelines](https://github.com/groovepost/Admin-Mock/blob/d942da618120963d6442a673b27cef57bd500a12/docs/admin-ui-guidelines.md) and [Platform Integration Handoff](https://github.com/groovepost/Admin-Mock/blob/d942da618120963d6442a673b27cef57bd500a12/docs/implementation-handoff.md). Preserve real capabilities absent from the mock and use shared native Payload presentation helpers. The platform gap audit in [groovepost/platform](https://github.com/groovepost/platform/tree/codex/admin-mock-integration/docs/admin-integration) records integration status; a mock success does not establish operational acceptance.
+
+## Publishing presentation ownership
+
+- `publishing-contracts` owns portable schemas; `design-tokens` owns design tokens and licensed font assets; `publishing-core` owns reusable theme resolution and content rules; `publishing-ui` owns public markup, CSS, font loading, icons, and navigation presentation.
+- Website routes, public components and presentation helpers are adapters: fetch content, enforce access/tenant policy, resolve metadata and destinations, then invoke shared views. Do not add host DOM markup, CSS rules, icon registries, or theme resolvers. The frontend root layout may render document shell tags and inject the shared theme CSS. Reusable CMS controls and publishing workflows are shared too. Hosts retain Payload route/import-map wiring and application-specific administration, authentication, storage and access policy. The starter must administer its own content independently of GroovePost.
+- Extend shared package exports before adding capabilities to either host. Keep deployment destinations in environment configuration or tenant records.
+- Both repositories run the same `publishing-core/presentationBoundary` policy during lint. Add acceptance/rejection coverage when changing the boundary; do not bypass it with local renderer copies.
+- Use shared publishing collection/global factories and preview/content/form helpers. Business services must not import HTTP API modules.
+
+Before changing site code, read the installed Next.js guide required by `apps/site/AGENTS.md`.
+
+## Project context and authoritative sources
+
+- Project Drive: [Daniel Markland HQ](https://drive.google.com/drive/folders/13UgJ-KiXNNJEHjHfMl6FKVri3WrT3Qfq).
+- Follow the shared portfolio standards in [Portfolio HQ — Strategy](https://docs.google.com/document/d/1Rh232DqxZuRfAow3Lia573h1cQmcUdx72fekVctdnHY/edit); reference those standards rather than copying business documents here.
+- Google Workspace is authoritative for business/product strategy, requirements, specifications, research, planning, and major decisions. GitHub is authoritative for code, implemented architecture, configuration, issues, PRs, and development task status.
+- Before substantive work, retrieve the relevant current project documents through configured Drive tools; do not rely solely on memory. Keep repository documentation focused on implementation.
+- Links do not grant access. If retrieval fails, stop dependent work, report the failure, and never claim inaccessible documents were read. Verify actual access independently in each Codex and Claude Code environment, including fresh-session retrieval.
+- Keep context concise and link to authoritative documents rather than duplicating them. Ask Daniel before resolving substantive conflicts between sources; record significant business/product decisions in Drive and implementation work in GitHub.
