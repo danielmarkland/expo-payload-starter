@@ -55,3 +55,14 @@ production deployment occurred.
 On October 30, native Safari publishing of the disposable page succeeded with the required slug, and the editor displayed Published plus Versions 2. The starter now carries the same document-lock transaction patch as platform; three installed-dependency regression checks preserve foreign-editor protection. Automatic-theme hard-reload and remaining native flows are still open; concurrent personal Safari use interrupted the resumed verification.
 
 The focused automated WebKit 26.0 regression passes a full server-rendered reload with system Dark/Automatic and verifies at least 4.5:1 primary-action contrast. `webkit-automatic-dark.png` is its 1440 × 900 screenshot. This is WebKit test-engine evidence; the earlier native Safari application/Responsive Design Mode report remains open until directly retested. Run with `PLAYWRIGHT_WEBKIT=1 pnpm --filter @starter/site exec playwright test tests/e2e/admin-theme.e2e.spec.ts` against a dedicated localhost database ending in `_test`, after installing the official Playwright WebKit engine. CI continues to run the default Chromium project.
+
+The October 30 continuation confirmed desktop Safari Automatic is readable after
+leaving Responsive Design Mode; a phone-width repaint issue remains open.
+Native unsaved-navigation confirmation retained the edited title, and Save Draft
+preserved the separate published version. Restoring that published version exposed
+a nested search-index transaction rollback: the HTTP response succeeded while the
+draft persisted. The follow-up keeps internal gate updates in the existing adapter
+transaction without passing editorial restore field state through gate validation.
+A real shared Postgres/search-plugin regression and the platform database regression
+now assert the restored title and Published status persist. Native retesting remains
+required before closing recovery acceptance. No external service acceptance is implied.
