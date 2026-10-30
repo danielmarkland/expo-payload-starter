@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-core",
-  "version": "0.16.1",
+  "version": "0.17.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -139,6 +139,18 @@
     "./footerMigration": {
       "types": "./dist/footerMigration.d.ts",
       "default": "./dist/footerMigration.js"
+    },
+    "./adminPresentation": {
+      "types": "./dist/adminPresentation.d.ts",
+      "default": "./dist/adminPresentation.js"
+    },
+    "./adminOverview": {
+      "types": "./dist/adminOverview.d.ts",
+      "default": "./dist/adminOverview.js"
+    },
+    "./adminNavigation": {
+      "types": "./dist/adminNavigation.d.ts",
+      "default": "./dist/adminNavigation.js"
     }
   },
   "files": [

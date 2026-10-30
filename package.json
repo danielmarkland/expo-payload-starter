@@ -23,7 +23,7 @@
     "setup": "node packages/config/scripts/setup.mjs",
     "setup:hosted": "node packages/config/scripts/setup.mjs --mode hosted",
     "setup:production": "node packages/config/scripts/setup-production.mjs",
-    "test": "pnpm test:release && turbo run test",
+    "test": "node --test scripts/payload-document-lock.test.mjs && pnpm test:release && turbo run test",
     "typecheck": "turbo run typecheck",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "changeset": "changeset",

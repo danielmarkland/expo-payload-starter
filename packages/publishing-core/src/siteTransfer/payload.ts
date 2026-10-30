@@ -1,4 +1,5 @@
 import { extname } from 'node:path'
+import { isDeepStrictEqual } from 'node:util'
 import { randomUUID } from 'node:crypto'
 import type { Field, Payload, PayloadRequest, Where } from 'payload'
 import {
@@ -70,7 +71,7 @@ function assertResources(options: Pick<SiteTransferOptions, 'resources'>) {
   if (options.resources.some((r) => r.media && r.kind !== 'collection'))
     throw new Error('Media must be a collection')
 }
-async function request(
+export async function request(
   options: SiteTransferOptions,
 ): Promise<Partial<PayloadRequest>> {
   return {
@@ -86,7 +87,9 @@ async function request(
 // Payload plugins retain file buffers in request context for nested operations.
 // A replacement spans many independent documents; only transaction and trusted
 // host context may cross those writes, never a previous document's upload cache.
-function writeRequest(req: Partial<PayloadRequest>): Partial<PayloadRequest> {
+export function writeRequest(
+  req: Partial<PayloadRequest>,
+): Partial<PayloadRequest> {
   const context = { ...req.context }
   delete context._payloadCloudStorage
   delete context.skipCloudStorage
@@ -94,7 +97,9 @@ function writeRequest(req: Partial<PayloadRequest>): Partial<PayloadRequest> {
   return { ...req, file: undefined, payloadUploadSizes: undefined, context }
 }
 
-async function capture(options: SiteTransferOptions): Promise<SiteArchive> {
+export async function capture(
+  options: SiteTransferOptions,
+): Promise<SiteArchive> {
   assertResources(options)
   const { payload } = options
   const req = await request(options)
@@ -207,13 +212,25 @@ async function capture(options: SiteTransferOptions): Promise<SiteArchive> {
     assets,
   }
 }
-function fingerprint(site: SiteArchive) {
+export function fingerprint(site: SiteArchive) {
   // Exclude capture time; serialization and record enumeration are deterministic.
   return sha256(
     Buffer.from(JSON.stringify({ ...site.manifest, createdAt: '' })),
   )
 }
-function materialize(
+// Native presentation may reorder fields. Object keys and reference discovery
+// order do not change archive meaning; content arrays and reference paths do.
+function sameState(left: SiteTransferState, right: SiteTransferState): boolean {
+  const references = (state: SiteTransferState) =>
+    [...state.references].sort((a, b) =>
+      JSON.stringify(a.path).localeCompare(JSON.stringify(b.path)),
+    )
+  return (
+    isDeepStrictEqual(left.data, right.data) &&
+    isDeepStrictEqual(references(left), references(right))
+  )
+}
+export function materialize(
   state: SiteTransferState,
   identities: Map<string, string | number>,
   allowMissing = false,
@@ -270,8 +287,7 @@ export function validateSiteArchive(
       if (
         resource.drafts &&
         !record.draft &&
-        (!record.published ||
-          JSON.stringify(record.current) !== JSON.stringify(record.published))
+        (!record.published || !sameState(record.current, record.published))
       )
         throw new Error(
           'Published record must have matching current and published states',
@@ -300,7 +316,7 @@ export function validateSiteArchive(
           resource.excludedPaths,
           true,
         )
-        if (JSON.stringify(projected) !== JSON.stringify(state))
+        if (!sameState(projected, state))
           throw new Error('Noncanonical state or invalid relationship paths')
       }
     }

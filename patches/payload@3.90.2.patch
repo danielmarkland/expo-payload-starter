@@ -1,0 +1,12 @@
+diff --git a/dist/utilities/checkDocumentLockStatus.js b/dist/utilities/checkDocumentLockStatus.js
+index 502abc62a4a1281e86509bf6957f5a3b79f76bac..210e84f9b96365f0db3e8d780b258092d2b76040 100644
+--- a/dist/utilities/checkDocumentLockStatus.js
++++ b/dist/utilities/checkDocumentLockStatus.js
+@@ -44,6 +44,7 @@ export const checkDocumentLockStatus = async ({ id, collectionSlug, globalSlug,
+         const finalLockErrorMessage = lockErrorMessage || defaultLockErrorMessage;
+         const lockedDocumentResult = await payload.db.find({
+             collection: lockedDocumentsCollectionSlug,
++            req,
+             limit: 1,
+             pagination: false,
+             sort: '-updatedAt',

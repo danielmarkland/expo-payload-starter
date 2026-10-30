@@ -34,8 +34,11 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      name: process.env.PLAYWRIGHT_WEBKIT === '1' ? 'webkit' : 'chromium',
+      use:
+        process.env.PLAYWRIGHT_WEBKIT === '1'
+          ? { ...devices['Desktop Safari'] }
+          : { ...devices['Desktop Chrome'], channel: 'chromium' },
     },
   ],
   webServer: {

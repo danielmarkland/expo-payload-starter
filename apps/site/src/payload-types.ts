@@ -67,13 +67,13 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
+    posts: Post;
+    pages: Page;
     media: Media;
     authors: Author;
     categories: Category;
     tags: Tag;
-    posts: Post;
-    pages: Page;
+    users: User;
     redirects: Redirect;
     search: Search;
     'publishing-transfer-gates': PublishingTransferGate;
@@ -84,13 +84,13 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
-    pages: PagesSelect<false> | PagesSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
     'publishing-transfer-gates': PublishingTransferGatesSelect<false> | PublishingTransferGatesSelect<true>;
@@ -143,88 +143,11 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  email: string;
-  /**
-   * Linked Better Auth editorial identity UUID. Product identities are separate.
-   */
-  authIdentityId?: string | null;
-  role: 'admin' | 'editor';
-  updatedAt: string;
-  createdAt: string;
-  collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt: string;
-  prefix?: string | null;
-  _objectKey?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "authors".
- */
-export interface Author {
-  id: number;
-  name: string;
-  slug: string;
-  bio?: string | null;
-  image?: (number | null) | Media;
-  website?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: number;
-  title: string;
-  slug: string;
-  description?: string | null;
-  parent?: (number | null) | Category;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: number;
-  title: string;
-  slug: string;
-  description?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
   id: number;
   title: string;
-  slug: string;
   summary: string;
   body: {
     root: {
@@ -257,9 +180,70 @@ export interface Post {
      */
     image?: (number | null) | Media;
   };
+  slug: string;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors".
+ */
+export interface Author {
+  id: number;
+  name: string;
+  slug: string;
+  bio?: string | null;
+  image?: (number | null) | Media;
+  website?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  prefix?: string | null;
+  _objectKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  slug: string;
+  description?: string | null;
+  parent?: (number | null) | Category;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  title: string;
+  slug: string;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -267,13 +251,7 @@ export interface Post {
  */
 export interface Page {
   id: number;
-  /**
-   * Full uses the available width. Padded aligns to the shared responsive container.
-   */
-  width?: ('site' | 'full' | 'padded') | null;
   title: string;
-  headerVariant?: ('inherit' | 'standard' | 'minimal') | null;
-  slug: string;
   layout: (
     | {
         /**
@@ -311,6 +289,12 @@ export interface Page {
         primaryButton?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -380,19 +364,19 @@ export interface Page {
                 | 'zap'
               )
             | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
-          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+          iconPosition?: ('left' | 'right') | null;
+          newTab?: boolean | null;
         };
         secondaryButton?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -462,15 +446,9 @@ export interface Page {
                 | 'zap'
               )
             | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
-          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+          iconPosition?: ('left' | 'right') | null;
+          newTab?: boolean | null;
         };
         image?: (number | null) | Media;
         /**
@@ -652,6 +630,12 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -721,15 +705,9 @@ export interface Page {
                 | 'zap'
               )
             | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
-          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+          iconPosition?: ('left' | 'right') | null;
+          newTab?: boolean | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -795,6 +773,12 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -864,15 +848,9 @@ export interface Page {
                 | 'zap'
               )
             | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
-          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+          iconPosition?: ('left' | 'right') | null;
+          newTab?: boolean | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -920,6 +898,12 @@ export interface Page {
           | {
               label: string;
               type?: ('page' | 'post' | 'url') | null;
+              page?: (number | null) | Page;
+              post?: (number | null) | Post;
+              /**
+               * Use a relative path, https, mailto, or tel URL.
+               */
+              url?: string | null;
               /**
                * Optional icon displayed with the link label.
                */
@@ -989,14 +973,8 @@ export interface Page {
                     | 'zap'
                   )
                 | null;
-              page?: (number | null) | Page;
-              post?: (number | null) | Post;
-              /**
-               * Use a relative path, https, mailto, or tel URL.
-               */
-              url?: string | null;
-              newTab?: boolean | null;
               iconPosition?: ('left' | 'right') | null;
+              newTab?: boolean | null;
               id?: string | null;
             }[]
           | null;
@@ -1006,6 +984,12 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -1075,15 +1059,9 @@ export interface Page {
                 | 'zap'
               )
             | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
-          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+          iconPosition?: ('left' | 'right') | null;
+          newTab?: boolean | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -1165,6 +1143,12 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -1234,15 +1218,9 @@ export interface Page {
                 | 'zap'
               )
             | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
-          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+          iconPosition?: ('left' | 'right') | null;
+          newTab?: boolean | null;
         };
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -1295,6 +1273,12 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -1364,15 +1348,9 @@ export interface Page {
                 | 'zap'
               )
             | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
-          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+          iconPosition?: ('left' | 'right') | null;
+          newTab?: boolean | null;
         };
         newsletter?: {
           /**
@@ -1609,8 +1587,8 @@ export interface Page {
               | 'zap'
             )
           | null;
-        iconPosition?: ('left' | 'right') | null;
         submitButtonVariant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+        iconPosition?: ('left' | 'right') | null;
         successMessage: string;
         /**
          * Optional layout and surface overrides. Defaults use the site design system.
@@ -1773,6 +1751,12 @@ export interface Page {
         action?: {
           label?: string | null;
           type?: ('page' | 'post' | 'url') | null;
+          page?: (number | null) | Page;
+          post?: (number | null) | Post;
+          /**
+           * Use a relative path, https, mailto, or tel URL.
+           */
+          url?: string | null;
           /**
            * Optional icon displayed with the link label.
            */
@@ -1842,15 +1826,9 @@ export interface Page {
                 | 'zap'
               )
             | null;
-          page?: (number | null) | Page;
-          post?: (number | null) | Post;
-          /**
-           * Use a relative path, https, mailto, or tel URL.
-           */
-          url?: string | null;
-          newTab?: boolean | null;
-          iconPosition?: ('left' | 'right') | null;
           variant?: ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+          iconPosition?: ('left' | 'right') | null;
+          newTab?: boolean | null;
         };
         limit?: number | null;
         /**
@@ -1889,6 +1867,11 @@ export interface Page {
       }
   )[];
   /**
+   * Full uses the available width. Padded aligns to the shared responsive container.
+   */
+  width?: ('site' | 'full' | 'padded') | null;
+  headerVariant?: ('inherit' | 'standard' | 'minimal') | null;
+  /**
    * Optional escape hatch for trusted editors. Scope selectors to [data-page] to avoid affecting the admin or other pages.
    */
   customCSS?: string | null;
@@ -1900,9 +1883,26 @@ export interface Page {
      */
     image?: (number | null) | Media;
   };
+  slug: string;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  email: string;
+  /**
+   * Linked Better Auth editorial identity UUID. Product identities are separate.
+   */
+  authIdentityId?: string | null;
+  role: 'admin' | 'editor';
+  updatedAt: string;
+  createdAt: string;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1990,8 +1990,12 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null)
     | ({
         relationTo: 'media';
@@ -2010,12 +2014,8 @@ export interface PayloadLockedDocument {
         value: number | Tag;
       } | null)
     | ({
-        relationTo: 'posts';
-        value: number | Post;
-      } | null)
-    | ({
-        relationTo: 'pages';
-        value: number | Page;
+        relationTo: 'users';
+        value: number | User;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -2069,78 +2069,10 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  email?: T;
-  authIdentityId?: T;
-  role?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  prefix?: T;
-  _objectKey?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "authors_select".
- */
-export interface AuthorsSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  bio?: T;
-  image?: T;
-  website?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories_select".
- */
-export interface CategoriesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  description?: T;
-  parent?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags_select".
- */
-export interface TagsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  description?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   summary?: T;
   body?: T;
   author?: T;
@@ -2155,6 +2087,7 @@ export interface PostsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2164,10 +2097,7 @@ export interface PostsSelect<T extends boolean = true> {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  width?: T;
   title?: T;
-  headerVariant?: T;
-  slug?: T;
   layout?:
     | T
     | {
@@ -2191,26 +2121,26 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
-                    iconPosition?: T;
+                    icon?: T;
                     variant?: T;
+                    iconPosition?: T;
+                    newTab?: T;
                   };
               secondaryButton?:
                 | T
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
-                    iconPosition?: T;
+                    icon?: T;
                     variant?: T;
+                    iconPosition?: T;
+                    newTab?: T;
                   };
               image?: T;
               appearance?:
@@ -2339,13 +2269,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
-                    iconPosition?: T;
+                    icon?: T;
                     variant?: T;
+                    iconPosition?: T;
+                    newTab?: T;
                   };
               appearance?:
                 | T
@@ -2390,13 +2320,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
-                    iconPosition?: T;
+                    icon?: T;
                     variant?: T;
+                    iconPosition?: T;
+                    newTab?: T;
                   };
               appearance?:
                 | T
@@ -2439,12 +2369,12 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
+                    icon?: T;
                     iconPosition?: T;
+                    newTab?: T;
                     id?: T;
                   };
               action?:
@@ -2452,13 +2382,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
-                    iconPosition?: T;
+                    icon?: T;
                     variant?: T;
+                    iconPosition?: T;
+                    newTab?: T;
                   };
               appearance?:
                 | T
@@ -2516,13 +2446,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
-                    iconPosition?: T;
+                    icon?: T;
                     variant?: T;
+                    iconPosition?: T;
+                    newTab?: T;
                   };
               appearance?:
                 | T
@@ -2568,13 +2498,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
-                    iconPosition?: T;
+                    icon?: T;
                     variant?: T;
+                    iconPosition?: T;
+                    newTab?: T;
                   };
               newsletter?:
                 | T
@@ -2715,8 +2645,8 @@ export interface PagesSelect<T extends boolean = true> {
               showCompany?: T;
               submitLabel?: T;
               icon?: T;
-              iconPosition?: T;
               submitButtonVariant?: T;
+              iconPosition?: T;
               successMessage?: T;
               appearance?:
                 | T
@@ -2848,13 +2778,13 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     label?: T;
                     type?: T;
-                    icon?: T;
                     page?: T;
                     post?: T;
                     url?: T;
-                    newTab?: T;
-                    iconPosition?: T;
+                    icon?: T;
                     variant?: T;
+                    iconPosition?: T;
+                    newTab?: T;
                   };
               limit?: T;
               appearance?:
@@ -2887,6 +2817,8 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  width?: T;
+  headerVariant?: T;
   customCSS?: T;
   meta?:
     | T
@@ -2895,9 +2827,77 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  prefix?: T;
+  _objectKey?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors_select".
+ */
+export interface AuthorsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  bio?: T;
+  image?: T;
+  website?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  parent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  email?: T;
+  authIdentityId?: T;
+  role?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2997,9 +2997,14 @@ export interface HeaderNavigation {
    */
   scrolledBackground?: ('fill' | 'transparent') | null;
   helpLink?: {
-    treatment?: ('default' | 'accent') | null;
     label?: string | null;
     type?: ('page' | 'post' | 'url') | null;
+    page?: (number | null) | Page;
+    post?: (number | null) | Post;
+    /**
+     * Use a relative path, https, mailto, or tel URL.
+     */
+    url?: string | null;
     /**
      * Optional icon displayed with the link label.
      */
@@ -3069,22 +3074,16 @@ export interface HeaderNavigation {
           | 'zap'
         )
       | null;
-    page?: (number | null) | Page;
-    post?: (number | null) | Post;
-    /**
-     * Use a relative path, https, mailto, or tel URL.
-     */
-    url?: string | null;
-    newTab?: boolean | null;
+    treatment?: ('default' | 'accent') | null;
     /**
      * The label remains available to screen readers.
      */
     iconOnly?: boolean | null;
+    newTab?: boolean | null;
   };
   socialLinks?:
     | {
         label: string;
-        url: string;
         icon:
           | 'apple'
           | 'bluesky'
@@ -3148,15 +3147,21 @@ export interface HeaderNavigation {
           | 'user'
           | 'users'
           | 'zap';
+        url: string;
         newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
   items?:
     | {
-        treatment?: ('default' | 'accent') | null;
         label: string;
         type: 'page' | 'post' | 'url';
+        page?: (number | null) | Page;
+        post?: (number | null) | Post;
+        /**
+         * Use a relative path, https, mailto, or tel URL.
+         */
+        url?: string | null;
         /**
          * Optional icon displayed with the link label.
          */
@@ -3226,17 +3231,12 @@ export interface HeaderNavigation {
               | 'zap'
             )
           | null;
-        page?: (number | null) | Page;
-        post?: (number | null) | Post;
-        /**
-         * Use a relative path, https, mailto, or tel URL.
-         */
-        url?: string | null;
-        newTab?: boolean | null;
+        treatment?: ('default' | 'accent') | null;
         /**
          * The label remains available to screen readers.
          */
         iconOnly?: boolean | null;
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -3398,9 +3398,14 @@ export interface FooterNavigation {
                     heading?: string | null;
                     items?:
                       | {
-                          treatment?: ('default' | 'accent') | null;
                           label: string;
                           type: 'page' | 'post' | 'url';
+                          page?: (number | null) | Page;
+                          post?: (number | null) | Post;
+                          /**
+                           * Use a relative path, https, mailto, or tel URL.
+                           */
+                          url?: string | null;
                           /**
                            * Optional icon displayed with the link label.
                            */
@@ -3470,17 +3475,12 @@ export interface FooterNavigation {
                                 | 'zap'
                               )
                             | null;
-                          page?: (number | null) | Page;
-                          post?: (number | null) | Post;
-                          /**
-                           * Use a relative path, https, mailto, or tel URL.
-                           */
-                          url?: string | null;
-                          newTab?: boolean | null;
+                          treatment?: ('default' | 'accent') | null;
                           /**
                            * The label remains available to screen readers.
                            */
                           iconOnly?: boolean | null;
+                          newTab?: boolean | null;
                           id?: string | null;
                         }[]
                       | null;
@@ -3538,9 +3538,14 @@ export interface FooterNavigation {
                     heading?: string | null;
                     body?: string | null;
                     action?: {
-                      treatment?: ('default' | 'accent') | null;
                       label?: string | null;
                       type?: ('page' | 'post' | 'url') | null;
+                      page?: (number | null) | Page;
+                      post?: (number | null) | Post;
+                      /**
+                       * Use a relative path, https, mailto, or tel URL.
+                       */
+                      url?: string | null;
                       /**
                        * Optional icon displayed with the link label.
                        */
@@ -3610,19 +3615,14 @@ export interface FooterNavigation {
                             | 'zap'
                           )
                         | null;
-                      page?: (number | null) | Page;
-                      post?: (number | null) | Post;
-                      /**
-                       * Use a relative path, https, mailto, or tel URL.
-                       */
-                      url?: string | null;
-                      newTab?: boolean | null;
+                      variant?:
+                        ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+                      treatment?: ('default' | 'accent') | null;
                       /**
                        * The label remains available to screen readers.
                        */
                       iconOnly?: boolean | null;
-                      variant?:
-                        ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+                      newTab?: boolean | null;
                     };
                     id?: string | null;
                     blockName?: string | null;
@@ -3726,9 +3726,9 @@ export interface FooterNavigation {
                           | 'zap'
                         )
                       | null;
-                    iconPosition?: ('left' | 'right') | null;
                     submitButtonVariant?:
                       ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+                    iconPosition?: ('left' | 'right') | null;
                     successMessage: string;
                     /**
                      * Optional layout and surface overrides. Defaults use the site design system.
@@ -3841,9 +3841,9 @@ export interface FooterNavigation {
                           | 'zap'
                         )
                       | null;
-                    iconPosition?: ('left' | 'right') | null;
                     submitButtonVariant?:
                       ('primary-filled' | 'primary-outline' | 'secondary-filled' | 'secondary-outline') | null;
+                    iconPosition?: ('left' | 'right') | null;
                     successMessage: string;
                     /**
                      * Optional layout and surface overrides. Defaults use the site design system.
@@ -3923,13 +3923,13 @@ export interface SiteSetting {
     defaultMode: 'system' | 'light' | 'dark';
     allowToggle: boolean;
     fontPreset: 'poppins' | 'system' | 'inter' | 'ibm-plex-mono';
+    shapePreset: 'square' | 'soft' | 'rounded';
+    densityPreset: 'compact' | 'comfortable' | 'spacious';
     headingFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
     bodyFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
     labelFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
     headingWeight?: ('600' | '700' | '800') | null;
     typographyPreset?: ('compact' | 'standard' | 'editorial') | null;
-    shapePreset: 'square' | 'soft' | 'rounded';
-    densityPreset: 'compact' | 'comfortable' | 'spacious';
     light: {
       darkSurface: string;
       darkInk: string;
@@ -4006,37 +4006,37 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
   helpLink?:
     | T
     | {
-        treatment?: T;
         label?: T;
         type?: T;
-        icon?: T;
         page?: T;
         post?: T;
         url?: T;
-        newTab?: T;
+        icon?: T;
+        treatment?: T;
         iconOnly?: T;
+        newTab?: T;
       };
   socialLinks?:
     | T
     | {
         label?: T;
-        url?: T;
         icon?: T;
+        url?: T;
         newTab?: T;
         id?: T;
       };
   items?:
     | T
     | {
-        treatment?: T;
         label?: T;
         type?: T;
-        icon?: T;
         page?: T;
         post?: T;
         url?: T;
-        newTab?: T;
+        icon?: T;
+        treatment?: T;
         iconOnly?: T;
+        newTab?: T;
         id?: T;
       };
   sticky?: T;
@@ -4114,15 +4114,15 @@ export interface FooterNavigationSelect<T extends boolean = true> {
                           items?:
                             | T
                             | {
-                                treatment?: T;
                                 label?: T;
                                 type?: T;
-                                icon?: T;
                                 page?: T;
                                 post?: T;
                                 url?: T;
-                                newTab?: T;
+                                icon?: T;
+                                treatment?: T;
                                 iconOnly?: T;
+                                newTab?: T;
                                 id?: T;
                               };
                           id?: T;
@@ -4154,16 +4154,16 @@ export interface FooterNavigationSelect<T extends boolean = true> {
                           action?:
                             | T
                             | {
-                                treatment?: T;
                                 label?: T;
                                 type?: T;
-                                icon?: T;
                                 page?: T;
                                 post?: T;
                                 url?: T;
-                                newTab?: T;
-                                iconOnly?: T;
+                                icon?: T;
                                 variant?: T;
+                                treatment?: T;
+                                iconOnly?: T;
+                                newTab?: T;
                               };
                           id?: T;
                           blockName?: T;
@@ -4196,8 +4196,8 @@ export interface FooterNavigationSelect<T extends boolean = true> {
                           consentText?: T;
                           submitLabel?: T;
                           icon?: T;
-                          iconPosition?: T;
                           submitButtonVariant?: T;
+                          iconPosition?: T;
                           successMessage?: T;
                           appearance?:
                             | T
@@ -4239,8 +4239,8 @@ export interface FooterNavigationSelect<T extends boolean = true> {
                           showCompany?: T;
                           submitLabel?: T;
                           icon?: T;
-                          iconPosition?: T;
                           submitButtonVariant?: T;
+                          iconPosition?: T;
                           successMessage?: T;
                           appearance?:
                             | T
@@ -4300,13 +4300,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         defaultMode?: T;
         allowToggle?: T;
         fontPreset?: T;
+        shapePreset?: T;
+        densityPreset?: T;
         headingFont?: T;
         bodyFont?: T;
         labelFont?: T;
         headingWeight?: T;
         typographyPreset?: T;
-        shapePreset?: T;
-        densityPreset?: T;
         light?:
           | T
           | {

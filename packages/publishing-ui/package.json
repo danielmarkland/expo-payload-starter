@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-ui",
-  "version": "0.12.5",
+  "version": "0.13.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -168,10 +168,49 @@
       "types": "./dist/admin/FooterEditor.d.ts",
       "default": "./dist/admin/FooterEditor.js"
     },
-    "./admin/FooterEditor.css": "./dist/admin/FooterEditor.css"
+    "./admin/FooterEditor.css": "./dist/admin/FooterEditor.css",
+    "./admin/AdminPresentation.css": "./dist/admin/AdminPresentation.css",
+    "./admin/UnsavedChanges": {
+      "types": "./dist/admin/UnsavedChanges.d.ts",
+      "default": "./dist/admin/UnsavedChanges.js"
+    },
+    "./admin/PageActions": {
+      "types": "./dist/admin/PageActions.d.ts",
+      "default": "./dist/admin/PageActions.js"
+    },
+    "./admin/AdminNavGroups": {
+      "types": "./dist/admin/AdminNavGroups.d.ts",
+      "default": "./dist/admin/AdminNavGroups.js"
+    },
+    "./admin/FormsView": {
+      "types": "./dist/admin/FormsView.d.ts",
+      "default": "./dist/admin/FormsView.js"
+    },
+    "./admin/PublishingOverview": {
+      "types": "./dist/admin/PublishingOverview.d.ts",
+      "default": "./dist/admin/PublishingOverview.js"
+    },
+    "./admin/SubmissionsView": {
+      "types": "./dist/admin/SubmissionsView.d.ts",
+      "default": "./dist/admin/SubmissionsView.js"
+    },
+    "./payloadListActionsLoader": "./tooling/payload-list-actions.cjs",
+    "./admin/Navigation": {
+      "types": "./dist/admin/Navigation.d.ts",
+      "default": "./dist/admin/Navigation.js"
+    },
+    "./admin/AdminDate": {
+      "types": "./dist/admin/AdminDate.d.ts",
+      "default": "./dist/admin/AdminDate.js"
+    },
+    "./admin/ThemeTransfer": {
+      "types": "./dist/admin/ThemeTransfer.d.ts",
+      "default": "./dist/admin/ThemeTransfer.js"
+    }
   },
   "files": [
-    "dist"
+    "dist",
+    "tooling/payload-list-actions.cjs"
   ],
   "publishConfig": {
     "access": "restricted",

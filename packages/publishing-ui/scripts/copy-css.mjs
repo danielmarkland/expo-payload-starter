@@ -14,6 +14,7 @@ for (const name of [
   'IconPickerField',
   'IdentifierDisplay',
   'FooterEditor',
+  'AdminPresentation',
 ]) {
   await copyFile(`src/admin/${name}.css`, `dist/admin/${name}.css`)
 }

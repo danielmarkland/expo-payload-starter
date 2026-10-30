@@ -5,7 +5,15 @@ export {
   type SiteArchive,
 } from './siteTransfer/archive.js'
 export { projectState, type ReferenceResolver } from './siteTransfer/fields.js'
-export * from './siteTransfer/payload.js'
+export {
+  exportSite,
+  previewSiteReplacement,
+  replaceSite,
+  validateSiteArchive,
+  type SiteTransferOptions,
+  type TransferResource,
+  type TransferPreview,
+} from './siteTransfer/payload.js'
 export {
   publishingTransferResources,
   selectTransferFields,
@@ -16,3 +24,5 @@ export {
 } from './siteTransfer/gate.js'
 
 export { payloadReplacementReceipt } from './siteTransfer/gate.js'
+
+export * from './siteTransfer/theme.js'

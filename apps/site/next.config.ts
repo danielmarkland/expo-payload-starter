@@ -9,6 +9,7 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 // Payload form providers and shared controls must use one React context instance.
 const require = createRequire(import.meta.url)
+const listActionsLoader = require.resolve('@danielmarkland/publishing-ui/payloadListActionsLoader')
 const payloadRequire = createRequire(require.resolve('@payloadcms/next/withPayload'))
 let payloadUI = path.dirname(payloadRequire.resolve('@payloadcms/ui'))
 while (!existsSync(path.join(payloadUI, 'package.json'))) {
@@ -27,6 +28,10 @@ const nextConfig: NextConfig = {
     ],
   },
   webpack: (webpackConfig) => {
+    webpackConfig.module.rules.push({
+      test: /@payloadcms[\\/]ui[\\/]dist[\\/]exports[\\/]client[\\/]index\.js$/,
+      use: [listActionsLoader],
+    })
     webpackConfig.resolve.alias = {
       ...webpackConfig.resolve.alias,
       '@payloadcms/ui': payloadUI,
@@ -41,6 +46,11 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     root: path.resolve(dirname, '../..'),
+    rules: {
+      '**/@payloadcms/ui/dist/exports/client/index.js': {
+        loaders: [listActionsLoader],
+      },
+    },
     resolveAlias: {
       '@payloadcms/ui': payloadUIAlias,
       '@payloadcms/ui/*': `${payloadUIAlias}/*`,
