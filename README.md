@@ -732,3 +732,5 @@ Record noteworthy implemented changes in [CHANGELOG.md](CHANGELOG.md). Follow
 the [release runbook](docs/release-runbook.md) for release preparation and approval.
 
 Reusable native Payload admin presentation is exported from `publishing-core/adminPresentation`; hosts register its plugin after schema-producing plugins and import `publishing-ui/admin/AdminPresentation.css`. Hosting services and authorization remain host-owned.
+
+The shared publishing packages also expose visual-only Theme archive operations and native import/export controls; see [publishing-core](packages/publishing-core/README.md) and [publishing-ui](packages/publishing-ui/README.md). Full-site archives retain both theme and content.

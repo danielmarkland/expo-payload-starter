@@ -202,6 +202,10 @@
     "./admin/AdminDate": {
       "types": "./dist/admin/AdminDate.d.ts",
       "default": "./dist/admin/AdminDate.js"
+    },
+    "./admin/ThemeTransfer": {
+      "types": "./dist/admin/ThemeTransfer.d.ts",
+      "default": "./dist/admin/ThemeTransfer.js"
     }
   },
   "files": [

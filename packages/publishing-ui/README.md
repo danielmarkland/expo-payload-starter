@@ -97,3 +97,9 @@ Footer area and component appearance controls apply their configured padding, ma
 Footer surface colors preserve the area’s configured full-width or padded gutters; padding overrides remain independent.
 
 Blank footer area top/bottom padding uses the medium design-system default before and after persistence. Select None for an explicit zero-padding override.
+
+`admin/ThemeTransfer` supplies native Theme export/upload controls. The host supplies
+authorized asynchronous jobs, errors and a busy flag; `onImport` resolves `true`
+only when upload/finalization succeeds, keeping the drawer open after failure. Theme
+packages contain visual settings only. The host renders the resulting preview,
+destination confirmation, progress and recovery actions.

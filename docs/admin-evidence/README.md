@@ -8,6 +8,7 @@ platform's hosted tenant integrations or establish production acceptance.
 
 - `safari-overview-dark.png`: desktop Safari 26.6.2, explicit native Dark preference.
 - `safari-responsive-overview.png`: Safari Responsive Design Mode, 390 × 844.
+- `safari-responsive-published.png`: native published page with Versions 2 after the transaction-lock fix.
 - `safari-responsive-validation.png`: native required Title/Layout/Slug validation.
 
 Phone-width navigation opens as an overlay, closes without navigating, and leaves
@@ -50,3 +51,7 @@ platform dependency pins, live operational service checks, actual mobile Safari,
 complete native publish/version recovery, relationship/upload acceptance and all
 remaining audit gaps are required before rollout. No package publication or
 production deployment occurred.
+
+On October 30, native Safari publishing of the disposable page succeeded with the required slug, and the editor displayed Published plus Versions 2. The starter now carries the same document-lock transaction patch as platform; three installed-dependency regression checks preserve foreign-editor protection. Automatic-theme hard-reload and remaining native flows are still open; concurrent personal Safari use interrupted the resumed verification.
+
+The focused automated WebKit 26.0 regression passes a full server-rendered reload with system Dark/Automatic and verifies at least 4.5:1 primary-action contrast. `webkit-automatic-dark.png` is its 1440 × 900 screenshot. This is WebKit test-engine evidence; the earlier native Safari application/Responsive Design Mode report remains open until directly retested. Run with `PLAYWRIGHT_WEBKIT=1 pnpm --filter @starter/site exec playwright test tests/e2e/admin-theme.e2e.spec.ts` against a dedicated localhost database ending in `_test`, after installing the official Playwright WebKit engine. CI continues to run the default Chromium project.

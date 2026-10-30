@@ -71,7 +71,7 @@ function assertResources(options: Pick<SiteTransferOptions, 'resources'>) {
   if (options.resources.some((r) => r.media && r.kind !== 'collection'))
     throw new Error('Media must be a collection')
 }
-async function request(
+export async function request(
   options: SiteTransferOptions,
 ): Promise<Partial<PayloadRequest>> {
   return {
@@ -87,7 +87,9 @@ async function request(
 // Payload plugins retain file buffers in request context for nested operations.
 // A replacement spans many independent documents; only transaction and trusted
 // host context may cross those writes, never a previous document's upload cache.
-function writeRequest(req: Partial<PayloadRequest>): Partial<PayloadRequest> {
+export function writeRequest(
+  req: Partial<PayloadRequest>,
+): Partial<PayloadRequest> {
   const context = { ...req.context }
   delete context._payloadCloudStorage
   delete context.skipCloudStorage
@@ -95,7 +97,9 @@ function writeRequest(req: Partial<PayloadRequest>): Partial<PayloadRequest> {
   return { ...req, file: undefined, payloadUploadSizes: undefined, context }
 }
 
-async function capture(options: SiteTransferOptions): Promise<SiteArchive> {
+export async function capture(
+  options: SiteTransferOptions,
+): Promise<SiteArchive> {
   assertResources(options)
   const { payload } = options
   const req = await request(options)
@@ -208,7 +212,7 @@ async function capture(options: SiteTransferOptions): Promise<SiteArchive> {
     assets,
   }
 }
-function fingerprint(site: SiteArchive) {
+export function fingerprint(site: SiteArchive) {
   // Exclude capture time; serialization and record enumeration are deterministic.
   return sha256(
     Buffer.from(JSON.stringify({ ...site.manifest, createdAt: '' })),
@@ -226,7 +230,7 @@ function sameState(left: SiteTransferState, right: SiteTransferState): boolean {
     isDeepStrictEqual(references(left), references(right))
   )
 }
-function materialize(
+export function materialize(
   state: SiteTransferState,
   identities: Map<string, string | number>,
   allowMissing = false,
