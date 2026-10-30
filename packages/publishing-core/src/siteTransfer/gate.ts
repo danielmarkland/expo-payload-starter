@@ -29,12 +29,13 @@ async function acquireRow(payload: Payload, scope: string, req: GateRequest) {
       req,
       overrideAccess: true,
     }))
-  await payload.update({
+  // Lock metadata belongs to this adapter transaction. Native restore/search
+  // requests carry editorial field state that must not enter gate validation.
+  await payload.db.updateOne({
     collection: gateSlug,
     id: row.id,
-    data: { nonce: randomUUID() },
+    data: { key, nonce: randomUUID() },
     req,
-    overrideAccess: true,
   })
 }
 /** Serialize editorial writes with exports/replacements using a database row lock.

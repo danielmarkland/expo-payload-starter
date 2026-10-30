@@ -138,6 +138,38 @@ describe.skipIf(!url)('real Payload replacement transaction', () => {
     await payload?.destroy()
     if (folder) await rm(folder, { recursive: true, force: true })
   })
+  it('persists version recovery when search indexing acquires the same editorial gate', async () => {
+    const page = await payload.create({
+      collection: 'pages',
+      data: {
+        title: 'Published recovery original',
+        slug: 'native-recovery',
+        layout: [],
+        _status: 'published',
+      },
+    })
+    try {
+      await payload.update({
+        collection: 'pages',
+        id: page.id,
+        draft: true,
+        data: { title: 'Unpublished recovery edit' },
+      })
+      const versions = await payload.findVersions({
+        collection: 'pages',
+        where: { parent: { equals: page.id } },
+        pagination: false,
+      })
+      const published = versions.docs.find((item) => item.version._status === 'published')!
+      expect(published).toBeTruthy()
+      await payload.restoreVersion({ collection: 'pages', id: published.id })
+      const restored = await payload.findByID({ collection: 'pages', id: page.id, draft: true })
+      expect(restored.title).toBe('Published recovery original')
+      expect(restored._status).toBe('published')
+    } finally {
+      await payload.delete({ collection: 'pages', id: page.id })
+    }
+  })
   it('replaces a populated site, retains published and draft versions, maps media and repeats', async () => {
     const media = await payload.create({
       collection: 'media',
