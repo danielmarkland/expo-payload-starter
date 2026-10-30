@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { encodeSiteArchive, decodeSiteArchive, sha256 } from './siteTransfer.js'
+import { validateSiteArchive } from './siteTransfer/payload.js'
 import { projectState } from './siteTransfer/fields.js'
 import type { SiteTransferManifest } from '@danielmarkland/publishing-contracts/siteTransfer'
 const bytes = Buffer.from('original media')
@@ -127,4 +128,56 @@ describe('portable site archive', () => {
       projectState(JSON.parse('{"__proto__":{}}'), [], () => ''),
     ).toThrow('Unsafe')
   })
+})
+
+it('accepts presentation field reordering without allowing undeclared fields', () => {
+  const state = {
+    data: { title: 'Example', links: ['first', 'second'] },
+    references: [],
+  }
+  const archive = {
+    manifest: {
+      format: 'publishing-site',
+      version: 1,
+      createdAt: '2026-10-05T00:00:00.000Z',
+      extensions: {},
+      resources: ['pages'],
+      records: [{ key: 'p', resource: 'pages', draft: false, current: state }],
+      assets: [],
+    },
+    assets: new Map(),
+  }
+  const options = {
+    resources: [
+      {
+        key: 'pages',
+        slug: 'pages',
+        kind: 'collection',
+        fields: [
+          { name: 'links', type: 'json' },
+          { name: 'title', type: 'text' },
+        ],
+      },
+    ],
+  } as const
+  const bytes = encodeSiteArchive(
+    archive as Parameters<typeof encodeSiteArchive>[0],
+  )
+  expect(() =>
+    validateSiteArchive(
+      bytes,
+      options as unknown as Parameters<typeof validateSiteArchive>[1],
+    ),
+  ).not.toThrow()
+  const invalid = structuredClone(archive)
+  invalid.manifest.records[0].current.data = {
+    ...state.data,
+    secret: 'not allowed',
+  } as typeof state.data
+  expect(() =>
+    validateSiteArchive(
+      encodeSiteArchive(invalid as Parameters<typeof encodeSiteArchive>[0]),
+      options as unknown as Parameters<typeof validateSiteArchive>[1],
+    ),
+  ).toThrow('Unsupported field secret')
 })

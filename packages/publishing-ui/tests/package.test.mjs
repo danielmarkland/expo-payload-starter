@@ -31,6 +31,10 @@ const clientFiles = [
   'admin/IconPickerField',
   'admin/FooterEditor',
   'admin/LinkRowLabel',
+  'admin/UnsavedChanges',
+  'admin/AdminDate',
+  'admin/FormsView',
+  'admin/SubmissionsView',
 ]
 
 test('published component entry points include JavaScript and declarations', async () => {
@@ -87,4 +91,9 @@ test('compact admin identifier styles are exported and packaged', async () => {
     './dist/admin/IdentifierDisplay.css',
   )
   await access('dist/admin/IdentifierDisplay.css')
+})
+
+test('native admin layout CSS and strict list loader ship with the package', async () => {
+  await access('dist/admin/AdminPresentation.css')
+  await access('tooling/payload-list-actions.cjs')
 })

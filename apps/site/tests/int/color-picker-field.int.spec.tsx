@@ -154,9 +154,8 @@ describe('Payload color picker field', () => {
     if (!tabs || tabs.type !== 'tabs') throw new Error('Site settings tabs are missing')
 
     expect(tabs.tabs.map((tab) => tab.label)).toEqual([
-      'General',
-      'Branding',
-      'Appearance',
+      'Site',
+      'Design',
       'Archives',
       'Integrations',
       'SEO',
@@ -185,7 +184,7 @@ describe('Payload color picker field', () => {
     )
   })
 
-  it('organizes the page editor into General, Layout, and SEO tabs', async () => {
+  it('organizes native content and appearance while retaining sidebar slugs and SEO', async () => {
     const config = await payloadConfig
     const pages = config.collections?.find((collection) => collection.slug === 'pages')
     const tabs = pages?.fields.find((candidate) => candidate.type === 'tabs')
@@ -193,22 +192,29 @@ describe('Payload color picker field', () => {
     expect(tabs?.type).toBe('tabs')
     if (!tabs || tabs.type !== 'tabs') throw new Error('Page editor tabs are missing')
 
-    expect(tabs.tabs.map((tab) => tab.label)).toEqual(['General', 'Layout', 'SEO'])
-    const generalTab = tabs.tabs.find((tab) => tab.label === 'General')
-    const layoutTab = tabs.tabs.find((tab) => tab.label === 'Layout')
+    expect(tabs.tabs.map((tab) => tab.label)).toEqual(['Content', 'Appearance', 'SEO'])
+    const generalTab = tabs.tabs.find((tab) => tab.label === 'Content')
+    const layoutTab = tabs.tabs.find((tab) => tab.label === 'Appearance')
     const seoTab = tabs.tabs.find((tab) => tab.label === 'SEO')
 
-    expect(generalTab?.fields.map((field) => ('name' in field ? field.name : undefined))).toEqual([
-      'width',
-      'title',
-      'headerVariant',
-      'slug',
-    ])
+    expect(generalTab?.fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'title' }),
+        expect.objectContaining({ name: 'layout', type: 'blocks' }),
+      ]),
+    )
     expect(layoutTab?.fields).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ name: 'layout', type: 'blocks' }),
-        expect.objectContaining({ label: 'Advanced presentation', type: 'collapsible' }),
+        expect.objectContaining({ name: 'width' }),
+        expect.objectContaining({ name: 'headerVariant' }),
+        expect.objectContaining({ label: 'Advanced Presentation', type: 'collapsible' }),
       ]),
+    )
+    expect(pages?.fields).toContainEqual(
+      expect.objectContaining({
+        name: 'slug',
+        admin: expect.objectContaining({ position: 'sidebar' }),
+      }),
     )
     expect(seoTab?.fields).toEqual(
       expect.arrayContaining([
@@ -218,7 +224,9 @@ describe('Payload color picker field', () => {
     expect(pages?.fields.filter((field) => 'name' in field && field.name === 'meta')).toEqual([])
 
     const posts = config.collections?.find((collection) => collection.slug === 'posts')
-    expect(posts?.fields.some((field) => field.type === 'tabs')).toBe(false)
+    expect(posts?.fields.find((field) => field.type === 'tabs')).toMatchObject({
+      tabs: [{ label: 'Content' }, { label: 'Organization' }, { label: 'SEO' }],
+    })
     expect(Pages.fields[0]).toMatchObject({ type: 'tabs' })
   })
 })

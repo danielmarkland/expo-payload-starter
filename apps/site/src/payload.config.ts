@@ -1,3 +1,4 @@
+import { publishingAdminPresentation } from '@danielmarkland/publishing-core/adminPresentation'
 import { publishingDocumentPath } from '@danielmarkland/publishing-core/preview'
 import { createPublishingRedirectAccess } from '@danielmarkland/publishing-core/payloadCollections'
 import {
@@ -48,7 +49,14 @@ const storage = getStorageConfig()
 export default buildConfig({
   admin: {
     user: Users.slug,
-    components: { views: { login: { Component: '/components/admin/EditorLogin#EditorLogin' } } },
+    components: {
+      Nav: '/components/admin/Navigation#NativeNavigation',
+      beforeNavLinks: ['@danielmarkland/publishing-ui/admin/Navigation#PublishingNavigationLinks'],
+      views: {
+        login: { Component: '/components/admin/EditorLogin#EditorLogin' },
+        dashboard: { Component: '/components/admin/Overview#OverviewView' },
+      },
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -113,5 +121,6 @@ export default buildConfig({
       globals: ['siteSettings', 'headerNavigation', 'footerNavigation'],
       scopes: async () => ['site'],
     }),
+    publishingAdminPresentation(),
   ],
 })

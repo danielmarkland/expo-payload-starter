@@ -26,6 +26,7 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { NativeFormState as NativeFormState_f5858a3466c0f7da499517bdea384719 } from '@danielmarkland/publishing-ui/admin/UnsavedChanges'
 import { TextStateFeatureClient as TextStateFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { IconPickerField as IconPickerField_3b23affeacfd37494d6d7d4ee53ad142 } from '@/components/admin/IconPickerField'
@@ -35,7 +36,11 @@ import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloa
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { FooterEditor as FooterEditor_d2554423f3bfd41e1796534fadced437 } from '@danielmarkland/publishing-ui/admin/FooterEditor'
 import { ColorPickerField as ColorPickerField_d572ded1c017fe858839e8cdc754e090 } from '@/components/admin/ColorPickerField'
+import { NativeNavigation as NativeNavigation_f37292601ea019a6da5cd585da1e4b35 } from '../../../components/admin/Navigation'
+import { PublishingNavigationLinks as PublishingNavigationLinks_5e908e3771dd5dcb0f986b17672475c1 } from '@danielmarkland/publishing-ui/admin/Navigation'
+import { UnsavedChangesProvider as UnsavedChangesProvider_f5858a3466c0f7da499517bdea384719 } from '@danielmarkland/publishing-ui/admin/UnsavedChanges'
 import { EditorLogin as EditorLogin_4d39043e195844b799a4c5b421cc0382 } from '../../../components/admin/EditorLogin'
+import { OverviewView as OverviewView_50056eb966237e51038cb651e847dbf5 } from '../../../components/admin/Overview'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 
@@ -69,6 +74,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@danielmarkland/publishing-ui/admin/UnsavedChanges#NativeFormState": NativeFormState_f5858a3466c0f7da499517bdea384719,
   "@payloadcms/richtext-lexical/client#TextStateFeatureClient": TextStateFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/components/admin/IconPickerField#IconPickerField": IconPickerField_3b23affeacfd37494d6d7d4ee53ad142,
@@ -78,7 +84,11 @@ export const importMap = {
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "@danielmarkland/publishing-ui/admin/FooterEditor#FooterEditor": FooterEditor_d2554423f3bfd41e1796534fadced437,
   "@/components/admin/ColorPickerField#ColorPickerField": ColorPickerField_d572ded1c017fe858839e8cdc754e090,
+  "/components/admin/Navigation#NativeNavigation": NativeNavigation_f37292601ea019a6da5cd585da1e4b35,
+  "@danielmarkland/publishing-ui/admin/Navigation#PublishingNavigationLinks": PublishingNavigationLinks_5e908e3771dd5dcb0f986b17672475c1,
+  "@danielmarkland/publishing-ui/admin/UnsavedChanges#UnsavedChangesProvider": UnsavedChangesProvider_f5858a3466c0f7da499517bdea384719,
   "/components/admin/EditorLogin#EditorLogin": EditorLogin_4d39043e195844b799a4c5b421cc0382,
+  "/components/admin/Overview#OverviewView": OverviewView_50056eb966237e51038cb651e847dbf5,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24
 }

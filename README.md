@@ -730,3 +730,5 @@ The shared footer builder replaces fixed CTA/newsletter/footer presets with any 
 
 Record noteworthy implemented changes in [CHANGELOG.md](CHANGELOG.md). Follow
 the [release runbook](docs/release-runbook.md) for release preparation and approval.
+
+Reusable native Payload admin presentation is exported from `publishing-core/adminPresentation`; hosts register its plugin after schema-producing plugins and import `publishing-ui/admin/AdminPresentation.css`. Hosting services and authorization remain host-owned.

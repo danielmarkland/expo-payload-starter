@@ -1,0 +1,323 @@
+/* Shared native block settings: preserve touch height; compact widths only. */
+.field-type.row.compact-settings-row > .row__fields {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+  margin-inline: 0 !important;
+}
+.field-type.row.compact-settings-row > .row__fields > * {
+  min-width: 0;
+  width: auto !important;
+  margin-inline: 0 !important;
+  padding-inline: 0;
+}
+
+.field-type.row.compact-settings-row--numbers > .row__fields {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 360px) {
+  .field-type.row.compact-settings-row--numbers > .row__fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* Nested native arrays/blocks must not consume the phone's usable field width. */
+@media (max-width: 700px) {
+  .compact-block-settings .collapsible__content {
+    padding-inline: 0.375rem !important;
+  }
+}
+/* Keep existing controls; remove duplicate field/row spacing and palette overflow. */
+.compact-settings-row > .row__fields > .field-type {
+  margin-bottom: 0;
+}
+
+.compact-palette-row .color-picker-field__control {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 700px) {
+  .payload-settings {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+  .payload-settings::before,
+  .payload-settings::after {
+    width: calc(100% + var(--gutter-h) * 2);
+  }
+  .doc-controls__meta {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+  .compact-appearance-panel > .collapsible__content {
+    padding-bottom: 0.75rem;
+  }
+  .compact-appearance-panel .checkbox {
+    margin-bottom: 0;
+    padding-top: 1.5rem;
+  }
+}
+/* Mobile navigation overlays the editor instead of taking a grid column.
+   Dynamic viewport units track Safari's expanding/collapsing browser chrome. */
+@media (max-width: 768px) {
+  .template-default.template-default--nav-hydrated {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .template-default > .nav {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    z-index: calc(var(--z-modal) + 1);
+    visibility: hidden;
+    pointer-events: none;
+    border-inline: 0;
+    background: var(--theme-bg);
+  }
+  .template-default > .nav--nav-open {
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .nav__scroll {
+    min-height: 0;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: max(
+      var(--nav-padding-block-end),
+      env(safe-area-inset-bottom)
+    );
+  }
+  .nav__header {
+    inset-inline: 0;
+    width: 100%;
+    padding-inline: var(--gutter-h);
+    background: var(--theme-bg);
+    z-index: 1;
+  }
+  body:has(.template-default > .nav--nav-open) {
+    overflow: hidden;
+  }
+}
+/* Shared compact page headers; actions wrap below the title on phones. */
+.tenant-overview > :first-child,
+.collection-edit > .document-header {
+  padding-top: 0.5rem;
+}
+
+.admin-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+.admin-page-header > div:first-child {
+  flex: 1 1 20rem;
+  min-width: 0;
+}
+.admin-page-header__hint {
+  margin: 0.25rem 0 0;
+  color: var(--theme-elevation-500);
+}
+
+.admin-page-header > .page-actions {
+  flex: 0 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+@media (max-width: 700px) {
+  .admin-page-header > .page-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+/* Reposition Payload's existing list actions; preserve its permissions and URLs. */
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header) {
+  /* Same native Button tokens as medium secondary PageActions buttons. */
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__content {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__title-and-actions {
+  display: contents;
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__title {
+  grid-column: 1;
+  grid-row: 1;
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__title-actions {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__title-actions
+  .list-create-new-doc__create-new-button {
+  order: 1;
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__actions {
+  grid-column: 2;
+  grid-row: 1;
+  margin-bottom: 0;
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__actions:empty {
+  display: none;
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__title-actions
+  .btn:not(.btn--icon-only):not(.list-create-new-doc__create-new-button),
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__actions
+  .btn:not(.btn--icon-only) {
+  --color: var(--theme-text);
+  --bg-color: transparent;
+  --btn-border: 1px solid var(--theme-elevation-800);
+  --hover-color: var(--theme-elevation-600);
+  --hover-bg: transparent;
+  --hover-btn-border: 1px solid var(--theme-elevation-400);
+  --btn-padding-block-start: calc(var(--base) * 0.2);
+  --btn-padding-block-end: calc(var(--base) * 0.2);
+  --btn-padding-inline-start: calc(var(--base) * 0.6);
+  --btn-padding-inline-end: calc(var(--base) * 0.6);
+}
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__title-actions
+  .btn:not(.btn--icon-only):not(
+    .list-create-new-doc__create-new-button
+  ).btn--disabled,
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__title-actions
+  .btn:not(.btn--icon-only):not(
+    .list-create-new-doc__create-new-button
+  ):disabled,
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__actions
+  .btn:not(.btn--icon-only).btn--disabled,
+.collection-list
+  > .collection-list__wrap
+  > .list-header:not(.list-drawer__header)
+  .list-header__actions
+  .btn:not(.btn--icon-only):disabled {
+  --color: var(--theme-elevation-200);
+  --btn-border: 1px solid var(--theme-elevation-200);
+  --hover-color: var(--color);
+  --hover-btn-border: var(--btn-border);
+}
+@media (max-width: 700px) {
+  .collection-list
+    > .collection-list__wrap
+    > .list-header:not(.list-drawer__header)
+    .list-header__content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .collection-list
+    > .collection-list__wrap
+    > .list-header:not(.list-drawer__header)
+    .list-header__title-actions {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    justify-content: flex-start;
+  }
+  .collection-list
+    > .collection-list__wrap
+    > .list-header:not(.list-drawer__header)
+    .list-header__actions {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}
+
+/* Native Button tokens for consequential actions; keep native focus/disabled behavior. */
+.admin-danger-action.btn,
+.admin-danger-confirmation #confirm-action {
+  --color: var(--theme-error-750);
+  --bg-color: transparent;
+  --btn-border: 1px solid var(--theme-error-500);
+  --hover-color: var(--theme-error-900);
+  --hover-bg: var(--theme-error-100);
+  --hover-btn-border: 1px solid var(--theme-error-750);
+}
+.admin-danger-action.btn.btn--disabled,
+.admin-danger-action.btn:disabled,
+.admin-danger-confirmation #confirm-action.btn--disabled,
+.admin-danger-confirmation #confirm-action:disabled {
+  --color: var(--theme-elevation-400);
+  --btn-border: 1px solid var(--theme-elevation-250);
+  --hover-color: var(--color);
+  --hover-bg: transparent;
+  --hover-btn-border: var(--btn-border);
+}
+
+/* An empty native sidebar must not leave an extra gutter inside tab content. */
+.document-fields--has-sidebar:has(
+    .document-fields__sidebar-wrap
+      .document-fields__sidebar-fields
+      > .render-fields:empty
+  )
+  .document-fields__fields
+  > .tabs-field {
+  margin-right: calc(var(--gutter-h) * -1);
+}
+
+.overview section {
+  margin-top: calc(var(--base) * 1.5);
+}
+.overview .table,
+.forms-view .table {
+  overflow-x: auto;
+}
+.forms-view__drawer {
+  max-width: 50rem;
+  padding-bottom: 3rem;
+}
+.forms-view__drawer > *,
+.forms-view__drawer form > * {
+  margin-bottom: var(--base);
+}
