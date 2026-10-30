@@ -58,7 +58,7 @@ test.describe('Admin Panel', () => {
     await expect(seoTitle).toBeHidden()
     await page.getByRole('button', { exact: true, name: 'Design' }).click()
     await page
-      .locator('.collapsible__header')
+      .locator('.collapsible__toggle-wrap')
       .filter({ hasText: 'Palettes' })
       .getByRole('button', { name: 'Toggle block', exact: true })
       .click()
