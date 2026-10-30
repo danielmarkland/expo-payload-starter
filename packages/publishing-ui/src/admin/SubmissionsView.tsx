@@ -3,7 +3,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import {
   Button,
-  Drawer,
   Pill,
   SelectInput,
   TextareaInput,
@@ -12,7 +11,7 @@ import {
 } from '@payloadcms/ui'
 import { RefreshCw, Save } from 'lucide-react'
 import { AdminDate } from './AdminDate.js'
-import { useUnsavedForm } from './UnsavedChanges.js'
+import { useUnsavedForm, WorkflowDrawer as Drawer } from './UnsavedChanges.js'
 
 type Submission = {
   id: string
@@ -57,10 +56,13 @@ export function SubmissionsView<T extends Submission>({
     (form) =>
       form.id === selected?.formId && form.version === selected.formVersion,
   )
-  useUnsavedForm(
-    Boolean(modalState['submission-review']?.isOpen) &&
-      Boolean(selected && (message || status !== selected.status)),
+  const reviewModified = Boolean(
+    selected && (message || status !== selected.status),
   )
+  useUnsavedForm(
+    Boolean(modalState['submission-review']?.isOpen) && reviewModified,
+  )
+
   async function refresh() {
     setBusy(true)
     setError('')
@@ -197,7 +199,15 @@ export function SubmissionsView<T extends Submission>({
           Next
         </Button>
       </div>
-      <Drawer slug="submission-review" title="Review Submission">
+      <Drawer
+        slug="submission-review"
+        title="Review Submission"
+        modified={reviewModified}
+        onDiscard={() => {
+          setMessage('')
+          setStatus(selected?.status || '')
+        }}
+      >
         {selected && (
           <div className="submissions-view__review">
             <h2>
@@ -279,6 +289,7 @@ export function SubmissionsView<T extends Submission>({
                 <Button
                   buttonStyle="secondary"
                   disabled={busy}
+                  id="close-drawer__submission-review"
                   onClick={() => closeModal('submission-review')}
                 >
                   Close

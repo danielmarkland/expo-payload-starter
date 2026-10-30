@@ -5,7 +5,6 @@ import {
   Button,
   CheckboxInput,
   ConfirmationModal,
-  Drawer,
   Pill,
   TextInput,
   TextareaInput,
@@ -13,7 +12,7 @@ import {
 } from '@payloadcms/ui'
 import { Save } from 'lucide-react'
 import { PageActions } from './PageActions.js'
-import { useUnsavedForm } from './UnsavedChanges.js'
+import { useUnsavedForm, WorkflowDrawer as Drawer } from './UnsavedChanges.js'
 
 type Definition = {
   id: string
@@ -45,10 +44,11 @@ export function FormsView<T extends Definition>({
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
   const [savedDefinition, setSavedDefinition] = useState('')
-  useUnsavedForm(
-    Boolean(modalState['form-editor']?.isOpen) &&
-      (editing ? definition !== savedDefinition : Boolean(id || title)),
-  )
+  const editorModified = editing
+    ? definition !== savedDefinition
+    : Boolean(id || title)
+  useUnsavedForm(Boolean(modalState['form-editor']?.isOpen) && editorModified)
+
   async function save(nextEnabled: boolean, nextForms: T[], drawer: string) {
     setBusy(true)
     setError('')
@@ -171,6 +171,12 @@ export function FormsView<T extends Definition>({
       )}
       <Drawer
         slug="form-editor"
+        modified={editorModified}
+        onDiscard={() => {
+          setDefinition(savedDefinition)
+          setID('')
+          setTitle('')
+        }}
         title={editing ? 'New Form Version' : 'New Form'}
       >
         <div className="forms-view__drawer">
@@ -243,6 +249,7 @@ export function FormsView<T extends Definition>({
               <Button
                 buttonStyle="secondary"
                 disabled={busy}
+                id="close-drawer__form-editor"
                 onClick={() => closeModal('form-editor')}
               >
                 Cancel

@@ -7,16 +7,25 @@ import {
   useRef,
   useState,
   type ReactNode,
+  type ComponentProps,
+  type SyntheticEvent,
 } from 'react'
 import {
   ConfirmationModal,
+  Drawer as NativeDrawer,
   useModal,
   useForm,
   useFormModified,
 } from '@payloadcms/ui'
 import { flushSync } from 'react-dom'
 
-type Entry = { modified: boolean; workflow?: boolean; discard: () => void }
+type Entry = {
+  modified: boolean
+  workflow?: boolean
+  drawer?: string
+  discard: () => void
+}
+const DrawerScope = createContext<string | undefined>(undefined)
 const Context = createContext<Map<symbol, Entry> | null>(null)
 
 export function UnsavedChangesProvider({ children }: { children: ReactNode }) {
@@ -92,6 +101,7 @@ export function useUnsavedChanges() {
 /** Custom workflow forms participate in scope switching and browser unloads. */
 export function useUnsavedForm(modified: boolean) {
   const entries = useContext(Context)
+  const drawer = useContext(DrawerScope)
   const token = useRef(Symbol('workflow-form'))
   const bypass = useRef(false)
   useEffect(() => {
@@ -100,6 +110,7 @@ export function useUnsavedForm(modified: boolean) {
     entries?.set(key, {
       modified,
       workflow: true,
+      drawer,
       discard: () => {
         bypass.current = true
         entries?.delete(key)
@@ -116,7 +127,7 @@ export function useUnsavedForm(modified: boolean) {
       entries?.delete(key)
       window.removeEventListener('beforeunload', unload)
     }
-  }, [entries, modified])
+  }, [entries, modified, drawer])
 }
 
 /** Register inside the native form, which is outside the header's React subtree. */
@@ -133,4 +144,72 @@ export function NativeFormState() {
     }
   }, [entries, modified, setModified])
   return null
+}
+
+/** Keep Payload's native drawer and modal behavior, guarding destructive dismissals. */
+export function WorkflowDrawer({
+  modified = false,
+  onDiscard,
+  children,
+  ...props
+}: ComponentProps<typeof NativeDrawer> & {
+  modified?: boolean
+  onDiscard?: () => void
+}) {
+  const entries = useContext(Context)
+  const { openModal, closeModal, modalState } = useModal()
+  const confirmation = `discard-workflow-drawer-${props.slug}`
+  function requestClose(event: SyntheticEvent) {
+    if (
+      !modified &&
+      ![...(entries?.values() ?? [])].some(
+        (entry) =>
+          entry.workflow && entry.drawer === props.slug && entry.modified,
+      )
+    )
+      return
+    event.preventDefault()
+    event.stopPropagation()
+    openModal(confirmation)
+  }
+  return (
+    <DrawerScope.Provider value={props.slug}>
+      <div
+        onClickCapture={(event) => {
+          const button =
+            event.target instanceof Element
+              ? event.target.closest('button')
+              : null
+          if (button?.id === `close-drawer__${props.slug}`) requestClose(event)
+        }}
+        onKeyDownCapture={(event) => {
+          const owner =
+            event.target instanceof Element
+              ? event.target.closest('.drawer')
+              : null
+          if (
+            event.key === 'Escape' &&
+            owner?.id === props.slug &&
+            !modalState[confirmation]?.isOpen
+          )
+            requestClose(event)
+        }}
+      >
+        <NativeDrawer {...props}>{children}</NativeDrawer>
+        <ConfirmationModal
+          modalSlug={confirmation}
+          heading="Discard Unsaved Changes?"
+          body="Close this drawer and discard changes that have not been saved?"
+          cancelLabel="Keep Editing"
+          confirmLabel="Discard Changes"
+          onCancel={() => closeModal(confirmation)}
+          onConfirm={() => {
+            closeModal(confirmation)
+            onDiscard?.()
+            closeModal(props.slug)
+          }}
+        />
+      </div>
+    </DrawerScope.Provider>
+  )
 }

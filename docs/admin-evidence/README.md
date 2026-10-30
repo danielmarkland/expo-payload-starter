@@ -20,7 +20,7 @@ made. The Mac subsequently locked, ending native UI automation.
 ## Automated verification
 
 `pnpm check` passed in the standalone starter before the evidence-only updates.
-The publishing core has 104 passing tests and publishing UI has 108 passing
+The publishing core has 104 passing tests and publishing UI has 111 passing
 tests. The standalone site has 90 passing tests and one skipped test. Seven
 package archive/entry-point checks pass. Production Next.js and Expo web builds
 pass. Optional identity-provider tests remain skipped without their test database.
@@ -28,7 +28,7 @@ pass. Optional identity-provider tests remain skipped without their test databas
 Shared tests cover exact persisted paths and schema callbacks, unknown/custom
 field preservation, navigation, scoped overview reads, immutable form definition
 updates, pinned submission versions/review revisions, native dirty-state
-registration, workflow navigation/unload protection, and the guarded list-action
+registration, workflow navigation/unload protection, drawer-close/Escape cancellation and discard, and the guarded list-action
 integration against the pinned native UI bundle.
 
 Portable archive validation now compares structured state independently of
