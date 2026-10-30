@@ -28,4 +28,8 @@ it('runs every summary query through native access with the original scoped requ
       depth: 0,
     })
   expect(summary.drafts.map((item) => item.count)).toEqual([2, 2])
+  for (const item of summary.drafts) {
+    const destination = new URL(item.href, 'https://admin.example.test')
+    expect(destination.searchParams.get('where[_status][equals]')).toBe('draft')
+  }
 })

@@ -1,5 +1,18 @@
 # @danielmarkland/publishing-ui
 
+## 0.13.0
+
+### Minor Changes
+
+- 7fdcd4b: Add reusable native Payload admin presentation and shared layout controls from the reviewed Admin-Mock reference, preserving publishing field paths and behavior.
+
+  Keep portable archive validation independent of presentation field order without relaxing content or relationship validation.
+
+### Patch Changes
+
+- Updated dependencies [7fdcd4b]
+  - @danielmarkland/publishing-core@0.17.0
+
 ## 0.12.5
 
 ### Patch Changes

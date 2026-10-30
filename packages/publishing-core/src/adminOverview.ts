@@ -30,7 +30,7 @@ export async function publishingOverview(req: PayloadRequest) {
         draft: {
           label: slug === 'posts' ? 'Posts' : 'Pages',
           count: drafts.totalDocs,
-          href: `/admin/collections/${slug}`,
+          href: `/admin/collections/${slug}?${new URLSearchParams({ 'where[_status][equals]': 'draft' })}`,
         },
         recent: recent.docs.map((doc) => ({
           id: String(doc.id),
