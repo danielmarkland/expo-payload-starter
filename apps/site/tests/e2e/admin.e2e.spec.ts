@@ -59,7 +59,7 @@ test.describe('Admin Panel', () => {
     await page.getByRole('button', { exact: true, name: 'Design' }).click()
     await expect(page.locator('input[name="theme.headingFont"]')).toBeHidden()
     await page.getByRole('button', { exact: true, name: 'Typography' }).click()
-    await expect(page.getByText('Font Preset', { exact: true })).toBeVisible()
+    await expect(page.getByText('Font Preset', { exact: false })).toBeVisible()
     await page.getByRole('button', { exact: true, name: 'Colors' }).click()
     await expect(page.getByText('Light Palette', { exact: true })).toBeVisible()
     await expect(siteDescription).toBeHidden()

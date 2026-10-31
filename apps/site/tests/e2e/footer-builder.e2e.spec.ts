@@ -112,15 +112,15 @@ test.describe('Visual footer builder', () => {
       'aria-label',
       'Second area',
     )
-    await editor.getByRole('button', { name: 'Mobile layout', exact: true }).click()
+    await editor.getByRole('button', { name: 'Mobile Layout', exact: true }).click()
     await expect(editor.locator('.footer-editor__board--mobile')).toBeVisible()
     await expect(editor.locator('.footer-editor__columns').last()).toHaveCSS(
       'grid-template-columns',
       /^\d+(\.\d+)?px$/,
     )
-    await editor.getByRole('button', { name: 'Desktop layout', exact: true }).click()
+    await editor.getByRole('button', { name: 'Desktop Layout', exact: true }).click()
     for (let i = 0; i < 4; i++) {
-      await editor.getByRole('button', { name: 'Add content area', exact: true }).click()
+      await editor.getByRole('button', { name: 'Add Content Area', exact: true }).click()
       await expect(editor.locator('.footer-editor__area')).toHaveCount(i + 3)
     }
     await removal(
@@ -171,10 +171,10 @@ test.describe('Visual footer builder', () => {
       'Remove this content area and all of its blocks?',
     )
     await expect(editor.locator('.footer-editor__area')).toHaveCount(5)
-    await editor.getByRole('button', { name: 'Add content area', exact: true }).click()
+    await editor.getByRole('button', { name: 'Add Content Area', exact: true }).click()
     await expect(editor.locator('.footer-editor__area')).toHaveCount(6)
     await expect(
-      editor.getByRole('button', { name: 'Add content area', exact: true }),
+      editor.getByRole('button', { name: 'Add Content Area', exact: true }),
     ).toBeEnabled()
     const saved = page.waitForResponse(
       (response) =>
