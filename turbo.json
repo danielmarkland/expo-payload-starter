@@ -52,6 +52,10 @@
     "@starter/site#test": {
       "dependsOn": ["^build"],
       "cache": false
+    },
+    "@starter/site#build": {
+      "dependsOn": ["^build"],
+      "cache": false
     }
   }
 }

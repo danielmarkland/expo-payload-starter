@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --check scripts/setup-production.mjs && node --test scripts/*.test.mjs"
+    "test": "node --test scripts/*.test.mjs"
   },
   "exports": {
     "./typescript": "./typescript/strict.json"

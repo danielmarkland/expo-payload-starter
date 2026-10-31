@@ -19,6 +19,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import {
+  Button,
   ConfirmationModal,
   RenderFields,
   useModal,
@@ -300,40 +301,52 @@ export function FooterEditor({
       aria-busy={busy}
     >
       <div className="footer-editor__toolbar">
-        <h3>Footer content areas</h3>
-        <button
-          type="button"
-          aria-pressed={mobile}
-          onClick={() => setMobile(!mobile)}
-        >
-          {mobile ? 'Desktop layout' : 'Mobile layout'}
-        </button>
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={() => {
-            const id = uid()
-            void update([
-              ...areas,
-              {
-                id,
-                title: `Area ${areas.length + 1}`,
-                appearance: { paddingTop: 'md', paddingBottom: 'md' },
-                columns: [{ id: uid(), alignment: 'start', blocks: [] }],
-              },
-            ])
-            setSelection({ kind: 'area', id })
-          }}
-        >
-          Add content area
-        </button>
+        <div>
+          <h3>Footer Layout</h3>
+          <p className="footer-editor__hint">
+            Arrange areas, columns and blocks. Save the footer to apply your
+            changes.
+          </p>
+        </div>
+        <div className="footer-editor__actions">
+          {areas.length > 0 && (
+            <Button
+              type="button"
+              buttonStyle="secondary"
+              margin={false}
+              extraButtonProps={{ 'aria-pressed': mobile }}
+              onClick={() => setMobile(!mobile)}
+            >
+              {mobile ? 'Desktop Layout' : 'Mobile Layout'}
+            </Button>
+          )}
+          <Button
+            type="button"
+            margin={false}
+            icon="plus"
+            disabled={disabled}
+            onClick={() => {
+              const id = uid()
+              void update([
+                ...areas,
+                {
+                  id,
+                  title: `Area ${areas.length + 1}`,
+                  appearance: { paddingTop: 'md', paddingBottom: 'md' },
+                  columns: [{ id: uid(), alignment: 'start', blocks: [] }],
+                },
+              ])
+              setSelection({ kind: 'area', id })
+            }}
+          >
+            Add Content Area
+          </Button>
+        </div>
       </div>
-      <p>
-        Add areas and columns, then drag blocks into position. Select a block to
-        edit its settings. Save the document to publish your changes.
-      </p>
       {error ? <p role="alert">{error}</p> : null}
-      <div className="footer-editor__workspace">
+      <div
+        className={`footer-editor__workspace${areas.length ? '' : ' footer-editor__workspace--empty'}`}
+      >
         <DndContext
           id={dragContextId}
           sensors={sensors}
@@ -344,7 +357,10 @@ export function FooterEditor({
             className={`footer-editor__board${mobile ? ' footer-editor__board--mobile' : ''}`}
           >
             {areas.length === 0 ? (
-              <p>No footer content areas. Add one to begin.</p>
+              <div className="footer-editor__empty-state">
+                <h4>No content areas yet</h4>
+                <p>Add a content area to start building your footer.</p>
+              </div>
             ) : null}
             {areas.map((area, ai) => (
               <section
@@ -533,114 +549,116 @@ export function FooterEditor({
             ))}
           </div>
         </DndContext>
-        <aside
-          className="footer-editor__settings"
-          aria-label="Footer component settings"
-        >
-          {panel ? (
-            <>
-              <h3>{panel.title}</h3>
-              {selection?.kind === 'block' ? (
-                <div className="footer-editor__block-tools">
-                  <label>
-                    Move to column
-                    <select
-                      aria-label="Move selected block to column"
+        {areas.length > 0 && (
+          <aside
+            className="footer-editor__settings"
+            aria-label="Footer component settings"
+          >
+            {panel ? (
+              <>
+                <h3>{panel.title}</h3>
+                {selection?.kind === 'block' ? (
+                  <div className="footer-editor__block-tools">
+                    <label>
+                      Move to column
+                      <select
+                        aria-label="Move selected block to column"
+                        disabled={disabled}
+                        value={
+                          allColumns.find(({ column }) =>
+                            column.blocks?.some((b) => b.id === selection.id),
+                          )?.column.id || ''
+                        }
+                        onChange={(event) =>
+                          void update(
+                            moveFooterBlock(
+                              areas,
+                              selection.id,
+                              event.target.value,
+                            ),
+                          )
+                        }
+                      >
+                        {allColumns.map(({ column, label: columnLabel }) => (
+                          <option key={column.id} value={column.id!}>
+                            {columnLabel}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <button
+                      type="button"
                       disabled={disabled}
-                      value={
-                        allColumns.find(({ column }) =>
-                          column.blocks?.some((b) => b.id === selection.id),
-                        )?.column.id || ''
-                      }
-                      onChange={(event) =>
-                        void update(
-                          moveFooterBlock(
-                            areas,
-                            selection.id,
-                            event.target.value,
-                          ),
-                        )
+                      onClick={() =>
+                        change((next) => {
+                          for (const area of next)
+                            for (const column of area.columns) {
+                              const index =
+                                column.blocks?.findIndex(
+                                  (b) => b.id === selection.id,
+                                ) ?? -1
+                              if (index >= 0) reorder(column.blocks!, index, -1)
+                            }
+                        })
                       }
                     >
-                      {allColumns.map(({ column, label: columnLabel }) => (
-                        <option key={column.id} value={column.id!}>
-                          {columnLabel}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <button
-                    type="button"
-                    disabled={disabled}
-                    onClick={() =>
-                      change((next) => {
-                        for (const area of next)
-                          for (const column of area.columns) {
-                            const index =
-                              column.blocks?.findIndex(
-                                (b) => b.id === selection.id,
-                              ) ?? -1
-                            if (index >= 0) reorder(column.blocks!, index, -1)
-                          }
-                      })
-                    }
-                  >
-                    Move block up
-                  </button>
-                  <button
-                    type="button"
-                    disabled={disabled}
-                    onClick={() =>
-                      change((next) => {
-                        for (const area of next)
-                          for (const column of area.columns) {
-                            const index =
-                              column.blocks?.findIndex(
-                                (b) => b.id === selection.id,
-                              ) ?? -1
-                            if (index >= 0) reorder(column.blocks!, index, 1)
-                          }
-                      })
-                    }
-                  >
-                    Move block down
-                  </button>
-                  <button
-                    type="button"
-                    disabled={disabled}
-                    onClick={() => {
-                      confirmRemoval('Remove this block?', async () => {
-                        await change((next) => {
+                      Move block up
+                    </button>
+                    <button
+                      type="button"
+                      disabled={disabled}
+                      onClick={() =>
+                        change((next) => {
                           for (const area of next)
-                            for (const column of area.columns)
-                              column.blocks = column.blocks?.filter(
-                                (b) => b.id !== selection.id,
-                              )
+                            for (const column of area.columns) {
+                              const index =
+                                column.blocks?.findIndex(
+                                  (b) => b.id === selection.id,
+                                ) ?? -1
+                              if (index >= 0) reorder(column.blocks!, index, 1)
+                            }
                         })
-                        setSelection(null)
-                      })
-                    }}
-                  >
-                    Remove block
-                  </button>
-                </div>
-              ) : null}
-              <fieldset disabled={disabled}>
-                <RenderFields
-                  key={panel.path}
-                  fields={panel.fields}
-                  parentPath={panel.path}
-                  parentSchemaPath={panel.schema}
-                  parentIndexPath=""
-                  permissions={panel.permissions ?? {}}
-                  readOnly={disabled}
-                />
-              </fieldset>
-            </>
-          ) : (
-            <p>Select an area, column, or block to edit its settings.</p>
-          )}
-        </aside>
+                      }
+                    >
+                      Move block down
+                    </button>
+                    <button
+                      type="button"
+                      disabled={disabled}
+                      onClick={() => {
+                        confirmRemoval('Remove this block?', async () => {
+                          await change((next) => {
+                            for (const area of next)
+                              for (const column of area.columns)
+                                column.blocks = column.blocks?.filter(
+                                  (b) => b.id !== selection.id,
+                                )
+                          })
+                          setSelection(null)
+                        })
+                      }}
+                    >
+                      Remove block
+                    </button>
+                  </div>
+                ) : null}
+                <fieldset disabled={disabled}>
+                  <RenderFields
+                    key={panel.path}
+                    fields={panel.fields}
+                    parentPath={panel.path}
+                    parentSchemaPath={panel.schema}
+                    parentIndexPath=""
+                    permissions={panel.permissions ?? {}}
+                    readOnly={disabled}
+                  />
+                </fieldset>
+              </>
+            ) : (
+              <p>Select an area, column, or block to edit its settings.</p>
+            )}
+          </aside>
+        )}
       </div>
       <ConfirmationModal
         modalSlug={removalSlug}

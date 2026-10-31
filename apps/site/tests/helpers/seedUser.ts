@@ -1,5 +1,6 @@
 import { getPayload } from 'payload'
 import config from '../../src/payload.config.js'
+import { createSEOMetadata } from './seo.js'
 import { identityServer, identityDatabase } from '../../src/lib/identity/server.js'
 
 export const testUser = {
@@ -19,6 +20,13 @@ export async function seedTestUser(): Promise<void> {
   )
     throw Error('Editorial browser fixtures require a dedicated local test database')
   const payload = await getPayload({ config })
+
+  // These globals belong exclusively to the guarded disposable browser database.
+  const settings = await payload.findGlobal({ slug: 'siteSettings', depth: 0 })
+  if (!settings.meta?.title || !settings.meta.description || !settings.meta.image) {
+    const meta = await createSEOMetadata(payload, 'Editor acceptance')
+    await payload.updateGlobal({ slug: 'siteSettings', data: { meta } })
+  }
 
   // Delete existing test user if any
   await payload.delete({

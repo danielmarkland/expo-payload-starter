@@ -2,6 +2,24 @@
 
 Shared Next.js publishing components and Payload admin controls.
 
+`AdminPresentation.css` sets consistent native admin gutters, document/header spacing, action groups and compact upload dropzones, with 44px upload button targets on phones and touchscreens. It applies to native create/edit screens and shared workflows; minimal login layouts retain their separate presentation.
+
+Native upload editors with an Alt field place the file control and metadata in equal desktop columns, stacking below 600px of available editor width. File selection, URL upload, previews, replacement and validation remain native.
+
+The same minimal dropzone height, padding and secondary actions apply to native upload relationship fields throughout the admin, including Authors, branding, nested blocks and drawers. Existing selected-file cards and unstyled dropzones keep their native presentation.
+
+Native SEO rows use aligned headers/inputs and compact guidance. Auto-generate buttons are hidden from the SEO controls by request; manual editing, validation and native generation endpoints remain intact. Individual missing/count/progress strips are hidden by request; native validation errors and the overview/preview remain available. `admin/SEOMetaImageLabel` retains the native localized label/required marker and adds sharing-image guidance. SEO styles are scoped to rows composed by the shared plugin.
+
+Editorial field pairs use native Payload rows from `publishingAdminPresentation` and adapt to the editor's available width. Native image/file actions share the small secondary action appearance, including disabled states; their original drawers, permissions and upload behavior remain native.
+
+Use `admin/AdminFieldGrid` for related short controls in manually composed workflow forms, including service credentials and creation drawers. Place editors, uploads, tables, notices and action groups outside it. It shares the native rows' 600px available-width breakpoint. Do not duplicate form grids in individual hosts or force every field type into columns.
+
+Native collection lists keep creation in the header and hide duplicate empty-state create actions when that header action is available.
+
+Forms separates submission status from the form list and keeps creation/settings actions in the header. Hosts may supply `documentationURL` to show API documentation under Advanced.
+
+The footer editor starts with a full-width empty state, then exposes its layout board and native field inspector once content areas exist. Builder styles are scoped to its own controls.
+
 Public components consume publishing contracts and never fetch application data.
 Applications load content and pass it to `PostList` and `LatestPostsSection`.
 `SiteBrand` receives explicit identity values. `SiteHeader` receives rendered
@@ -103,3 +121,17 @@ authorized asynchronous jobs, errors and a busy flag; `onImport` resolves `true`
 only when upload/finalization succeeds, keeping the drawer open after failure. Theme
 packages contain visual settings only. The host renders the resulting preview,
 destination confirmation, progress and recovery actions.
+
+All native admin `.table` lists share compact cell padding and centered content. Buttons have no outside margins inside cells, preventing oversized rows across Services, Domains, Customers, Tenants, Overview, Forms, Submissions, native collections and Build History. Narrow/coarse-pointer table actions retain 44px touch targets. Page header titles and direct actions also discard native outside margins.
+
+Mixed native checkbox/input rows reserve the neighbouring field label's space and center the checkbox in the native input-height band. This applies to Header Sticky and other mixed shared rows; checkbox-only rows and stacked narrow editors retain native alignment.
+
+Top-level native groups use the same unboxed field flow as other editors, without full-width divider borders, negative gutters or section padding. Consecutive top-level groups retain a standard section gap. Named groups and native headings/errors remain intact; nested grouping and explicit collapsible/editor chrome retain their own presentation.
+
+Workflow pages can use `admin-workflow-page`, `admin-workflow-help` and the shared field-grid control/action slots for a half-width input with an adjacent compact action. Detail drawers use the shared unbulleted detail-list and action spacing, keeping native controls and tables.
+
+`admin/ThemeSection` renders the original Site Settings theme fields inside separate main-row tabs using native GroupField controls. It resolves the canonical schema path and field permissions, preserves every field index/custom component, respects document locks/read-only state, and hides unrelated fields only in the rendered client configuration. The server schema retains one theme group.
+
+Site Settings palette rows use four equal columns in editor containers at least 900px wide, two at 600–899px, and one below 600px. Swatch controls and native field paths stay unchanged.
+
+Native workflow page and drawer action groups retain 44px minimum button heights on narrow screens and coarse pointers, matching native table actions. Desktop compact sizes remain unchanged.

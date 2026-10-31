@@ -1,5 +1,11 @@
 # @danielmarkland/publishing-core
 
+## 0.18.0
+
+### Minor Changes
+
+- Apply the reviewed native admin layouts, focused Site Settings tabs, required manual SEO metadata, compact uploads and workflow actions while preserving native field paths and permissions.
+
 ## 0.17.0
 
 ### Minor Changes

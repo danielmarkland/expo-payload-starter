@@ -58,7 +58,6 @@
   }
   .compact-appearance-panel .checkbox {
     margin-bottom: 0;
-    padding-top: 1.5rem;
   }
 }
 /* Mobile navigation overlays the editor instead of taking a grid column.
@@ -103,9 +102,303 @@
     overflow: hidden;
   }
 }
-/* Shared compact page headers; actions wrap below the title on phones. */
-.tenant-overview > :first-child,
-.collection-edit > .document-header {
+/* Named groups preserve stored paths; they are not separate bordered pages.
+   Native row spacing and group headings provide the shared editor hierarchy. */
+.group-field.group-field--top-level {
+  border-block: 0;
+  margin: 0;
+  padding: 0;
+}
+/* Consecutive named settings groups retain a normal section gap. */
+.group-field.group-field--top-level + .group-field.group-field--top-level {
+  margin-top: var(--base);
+}
+/* One density for native screens: align breadcrumbs, titles, controls and fields. */
+.field-type.row.compact-editor-row,
+.field-type.row.compact-settings-row:not(.compact-settings-row--numbers),
+.admin-field-grid {
+  container-type: inline-size;
+}
+.field-type.row.compact-editor-row > .row__fields,
+.field-type.row.compact-settings-row:not(.compact-settings-row--numbers)
+  > .row__fields,
+.admin-field-grid__fields {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--base);
+  margin-inline: 0;
+}
+.field-type.row.compact-editor-row > .row__fields > *,
+.field-type.row.compact-settings-row:not(.compact-settings-row--numbers)
+  > .row__fields
+  > *,
+.admin-field-grid__fields > * {
+  min-width: 0;
+  width: auto !important;
+  margin: 0;
+  padding-inline: 0;
+}
+@container (min-width: 600px) {
+  .field-type.row.compact-editor-row > .row__fields,
+  .field-type.row.compact-settings-row:not(.compact-settings-row--numbers)
+    > .row__fields,
+  .admin-field-grid__fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* A native checkbox combines its label and input. Reserve the neighbouring
+     label's line + gap, then center its checkbox in the same 2-base input band. */
+  :is(.compact-editor-row, .compact-settings-row)
+    > .row__fields:has(> .field-type:not(.checkbox))
+    > .checkbox {
+    padding-block-start: calc(var(--base) * 1.25);
+  }
+  :is(.compact-editor-row, .compact-settings-row)
+    > .row__fields:has(> .field-type:not(.checkbox))
+    > .checkbox
+    > .checkbox-input {
+    min-height: calc(var(--base) * 2);
+    align-items: center;
+  }
+}
+.admin-field-grid {
+  margin-bottom: var(--base);
+}
+.admin-field-grid__control > .field-type {
+  margin-bottom: 0;
+}
+.admin-field-grid__hint {
+  display: block;
+  margin-top: calc(var(--base) * 0.25);
+  color: var(--theme-elevation-500);
+  line-height: 1.5;
+}
+.admin-field-grid__actions,
+.admin-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: calc(var(--base) * 0.5);
+}
+:is(.admin-field-grid__actions, .admin-detail-actions) > .btn {
+  margin: 0;
+}
+.admin-field-grid__actions > .btn {
+  min-height: calc(var(--base) * 2);
+}
+@media (max-width: 700px), (pointer: coarse) {
+  .admin-field-grid__actions > .btn {
+    min-height: 44px;
+  }
+}
+@container (min-width: 600px) {
+  .admin-field-grid__fields > .admin-field-grid__actions {
+    padding-block-start: calc(var(--base) * 1.25);
+  }
+}
+.admin-workflow-page {
+  display: grid;
+  gap: calc(var(--base) * 1.25);
+}
+.admin-workflow-page .admin-field-grid {
+  margin-bottom: 0;
+}
+.admin-workflow-help summary {
+  cursor: pointer;
+}
+.admin-workflow-help p {
+  margin: calc(var(--base) * 0.5) 0 0;
+  max-width: 75ch;
+  color: var(--theme-elevation-500);
+}
+.admin-detail-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--base) 0;
+}
+.admin-detail-card {
+  display: grid;
+  gap: calc(var(--base) * 0.75);
+}
+.admin-detail-card > :is(p, h3) {
+  margin: 0;
+}
+/* SEO 3.90 uses inline spacing: scope overrides to our native metadata rows. */
+.compact-seo-row > .row__fields {
+  row-gap: calc(var(--base) * 0.4);
+}
+.compact-seo-row > .row__fields > * {
+  margin-bottom: 0 !important;
+}
+.compact-seo-row > .row__fields > * > div:first-child {
+  margin-bottom: 0 !important;
+}
+.compact-seo-row > .row__fields > * > div:nth-child(2) {
+  margin-bottom: 0 !important;
+  min-width: 0;
+  width: 100%;
+}
+.compact-seo-row > .row__fields > * > div:nth-child(2) > .field-type {
+  width: 100%;
+}
+/* The user-facing missing/count/progress strip is intentionally removed. */
+.compact-seo-row > .row__fields > * > div:nth-child(3) {
+  display: none !important;
+}
+@supports (grid-template-rows: subgrid) {
+  .compact-seo-row > .row__fields > * {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    grid-row: span 2;
+    row-gap: inherit;
+  }
+}
+.compact-seo-row .plugin-seo__field {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--base) * 0.4);
+  min-height: calc(var(--base) * 1.5);
+  font-size: 0;
+}
+.compact-seo-row .plugin-seo__field .field-label {
+  display: flex !important;
+  align-items: center;
+  min-height: calc(var(--base) * 1.5);
+  flex: 1;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+}
+.compact-seo-row .plugin-seo__field > button {
+  display: none;
+}
+.compact-seo-row > .row__fields > * > div:first-child > div:nth-child(2),
+.seo-field-description {
+  color: var(--theme-elevation-500) !important;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: calc(var(--base) * 0.25) 0 0;
+}
+.seo-image-label {
+  width: 100%;
+}
+
+.template-default {
+  --gutter-h: clamp(1rem, 2.5vw, 2rem);
+  --doc-controls-height: calc(var(--base) * 2.4);
+}
+.template-default .doc-header {
+  margin-top: 0;
+  padding-bottom: calc(var(--base) * 0.6);
+}
+.collection-edit .doc-controls__content {
+  padding-block: calc(var(--base) * 0.3);
+}
+.document-fields__edit,
+.document-fields__sidebar-fields {
+  padding-top: var(--base);
+}
+/* Native upload editors keep their file control and alt metadata together. */
+.document-fields__main:has(> .document-fields__edit > .file-field) {
+  container-type: inline-size;
+}
+@container (min-width: 600px) {
+  .document-fields__edit:has(> .file-field):has(
+      > .document-fields__fields #field-alt
+    ) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    align-content: start;
+    gap: var(--base);
+  }
+  .document-fields__edit:has(> .file-field):has(
+      > .document-fields__fields #field-alt
+    )
+    > * {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+  .document-fields__edit:has(> .file-field):has(
+      > .document-fields__fields #field-alt
+    )
+    > :is(.file-field, .document-fields__fields) {
+    grid-column: auto;
+    margin-bottom: 0;
+  }
+  .document-fields__edit:has(> .file-field):has(
+      > .document-fields__fields #field-alt
+    )
+    > .file-field {
+    align-self: end;
+  }
+  .document-fields__edit:has(> .file-field)
+    > .document-fields__fields
+    > .field-type:has(#field-alt) {
+    margin-bottom: 0;
+  }
+}
+:is(.file-field, .upload) .dropzone:not(.dropzoneStyle--none) {
+  padding: calc(var(--base) * 0.35) calc(var(--base) * 0.5);
+  min-height: calc(var(--base) * 2);
+  height: auto;
+}
+.file-field__dropzoneButtons {
+  flex-wrap: wrap;
+}
+.file-field__dragAndDropText,
+.upload__dragAndDropText {
+  flex-shrink: 1;
+}
+.upload__dropzoneContent {
+  align-items: center;
+}
+/* Native upload actions use the same small secondary tokens as row actions. */
+:is(
+  .upload__createNewToggler,
+  .upload__listToggler,
+  .file-field__dropzoneButtons .btn
+) {
+  --color: var(--theme-text);
+  --bg-color: transparent;
+  --btn-border: 1px solid var(--theme-elevation-800);
+  --hover-color: var(--theme-elevation-600);
+  --hover-bg: transparent;
+  --hover-btn-border: 1px solid var(--theme-elevation-400);
+  margin: 0;
+}
+:is(
+  .upload__createNewToggler,
+  .upload__listToggler,
+  .file-field__dropzoneButtons .btn
+).btn--disabled {
+  --color: var(--theme-elevation-200);
+  --btn-border: 1px solid var(--theme-elevation-200);
+  --hover-btn-border: var(--btn-border);
+  --hover-color: var(--color);
+}
+.upload__dropzoneContent__buttons {
+  flex-wrap: wrap;
+  align-items: center;
+  left: 0;
+}
+@media (max-width: 700px), (pointer: coarse) {
+  .file-field .dropzone .btn,
+  .upload__createNewToggler,
+  .upload__listToggler {
+    min-height: 44px;
+  }
+}
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(var(--base) * 0.5);
+}
+.page-actions > .btn {
+  margin: 0;
+}
+.tenant-overview > :first-child {
   padding-top: 0.5rem;
 }
 
@@ -115,6 +408,11 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem 1.5rem;
+}
+.admin-page-header > .btn,
+.admin-page-header > h1,
+.admin-page-header > div:first-child > h1 {
+  margin: 0;
 }
 .admin-page-header > div:first-child {
   flex: 1 1 20rem;
@@ -309,9 +607,75 @@
 .overview section {
   margin-top: calc(var(--base) * 1.5);
 }
-.overview .table,
-.forms-view .table {
+/* Every native admin table shares one density policy, including host workflows.
+   Button's default outside margins otherwise add whole blank lines to each row. */
+.table {
   overflow-x: auto;
+}
+.table :is(th, td) {
+  padding-block: calc(var(--base) * 0.5);
+}
+.table td {
+  vertical-align: middle;
+}
+.table .btn {
+  --margin-block: 0px;
+  margin: 0;
+  vertical-align: middle;
+}
+.table .pill {
+  vertical-align: middle;
+}
+@media (max-width: 700px), (pointer: coarse) {
+  .table .btn,
+  .page-actions > .btn,
+  .admin-detail-actions > .btn,
+  .admin-page-header > .btn {
+    min-height: 44px;
+  }
+}
+.forms-view {
+  display: grid;
+  gap: calc(var(--base) * 1.25);
+}
+.forms-view > .admin-page-header h1 {
+  margin: 0;
+}
+.forms-view__status,
+.forms-view__empty {
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: var(--style-radius-m);
+  padding: var(--base);
+}
+.forms-view__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--base);
+  background: var(--theme-elevation-50);
+}
+.forms-view__status h2 {
+  font: inherit;
+  font-weight: 600;
+  margin: 0;
+}
+.forms-view__status p,
+.forms-view__empty p {
+  margin: calc(var(--base) * 0.25) 0 0;
+  color: var(--theme-elevation-500);
+  max-width: 65ch;
+}
+.forms-view__empty {
+  padding-block: calc(var(--base) * 1.5);
+}
+.forms-view__empty h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+.forms-view__advanced p {
+  margin-bottom: 0;
+  max-width: 65ch;
 }
 .forms-view__drawer {
   max-width: 50rem;
@@ -320,4 +684,22 @@
 .forms-view__drawer > *,
 .forms-view__drawer form > * {
   margin-bottom: var(--base);
+}
+
+/* Match native admin typography while retaining semantic editor formatting. */
+.rich-text-lexical .editor-container {
+  font-family: var(--font-body);
+}
+
+/* Hide duplicate empty-state creation only when the native header offers it. */
+.collection-list:has(.list-create-new-doc__create-new-button)
+  .no-results__actions {
+  display: none;
+}
+
+/* Palette swatches share four desktop columns, retaining the standard narrow layout. */
+@container (min-width: 900px) {
+  .field-type.row.compact-settings-row.compact-palette-row > .row__fields {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }

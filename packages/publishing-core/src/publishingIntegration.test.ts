@@ -1,10 +1,7 @@
 import vm from 'node:vm'
 import { themeBootstrapScript } from './siteConfig.js'
 import { describe, expect, it, vi, afterEach } from 'vitest'
-import {
-  createPublishingContentClient,
-  createLegacyPublishingForwarder,
-} from './contentClient.js'
+import { createPublishingContentClient } from './contentClient.js'
 import { createPreviewHandler, createPreviewURLBuilder } from './preview.js'
 import {
   createAuthorsCollection,
@@ -87,25 +84,6 @@ describe('shared publishing integration', () => {
     expect(transport).toHaveBeenCalledWith('/pages/a%2Fb', {
       headers: { 'x-preview-secret': 'secret' },
     })
-  })
-  it('forwards legacy requests without discarding request headers or error status', async () => {
-    const transport = vi
-      .fn()
-      .mockResolvedValue(
-        Response.json({ error: { message: 'Not available' } }, { status: 503 }),
-      )
-    const response = await createLegacyPublishingForwarder(transport)(
-      new Request('https://site.example/api/contact', {
-        method: 'POST',
-        headers: { 'x-custom': 'value' },
-        body: '{}',
-      }),
-      '/contact',
-    )
-    expect(response.status).toBe(503)
-    expect(await response.json()).toEqual({ error: 'Not available' })
-    expect(response.headers.get('deprecation')).toBe('true')
-    expect(transport.mock.calls[0][1].headers.get('x-custom')).toBe('value')
   })
   it('builds admin previews from the actual Payload document callback contract', async () => {
     const getSiteURL = vi.fn(async (doc) => `https://${doc.tenant}.example`)

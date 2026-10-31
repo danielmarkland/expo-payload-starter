@@ -7,7 +7,8 @@ vi.mock('payload', () => ({
 }))
 vi.mock('@/payload.config', () => ({ default: Promise.resolve({}) }))
 
-import { POST } from '@/app/(frontend)/api/contact/route'
+import { apiApp } from '@/lib/api/app'
+const POST = (request: Request) => apiApp.fetch(request)
 
 const validSubmission = {
   email: 'daniel@example.com',
@@ -18,7 +19,7 @@ const validSubmission = {
 }
 
 function request(body: unknown) {
-  return new Request('http://localhost/api/contact', {
+  return new Request('http://localhost/api/v1/contact', {
     body: JSON.stringify(body),
     headers: { 'content-type': 'application/json', 'x-forwarded-for': '127.0.0.1' },
     method: 'POST',

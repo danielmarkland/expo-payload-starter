@@ -1,14 +1,23 @@
-import type { Field } from 'payload'
+import type { Field, RowField } from 'payload'
 import { compactBlockSettings } from './compactBlockSettings.js'
 
-const row = (fields: Field[], palette = false): Field => ({
+const row = (fields: Field[], palette = false): RowField => ({
   type: 'row',
   admin: {
     className: `compact-settings-row${palette ? ' compact-palette-row' : ''}`,
   },
   fields: fields.map(
-    (field) => ({ ...field, admin: { ...field.admin, width: '50%' } }) as Field,
+    (field) =>
+      ({
+        ...field,
+        admin: { ...field.admin, width: palette ? '25%' : '50%' },
+      }) as Field,
   ),
+})
+
+const halfRow = (field: Field): Field => ({
+  ...row([field]),
+  admin: { className: 'compact-editor-row' },
 })
 
 /** Layout-only policy for the shared settings schema, including standalone globals. */
@@ -37,14 +46,15 @@ export function compactSiteSettings(fields: Field[]): Field[] {
         )
       ) {
         const rows: Field[] = []
-        for (let index = 0; index < colors.length; index += 2)
-          rows.push(row(colors.slice(index, index + 2), true))
+        for (let index = 0; index < colors.length; index += 4)
+          rows.push(row(colors.slice(index, index + 4), true))
         return { ...field, fields: rows }
       }
     }
     const children = compactSiteSettings(field.fields)
     if (field.type === 'group' && 'name' in field && field.name === 'theme') {
       const typography = new Set([
+        'fontPreset',
         'headingFont',
         'bodyFont',
         'labelFont',
@@ -57,18 +67,26 @@ export function compactSiteSettings(fields: Field[]): Field[] {
       const palettes = children.filter(
         (child) => 'name' in child && ['light', 'dark'].includes(child.name),
       )
+      const presetNames = [
+        'defaultMode',
+        'allowToggle',
+        'densityPreset',
+        'shapePreset',
+      ]
+      const presets = presetNames.flatMap((name) =>
+        children.filter((child) => 'name' in child && child.name === name),
+      )
+      const remaining = children.filter(
+        (child) =>
+          !('name' in child) ||
+          (!presetNames.includes(child.name) &&
+            !typography.has(child.name) &&
+            !['light', 'dark'].includes(child.name)),
+      )
       return {
         ...field,
         fields: [
-          ...compactBlockSettings(
-            children.filter(
-              (child) =>
-                !('name' in child) ||
-                (!typography.has(child.name) &&
-                  !['light', 'dark'].includes(child.name)),
-            ),
-            true,
-          ),
+          ...compactBlockSettings([...presets, ...remaining], true),
           ...(details.length
             ? [
                 {
@@ -92,6 +110,17 @@ export function compactSiteSettings(fields: Field[]): Field[] {
         ],
       }
     }
+    if (field.type === 'group' && 'name' in field && field.name === 'buttons')
+      return {
+        ...field,
+        fields: children.map((child) =>
+          'name' in child &&
+          child.name === 'shape' &&
+          child.admin?.width !== '50%'
+            ? halfRow(child)
+            : child,
+        ),
+      }
     return { ...field, fields: children } as Field
   })
   const output: Field[] = []
@@ -107,6 +136,12 @@ export function compactSiteSettings(fields: Field[]): Field[] {
     ) {
       output.push(row([current, next]))
       index++
+    } else if (
+      'name' in current &&
+      ['favicon', 'listSurface'].includes(current.name) &&
+      current.admin?.width !== '50%'
+    ) {
+      output.push(halfRow(current))
     } else output.push(current)
   }
   return output

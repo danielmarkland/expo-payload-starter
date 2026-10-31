@@ -165,20 +165,20 @@ export interface Post {
     [k: string]: unknown;
   };
   author?: (number | null) | Author;
+  publishedAt?: string | null;
   categories?: (number | Category)[] | null;
   tags?: (number | Tag)[] | null;
-  publishedAt?: string | null;
   /**
    * Show links to level-two and level-three headings in this article.
    */
   showTableOfContents?: boolean | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
+  meta: {
+    title: string;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Used when this page is shared. Recommended image size: 1200 × 630 pixels.
      */
-    image?: (number | null) | Media;
+    image: number | Media;
+    description: string;
   };
   slug: string;
   updatedAt: string;
@@ -228,8 +228,8 @@ export interface Category {
   id: number;
   title: string;
   slug: string;
-  description?: string | null;
   parent?: (number | null) | Category;
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1875,13 +1875,13 @@ export interface Page {
    * Optional escape hatch for trusted editors. Scope selectors to [data-page] to avoid affecting the admin or other pages.
    */
   customCSS?: string | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
+  meta: {
+    title: string;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Used when this page is shared. Recommended image size: 1200 × 630 pixels.
      */
-    image?: (number | null) | Media;
+    image: number | Media;
+    description: string;
   };
   slug: string;
   updatedAt: string;
@@ -2076,16 +2076,16 @@ export interface PostsSelect<T extends boolean = true> {
   summary?: T;
   body?: T;
   author?: T;
+  publishedAt?: T;
   categories?: T;
   tags?: T;
-  publishedAt?: T;
   showTableOfContents?: T;
   meta?:
     | T
     | {
         title?: T;
-        description?: T;
         image?: T;
+        description?: T;
       };
   slug?: T;
   updatedAt?: T;
@@ -2824,8 +2824,8 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        description?: T;
         image?: T;
+        description?: T;
       };
   slug?: T;
   updatedAt?: T;
@@ -2872,8 +2872,8 @@ export interface AuthorsSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  description?: T;
   parent?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2989,13 +2989,105 @@ export interface HeaderNavigation {
   id: number;
   variant?: ('standard' | 'minimal') | null;
   /**
-   * Background at the top of the page. Transparent overlays a leading background hero.
+   * Keep the header visible while the visitor scrolls.
    */
-  topBackground?: ('fill' | 'transparent') | null;
+  sticky?: boolean | null;
   /**
    * Background after scrolling more than 8px. Enable Sticky header to keep it visible.
    */
   scrolledBackground?: ('fill' | 'transparent') | null;
+  /**
+   * Background at the top of the page. Transparent overlays a leading background hero.
+   */
+  topBackground?: ('fill' | 'transparent') | null;
+  items?:
+    | {
+        label: string;
+        type: 'page' | 'post' | 'url';
+        page?: (number | null) | Page;
+        post?: (number | null) | Post;
+        /**
+         * Use a relative path, https, mailto, or tel URL.
+         */
+        url?: string | null;
+        /**
+         * Optional icon displayed with the link label.
+         */
+        icon?:
+          | (
+              | 'apple'
+              | 'bluesky'
+              | 'discord'
+              | 'facebook'
+              | 'github'
+              | 'google-play'
+              | 'instagram'
+              | 'linkedin'
+              | 'mastodon'
+              | 'medium'
+              | 'pinterest'
+              | 'reddit'
+              | 'slack'
+              | 'spotify'
+              | 'telegram'
+              | 'threads'
+              | 'tiktok'
+              | 'twitch'
+              | 'whatsapp'
+              | 'twitter'
+              | 'youtube'
+              | 'arrow-right'
+              | 'arrow-up-right'
+              | 'bell'
+              | 'book-open'
+              | 'calendar'
+              | 'camera'
+              | 'check'
+              | 'chevron-right'
+              | 'help'
+              | 'cloud'
+              | 'download'
+              | 'external-link'
+              | 'file-text'
+              | 'globe'
+              | 'heart'
+              | 'home'
+              | 'image'
+              | 'info'
+              | 'link'
+              | 'lock'
+              | 'log-in'
+              | 'mail'
+              | 'map-pin'
+              | 'menu'
+              | 'message'
+              | 'phone'
+              | 'play'
+              | 'podcast'
+              | 'radio'
+              | 'rss'
+              | 'search'
+              | 'send'
+              | 'settings'
+              | 'share'
+              | 'shopping-bag'
+              | 'shopping-cart'
+              | 'sparkles'
+              | 'star'
+              | 'user'
+              | 'users'
+              | 'zap'
+            )
+          | null;
+        treatment?: ('default' | 'accent') | null;
+        /**
+         * The label remains available to screen readers.
+         */
+        iconOnly?: boolean | null;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   helpLink?: {
     label?: string | null;
     type?: ('page' | 'post' | 'url') | null;
@@ -3152,98 +3244,6 @@ export interface HeaderNavigation {
         id?: string | null;
       }[]
     | null;
-  items?:
-    | {
-        label: string;
-        type: 'page' | 'post' | 'url';
-        page?: (number | null) | Page;
-        post?: (number | null) | Post;
-        /**
-         * Use a relative path, https, mailto, or tel URL.
-         */
-        url?: string | null;
-        /**
-         * Optional icon displayed with the link label.
-         */
-        icon?:
-          | (
-              | 'apple'
-              | 'bluesky'
-              | 'discord'
-              | 'facebook'
-              | 'github'
-              | 'google-play'
-              | 'instagram'
-              | 'linkedin'
-              | 'mastodon'
-              | 'medium'
-              | 'pinterest'
-              | 'reddit'
-              | 'slack'
-              | 'spotify'
-              | 'telegram'
-              | 'threads'
-              | 'tiktok'
-              | 'twitch'
-              | 'whatsapp'
-              | 'twitter'
-              | 'youtube'
-              | 'arrow-right'
-              | 'arrow-up-right'
-              | 'bell'
-              | 'book-open'
-              | 'calendar'
-              | 'camera'
-              | 'check'
-              | 'chevron-right'
-              | 'help'
-              | 'cloud'
-              | 'download'
-              | 'external-link'
-              | 'file-text'
-              | 'globe'
-              | 'heart'
-              | 'home'
-              | 'image'
-              | 'info'
-              | 'link'
-              | 'lock'
-              | 'log-in'
-              | 'mail'
-              | 'map-pin'
-              | 'menu'
-              | 'message'
-              | 'phone'
-              | 'play'
-              | 'podcast'
-              | 'radio'
-              | 'rss'
-              | 'search'
-              | 'send'
-              | 'settings'
-              | 'share'
-              | 'shopping-bag'
-              | 'shopping-cart'
-              | 'sparkles'
-              | 'star'
-              | 'user'
-              | 'users'
-              | 'zap'
-            )
-          | null;
-        treatment?: ('default' | 'accent') | null;
-        /**
-         * The label remains available to screen readers.
-         */
-        iconOnly?: boolean | null;
-        newTab?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Keep the header visible while the visitor scrolls.
-   */
-  sticky?: boolean | null;
   /**
    * Show the built-in Search link after the navigation items.
    */
@@ -3895,36 +3895,26 @@ export interface FooterNavigation {
  */
 export interface SiteSetting {
   id: number;
-  /**
-   * Full uses the available width. Padded aligns to the shared responsive container.
-   */
-  width?: ('full' | 'padded') | null;
   siteTitle: string;
   appTitle: string;
   shortName: string;
   /**
-   * Logo shown in light mode. The site title is used when this is empty.
+   * Fallback description for pages without their own SEO description.
    */
-  lightLogo?: (number | null) | Media;
+  siteDescription: string;
   /**
-   * Logo shown in dark mode. The site title is used when this is empty.
+   * Full uses the available width. Padded aligns to the shared responsive container.
    */
-  darkLogo?: (number | null) | Media;
-  logoMaxWidth?: number | null;
-  logoMaxHeight?: number | null;
-  /**
-   * Website favicon and web-app manifest icon. Use a square PNG or SVG.
-   */
-  favicon?: (number | null) | Media;
+  width?: ('full' | 'padded') | null;
   theme: {
     /**
      * Used when a visitor has not saved a light or dark preference.
      */
     defaultMode: 'system' | 'light' | 'dark';
     allowToggle: boolean;
-    fontPreset: 'poppins' | 'system' | 'inter' | 'ibm-plex-mono';
-    shapePreset: 'square' | 'soft' | 'rounded';
     densityPreset: 'compact' | 'comfortable' | 'spacious';
+    shapePreset: 'square' | 'soft' | 'rounded';
+    fontPreset: 'poppins' | 'system' | 'inter' | 'ibm-plex-mono';
     headingFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
     bodyFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
     labelFont?: ('system' | 'poppins' | 'inter' | 'ibm-plex-mono') | null;
@@ -3961,6 +3951,20 @@ export interface SiteSetting {
      */
     shape: 'square' | 'soft' | 'rounded' | 'pill';
   };
+  /**
+   * Logo shown in light mode. The site title is used when this is empty.
+   */
+  lightLogo?: (number | null) | Media;
+  /**
+   * Logo shown in dark mode. The site title is used when this is empty.
+   */
+  darkLogo?: (number | null) | Media;
+  logoMaxWidth?: number | null;
+  logoMaxHeight?: number | null;
+  /**
+   * Website favicon and web-app manifest icon. Use a square PNG or SVG.
+   */
+  favicon?: (number | null) | Media;
   archive?: {
     pageSize?: number | null;
     columns?: ('auto' | '2' | '3' | '4') | null;
@@ -3980,17 +3984,13 @@ export interface SiteSetting {
      */
     turnstileSiteKey?: string | null;
   };
-  /**
-   * Fallback description for pages without their own SEO description.
-   */
-  siteDescription: string;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
+  meta: {
+    title: string;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * Used when this page is shared. Recommended image size: 1200 × 630 pixels.
      */
-    image?: (number | null) | Media;
+    image: number | Media;
+    description: string;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -4001,8 +4001,23 @@ export interface SiteSetting {
  */
 export interface HeaderNavigationSelect<T extends boolean = true> {
   variant?: T;
-  topBackground?: T;
+  sticky?: T;
   scrolledBackground?: T;
+  topBackground?: T;
+  items?:
+    | T
+    | {
+        label?: T;
+        type?: T;
+        page?: T;
+        post?: T;
+        url?: T;
+        icon?: T;
+        treatment?: T;
+        iconOnly?: T;
+        newTab?: T;
+        id?: T;
+      };
   helpLink?:
     | T
     | {
@@ -4025,21 +4040,6 @@ export interface HeaderNavigationSelect<T extends boolean = true> {
         newTab?: T;
         id?: T;
       };
-  items?:
-    | T
-    | {
-        label?: T;
-        type?: T;
-        page?: T;
-        post?: T;
-        url?: T;
-        icon?: T;
-        treatment?: T;
-        iconOnly?: T;
-        newTab?: T;
-        id?: T;
-      };
-  sticky?: T;
   showSearch?: T;
   searchIcon?: T;
   updatedAt?: T;
@@ -4285,23 +4285,19 @@ export interface FooterNavigationSelect<T extends boolean = true> {
  * via the `definition` "siteSettings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
-  width?: T;
   siteTitle?: T;
   appTitle?: T;
   shortName?: T;
-  lightLogo?: T;
-  darkLogo?: T;
-  logoMaxWidth?: T;
-  logoMaxHeight?: T;
-  favicon?: T;
+  siteDescription?: T;
+  width?: T;
   theme?:
     | T
     | {
         defaultMode?: T;
         allowToggle?: T;
-        fontPreset?: T;
-        shapePreset?: T;
         densityPreset?: T;
+        shapePreset?: T;
+        fontPreset?: T;
         headingFont?: T;
         bodyFont?: T;
         labelFont?: T;
@@ -4341,6 +4337,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         shape?: T;
       };
+  lightLogo?: T;
+  darkLogo?: T;
+  logoMaxWidth?: T;
+  logoMaxHeight?: T;
+  favicon?: T;
   archive?:
     | T
     | {
@@ -4358,13 +4359,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         googleTagManagerId?: T;
         turnstileSiteKey?: T;
       };
-  siteDescription?: T;
   meta?:
     | T
     | {
         title?: T;
-        description?: T;
         image?: T;
+        description?: T;
       };
   updatedAt?: T;
   createdAt?: T;

@@ -102,21 +102,22 @@ export function compactBlockSettings(
         count++
       const size = numeric && count >= 3 ? 3 : Math.min(2, count)
       const row = pending.splice(0, size)
-      if (row.length === 1) output.push(row[0]!)
-      else
-        output.push({
-          type: 'row',
-          admin: {
-            className: `compact-settings-row${size === 3 ? ' compact-settings-row--numbers' : ''}`,
-          },
-          fields: row.map(
-            (field) =>
-              ({
-                ...field,
-                admin: { ...field.admin, width: `${100 / size}%` },
-              }) as Field,
-          ),
-        })
+      output.push({
+        type: 'row',
+        admin: {
+          className: `compact-settings-row${size === 3 ? ' compact-settings-row--numbers' : ''}`,
+        },
+        fields: row.map(
+          (field) =>
+            ({
+              ...field,
+              admin: {
+                ...field.admin,
+                width: `${size === 1 ? 50 : 100 / size}%`,
+              },
+            }) as Field,
+        ),
+      })
     }
   }
   for (const field of nested) {

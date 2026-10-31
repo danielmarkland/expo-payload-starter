@@ -1,6 +1,6 @@
 {
   "name": "@danielmarkland/publishing-ui",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.js",
@@ -206,6 +206,18 @@
     "./admin/ThemeTransfer": {
       "types": "./dist/admin/ThemeTransfer.d.ts",
       "default": "./dist/admin/ThemeTransfer.js"
+    },
+    "./admin/AdminFieldGrid": {
+      "types": "./dist/admin/AdminFieldGrid.d.ts",
+      "default": "./dist/admin/AdminFieldGrid.js"
+    },
+    "./admin/SEOMetaImageLabel": {
+      "types": "./dist/admin/SEOMetaImageLabel.d.ts",
+      "default": "./dist/admin/SEOMetaImageLabel.js"
+    },
+    "./admin/ThemeSection": {
+      "types": "./dist/admin/ThemeSection.d.ts",
+      "default": "./dist/admin/ThemeSection.js"
     }
   },
   "files": [

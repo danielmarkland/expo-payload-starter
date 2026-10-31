@@ -1,6 +1,9 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import type { TextFieldClientProps } from 'payload'
+import type { Field, TextFieldClientProps } from 'payload'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+
+const nativeFields = (fields: Field[] = []): Field[] =>
+  fields.flatMap((field) => (field.type === 'row' ? nativeFields(field.fields) : [field]))
 
 const fieldState = vi.hoisted(() => ({
   disabled: false,
@@ -156,14 +159,17 @@ describe('Payload color picker field', () => {
     expect(tabs.tabs.map((tab) => tab.label)).toEqual([
       'Site',
       'Design',
-      'Archives',
+      'Typography',
+      'Colors',
+      'Buttons',
+      'Logos',
+      'Post Display',
       'Integrations',
       'SEO',
     ])
     const seoTab = tabs.tabs.find((tab) => tab.label === 'SEO')
     expect(seoTab?.fields).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ name: 'siteDescription' }),
         expect.objectContaining({ name: 'meta', label: 'SEO', type: 'group' }),
       ]),
     )
@@ -171,10 +177,10 @@ describe('Payload color picker field', () => {
       expect(tab.fields).not.toEqual(
         expect.arrayContaining([expect.objectContaining({ name: 'meta' })]),
       )
-      expect(tab.fields).not.toEqual(
-        expect.arrayContaining([expect.objectContaining({ name: 'siteDescription' })]),
-      )
     }
+    expect(nativeFields(tabs.tabs.find((tab) => tab.label === 'Site')?.fields)).toContainEqual(
+      expect.objectContaining({ name: 'siteDescription' }),
+    )
     const outsideTabFields = siteSettings?.fields.filter((field) => field.type !== 'tabs') ?? []
     expect(outsideTabFields).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ name: 'meta' })]),
@@ -197,17 +203,17 @@ describe('Payload color picker field', () => {
     const layoutTab = tabs.tabs.find((tab) => tab.label === 'Appearance')
     const seoTab = tabs.tabs.find((tab) => tab.label === 'SEO')
 
-    expect(generalTab?.fields).toEqual(
+    expect(nativeFields(generalTab?.fields)).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ name: 'title' }),
         expect.objectContaining({ name: 'layout', type: 'blocks' }),
       ]),
     )
-    expect(layoutTab?.fields).toEqual(
+    expect(nativeFields(layoutTab?.fields)).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ name: 'width' }),
         expect.objectContaining({ name: 'headerVariant' }),
-        expect.objectContaining({ label: 'Advanced Presentation', type: 'collapsible' }),
+        expect.objectContaining({ name: 'customCSS', type: 'code' }),
       ]),
     )
     expect(pages?.fields).toContainEqual(

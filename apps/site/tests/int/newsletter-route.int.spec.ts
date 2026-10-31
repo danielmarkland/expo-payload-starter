@@ -4,7 +4,8 @@ const findGlobal = vi.fn()
 vi.mock('payload', () => ({ getPayload: vi.fn(async () => ({ findGlobal })) }))
 vi.mock('@/payload.config', () => ({ default: Promise.resolve({}) }))
 
-import { POST } from '@/app/(frontend)/api/newsletter/route'
+import { apiApp } from '@/lib/api/app'
+const POST = (request: Request) => apiApp.fetch(request)
 
 const validSubmission = {
   email: 'ada@example.com',
@@ -15,7 +16,7 @@ const validSubmission = {
 }
 
 function request(body: unknown) {
-  return new Request('http://localhost/api/newsletter', {
+  return new Request('http://localhost/api/v1/newsletter', {
     body: JSON.stringify(body),
     headers: { 'content-type': 'application/json' },
     method: 'POST',
@@ -91,7 +92,7 @@ describe('newsletter route', () => {
     const response = await POST(request(validSubmission))
     expect(response.status).toBe(502)
     await expect(response.json()).resolves.toEqual({
-      error: 'Subscription failed. Please try again shortly.',
+      error: { code: 'upstream_error', message: 'Subscription failed. Please try again shortly.' },
     })
   })
 })

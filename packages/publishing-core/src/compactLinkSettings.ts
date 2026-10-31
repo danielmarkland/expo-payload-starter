@@ -14,7 +14,7 @@ const names = new Set([
   'variant',
   'submitButtonVariant',
 ])
-/** Shared link/action composition. Native destination pickers keep their full width. */
+/** Shared link/action composition with separate responsive destination rows. */
 export function compactLinkSettings(fields: Field[]): Field[] | undefined {
   fields = fields.flatMap((field) =>
     field.type === 'row' &&
@@ -49,15 +49,18 @@ export function compactLinkSettings(fields: Field[]): Field[] | undefined {
       })
   }
   row(named('type') ? ['label', 'type'] : ['label', 'icon'])
-  // Conditional alternatives preserve siblingData and are never squeezed beside edit/add buttons.
+  // Each conditional destination retains its siblingData and its own row.
   for (const key of ['page', 'post', 'url']) {
     const field = named(key)
     if (field) {
       used.add(field)
       output.push({
-        ...field,
-        admin: { ...field.admin, width: '100%' },
-      } as Field)
+        type: 'row',
+        admin: { className: 'compact-editor-row' },
+        fields: [
+          { ...field, admin: { ...field.admin, width: '50%' } } as Field,
+        ],
+      })
     }
   }
   row(['icon', 'variant', 'submitButtonVariant', 'treatment'])

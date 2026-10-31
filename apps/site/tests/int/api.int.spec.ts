@@ -1,5 +1,6 @@
 import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
+import { createSEOMetadata } from '../helpers/seo'
 import { pageSchema, postSchema, paginatedPostsSchema } from '@danielmarkland/publishing-contracts'
 import { createHeroHeadline } from '@danielmarkland/publishing-core'
 
@@ -51,10 +52,12 @@ describe('API', () => {
 
   it('keeps draft pages private and allows published pages to be read publicly', async () => {
     const slug = `page-access-${Date.now()}`
+    const meta = await createSEOMetadata(payload, 'Page access fixture')
     const created = await payload.create({
       collection: 'pages',
       data: {
         title: 'Page access fixture',
+        meta,
         slug,
         layout: [{ blockType: 'hero', heading: createHeroHeadline('A private draft') }],
       },
@@ -96,6 +99,7 @@ describe('API', () => {
       expect(pageSchema.parse(publishedPage.docs[0])._status).toBe('published')
     } finally {
       await payload.delete({ collection: 'pages', id: created.id, overrideAccess: true })
+      await payload.delete({ collection: 'media', id: meta.image, overrideAccess: true })
     }
   })
 
@@ -116,6 +120,7 @@ describe('API', () => {
       data: { name: `Author ${suffix}`, slug: `author-${suffix}` },
       overrideAccess: true,
     })
+    const meta = await createSEOMetadata(payload, `Post fixture ${suffix}`)
     let postId: number | undefined
 
     try {
@@ -123,6 +128,7 @@ describe('API', () => {
         collection: 'posts',
         data: {
           title: `Searchable title ${suffix}`,
+          meta,
           slug: `searchable-post-${suffix}`,
           summary: `Summary needle-${suffix}`,
           body: {
@@ -186,6 +192,7 @@ describe('API', () => {
       if (postId !== undefined) {
         await payload.delete({ collection: 'posts', id: postId, overrideAccess: true })
       }
+      await payload.delete({ collection: 'media', id: meta.image, overrideAccess: true })
       await payload.delete({ collection: 'authors', id: author.id, overrideAccess: true })
       await payload.delete({ collection: 'tags', id: tag.id, overrideAccess: true })
       await payload.delete({ collection: 'categories', id: category.id, overrideAccess: true })
