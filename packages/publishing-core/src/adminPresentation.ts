@@ -107,31 +107,36 @@ function editorFields(slug: string, fields: Field[]): Field[] {
     ])
     const appearance = new Set([
       'variant',
-      'topBackground',
-      'scrolledBackground',
       'sticky',
+      'scrolledBackground',
+      'topBackground',
     ])
     const selected = (names: Set<string>) =>
       fields.filter((field) => 'name' in field && names.has(field.name))
-    const design = selected(appearance)
+    const orderedAppearance = [...appearance].flatMap((name) =>
+      fields.filter((field) => 'name' in field && field.name === name),
+    )
+    const design: Field[] = []
+    for (let index = 0; index < orderedAppearance.length; index += 2)
+      design.push({
+        type: 'row',
+        admin: { className: 'compact-editor-row' },
+        fields: orderedAppearance
+          .slice(index, index + 2)
+          .map(
+            (field) =>
+              ({ ...field, admin: { ...field.admin, width: '50%' } }) as Field,
+          ),
+      })
     return [
       {
         type: 'tabs',
         tabs: [
+          ...(design.length ? [{ label: 'Appearance', fields: design }] : []),
           { label: 'Menu Links', fields: selected(menu) },
           { label: 'Utility Links', fields: selected(utility) },
         ],
       },
-      ...(design.length
-        ? [
-            {
-              type: 'collapsible' as const,
-              label: 'Header Appearance',
-              admin: { initCollapsed: true },
-              fields: design,
-            },
-          ]
-        : []),
       ...fields.filter(
         (field) =>
           !('name' in field) ||

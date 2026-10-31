@@ -58,7 +58,6 @@
   }
   .compact-appearance-panel .checkbox {
     margin-bottom: 0;
-    padding-top: 1.5rem;
   }
 }
 /* Mobile navigation overlays the editor instead of taking a grid column.
@@ -103,6 +102,13 @@
     overflow: hidden;
   }
 }
+/* Named groups preserve stored paths; they are not separate bordered pages.
+   Native row spacing and group headings provide the shared editor hierarchy. */
+.group-field.group-field--top-level {
+  border-block: 0;
+  margin: 0;
+  padding: 0;
+}
 /* One density for native screens: align breadcrumbs, titles, controls and fields. */
 .field-type.row.compact-editor-row,
 .field-type.row.compact-settings-row:not(.compact-settings-row--numbers),
@@ -135,9 +141,82 @@
   .admin-field-grid__fields {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  /* A native checkbox combines its label and input. Reserve the neighbouring
+     label's line + gap, then center its checkbox in the same 2-base input band. */
+  :is(.compact-editor-row, .compact-settings-row)
+    > .row__fields:has(> .field-type:not(.checkbox))
+    > .checkbox {
+    padding-block-start: calc(var(--base) * 1.25);
+  }
+  :is(.compact-editor-row, .compact-settings-row)
+    > .row__fields:has(> .field-type:not(.checkbox))
+    > .checkbox
+    > .checkbox-input {
+    min-height: calc(var(--base) * 2);
+    align-items: center;
+  }
 }
 .admin-field-grid {
   margin-bottom: var(--base);
+}
+.admin-field-grid__control > .field-type {
+  margin-bottom: 0;
+}
+.admin-field-grid__hint {
+  display: block;
+  margin-top: calc(var(--base) * 0.25);
+  color: var(--theme-elevation-500);
+  line-height: 1.5;
+}
+.admin-field-grid__actions,
+.admin-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: calc(var(--base) * 0.5);
+}
+:is(.admin-field-grid__actions, .admin-detail-actions) > .btn {
+  margin: 0;
+}
+.admin-field-grid__actions > .btn {
+  min-height: calc(var(--base) * 2);
+}
+@media (max-width: 700px), (pointer: coarse) {
+  .admin-field-grid__actions > .btn {
+    min-height: 44px;
+  }
+}
+@container (min-width: 600px) {
+  .admin-field-grid__fields > .admin-field-grid__actions {
+    padding-block-start: calc(var(--base) * 1.25);
+  }
+}
+.admin-workflow-page {
+  display: grid;
+  gap: calc(var(--base) * 1.25);
+}
+.admin-workflow-page .admin-field-grid {
+  margin-bottom: 0;
+}
+.admin-workflow-help summary {
+  cursor: pointer;
+}
+.admin-workflow-help p {
+  margin: calc(var(--base) * 0.5) 0 0;
+  max-width: 75ch;
+  color: var(--theme-elevation-500);
+}
+.admin-detail-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--base) 0;
+}
+.admin-detail-card {
+  display: grid;
+  gap: calc(var(--base) * 0.75);
+}
+.admin-detail-card > :is(p, h3) {
+  margin: 0;
 }
 /* SEO 3.90 uses inline spacing: scope overrides to our native metadata rows. */
 .compact-seo-row > .row__fields {
@@ -325,6 +404,11 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem 1.5rem;
+}
+.admin-page-header > .btn,
+.admin-page-header > h1,
+.admin-page-header > div:first-child > h1 {
+  margin: 0;
 }
 .admin-page-header > div:first-child {
   flex: 1 1 20rem;
@@ -519,15 +603,29 @@
 .overview section {
   margin-top: calc(var(--base) * 1.5);
 }
-.overview .table,
-.forms-view .table {
+/* Every native admin table shares one density policy, including host workflows.
+   Button's default outside margins otherwise add whole blank lines to each row. */
+.table {
   overflow-x: auto;
 }
-:is(.overview, .forms-view, .submissions-view) .table td {
+.table :is(th, td) {
+  padding-block: calc(var(--base) * 0.5);
+}
+.table td {
   vertical-align: middle;
 }
-:is(.overview, .forms-view, .submissions-view) .table .btn {
+.table .btn {
+  --margin-block: 0px;
   margin: 0;
+  vertical-align: middle;
+}
+.table .pill {
+  vertical-align: middle;
+}
+@media (max-width: 700px), (pointer: coarse) {
+  .table .btn {
+    min-height: 44px;
+  }
 }
 .forms-view {
   display: grid;

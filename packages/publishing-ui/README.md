@@ -121,3 +121,11 @@ authorized asynchronous jobs, errors and a busy flag; `onImport` resolves `true`
 only when upload/finalization succeeds, keeping the drawer open after failure. Theme
 packages contain visual settings only. The host renders the resulting preview,
 destination confirmation, progress and recovery actions.
+
+All native admin `.table` lists share compact cell padding and centered content. Buttons have no outside margins inside cells, preventing oversized rows across Services, Domains, Customers, Tenants, Overview, Forms, Submissions, native collections and Build History. Narrow/coarse-pointer table actions retain 44px touch targets. Page header titles and direct actions also discard native outside margins.
+
+Mixed native checkbox/input rows reserve the neighbouring field label's space and center the checkbox in the native input-height band. This applies to Header Sticky and other mixed shared rows; checkbox-only rows and stacked narrow editors retain native alignment.
+
+Top-level native groups use the same unboxed field flow as other editors, without full-width divider borders, negative gutters or section padding. Named groups and native headings/errors remain intact; nested grouping and explicit collapsible/editor chrome retain their own presentation.
+
+Workflow pages can use `admin-workflow-page`, `admin-workflow-help` and the shared field-grid control/action slots for a half-width input with an adjacent compact action. Detail drawers use the shared unbulleted detail-list and action spacing, keeping native controls and tables.

@@ -10,6 +10,16 @@ Implemented changes awaiting an official repository release. Ideas belong in iss
 
 ### Changed
 
+- Add consistent workflow input/action and detail-drawer spacing for compact operational forms.
+
+- Normalize top-level native field groups to the shared unboxed editor flow, removing their full-width separators and oversized section gutters.
+
+- Align checkboxes with neighbouring native inputs in mixed desktop rows, retaining normal alignment when controls stack.
+
+- Place Header appearance controls in the first native Appearance tab, followed by Menu Links and Utility Links; pair Variant/Sticky Header, then Header Scrolled/Header Top.
+
+- Apply compact table cell/button spacing globally across native admin tables rather than limiting the fix to a few workflow screens.
+
 - Restore the reviewed Site/Design/SEO settings hierarchy and Header Menu Links/Utility Links tabs, with occasional listing/integration/appearance controls in labelled collapsibles.
 
 - Make unmatched ordinary admin controls half-width by default, including descriptions, uploads and multi-selects, and retain half-width lone block settings.
