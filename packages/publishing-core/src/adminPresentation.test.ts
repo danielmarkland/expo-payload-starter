@@ -116,18 +116,22 @@ describe('reviewed admin presentation', () => {
     expect(tabs.tabs.map((tab) => tab.label)).toEqual([
       'Site',
       'Design',
+      'Post Display',
+      'Integrations',
       'SEO',
       'Extension',
     ])
     const site = leaves(tabs.tabs[0]!.fields)
     const design = leaves(tabs.tabs[1]!.fields)
     expect(site.has('siteDescription')).toBe(true)
-    expect(site.has('archive')).toBe(true)
-    expect(site.has('integrations')).toBe(true)
+    expect(site.has('archive')).toBe(false)
+    expect(leaves(tabs.tabs[2]!.fields).has('archive')).toBe(true)
+    expect(site.has('integrations')).toBe(false)
+    expect(leaves(tabs.tabs[3]!.fields).has('integrations')).toBe(true)
     expect(design.has('lightLogo')).toBe(true)
     expect(design.has('width')).toBe(true)
     expect(design.has('theme')).toBe(true)
-    expect(leaves(tabs.tabs[3]!.fields).get('extra')?.required).toBe(true)
+    expect(leaves(tabs.tabs[5]!.fields).get('extra')?.required).toBe(true)
     expect(
       tabs.tabs[0]!.fields.filter(
         (field) => field.type === 'collapsible',

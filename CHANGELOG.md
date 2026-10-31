@@ -10,6 +10,10 @@ Implemented changes awaiting an official repository release. Ideas belong in iss
 
 ### Changed
 
+- Tighten Design with collapsed Branding, paired font/density presets and consistent spacing between Theme and Buttons.
+
+- Give Post Display and Integrations their own native Site Settings tabs, preserving stored field paths and behavior.
+
 - Add consistent workflow input/action and detail-drawer spacing for compact operational forms.
 
 - Normalize top-level native field groups to the shared unboxed editor flow, removing their full-width separators and oversized section gutters.

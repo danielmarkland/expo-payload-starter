@@ -62,18 +62,27 @@ export function compactSiteSettings(fields: Field[]): Field[] {
       const palettes = children.filter(
         (child) => 'name' in child && ['light', 'dark'].includes(child.name),
       )
+      const presetNames = [
+        'defaultMode',
+        'allowToggle',
+        'fontPreset',
+        'densityPreset',
+        'shapePreset',
+      ]
+      const presets = presetNames.flatMap((name) =>
+        children.filter((child) => 'name' in child && child.name === name),
+      )
+      const remaining = children.filter(
+        (child) =>
+          !('name' in child) ||
+          (!presetNames.includes(child.name) &&
+            !typography.has(child.name) &&
+            !['light', 'dark'].includes(child.name)),
+      )
       return {
         ...field,
         fields: [
-          ...compactBlockSettings(
-            children.filter(
-              (child) =>
-                !('name' in child) ||
-                (!typography.has(child.name) &&
-                  !['light', 'dark'].includes(child.name)),
-            ),
-            true,
-          ),
+          ...compactBlockSettings([...presets, ...remaining], true),
           ...(details.length
             ? [
                 {

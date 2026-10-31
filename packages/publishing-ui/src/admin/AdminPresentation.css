@@ -109,6 +109,10 @@
   margin: 0;
   padding: 0;
 }
+/* Consecutive named settings groups retain a normal section gap. */
+.group-field.group-field--top-level + .group-field.group-field--top-level {
+  margin-top: var(--base);
+}
 /* One density for native screens: align breadcrumbs, titles, controls and fields. */
 .field-type.row.compact-editor-row,
 .field-type.row.compact-settings-row:not(.compact-settings-row--numbers),

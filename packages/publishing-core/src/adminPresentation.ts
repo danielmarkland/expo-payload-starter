@@ -256,17 +256,6 @@ function editorFields(slug: string, fields: Field[]): Field[] {
       const fallback = seo.filter(
         (child) => 'name' in child && child.name === 'siteDescription',
       )
-      const collapsed = (label: string, children: Field[]): Field[] =>
-        children.length
-          ? [
-              {
-                type: 'collapsible',
-                label,
-                admin: { initCollapsed: true },
-                fields: children,
-              },
-            ]
-          : []
       const known = new Set([
         'General',
         'Branding',
@@ -285,20 +274,25 @@ function editorFields(slug: string, fields: Field[]): Field[] {
                 (child) => !('name' in child) || child.name !== 'width',
               ),
               ...fallback,
-              ...collapsed('Post Listings', from('Archives')),
-              ...collapsed('Public Integrations', from('Integrations')),
             ],
           },
           {
             label: 'Design',
             fields: [
-              ...from('Branding'),
+              {
+                type: 'collapsible',
+                label: 'Branding',
+                admin: { initCollapsed: true },
+                fields: from('Branding'),
+              },
               ...general.filter(
                 (child) => 'name' in child && child.name === 'width',
               ),
               ...from('Appearance'),
             ],
           },
+          { label: 'Post Display', fields: from('Archives') },
+          { label: 'Integrations', fields: from('Integrations') },
           {
             label: 'SEO',
             fields: seo.filter(
