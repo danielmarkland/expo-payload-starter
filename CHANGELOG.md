@@ -10,6 +10,8 @@ Implemented changes awaiting an official repository release. Ideas belong in iss
 
 ### Changed
 
+- Retain 44px touch targets for shared workflow page and drawer action groups, consistent with native table actions.
+
 - Use four desktop columns for Site Settings palettes and move button settings to their own main-row Buttons tab.
 
 - Move Typography, Colors and Logos into main-row Site Settings tabs, keep Width first in Design, and preserve canonical theme paths through a native rendering adapter.

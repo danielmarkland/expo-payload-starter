@@ -133,3 +133,5 @@ Workflow pages can use `admin-workflow-page`, `admin-workflow-help` and the shar
 `admin/ThemeSection` renders the original Site Settings theme fields inside separate main-row tabs using native GroupField controls. It resolves the canonical schema path and field permissions, preserves every field index/custom component, respects document locks/read-only state, and hides unrelated fields only in the rendered client configuration. The server schema retains one theme group.
 
 Site Settings palette rows use four equal columns in editor containers at least 900px wide, two at 600–899px, and one below 600px. Swatch controls and native field paths stay unchanged.
+
+Native workflow page and drawer action groups retain 44px minimum button heights on narrow screens and coarse pointers, matching native table actions. Desktop compact sizes remain unchanged.

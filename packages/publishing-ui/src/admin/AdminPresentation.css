@@ -627,7 +627,10 @@
   vertical-align: middle;
 }
 @media (max-width: 700px), (pointer: coarse) {
-  .table .btn {
+  .table .btn,
+  .page-actions > .btn,
+  .admin-detail-actions > .btn,
+  .admin-page-header > .btn {
     min-height: 44px;
   }
 }
