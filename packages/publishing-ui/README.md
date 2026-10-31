@@ -129,3 +129,7 @@ Mixed native checkbox/input rows reserve the neighbouring field label's space an
 Top-level native groups use the same unboxed field flow as other editors, without full-width divider borders, negative gutters or section padding. Consecutive top-level groups retain a standard section gap. Named groups and native headings/errors remain intact; nested grouping and explicit collapsible/editor chrome retain their own presentation.
 
 Workflow pages can use `admin-workflow-page`, `admin-workflow-help` and the shared field-grid control/action slots for a half-width input with an adjacent compact action. Detail drawers use the shared unbulleted detail-list and action spacing, keeping native controls and tables.
+
+`admin/ThemeSection` renders the original Site Settings theme fields inside separate main-row tabs using native GroupField controls. It resolves the canonical schema path and field permissions, preserves every field index/custom component, respects document locks/read-only state, and hides unrelated fields only in the rendered client configuration. The server schema retains one theme group.
+
+Site Settings palette rows use four equal columns in editor containers at least 900px wide, two at 600–899px, and one below 600px. Swatch controls and native field paths stay unchanged.

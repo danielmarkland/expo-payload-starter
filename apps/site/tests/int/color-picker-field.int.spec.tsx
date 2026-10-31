@@ -159,6 +159,10 @@ describe('Payload color picker field', () => {
     expect(tabs.tabs.map((tab) => tab.label)).toEqual([
       'Site',
       'Design',
+      'Typography',
+      'Colors',
+      'Buttons',
+      'Logos',
       'Post Display',
       'Integrations',
       'SEO',

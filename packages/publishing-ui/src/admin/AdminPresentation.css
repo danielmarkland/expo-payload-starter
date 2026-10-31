@@ -693,3 +693,10 @@
   .no-results__actions {
   display: none;
 }
+
+/* Palette swatches share four desktop columns, retaining the standard narrow layout. */
+@container (min-width: 900px) {
+  .field-type.row.compact-settings-row.compact-palette-row > .row__fields {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

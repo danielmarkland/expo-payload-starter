@@ -10,6 +10,10 @@ Implemented changes awaiting an official repository release. Ideas belong in iss
 
 ### Changed
 
+- Use four desktop columns for Site Settings palettes and move button settings to their own main-row Buttons tab.
+
+- Move Typography, Colors and Logos into main-row Site Settings tabs, keep Width first in Design, and preserve canonical theme paths through a native rendering adapter.
+
 - Tighten Design with collapsed Branding, paired font/density presets and consistent spacing between Theme and Buttons.
 
 - Give Post Display and Integrations their own native Site Settings tabs, preserving stored field paths and behavior.

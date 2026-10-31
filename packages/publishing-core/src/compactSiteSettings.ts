@@ -7,7 +7,11 @@ const row = (fields: Field[], palette = false): RowField => ({
     className: `compact-settings-row${palette ? ' compact-palette-row' : ''}`,
   },
   fields: fields.map(
-    (field) => ({ ...field, admin: { ...field.admin, width: '50%' } }) as Field,
+    (field) =>
+      ({
+        ...field,
+        admin: { ...field.admin, width: palette ? '25%' : '50%' },
+      }) as Field,
   ),
 })
 
@@ -42,14 +46,15 @@ export function compactSiteSettings(fields: Field[]): Field[] {
         )
       ) {
         const rows: Field[] = []
-        for (let index = 0; index < colors.length; index += 2)
-          rows.push(row(colors.slice(index, index + 2), true))
+        for (let index = 0; index < colors.length; index += 4)
+          rows.push(row(colors.slice(index, index + 4), true))
         return { ...field, fields: rows }
       }
     }
     const children = compactSiteSettings(field.fields)
     if (field.type === 'group' && 'name' in field && field.name === 'theme') {
       const typography = new Set([
+        'fontPreset',
         'headingFont',
         'bodyFont',
         'labelFont',
@@ -65,7 +70,6 @@ export function compactSiteSettings(fields: Field[]): Field[] {
       const presetNames = [
         'defaultMode',
         'allowToggle',
-        'fontPreset',
         'densityPreset',
         'shapePreset',
       ]

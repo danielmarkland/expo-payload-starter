@@ -214,6 +214,10 @@
     "./admin/SEOMetaImageLabel": {
       "types": "./dist/admin/SEOMetaImageLabel.d.ts",
       "default": "./dist/admin/SEOMetaImageLabel.js"
+    },
+    "./admin/ThemeSection": {
+      "types": "./dist/admin/ThemeSection.d.ts",
+      "default": "./dist/admin/ThemeSection.js"
     }
   },
   "files": [

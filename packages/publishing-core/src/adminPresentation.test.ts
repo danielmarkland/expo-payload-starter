@@ -76,7 +76,8 @@ describe('reviewed admin presentation', () => {
         collections: [{ slug, fields }],
       })
       const after = leaves(config.collections![0]!.fields)
-      after.delete('adminUnsavedChanges')
+      for (const [path, field] of after)
+        if (field.type === 'ui') after.delete(path)
       expect([...after.keys()].sort()).toEqual([...before.keys()].sort())
       for (const [path, field] of before) {
         const next = after.get(path)!
@@ -116,6 +117,10 @@ describe('reviewed admin presentation', () => {
     expect(tabs.tabs.map((tab) => tab.label)).toEqual([
       'Site',
       'Design',
+      'Typography',
+      'Colors',
+      'Buttons',
+      'Logos',
       'Post Display',
       'Integrations',
       'SEO',
@@ -125,13 +130,30 @@ describe('reviewed admin presentation', () => {
     const design = leaves(tabs.tabs[1]!.fields)
     expect(site.has('siteDescription')).toBe(true)
     expect(site.has('archive')).toBe(false)
-    expect(leaves(tabs.tabs[2]!.fields).has('archive')).toBe(true)
+    expect(
+      leaves(tabs.tabs.find((tab) => tab.label === 'Post Display')!.fields).has(
+        'archive',
+      ),
+    ).toBe(true)
     expect(site.has('integrations')).toBe(false)
-    expect(leaves(tabs.tabs[3]!.fields).has('integrations')).toBe(true)
-    expect(design.has('lightLogo')).toBe(true)
+    expect(
+      leaves(tabs.tabs.find((tab) => tab.label === 'Integrations')!.fields).has(
+        'integrations',
+      ),
+    ).toBe(true)
+    expect(design.has('lightLogo')).toBe(false)
+    expect(
+      leaves(tabs.tabs.find((tab) => tab.label === 'Logos')!.fields).has(
+        'lightLogo',
+      ),
+    ).toBe(true)
     expect(design.has('width')).toBe(true)
     expect(design.has('theme')).toBe(true)
-    expect(leaves(tabs.tabs[5]!.fields).get('extra')?.required).toBe(true)
+    expect(
+      leaves(tabs.tabs.find((tab) => tab.label === 'Extension')!.fields).get(
+        'extra',
+      )?.required,
+    ).toBe(true)
     expect(
       tabs.tabs[0]!.fields.filter(
         (field) => field.type === 'collapsible',

@@ -256,6 +256,23 @@ function editorFields(slug: string, fields: Field[]): Field[] {
       const fallback = seo.filter(
         (child) => 'name' in child && child.name === 'siteDescription',
       )
+      const themeSection = (section: string): Field => ({
+        name: `siteTheme${section}`,
+        type: 'ui',
+        admin: {
+          components: {
+            Field: {
+              path: '@danielmarkland/publishing-ui/admin/ThemeSection#ThemeSection',
+              clientProps: { section },
+            },
+          },
+        },
+      })
+      const appearance = from('Appearance').map((child): Field =>
+        child.type === 'group' && 'name' in child && child.name === 'theme'
+          ? { ...child, admin: { ...child.admin, hidden: true } }
+          : child,
+      )
       const known = new Set([
         'General',
         'Branding',
@@ -279,18 +296,24 @@ function editorFields(slug: string, fields: Field[]): Field[] {
           {
             label: 'Design',
             fields: [
-              {
-                type: 'collapsible',
-                label: 'Branding',
-                admin: { initCollapsed: true },
-                fields: from('Branding'),
-              },
               ...general.filter(
                 (child) => 'name' in child && child.name === 'width',
               ),
-              ...from('Appearance'),
+              ...appearance.filter(
+                (child) => !('name' in child) || child.name !== 'buttons',
+              ),
+              themeSection('Design'),
             ],
           },
+          { label: 'Typography', fields: [themeSection('Typography')] },
+          { label: 'Colors', fields: [themeSection('Colors')] },
+          {
+            label: 'Buttons',
+            fields: appearance.filter(
+              (child) => 'name' in child && child.name === 'buttons',
+            ),
+          },
+          { label: 'Logos', fields: from('Branding') },
           { label: 'Post Display', fields: from('Archives') },
           { label: 'Integrations', fields: from('Integrations') },
           {
