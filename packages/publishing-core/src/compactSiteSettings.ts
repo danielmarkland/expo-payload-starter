@@ -1,7 +1,7 @@
-import type { Field } from 'payload'
+import type { Field, RowField } from 'payload'
 import { compactBlockSettings } from './compactBlockSettings.js'
 
-const row = (fields: Field[], palette = false): Field => ({
+const row = (fields: Field[], palette = false): RowField => ({
   type: 'row',
   admin: {
     className: `compact-settings-row${palette ? ' compact-palette-row' : ''}`,
@@ -9,6 +9,11 @@ const row = (fields: Field[], palette = false): Field => ({
   fields: fields.map(
     (field) => ({ ...field, admin: { ...field.admin, width: '50%' } }) as Field,
   ),
+})
+
+const halfRow = (field: Field): Field => ({
+  ...row([field]),
+  admin: { className: 'compact-editor-row' },
 })
 
 /** Layout-only policy for the shared settings schema, including standalone globals. */
@@ -92,6 +97,17 @@ export function compactSiteSettings(fields: Field[]): Field[] {
         ],
       }
     }
+    if (field.type === 'group' && 'name' in field && field.name === 'buttons')
+      return {
+        ...field,
+        fields: children.map((child) =>
+          'name' in child &&
+          child.name === 'shape' &&
+          child.admin?.width !== '50%'
+            ? halfRow(child)
+            : child,
+        ),
+      }
     return { ...field, fields: children } as Field
   })
   const output: Field[] = []
@@ -107,6 +123,12 @@ export function compactSiteSettings(fields: Field[]): Field[] {
     ) {
       output.push(row([current, next]))
       index++
+    } else if (
+      'name' in current &&
+      ['favicon', 'listSurface'].includes(current.name) &&
+      current.admin?.width !== '50%'
+    ) {
+      output.push(halfRow(current))
     } else output.push(current)
   }
   return output

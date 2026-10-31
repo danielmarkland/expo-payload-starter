@@ -81,6 +81,7 @@ export function PublishingOverview({
                       to={item.href}
                       buttonStyle="secondary"
                       size="small"
+                      margin={false}
                     >
                       View Drafts
                     </Button>

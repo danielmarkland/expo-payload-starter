@@ -2,6 +2,24 @@
 
 Shared Next.js publishing components and Payload admin controls.
 
+`AdminPresentation.css` sets consistent native admin gutters, document/header spacing, action groups and compact upload dropzones, with 44px upload button targets on phones and touchscreens. It applies to native create/edit screens and shared workflows; minimal login layouts retain their separate presentation.
+
+Native upload editors with an Alt field place the file control and metadata in equal desktop columns, stacking below 600px of available editor width. File selection, URL upload, previews, replacement and validation remain native.
+
+The same minimal dropzone height, padding and secondary actions apply to native upload relationship fields throughout the admin, including Authors, branding, nested blocks and drawers. Existing selected-file cards and unstyled dropzones keep their native presentation.
+
+Native SEO rows use aligned headers/inputs and compact guidance. Auto-generate buttons are hidden from the SEO controls by request; manual editing, validation and native generation endpoints remain intact. Individual missing/count/progress strips are hidden by request; native validation errors and the overview/preview remain available. `admin/SEOMetaImageLabel` retains the native localized label/required marker and adds sharing-image guidance. SEO styles are scoped to rows composed by the shared plugin.
+
+Editorial field pairs use native Payload rows from `publishingAdminPresentation` and adapt to the editor's available width. Native image/file actions share the small secondary action appearance, including disabled states; their original drawers, permissions and upload behavior remain native.
+
+Use `admin/AdminFieldGrid` for related short controls in manually composed workflow forms, including service credentials and creation drawers. Place editors, uploads, tables, notices and action groups outside it. It shares the native rows' 600px available-width breakpoint. Do not duplicate form grids in individual hosts or force every field type into columns.
+
+Native collection lists keep creation in the header and hide duplicate empty-state create actions when that header action is available.
+
+Forms separates submission status from the form list and keeps creation/settings actions in the header. Hosts may supply `documentationURL` to show API documentation under Advanced.
+
+The footer editor starts with a full-width empty state, then exposes its layout board and native field inspector once content areas exist. Builder styles are scoped to its own controls.
+
 Public components consume publishing contracts and never fetch application data.
 Applications load content and pass it to `PostList` and `LatestPostsSection`.
 `SiteBrand` receives explicit identity values. `SiteHeader` receives rendered

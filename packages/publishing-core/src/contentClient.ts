@@ -133,35 +133,3 @@ export function createPublishingContentClient(
     },
   }
 }
-export function createLegacyPublishingForwarder(request: PublishingRequest) {
-  return async (incoming: Request, path: string) => {
-    const headers = new Headers(incoming.headers)
-    const body =
-      incoming.method === 'GET' || incoming.method === 'HEAD'
-        ? undefined
-        : await incoming.text()
-    const response = await request(path, {
-      body,
-      headers,
-      method: incoming.method,
-    })
-    let forwarded: Response
-    if (!response.ok) {
-      const value = (await response.json().catch(() => null)) as {
-        error?: { message?: string } | string
-      } | null
-      forwarded = Response.json(
-        {
-          error:
-            typeof value?.error === 'string'
-              ? value.error
-              : value?.error?.message || 'The request could not be completed.',
-        },
-        { status: response.status },
-      )
-    } else forwarded = new Response(response.body, response)
-    forwarded.headers.set('deprecation', 'true')
-    forwarded.headers.set('link', `</api/v1${path}>; rel="successor-version"`)
-    return forwarded
-  }
-}

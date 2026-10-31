@@ -206,6 +206,14 @@
     "./admin/ThemeTransfer": {
       "types": "./dist/admin/ThemeTransfer.d.ts",
       "default": "./dist/admin/ThemeTransfer.js"
+    },
+    "./admin/AdminFieldGrid": {
+      "types": "./dist/admin/AdminFieldGrid.d.ts",
+      "default": "./dist/admin/AdminFieldGrid.js"
+    },
+    "./admin/SEOMetaImageLabel": {
+      "types": "./dist/admin/SEOMetaImageLabel.d.ts",
+      "default": "./dist/admin/SEOMetaImageLabel.js"
     }
   },
   "files": [

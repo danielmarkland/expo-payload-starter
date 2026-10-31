@@ -14,8 +14,6 @@ test-results/
 apps/app/android/
 apps/app/ios/
 apps/site/media/
-supabase/.branches/
-supabase/.temp/
 *.tsbuildinfo
 
 # Release jobs contain private build output; only sanitized summaries are artifacts.

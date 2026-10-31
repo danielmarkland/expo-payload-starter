@@ -22,7 +22,6 @@
     "payload:migrate:status": "pnpm --filter @starter/site payload migrate:status",
     "setup": "node packages/config/scripts/setup.mjs",
     "setup:hosted": "node packages/config/scripts/setup.mjs --mode hosted",
-    "setup:production": "node packages/config/scripts/setup-production.mjs",
     "test": "node --test scripts/payload-document-lock.test.mjs && pnpm test:release && turbo run test",
     "typecheck": "turbo run typecheck",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
@@ -31,7 +30,8 @@
     "release": "pnpm --filter @danielmarkland/contracts build && pnpm --filter @danielmarkland/design-tokens build && pnpm --filter @danielmarkland/publishing-contracts build && pnpm --filter @danielmarkland/publishing-core build && pnpm --filter @danielmarkland/publishing-ui build && pnpm --filter @danielmarkland/auth-runtime build && changeset publish",
     "test:release": "node --test scripts/release/*.test.mjs scripts/database/*.test.mjs",
     "database:migrate": "node scripts/database/migrate.mjs",
-    "storage:init": "node scripts/database/init-storage.mjs"
+    "storage:init": "node scripts/database/init-storage.mjs",
+    "clean:cache": "node -e \"for (const p of ['.turbo','apps/site/.next','apps/app/.expo']) require('node:fs').rmSync(p,{recursive:true,force:true})\""
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",

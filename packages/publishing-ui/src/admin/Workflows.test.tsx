@@ -21,6 +21,7 @@ vi.mock('@payloadcms/ui', () => ({
     buttonStyle: _style,
     icon: _icon,
     size: _size,
+    margin: _margin,
     el,
     to,
     ...props
@@ -28,11 +29,13 @@ vi.mock('@payloadcms/ui', () => ({
     buttonStyle?: string
     icon?: ReactNode
     size?: string
+    margin?: boolean
     el?: string
     to?: string
   }) =>
     el ? <a href={to}>{children}</a> : <button {...props}>{children}</button>,
-  Pill: ({ children }: { children: ReactNode }) => <span>{children}</span>,
+  // Payload's native Pill renders a div; preserve its semantics to catch invalid nesting.
+  Pill: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   TextInput: ({
     path,
     label,
@@ -106,7 +109,48 @@ vi.mock('@payloadcms/ui', () => ({
     modalState: {},
   }),
 }))
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  vi.restoreAllMocks()
+})
+
+it.each([false, true])(
+  'renders an empty Forms page without invalid nesting (enabled=%s)',
+  (enabled) => {
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const configure = vi.fn(async () => {})
+    render(
+      <FormsView
+        initial={{ enabled, forms: [] }}
+        configure={configure}
+        createDefinition={(id, title) => ({
+          id,
+          title,
+          version: 1,
+          statuses: ['submitted'],
+        })}
+        documentationURL="/api/forms/docs"
+      />,
+    )
+    expect(screen.getByRole('heading', { name: 'No forms yet' })).toBeTruthy()
+    expect(
+      screen.getByRole('region', { name: 'Submission Status' }).textContent,
+    ).toContain(enabled ? 'Enabled' : 'Paused')
+    expect(
+      screen.getAllByRole('button', { name: 'New Form', exact: true }),
+    ).toHaveLength(1)
+    expect(
+      screen.queryByRole('link', { name: 'Open Submissions' }) !== null,
+    ).toBe(enabled)
+    const docs = screen.getByRole('link', {
+      name: 'API Documentation',
+      hidden: true,
+    })
+    expect(docs.closest('details')?.open).toBe(false)
+    expect(configure).not.toHaveBeenCalled()
+    expect(errors).not.toHaveBeenCalled()
+  },
+)
 
 it('retains advanced definition properties and installs a new immutable version', async () => {
   const form = {

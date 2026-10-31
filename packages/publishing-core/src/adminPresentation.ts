@@ -2,6 +2,7 @@ import type { Field, Plugin, LabelFunction, StaticLabel } from 'payload'
 import { compactSiteSettings } from './compactSiteSettings.js'
 import { compactBlockSettings } from './compactBlockSettings.js'
 import { titleCaseFields } from './titleCaseFields.js'
+import { compactAdminFields } from './compactAdminFields.js'
 
 export { titleCase } from './titleCase.js'
 export { titleCaseFields } from './titleCaseFields.js'
@@ -21,8 +22,123 @@ function relabel(
 
 export const adminDateFormat = 'MMM d, yyyy, h:mm a'
 
+/** Deliberate field pairs; unnamed rows preserve paths and native behavior. */
+function compactEditorFields(slug: string, fields: Field[]): Field[] {
+  const pairs: Record<string, string[][]> = {
+    authors: [
+      ['name', 'slug'],
+      ['image', 'website'],
+    ],
+    categories: [['title', 'slug'], ['parent'], ['description']],
+    tags: [['title', 'slug'], ['description']],
+    posts: [
+      ['author', 'publishedAt'],
+      ['categories', 'tags'],
+    ],
+    'footer-navigation': [['title', 'background']],
+    footerNavigation: [['title', 'background']],
+  }
+  const nested = fields.map((field): Field =>
+    field.type === 'tabs'
+      ? {
+          ...field,
+          tabs: field.tabs.map((tab) =>
+            'name' in tab && tab.name
+              ? tab
+              : { ...tab, fields: compactEditorFields(slug, tab.fields) },
+          ),
+        }
+      : field,
+  )
+  if (slug === 'categories') {
+    const parent = nested.findIndex(
+      (field) => 'name' in field && field.name === 'parent',
+    )
+    const description = nested.findIndex(
+      (field) => 'name' in field && field.name === 'description',
+    )
+    if (description >= 0 && parent > description) {
+      const [field] = nested.splice(parent, 1)
+      nested.splice(description, 0, field!)
+    }
+  }
+  for (const pair of pairs[slug] ?? []) {
+    const indexes = pair.map((name) =>
+      nested.findIndex(
+        (field) =>
+          'name' in field &&
+          field.name === name &&
+          field.admin?.position !== 'sidebar',
+      ),
+    )
+    if (indexes.some((index) => index < 0)) continue
+    const children = indexes.map((index) => nested[index]!)
+    const first = Math.min(...indexes)
+    const row: Field = {
+      type: 'row',
+      admin: { className: 'compact-editor-row' },
+      fields: children.map(
+        (field) =>
+          ({
+            ...field,
+            admin: { ...field.admin, width: '50%' },
+          }) as Field,
+      ),
+    }
+    for (const index of [...indexes].sort((a, b) => b - a))
+      nested.splice(index, 1)
+    nested.splice(first, 0, row)
+  }
+  return nested
+}
+
 /** Rearrange unnamed layout containers only; no stored field names change. */
 function editorFields(slug: string, fields: Field[]): Field[] {
+  if (
+    ['header-navigation', 'headerNavigation'].includes(slug) &&
+    !fields.some((field) => field.type === 'tabs')
+  ) {
+    const menu = new Set(['items'])
+    const utility = new Set([
+      'helpLink',
+      'socialLinks',
+      'showSearch',
+      'searchIcon',
+    ])
+    const appearance = new Set([
+      'variant',
+      'topBackground',
+      'scrolledBackground',
+      'sticky',
+    ])
+    const selected = (names: Set<string>) =>
+      fields.filter((field) => 'name' in field && names.has(field.name))
+    const design = selected(appearance)
+    return [
+      {
+        type: 'tabs',
+        tabs: [
+          { label: 'Menu Links', fields: selected(menu) },
+          { label: 'Utility Links', fields: selected(utility) },
+        ],
+      },
+      ...(design.length
+        ? [
+            {
+              type: 'collapsible' as const,
+              label: 'Header Appearance',
+              admin: { initCollapsed: true },
+              fields: design,
+            },
+          ]
+        : []),
+      ...fields.filter(
+        (field) =>
+          !('name' in field) ||
+          ![menu, utility, appearance].some((names) => names.has(field.name)),
+      ),
+    ]
+  }
   if (slug === 'posts' && !fields.some((field) => field.type === 'tabs')) {
     const organization = new Set([
       'author',
@@ -119,46 +235,90 @@ function editorFields(slug: string, fields: Field[]): Field[] {
     return [...next, ...sidebar]
   }
   if (slug === 'site-settings' || slug === 'siteSettings')
-    return fields.map((field) =>
-      field.type === 'tabs' &&
-      !field.tabs.some((tab) => 'name' in tab && tab.name) &&
-      field.tabs.some((tab) => tab.label === 'General')
-        ? {
-            ...field,
-            tabs: [
+    return fields.map((field) => {
+      if (
+        field.type !== 'tabs' ||
+        field.tabs.some((tab) => 'name' in tab && tab.name) ||
+        !field.tabs.some((tab) => tab.label === 'General')
+      )
+        return field
+      const from = (label: string) =>
+        field.tabs
+          .filter((tab) => tab.label === label)
+          .flatMap((tab) => tab.fields)
+      const general = from('General')
+      const seo = from('SEO')
+      const fallback = seo.filter(
+        (child) => 'name' in child && child.name === 'siteDescription',
+      )
+      const collapsed = (label: string, children: Field[]): Field[] =>
+        children.length
+          ? [
               {
-                label: 'Site',
-                fields: field.tabs
-                  .filter(
-                    (tab) =>
-                      tab.label === 'General' || tab.label === 'Branding',
-                  )
-                  .flatMap((tab) => tab.fields),
+                type: 'collapsible',
+                label,
+                admin: { initCollapsed: true },
+                fields: children,
               },
-              ...field.tabs
-                .filter(
-                  (tab) => tab.label !== 'General' && tab.label !== 'Branding',
-                )
-                .map((tab) =>
-                  tab.label === 'Appearance'
-                    ? { ...tab, label: 'Design' }
-                    : tab,
-                ),
+            ]
+          : []
+      const known = new Set([
+        'General',
+        'Branding',
+        'Appearance',
+        'Archives',
+        'Integrations',
+        'SEO',
+      ])
+      return {
+        ...field,
+        tabs: [
+          {
+            label: 'Site',
+            fields: [
+              ...general.filter(
+                (child) => !('name' in child) || child.name !== 'width',
+              ),
+              ...fallback,
+              ...collapsed('Post Listings', from('Archives')),
+              ...collapsed('Public Integrations', from('Integrations')),
             ],
-          }
-        : field,
-    )
+          },
+          {
+            label: 'Design',
+            fields: [
+              ...from('Branding'),
+              ...general.filter(
+                (child) => 'name' in child && child.name === 'width',
+              ),
+              ...from('Appearance'),
+            ],
+          },
+          {
+            label: 'SEO',
+            fields: seo.filter(
+              (child) => !('name' in child) || child.name !== 'siteDescription',
+            ),
+          },
+          ...field.tabs.filter(
+            (tab) => typeof tab.label !== 'string' || !known.has(tab.label),
+          ),
+        ],
+      }
+    })
   return fields
 }
 
 /** Run after schema-producing plugins. Unnamed rows preserve stored field paths. */
 export function publishingAdminPresentation(): Plugin {
   const fields = (slug: string, value: Field[]) => [
-    ...titleCaseFields(
-      compactBlockSettings(
-        ['site-settings', 'siteSettings'].includes(slug)
-          ? compactSiteSettings(editorFields(slug, value))
-          : editorFields(slug, value),
+    ...compactAdminFields(
+      titleCaseFields(
+        compactBlockSettings(
+          ['site-settings', 'siteSettings'].includes(slug)
+            ? compactSiteSettings(editorFields(slug, value))
+            : compactEditorFields(slug, editorFields(slug, value)),
+        ),
       ),
     ),
     {

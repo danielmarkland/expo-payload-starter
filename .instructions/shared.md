@@ -133,3 +133,7 @@ publication and production deployments require explicit release authorization.
 ## Reviewed admin presentation
 
 For admin changes, read the pinned [Admin UI Guidelines](https://github.com/groovepost/Admin-Mock/blob/d942da618120963d6442a673b27cef57bd500a12/docs/admin-ui-guidelines.md) and [Platform Integration Handoff](https://github.com/groovepost/Admin-Mock/blob/d942da618120963d6442a673b27cef57bd500a12/docs/implementation-handoff.md). Preserve real capabilities absent from the mock and use shared native Payload presentation helpers. The platform gap audit in [groovepost/platform](https://github.com/groovepost/platform/tree/codex/admin-mock-integration/docs/admin-integration) records integration status; a mock success does not establish operational acceptance.
+
+## Admin layout standard
+
+Use `publishingAdminPresentation` for the shared default short-field layout in native schemas and `publishing-ui/admin/AdminFieldGrid` for manually composed workflow forms. Related short fields share two columns with at least 600px of available editor width and stack below it. Preserve explicit/conditional/sidebar layouts, full-width complex controls, native behavior and stored paths; keep the policy shared rather than adding per-screen CSS copies.

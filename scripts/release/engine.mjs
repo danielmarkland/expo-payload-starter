@@ -353,7 +353,6 @@ export function createDriver(env = process.env) {
         PAYLOAD_MIGRATING: 'true',
         RELEASE_MIGRATION: 'true',
         VERCEL: '0',
-        DATABASE_POOLER_PORT: '5432',
       }
       if (env.RELEASE_PROFILE === 'platform')
         command(

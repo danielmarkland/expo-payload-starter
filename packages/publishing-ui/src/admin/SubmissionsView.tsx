@@ -213,10 +213,10 @@ export function SubmissionsView<T extends Submission>({
             <h2>
               {definition?.title ?? selected.formId} · {selected.reference}
             </h2>
-            <p>
+            <div>
               <Pill>{selected.status}</Pill> · Form Version{' '}
               {selected.formVersion}
-            </p>
+            </div>
             <dl>
               {Object.entries(selected.data).map(([key, value]) => (
                 <div key={key}>

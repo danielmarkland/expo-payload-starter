@@ -1,4 +1,5 @@
 'use client'
+import { AdminFieldGrid } from './AdminFieldGrid.js'
 
 import { useState, type ChangeEvent } from 'react'
 import {
@@ -26,10 +27,12 @@ export function FormsView<T extends Definition>({
   initial,
   configure,
   createDefinition,
+  documentationURL,
 }: {
   initial: { enabled: boolean; forms: T[] }
   configure: (enabled: boolean, definitions: T[]) => Promise<void>
   createDefinition: (id: string, title: string) => T
+  documentationURL?: string
 }) {
   const { openModal, closeModal, modalState } = useModal()
   const [enabled, setEnabled] = useState(initial.enabled)
@@ -70,12 +73,16 @@ export function FormsView<T extends Definition>({
       <header className="admin-page-header">
         <div>
           <h1>Forms</h1>
-          <p>
-            Versioned definitions for this environment. Questions and
-            presentation remain owned by the app.
+          <p className="admin-page-header__hint">
+            Manage your forms and the submissions they collect.
           </p>
         </div>
         <PageActions>
+          {enabled && (
+            <Button el="link" to="/admin/submissions" buttonStyle="secondary">
+              Open Submissions
+            </Button>
+          )}
           <Button
             buttonStyle="secondary"
             onClick={() => {
@@ -103,11 +110,22 @@ export function FormsView<T extends Definition>({
       </header>
       {message && <p role="status">{message}</p>}
       {error && <p role="alert">{error}</p>}
-      <p>
-        <Pill>{enabled ? 'Submissions Enabled' : 'Submissions Paused'}</Pill>
-      </p>
+      <section className="forms-view__status" aria-label="Submission Status">
+        <div>
+          <h2>Submissions</h2>
+          <p>
+            {enabled
+              ? 'New submissions are being accepted.'
+              : 'New submissions are paused. Existing submissions remain available.'}
+          </p>
+        </div>
+        <Pill size="small">{enabled ? 'Enabled' : 'Paused'}</Pill>
+      </section>
       {!forms.length ? (
-        <p>No form definitions are installed.</p>
+        <section className="forms-view__empty" aria-label="Forms List">
+          <h2>No forms yet</h2>
+          <p>Create a form to start collecting submissions from your app.</p>
+        </section>
       ) : (
         <div className="table">
           <table>
@@ -133,6 +151,7 @@ export function FormsView<T extends Definition>({
                     <Button
                       buttonStyle="secondary"
                       size="small"
+                      margin={false}
                       onClick={() => {
                         setSavedDefinition(
                           JSON.stringify(
@@ -164,10 +183,14 @@ export function FormsView<T extends Definition>({
           </table>
         </div>
       )}
-      {enabled && (
-        <Button el="link" to="/admin/submissions" buttonStyle="secondary">
-          Open Submissions
-        </Button>
+      {documentationURL && (
+        <details className="forms-view__advanced">
+          <summary>Advanced</summary>
+          <p>
+            Connect your app to forms and submissions using the{' '}
+            <a href={documentationURL}>API Documentation</a>.
+          </p>
+        </details>
       )}
       <Drawer
         slug="form-editor"
@@ -220,24 +243,26 @@ export function FormsView<T extends Definition>({
               />
             ) : (
               <>
-                <TextInput
-                  path="form-id"
-                  label="Form ID"
-                  required
-                  value={id}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    setID(event.target.value)
-                  }
-                />
-                <TextInput
-                  path="form-title"
-                  label="Title"
-                  required
-                  value={title}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    setTitle(event.target.value)
-                  }
-                />
+                <AdminFieldGrid>
+                  <TextInput
+                    path="form-id"
+                    label="Form ID"
+                    required
+                    value={id}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setID(event.target.value)
+                    }
+                  />
+                  <TextInput
+                    path="form-title"
+                    label="Title"
+                    required
+                    value={title}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setTitle(event.target.value)
+                    }
+                  />
+                </AdminFieldGrid>
                 <p>
                   New forms start at version 1 with the submitted review status.
                   Edit the definition afterward to configure schemas, policy

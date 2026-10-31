@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import type { Field } from 'payload'
 import { createPagesFields } from './payloadPages.js'
-import { createPostsFields } from './payloadEditorial.js'
+import { createHeaderNavigationFields } from './payloadNavigation.js'
+import {
+  createAuthorsFields,
+  createCategoriesFields,
+  createTagsFields,
+  createPostsFields,
+} from './payloadEditorial.js'
 import { createSiteSettingsFields } from './payloadSiteSettings.js'
 import { createPublishingFields } from './payloadFields.js'
 import { createPublishingBlocks } from './payloadBlocks.js'
@@ -45,7 +51,7 @@ function leaves(fields: Field[], prefix = ''): Map<string, Field> {
 }
 
 describe('reviewed admin presentation', () => {
-  it('retains every field and behavior in the real shared page, post and site schemas', () => {
+  it('retains every field and behavior in the real shared editorial and site schemas', () => {
     const controls = createPublishingFields({
       linkIconOptions: [],
       socialIconOptions: [],
@@ -56,6 +62,10 @@ describe('reviewed admin presentation', () => {
     for (const [slug, fields] of [
       ['pages', createPagesFields(blocks.pageBlocks)],
       ['posts', createPostsFields()],
+      ['header-navigation', createHeaderNavigationFields(controls)],
+      ['authors', createAuthorsFields()],
+      ['categories', createCategoriesFields()],
+      ['tags', createTagsFields()],
       [
         'site-settings',
         createSiteSettingsFields({ colorPickerFieldComponent: '/Color' }),
@@ -89,6 +99,42 @@ describe('reviewed admin presentation', () => {
       }
     }
   })
+  it('uses major-area tabs and retains additional settings when regrouping', () => {
+    const source = createSiteSettingsFields({
+      colorPickerFieldComponent: '/Color',
+    })
+    const extra: Field = { name: 'extra', type: 'text', required: true }
+    const original = source[0]!
+    if (original.type !== 'tabs')
+      throw new Error('Expected native settings tabs')
+    original.tabs.push({ label: 'Extension', fields: [extra] })
+    const result = publishingAdminPresentation()({
+      collections: [{ slug: 'site-settings', fields: source }],
+    })
+    const tabs = result.collections![0]!.fields[0]!
+    if (tabs.type !== 'tabs') throw new Error('Expected native settings tabs')
+    expect(tabs.tabs.map((tab) => tab.label)).toEqual([
+      'Site',
+      'Design',
+      'SEO',
+      'Extension',
+    ])
+    const site = leaves(tabs.tabs[0]!.fields)
+    const design = leaves(tabs.tabs[1]!.fields)
+    expect(site.has('siteDescription')).toBe(true)
+    expect(site.has('archive')).toBe(true)
+    expect(site.has('integrations')).toBe(true)
+    expect(design.has('lightLogo')).toBe(true)
+    expect(design.has('width')).toBe(true)
+    expect(design.has('theme')).toBe(true)
+    expect(leaves(tabs.tabs[3]!.fields).get('extra')?.required).toBe(true)
+    expect(
+      tabs.tabs[0]!.fields.filter(
+        (field) => field.type === 'collapsible',
+      ).every((field) => field.admin?.initCollapsed),
+    ).toBe(true)
+  })
+
   it('preserves paths, access, conditions, validation, hooks and components through nested layouts', () => {
     const condition = () => true
     const validate = () => 'Preserved validation'
