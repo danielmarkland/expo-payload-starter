@@ -21,11 +21,12 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { OverviewComponent as OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
-import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { SEOMetaImageLabel as SEOMetaImageLabel_bb94516dc3d7c02796634918963f2615 } from '@danielmarkland/publishing-ui/admin/SEOMetaImageLabel'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
-import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { NativeFormState as NativeFormState_f5858a3466c0f7da499517bdea384719 } from '@danielmarkland/publishing-ui/admin/UnsavedChanges'
 import { TextStateFeatureClient as TextStateFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
@@ -36,6 +37,7 @@ import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloa
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { FooterEditor as FooterEditor_d2554423f3bfd41e1796534fadced437 } from '@danielmarkland/publishing-ui/admin/FooterEditor'
 import { ColorPickerField as ColorPickerField_d572ded1c017fe858839e8cdc754e090 } from '@/components/admin/ColorPickerField'
+import { ThemeSection as ThemeSection_4b04fc6b9559f821870dc91736114952 } from '@danielmarkland/publishing-ui/admin/ThemeSection'
 import { NativeNavigation as NativeNavigation_f37292601ea019a6da5cd585da1e4b35 } from '../../../components/admin/Navigation'
 import { PublishingNavigationLinks as PublishingNavigationLinks_5e908e3771dd5dcb0f986b17672475c1 } from '@danielmarkland/publishing-ui/admin/Navigation'
 import { UnsavedChangesProvider as UnsavedChangesProvider_f5858a3466c0f7da499517bdea384719 } from '@danielmarkland/publishing-ui/admin/UnsavedChanges'
@@ -69,11 +71,12 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@danielmarkland/publishing-ui/admin/SEOMetaImageLabel#SEOMetaImageLabel": SEOMetaImageLabel_bb94516dc3d7c02796634918963f2615,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@danielmarkland/publishing-ui/admin/UnsavedChanges#NativeFormState": NativeFormState_f5858a3466c0f7da499517bdea384719,
   "@payloadcms/richtext-lexical/client#TextStateFeatureClient": TextStateFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
@@ -84,6 +87,7 @@ export const importMap = {
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "@danielmarkland/publishing-ui/admin/FooterEditor#FooterEditor": FooterEditor_d2554423f3bfd41e1796534fadced437,
   "@/components/admin/ColorPickerField#ColorPickerField": ColorPickerField_d572ded1c017fe858839e8cdc754e090,
+  "@danielmarkland/publishing-ui/admin/ThemeSection#ThemeSection": ThemeSection_4b04fc6b9559f821870dc91736114952,
   "/components/admin/Navigation#NativeNavigation": NativeNavigation_f37292601ea019a6da5cd585da1e4b35,
   "@danielmarkland/publishing-ui/admin/Navigation#PublishingNavigationLinks": PublishingNavigationLinks_5e908e3771dd5dcb0f986b17672475c1,
   "@danielmarkland/publishing-ui/admin/UnsavedChanges#UnsavedChangesProvider": UnsavedChangesProvider_f5858a3466c0f7da499517bdea384719,
