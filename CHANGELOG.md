@@ -10,6 +10,8 @@ Implemented changes awaiting an official repository release. Ideas belong in iss
 
 ### Changed
 
+- Prepare publishing-core 0.18.0 / publishing-ui 0.14.0; align browser/SEO fixtures with the reviewed admin and leave new bootstrap homepages as drafts until metadata is complete.
+
 - Retain 44px touch targets for shared workflow page and drawer action groups, consistent with native table actions.
 
 - Use four desktop columns for Site Settings palettes and move button settings to their own main-row Buttons tab.

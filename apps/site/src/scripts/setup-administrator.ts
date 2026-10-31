@@ -79,15 +79,16 @@ try {
   if (!home.totalDocs) {
     await payload.create({
       collection: 'pages',
+      draft: true,
       data: {
         title: 'Welcome',
         slug: 'home',
         layout: [{ blockType: 'hero', heading: createHeroHeadline('Your new website') }],
-        _status: 'published',
+        _status: 'draft',
       },
       overrideAccess: true,
     })
-    console.log('Starter homepage created; existing content preserved')
+    console.log('Starter homepage draft created; complete SEO metadata before publishing')
   }
 } finally {
   await payload.destroy()

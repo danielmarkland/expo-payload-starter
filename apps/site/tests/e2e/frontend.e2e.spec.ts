@@ -3,11 +3,13 @@ import { test, expect } from '@playwright/test'
 import { getPayload } from 'payload'
 
 import config from '../../src/payload.config.js'
+import { createSEOMetadata } from '../helpers/seo.js'
 import { createHeroHeadline } from '@danielmarkland/publishing-core'
 
 test.describe('Frontend', () => {
   const slug = `e2e-page-${Date.now()}`
   let pageId: number
+  let mediaId: number
   let previousFooter:
     Awaited<ReturnType<Awaited<ReturnType<typeof getPayload>>['findGlobal']>> | undefined
 
@@ -31,10 +33,13 @@ test.describe('Frontend', () => {
         ],
       },
     })
+    const meta = await createSEOMetadata(payload, 'CMS page fixture')
+    mediaId = meta.image
     const page = await payload.create({
       collection: 'pages',
       data: {
         title: 'CMS page fixture',
+        meta,
         slug,
         layout: [
           {
@@ -56,6 +61,7 @@ test.describe('Frontend', () => {
     if (!pageId) return
     const payload = await getPayload({ config })
     await payload.delete({ collection: 'pages', id: pageId, overrideAccess: true })
+    if (mediaId) await payload.delete({ collection: 'media', id: mediaId, overrideAccess: true })
     if (previousFooter)
       await payload.updateGlobal({ slug: 'footerNavigation', data: previousFooter })
   })

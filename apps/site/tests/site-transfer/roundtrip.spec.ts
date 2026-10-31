@@ -6,6 +6,9 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import sharp from 'sharp'
+import { seoPlugin } from '@payloadcms/plugin-seo'
+import { compactSEOFields } from '@danielmarkland/publishing-core/payloadSEO'
+import { createSEOMetadata } from '../helpers/seo'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import {
   exportSite,
@@ -101,6 +104,11 @@ describe.skipIf(!url)('real Payload replacement transaction', () => {
         },
       ],
       plugins: [
+        seoPlugin({
+          collections: ['pages', 'posts'],
+          uploadsCollection: 'media',
+          fields: ({ defaultFields }) => compactSEOFields(defaultFields),
+        }),
         siteTransferGatePlugin({
           collections: ['media', 'authors', 'categories', 'tags', 'posts', 'pages', 'search'],
           scopes: async () => ['site'],
@@ -139,10 +147,12 @@ describe.skipIf(!url)('real Payload replacement transaction', () => {
     if (folder) await rm(folder, { recursive: true, force: true })
   })
   it('persists version recovery when search indexing acquires the same editorial gate', async () => {
+    const meta = await createSEOMetadata(payload, 'Published recovery original')
     const page = await payload.create({
       collection: 'pages',
       data: {
         title: 'Published recovery original',
+        meta,
         slug: 'native-recovery',
         layout: [],
         _status: 'published',
@@ -168,6 +178,7 @@ describe.skipIf(!url)('real Payload replacement transaction', () => {
       expect(restored._status).toBe('published')
     } finally {
       await payload.delete({ collection: 'pages', id: page.id })
+      await payload.delete({ collection: 'media', id: meta.image })
     }
   })
   it('replaces a populated site, retains published and draft versions, maps media and repeats', async () => {
@@ -184,6 +195,7 @@ describe.skipIf(!url)('real Payload replacement transaction', () => {
       collection: 'posts',
       data: {
         title: 'Published',
+        meta: { title: 'Published', description: 'Published test post', image: media.id },
         slug: 'article',
         summary: 'Summary',
         body: richText('Published body'),
@@ -201,6 +213,7 @@ describe.skipIf(!url)('real Payload replacement transaction', () => {
       collection: 'pages',
       data: {
         title: 'Home',
+        meta: { title: 'Home', description: 'Home test page', image: media.id },
         slug: 'home',
         layout: [{ blockType: 'image', image: media.id }],
         _status: 'published',

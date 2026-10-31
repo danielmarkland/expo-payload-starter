@@ -369,3 +369,5 @@ The shared publishing packages also expose visual-only Theme archive operations 
 ## Build caches
 
 Stop local development processes, then run `pnpm clean:cache` to remove regenerable Turbo, Next.js and Expo caches. Dependencies, database volumes, private setup state and credentials are retained. Shared-package builds remain cached; site builds run without Turbo artifact caching to avoid retaining a full Next.js build for every input change.
+
+The operator bootstrap creates a new homepage as a draft. Complete its required SEO Title, Description and Meta Image in the native editor before publishing; existing pages are preserved.

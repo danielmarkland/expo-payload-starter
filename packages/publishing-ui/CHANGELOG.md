@@ -1,5 +1,16 @@
 # @danielmarkland/publishing-ui
 
+## 0.14.0
+
+### Minor Changes
+
+- Apply the reviewed native admin layouts, focused Site Settings tabs, required manual SEO metadata, compact uploads and workflow actions while preserving native field paths and permissions.
+
+### Patch Changes
+
+- Updated dependencies
+  - @danielmarkland/publishing-core@0.18.0
+
 ## 0.13.0
 
 ### Minor Changes
